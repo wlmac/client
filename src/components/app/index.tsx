@@ -1,48 +1,11 @@
 import * as React from "react";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { NavigationBar } from "./navigation";
 import { Home } from "../home";
 import { Announcements } from "../announcements";
 import { NotFound } from "../notfound";
 
 import "./index.scss";
-
-export const NavigationBar = () => {
-    const nav = useNavigate();
-
-    return (
-        <nav>
-            <div className="nav-wrapper">
-                <a href="/">
-                    <div className="brand-logo">
-                        <img className="img-logo" src=""></img>
-                    </div>
-                </a>
-                    
-                <a href="#" data-target="slide-out" className="sidenav-trigger"><i className="zmdi zmdi-menu"></i></a>
-                <ul className="right hide-on-med-and-down">
-                    <li className="nav-item">
-                        <a className="nav-link" href="{{ items }}" onClick={(ev)=>{
-                            ev.preventDefault();
-                            nav("/");
-                        }}>Link</a>
-                    </li>
-                    <li>
-                        <a className="dropdown-trigger" href="#!" data-target="dropdown{{ heading }}">Announcements<i className="zmdi zmdi-caret-down"></i></a>
-                        <ul id="dropdown{{ heading }}" className="dropdown-content">
-                            <li>
-                                <a href="/announcements">Announcements</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li><a className="dropdown-trigger" href="#!" data-target="dropdownAcc">
-                        Login/Sign Up
-                        <i className="zmdi zmdi-caret-down"></i>
-                    </a></li>
-                </ul>
-            </div>
-        </nav>
-    );
-}
 
 export const Footer = () => {
     const nav = useNavigate();
