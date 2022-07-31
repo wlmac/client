@@ -2,6 +2,7 @@ import * as React from "react";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import { Home } from "../home";
 import { Announcements } from "../announcements";
+import { NotFound } from "../notfound";
 
 import "./index.scss";
 
@@ -73,6 +74,7 @@ export const _App = () => {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/announcements" element={<Announcements />} />
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
             </div>
 
