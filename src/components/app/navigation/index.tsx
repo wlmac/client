@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 import "./index.scss";
 
-
 export const NavigationLink = (props: any) => {
     const nav = useNavigate();
 
