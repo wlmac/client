@@ -2,7 +2,7 @@ import * as React from "react";
 import { useNavigate } from "react-router-dom";
 
 import "./index.scss";
-import M from 'materialize-css';
+
 
 export const NavigationLink = (props: any) => {
     const nav = useNavigate();
@@ -18,18 +18,14 @@ export const NavigationLink = (props: any) => {
 export const NavigationBar = () => {
     const nav = useNavigate();
 
-    React.useEffect(() => {
-        M.AutoInit();
-    });
-
     return (
         <nav>
             <div className="nav-wrapper">
-                <a href="/">
+                <NavigationLink href="/">
                     <div className="brand-logo">
                         <img className="img-logo" src="/static/img/themes/logos/dark-transparent.png" />
                     </div>
-                </a>
+                </NavigationLink>
                     
                 <a href="#" data-target="slide-out" className="sidenav-trigger"><i className="zmdi zmdi-menu"></i></a>
                 <ul className="right hide-on-med-and-down">

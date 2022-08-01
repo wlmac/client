@@ -5,10 +5,15 @@ import { Home } from "../home";
 import { Announcements } from "../announcements";
 import { NotFound } from "../notfound";
 
+import M from 'materialize-css';
 import "./index.scss";
 
 export const Footer = () => {
     const nav = useNavigate();
+
+    React.useEffect(() => {
+        M.AutoInit();
+    });
 
     return (
         <div className="footer">
