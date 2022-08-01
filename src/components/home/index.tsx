@@ -9,7 +9,7 @@ export const Home = () => {
     return (
         <div id="content-container">
             <div className="banner">
-                <div className="background"><img src="./Home _ Metropolis_files/summer.jpg" /></div>
+                <div className="background"><img src="/static/img/themes/banners/summer.jpg" /></div>
                 <div className="overlay-container valign-wrapper">
                     <div className="next-class center-align">
                         <h4 className="schedule-course">No School</h4>
