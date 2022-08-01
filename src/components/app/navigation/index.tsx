@@ -2,6 +2,7 @@ import * as React from "react";
 import { useNavigate } from "react-router-dom";
 
 import "./index.scss";
+import M from 'materialize-css';
 
 export const NavigationLink = (props: any) => {
     const nav = useNavigate();
@@ -17,6 +18,10 @@ export const NavigationLink = (props: any) => {
 export const NavigationBar = () => {
     const nav = useNavigate();
 
+    React.useEffect(() => {
+        M.AutoInit();
+    });
+
     return (
         <nav>
             <div className="nav-wrapper">
@@ -26,26 +31,21 @@ export const NavigationBar = () => {
                     </div>
                 </a>
                     
-                <a href="/#" data-target="slide-out" className="sidenav-trigger"><i className="zmdi zmdi-menu"></i></a>
+                <a href="#" data-target="slide-out" className="sidenav-trigger"><i className="zmdi zmdi-menu"></i></a>
                 <ul className="right hide-on-med-and-down">
                     <li>
-                        <a className="dropdown-trigger" href="/#!" data-target="dropdownAnnouncements">Announcements<i className="zmdi zmdi-caret-down"></i></a><ul id="dropdownAnnouncements" className="dropdown-content">
+                        <a className="dropdown-trigger" data-target="dropdownAnnouncements">Announcements<i className="zmdi zmdi-caret-down"></i></a>
+                        <ul id="dropdownAnnouncements" className="dropdown-content">
                             <li>
                                 <NavigationLink href="/announcements?feed=all">All</NavigationLink>
                             </li>
                         
                             <li>
-                                <a href="/announcements?feed=school" onClick={(ev)=>{
-                                    ev.preventDefault();
-                                    nav("/announcements?feed=school");
-                                }}>School</a>
+                                <NavigationLink href="/announcements?feed=school">School</NavigationLink>
                             </li>
                         
                             <li>
-                                <a href="/announcements?feed=studentcouncil" onClick={(ev)=>{
-                                    ev.preventDefault();
-                                    nav("/announcements?feed=studentcouncil");
-                                }}>Student Council</a>
+                                <NavigationLink href="/announcements?feed=studentcouncil">Student Council</NavigationLink>
                             </li>
                         </ul>
                     </li>
@@ -64,22 +64,22 @@ export const NavigationBar = () => {
                     <li>
                         <a className="dropdown-trigger" href="/#!" data-target="dropdownAbout">About<i className="zmdi zmdi-caret-down"></i></a><ul id="dropdownAbout" className="dropdown-content">
                             <li>
-                                <a href="/about?tab=history">WLMCI</a>
+                                <NavigationLink href="/about?tab=history">WLMCI</NavigationLink>
                             </li>
                             <li>
-                                <a href="/about?tab=about">About</a>
+                                <NavigationLink href="/about?tab=about">About</NavigationLink>
                             </li>
                             <li>
-                                <a href="/about?tab=team">Team</a>
+                                <NavigationLink href="/about?tab=team">Team</NavigationLink>
                             </li>
                             <li>
-                                <a href="/map">Map</a>
+                                <NavigationLink href="/map">Map</NavigationLink>
                             </li>
                             <li>
-                                <a href="/about?tab=school">Contact WLMCI</a>
+                                <NavigationLink href="/about?tab=school">Contact WLMCI</NavigationLink>
                             </li>
                             <li>
-                                <a href="/about?tab=contact">Contact Us</a>
+                                <NavigationLink href="/about?tab=contact">Contact Us</NavigationLink>
                             </li>
                         </ul>
                         
