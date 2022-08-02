@@ -4,6 +4,10 @@ import { useNavigate } from "react-router-dom";
 export const Home = () => {
     const nav = useNavigate();
 
+    React.useEffect(() => {
+        document.title = "Home | Metropolis";
+    }, []);
+
     return (
         <div id="content-container">
             <div className="banner">

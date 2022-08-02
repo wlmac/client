@@ -12,6 +12,10 @@ import "./index.scss";
 export const _App = () => {
     const nav = useNavigate();
 
+    React.useEffect(() => {
+        M.AutoInit();
+    });
+
     return (
         <div className="page">
             <NavigationBar />

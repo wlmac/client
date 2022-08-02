@@ -4,10 +4,6 @@ import { useNavigate } from "react-router-dom";
 export const Footer = () => {
     const nav = useNavigate();
 
-    React.useEffect(() => {
-        M.AutoInit();
-    });
-
     return (
         <div className="footer">
             <div className="footer-title-par">
