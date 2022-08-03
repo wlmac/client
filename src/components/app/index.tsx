@@ -5,6 +5,7 @@ import { Footer } from "./footer";
 import { Home } from "../home";
 import { Announcements } from "../announcements";
 import { NotFound } from "../notfound";
+import { Resources } from "../resources";
 
 import M from 'materialize-css';
 import "./index.scss";
@@ -24,6 +25,7 @@ export const _App = () => {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/announcements" element={<Announcements />} />
+                    <Route path="/resources" element={<Resources />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </div>
