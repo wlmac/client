@@ -1,97 +1,108 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 
-export const NavigationLink = (props: any) => {
-    const nav = useNavigate();
-
-    return (
-        <a className="nav-link" href={props.href} onClick={(ev)=>{
-            ev.preventDefault();
-            nav(props.href);
-        }}>{props.children}</a>
-    );
-}
-
 export const NavigationBar = () => {
     const nav = useNavigate();
 
     return (
         <nav>
             <div className="nav-wrapper">
-                <NavigationLink href="/">
+                <NavLink href="/">
                     <div className="brand-logo">
                         <img className="img-logo" src="/static/img/themes/logos/dark-transparent.png" />
                     </div>
-                </NavigationLink>
-                    
+                </NavLink>
+
                 <a href="#" data-target="slide-out" className="sidenav-trigger"><i className="zmdi zmdi-menu"></i></a>
                 <ul className="right hide-on-med-and-down">
                     <li>
                         <a className="dropdown-trigger" data-target="dropdownAnnouncements">Announcements<i className="zmdi zmdi-caret-down"></i></a>
                         <ul id="dropdownAnnouncements" className="dropdown-content">
                             <li>
-                                <NavigationLink href="/announcements?feed=all">All</NavigationLink>
+                                <NavLink href="/announcements?feed=all">All</NavLink>
                             </li>
-                        
+
                             <li>
-                                <NavigationLink href="/announcements?feed=school">School</NavigationLink>
+                                <NavLink href="/announcements?feed=school">School</NavLink>
                             </li>
-                        
+
                             <li>
-                                <NavigationLink href="/announcements?feed=studentcouncil">Student Council</NavigationLink>
+                                <NavLink href="/announcements?feed=studentcouncil">Student Council</NavLink>
                             </li>
                         </ul>
                     </li>
                     <li className="nav-item">
-                        <NavigationLink href="/calendar">Calendar</NavigationLink>
+                        <NavLink href="/calendar">Calendar</NavLink>
                     </li>
                     <li className="nav-item">
-                        <NavigationLink href="/clubs">Clubs</NavigationLink>
+                        <NavLink href="/clubs">Clubs</NavLink>
                     </li>
                     <li className="nav-item">
-                        <NavigationLink href="/blog">Content</NavigationLink>
+                        <NavLink href="/blog">Content</NavLink>
                     </li>
                     <li className="nav-item">
-                        <NavigationLink href="/resources">Resources</NavigationLink>
+                        <NavLink href="/resources">Resources</NavLink>
                     </li>
                     <li>
                         <a className="dropdown-trigger" href="/#!" data-target="dropdownAbout">About<i className="zmdi zmdi-caret-down"></i></a><ul id="dropdownAbout" className="dropdown-content">
                             <li>
-                                <NavigationLink href="/about?tab=history">WLMCI</NavigationLink>
+                                <NavLink href="/about?tab=history">WLMCI</NavLink>
                             </li>
                             <li>
-                                <NavigationLink href="/about?tab=about">About</NavigationLink>
+                                <NavLink href="/about?tab=about">About</NavLink>
                             </li>
                             <li>
-                                <NavigationLink href="/about?tab=team">Team</NavigationLink>
+                                <NavLink href="/about?tab=team">Team</NavLink>
                             </li>
                             <li>
-                                <NavigationLink href="/map">Map</NavigationLink>
+                                <NavLink href="/map">Map</NavLink>
                             </li>
                             <li>
-                                <NavigationLink href="/about?tab=school">Contact WLMCI</NavigationLink>
+                                <NavLink href="/about?tab=school">Contact WLMCI</NavLink>
                             </li>
                             <li>
-                                <NavigationLink href="/about?tab=contact">Contact Us</NavigationLink>
+                                <NavLink href="/about?tab=contact">Contact Us</NavLink>
                             </li>
                         </ul>
-                        
                     </li>
-                    
-                    
-                    <li><a className="dropdown-trigger" href="/#!" data-target="dropdownAcc">
-                        
-                        Login/Sign Up
-                        
-                        <i className="zmdi zmdi-caret-down"></i>
-                    </a><ul id="dropdownAcc" className="dropdown-content" >
-            
-            <li><a href="/accounts/login/?next=/">Login</a></li>
-            <li><a href="/accounts/signup/?next=/">Sign Up</a></li>
-            
-        </ul></li>
+
+
+                    <li>
+                        <a className="dropdown-trigger" href="/#!" data-target="dropdownAcc">
+                            Login/Sign Up<i className="zmdi zmdi-caret-down"></i>
+                        </a>
+
+                        <ul id="dropdownAcc" className="dropdown-content" >
+                            <li><RouterLink href="/accounts/login/?next=/">Login</RouterLink></li>
+                            <li><RouterLink href="/accounts/signup/?next=/">Sign Up</RouterLink></li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </nav>
+    );
+}
+
+export const NavLink = (props: any) => {
+    const nav = useNavigate();
+
+    return (
+        <a className="nav-link" href={props.href} onClick={(ev) => {
+            ev.preventDefault();
+            nav(props.href);
+        }}>{props.children}</a>
+    );
+}
+
+export const RouterLink = (props: any) => {
+    const nav = useNavigate();
+
+    return (
+        <a href={props.href} onClick={(ev) => {
+            ev.preventDefault();
+            nav(props.href);
+        }}>
+            {props.children}
+        </a>
     );
 }

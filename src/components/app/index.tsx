@@ -7,6 +7,8 @@ import { Announcements } from "../announcements";
 import { NotFound } from "../notfound";
 import { Resources } from "../resources";
 
+import { Login } from "../auth/login";
+
 import M from 'materialize-css';
 import "./index.scss";
 
@@ -26,6 +28,10 @@ export const _App = () => {
                     <Route path="/" element={<Home />} />
                     <Route path="/announcements" element={<Announcements />} />
                     <Route path="/resources" element={<Resources />} />
+
+                    <Route path="/accounts/login" element={<Login />} />
+                    {/* <Route path="/accounts/register" element={<Register />} /> */}
+
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </div>
