@@ -98,7 +98,7 @@ export const RouterLink = (props: any) => {
     const nav = useNavigate();
 
     return (
-        <a href={props.href} onClick={(ev) => {
+        <a href={props.href} className={props.className} onClick={(ev) => {
             ev.preventDefault();
             nav(props.href);
         }}>
