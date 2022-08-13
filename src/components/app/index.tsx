@@ -6,6 +6,7 @@ import { Home } from "../home";
 import { Announcements } from "../announcements";
 import { NotFound } from "../notfound";
 import { Resources } from "../resources";
+import { About } from "../about";
 
 import { Login } from "../auth/login";
 import { Register } from "../auth/register";
@@ -32,6 +33,12 @@ export const _App = () => {
 
                     <Route path="/accounts/login" element={<Login />} />
                     <Route path="/accounts/signup" element={<Register />} />
+
+                    <Route path="/about" element={<About />}>
+                        <Route path=":page" element={<About />} />
+                    </Route>
+
+                    <Route path="/map" />
 
                     <Route path="*" element={<NotFound />} />
                 </Routes>

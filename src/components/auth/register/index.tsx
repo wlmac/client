@@ -25,9 +25,9 @@ export const Register = () => {
                                     </RouterLink>
                                 </div>
                                 <div className="col s6">
-                                    <a href="/accounts/signup/">
+                                    <RouterLink href="/accounts/signup/">
                                         <div className="tab current">Sign Up</div>
-                                    </a>
+                                    </RouterLink>
                                 </div>
                             </div>
 

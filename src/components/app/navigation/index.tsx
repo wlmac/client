@@ -19,15 +19,15 @@ export const NavigationBar = () => {
                         <a className="dropdown-trigger" data-target="dropdownAnnouncements">Announcements<i className="zmdi zmdi-caret-down"></i></a>
                         <ul id="dropdownAnnouncements" className="dropdown-content">
                             <li>
-                                <NavLink href="/announcements?feed=all">All</NavLink>
+                                <NavLink href="/announcements/all">All</NavLink>
                             </li>
 
                             <li>
-                                <NavLink href="/announcements?feed=school">School</NavLink>
+                                <NavLink href="/announcements/school">School</NavLink>
                             </li>
 
                             <li>
-                                <NavLink href="/announcements?feed=studentcouncil">Student Council</NavLink>
+                                <NavLink href="/announcements/studentcouncil">Student Council</NavLink>
                             </li>
                         </ul>
                     </li>
@@ -46,22 +46,22 @@ export const NavigationBar = () => {
                     <li>
                         <a className="dropdown-trigger" href="/#!" data-target="dropdownAbout">About<i className="zmdi zmdi-caret-down"></i></a><ul id="dropdownAbout" className="dropdown-content">
                             <li>
-                                <NavLink href="/about?tab=history">WLMCI</NavLink>
+                                <NavLink href="/about/history">WLMCI</NavLink>
                             </li>
                             <li>
-                                <NavLink href="/about?tab=about">About</NavLink>
+                                <NavLink href="/about/about">About</NavLink>
                             </li>
                             <li>
-                                <NavLink href="/about?tab=team">Team</NavLink>
+                                <NavLink href="/about/team">Team</NavLink>
                             </li>
                             <li>
                                 <NavLink href="/map">Map</NavLink>
                             </li>
                             <li>
-                                <NavLink href="/about?tab=school">Contact WLMCI</NavLink>
+                                <NavLink href="/about/school">Contact WLMCI</NavLink>
                             </li>
                             <li>
-                                <NavLink href="/about?tab=contact">Contact Us</NavLink>
+                                <NavLink href="/about/contact">Contact Us</NavLink>
                             </li>
                         </ul>
                     </li>

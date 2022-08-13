@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { RouterLink } from "../../app/navigation";
 
 export const Login = () => {
@@ -70,7 +70,7 @@ export const Login = () => {
                                 <div>
                                     <button type="submit" className="btn login-btn ">Sign In</button>
                                 </div>
-                                <p>Forgot your password? Click <a className="link" href="https://maclyonsden.com/accounts/password/reset/">here</a> to reset.</p>
+                                <p>Forgot your password? Click <Link className="link" to="/accounts/password/reset/">here</Link> to reset.</p>
                             </form>
                         </div>
                     </div>
