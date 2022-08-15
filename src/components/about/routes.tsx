@@ -8,19 +8,19 @@ export const routes = [
     {
         id: "history",
         text: "WLMCI",
-        path: "/about/history",
+        path: "/about?tab=history",
         component: ContentHistory,
     },
     {
         id: "about",
         text: "ABOUT",
-        path: "/about/about",
+        path: "/about?tab=about",
         component: ContentAbout,
     },
     {
         id: "team",
         text: "TEAM",
-        path: "/about/team",
+        path: "/about?tab=team",
         component: ContentTeam,
     },
     {
@@ -32,13 +32,13 @@ export const routes = [
     {
         id: "school",
         text: "CONTACT WLMCI",
-        path: "/about/school",
+        path: "/about?tab=school",
         component: ContentSchool,
     },
     {
         id: "contact",
         text: "CONTACT US",
-        path: "/about/contact",
+        path: "/about?tab=contact",
         component: ContentContact,
     },
 ]

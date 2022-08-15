@@ -14,10 +14,10 @@ import { Register } from "../auth/register";
 import M from 'materialize-css';
 import "./index.scss";
 
-export const _App = () => {
+export const _App = (): JSX.Element => {
     const nav = useNavigate();
 
-    React.useEffect(() => {
+    React.useEffect((): void => {
         M.AutoInit();
     });
 
@@ -49,7 +49,7 @@ export const _App = () => {
     );
 }
 
-export const App = () => {
+export const App = (): JSX.Element => {
     return (
         <BrowserRouter>
             <_App />

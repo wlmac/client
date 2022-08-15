@@ -1,7 +1,7 @@
 import * as React from "react";
 
-export const NotFound = () => {
-    React.useEffect(() => {
+export const NotFound = (): JSX.Element => {
+    React.useEffect((): void => {
         document.title = "404 Page Not Found";
     }, []);
 

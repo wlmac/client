@@ -1,7 +1,6 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
 
-export const ContentHistory = () => {
+export const ContentHistory = (): JSX.Element => {
     return (
         <>
             <div className="content" id="content-history">

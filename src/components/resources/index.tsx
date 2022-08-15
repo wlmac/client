@@ -1,6 +1,6 @@
 import * as React from "react";
 
-export const Resources = () => {
+export const Resources = (): JSX.Element => {
     function goBack(): void {
         window.history.back();
     }

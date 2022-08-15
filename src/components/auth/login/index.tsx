@@ -12,7 +12,7 @@ export const Login = (): JSX.Element => {
         console.log(document.getElementById(elmID));
     }
 
-    React.useEffect(() => {
+    React.useEffect((): void => {
         removePlaceholder("id_login");
         removePlaceholder("id_password");
         removePlaceholder("id_remember");

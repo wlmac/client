@@ -1,10 +1,10 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 
-export const Home = () => {
+export const Home = (): JSX.Element => {
     const nav = useNavigate();
 
-    React.useEffect(() => {
+    React.useEffect((): void => {
         document.title = "Home | Metropolis";
     }, []);
 
@@ -24,47 +24,47 @@ export const Home = () => {
                         <div className="schedule-today-courses"></div>
                     </div>
                 </div>
-                
-                    <div className="overlay-container">
-                        <div className="banner-message center-align">
-                    <span>
-                        
-                        <a href="https://maclyonsden.com/accounts/signup/">Sign up</a> and add your timetable to see a personalized schedule here.
-                        
-                    </span>
-                        </div>
+
+                <div className="overlay-container">
+                    <div className="banner-message center-align">
+                        <span>
+
+                            <a href="https://maclyonsden.com/accounts/signup/">Sign up</a> and add your timetable to see a personalized schedule here.
+
+                        </span>
                     </div>
-                
+                </div>
+
             </div>
             <div id="main-container">
-                    
-                    <div className="blog row">
-                        <div className="blog-content s5 col valign-wrapper left-align s5">
-                            <div className="blog-content-container">
-                                <h4 className="title">Sacred Silence - 6 weeks at a glance</h4>
-                                <hr />
-                                <div className="blog-body markdown-container">
-                                    <p>Hey Mac! Now that we're at the end of the school year, have you taken the time to finally catch your breath and meditate? Some of us had started this challenge in the middle of culminatings and completed it, hopefully now you can too :)</p>
-                                    <a className="full-content-page link" href="https://maclyonsden.com/blog/sacred-silence-infographic">Read full blog
-                                        post <i className="zmdi zmdi-chevron-right"></i></a>
-                                </div>
+
+                <div className="blog row">
+                    <div className="blog-content s5 col valign-wrapper left-align s5">
+                        <div className="blog-content-container">
+                            <h4 className="title">Sacred Silence - 6 weeks at a glance</h4>
+                            <hr />
+                            <div className="blog-body markdown-container">
+                                <p>Hey Mac! Now that we're at the end of the school year, have you taken the time to finally catch your breath and meditate? Some of us had started this challenge in the middle of culminatings and completed it, hopefully now you can too :)</p>
+                                <a className="full-content-page link" href="https://maclyonsden.com/blog/sacred-silence-infographic">Read full blog
+                                    post <i className="zmdi zmdi-chevron-right"></i></a>
                             </div>
                         </div>
-                        <img className="blog-image hide-on-small-and-down col s7" src="./Home _ Metropolis_files/ac3ad78602d841cfa346c3d6fc70c659.png" />
                     </div>
-                
+                    <img className="blog-image hide-on-small-and-down col s7" src="./Home _ Metropolis_files/ac3ad78602d841cfa346c3d6fc70c659.png" />
+                </div>
+
                 <div id="recent-events" className="card-list center-align">
                     <div className="cards-container">
-                        
-                            There are no events at this time.
-                        
+
+                        There are no events at this time.
+
                     </div>
                     <a className="full-content-page link" href="https://maclyonsden.com/calendar">View all events <i className="zmdi zmdi-chevron-right"></i></a>
                 </div>
-                <hr style={{margin: "10px calc(2% + 10px)", borderTopWidth: "2.5px", borderColor: "#d9d9d9"}} />
+                <hr style={{ margin: "10px calc(2% + 10px)", borderTopWidth: "2.5px", borderColor: "#d9d9d9" }} />
                 <div id="recent-announcements" className="center-align">
                     <div id="announcements" className="cards-container">
-                        <div className="announcement-card card  left-align" style={{borderColor: "#ffccce"}}>
+                        <div className="announcement-card card  left-align" style={{ borderColor: "#ffccce" }}>
                             <h5 className="title truncate">Project Metropolis - NOW HIRING!</h5>
                             <div className="authors">
                                 <div className="authors-image">
@@ -80,8 +80,8 @@ export const Home = () => {
                                 <a className="link" href="https://maclyonsden.com/announcement/216">See announcement <i className="zmdi zmdi-chevron-right"></i></a>
                             </div>
                         </div>
-                    
-                        <div className="announcement-card card  left-align" style={{borderColor: "#e4ffcc"}}>
+
+                        <div className="announcement-card card  left-align" style={{ borderColor: "#e4ffcc" }}>
                             <h5 className="title truncate">Issue 4 is here!</h5>
                             <div className="authors">
                                 <div className="authors-image">
@@ -97,8 +97,8 @@ export const Home = () => {
                                 <a className="link" href="https://maclyonsden.com/announcement/215">See announcement <i className="zmdi zmdi-chevron-right"></i></a>
                             </div>
                         </div>
-                    
-                        <div className="announcement-card card  hide-on-med-and-down  left-align" style={{borderColor: "#ffccce"}}>
+
+                        <div className="announcement-card card  hide-on-med-and-down  left-align" style={{ borderColor: "#ffccce" }}>
                             <h5 className="title truncate">MAC DANCE HALL</h5>
                             <div className="authors">
                                 <div className="authors-image">

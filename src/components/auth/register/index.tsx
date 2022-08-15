@@ -1,7 +1,7 @@
 import * as React from "react";
 import { RouterLink } from "../../app/navigation";
 
-export const Register = () => {
+export const Register = (): JSX.Element => {
     function goBack(): void {
         window.history.back();
     }

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 
-export const Footer = () => {
+export const Footer = (): JSX.Element => {
     const nav = useNavigate();
 
     return (

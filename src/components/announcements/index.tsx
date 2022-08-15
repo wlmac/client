@@ -3,7 +3,7 @@ import * as React from "react";
 import "./index.scss";
 
 export const Announcements = (): JSX.Element => {
-    React.useEffect(() => {
+    React.useEffect((): void => {
         document.title = "Announcements | Metropolis";
     }, []);
 
