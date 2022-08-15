@@ -2,7 +2,7 @@ import * as React from "react";
 
 import "./index.scss";
 
-export const Announcements = () => {
+export const Announcements = (): JSX.Element => {
     React.useEffect(() => {
         document.title = "Announcements | Metropolis";
     }, []);
