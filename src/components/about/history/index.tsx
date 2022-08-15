@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
 
 export const History = () => {
     return (
@@ -58,7 +59,7 @@ export const History = () => {
                 <div className="member-list">
                     <h2 className="subtitle">Project Manager</h2>
 
-                    <a href="https://maclyonsden.com/user/justinlu">
+                    <Link to="/user/justinlu">
                         <div className="member">
                             <div className="member-name">
                                 <div className="member-image">
@@ -75,14 +76,14 @@ export const History = () => {
                             </div>
 
                         </div>
-                    </a>
+                    </Link>
 
                 </div>
 
                 <div className="member-list">
                     <h2 className="subtitle">Frontend Developers</h2>
 
-                    <a href="https://maclyonsden.com/user/toaster203">
+                    <Link to="https://maclyonsden.com/user/toaster203">
                         <div className="member">
                             <div className="member-name">
                                 <div className="member-image">
@@ -99,9 +100,9 @@ export const History = () => {
                             </div>
 
                         </div>
-                    </a>
+                    </Link>
 
-                    <a href="https://maclyonsden.com/user/lindiana">
+                    <Link to="https://maclyonsden.com/user/lindiana">
                         <div className="member">
                             <div className="member-name">
                                 <div className="member-image">
@@ -118,9 +119,9 @@ export const History = () => {
                             </div>
 
                         </div>
-                    </a>
+                    </Link>
 
-                    <a href="https://maclyonsden.com/user/ji.mmyliu">
+                    <Link to="https://maclyonsden.com/user/ji.mmyliu">
                         <div className="member">
                             <div className="member-name">
                                 <div className="member-image">
@@ -137,9 +138,9 @@ export const History = () => {
                             </div>
 
                         </div>
-                    </a>
+                    </Link>
 
-                    <a href="https://maclyonsden.com/user/AavaSapkota">
+                    <Link to="https://maclyonsden.com/user/AavaSapkota">
                         <div className="member">
                             <div className="member-name">
                                 <div className="member-image">
@@ -156,9 +157,9 @@ export const History = () => {
                             </div>
 
                         </div>
-                    </a>
+                    </Link>
 
-                    <a href="https://maclyonsden.com/user/rcshim04">
+                    <Link to="https://maclyonsden.com/user/rcshim04">
                         <div className="member">
                             <div className="member-name">
                                 <div className="member-image">
@@ -175,9 +176,9 @@ export const History = () => {
                             </div>
 
                         </div>
-                    </a>
+                    </Link>
 
-                    <a href="https://maclyonsden.com/user/V1ad20">
+                    <Link to="https://maclyonsden.com/user/V1ad20">
                         <div className="member">
                             <div className="member-name">
                                 <div className="member-image">
@@ -194,9 +195,9 @@ export const History = () => {
                             </div>
 
                         </div>
-                    </a>
+                    </Link>
 
-                    <a href="https://maclyonsden.com/user/Trentium">
+                    <Link to="https://maclyonsden.com/user/Trentium">
                         <div className="member">
                             <div className="member-name">
                                 <div className="member-image">
@@ -213,9 +214,9 @@ export const History = () => {
                             </div>
 
                         </div>
-                    </a>
+                    </Link>
 
-                    <a href="https://maclyonsden.com/user/justinzhu">
+                    <Link to="https://maclyonsden.com/user/justinzhu">
                         <div className="member">
                             <div className="member-name">
                                 <div className="member-image">
@@ -232,14 +233,14 @@ export const History = () => {
                             </div>
 
                         </div>
-                    </a>
+                    </Link>
 
                 </div>
 
                 <div className="member-list">
                     <h2 className="subtitle">Backend Developers</h2>
 
-                    <a href="https://maclyonsden.com/user/4yfc">
+                    <Link to="https://maclyonsden.com/user/4yfc">
                         <div className="member">
                             <div className="member-name">
                                 <div className="member-image">
@@ -256,9 +257,9 @@ export const History = () => {
                             </div>
 
                         </div>
-                    </a>
+                    </Link>
 
-                    <a href="https://maclyonsden.com/user/enigma">
+                    <Link to="https://maclyonsden.com/user/enigma">
                         <div className="member">
                             <div className="member-name">
                                 <div className="member-image">
@@ -275,9 +276,9 @@ export const History = () => {
                             </div>
 
                         </div>
-                    </a>
+                    </Link>
 
-                    <a href="https://maclyonsden.com/user/nyiyui">
+                    <Link to="https://maclyonsden.com/user/nyiyui">
                         <div className="member">
                             <div className="member-name">
                                 <div className="member-image">
@@ -294,9 +295,9 @@ export const History = () => {
                             </div>
 
                         </div>
-                    </a>
+                    </Link>
 
-                    <a href="https://maclyonsden.com/user/retep">
+                    <Link to="https://maclyonsden.com/user/retep">
                         <div className="member">
                             <div className="member-name">
                                 <div className="member-image">
@@ -313,14 +314,14 @@ export const History = () => {
                             </div>
 
                         </div>
-                    </a>
+                    </Link>
 
                 </div>
 
                 <div className="member-list">
                     <h2 className="subtitle">App Developers</h2>
 
-                    <a href="https://maclyonsden.com/user/ApocalypseCalculator">
+                    <Link to="https://maclyonsden.com/user/ApocalypseCalculator">
                         <div className="member">
                             <div className="member-name">
                                 <div className="member-image">
@@ -337,9 +338,9 @@ export const History = () => {
                             </div>
 
                         </div>
-                    </a>
+                    </Link>
 
-                    <a href="https://maclyonsden.com/user/AZron">
+                    <Link to="https://maclyonsden.com/user/AZron">
                         <div className="member">
                             <div className="member-name">
                                 <div className="member-image">
@@ -356,14 +357,14 @@ export const History = () => {
                             </div>
 
                         </div>
-                    </a>
+                    </Link>
 
                 </div>
 
                 <div className="member-list">
                     <h2 className="subtitle">Graphic Designers</h2>
 
-                    <a href="https://maclyonsden.com/user/aliciachung">
+                    <Link to="https://maclyonsden.com/user/aliciachung">
                         <div className="member">
                             <div className="member-name">
                                 <div className="member-image">
@@ -380,9 +381,9 @@ export const History = () => {
                             </div>
 
                         </div>
-                    </a>
+                    </Link>
 
-                    <a href="https://maclyonsden.com/user/nisu">
+                    <Link to="https://maclyonsden.com/user/nisu">
                         <div className="member">
                             <div className="member-name">
                                 <div className="member-image">
@@ -399,9 +400,9 @@ export const History = () => {
                             </div>
 
                         </div>
-                    </a>
+                    </Link>
 
-                    <a href="https://maclyonsden.com/user/zozoe_fc">
+                    <Link to="https://maclyonsden.com/user/zozoe_fc">
                         <div className="member">
                             <div className="member-name">
                                 <div className="member-image">
@@ -418,9 +419,9 @@ export const History = () => {
                             </div>
 
                         </div>
-                    </a>
+                    </Link>
 
-                    <a href="https://maclyonsden.com/user/SidewalkSkunk">
+                    <Link to="https://maclyonsden.com/user/SidewalkSkunk">
                         <div className="member">
                             <div className="member-name">
                                 <div className="member-image">
@@ -437,9 +438,9 @@ export const History = () => {
                             </div>
 
                         </div>
-                    </a>
+                    </Link>
 
-                    <a href="https://maclyonsden.com/user/cheollie">
+                    <Link to="https://maclyonsden.com/user/cheollie">
                         <div className="member">
                             <div className="member-name">
                                 <div className="member-image">
@@ -456,9 +457,9 @@ export const History = () => {
                             </div>
 
                         </div>
-                    </a>
+                    </Link>
 
-                    <a href="https://maclyonsden.com/user/Neko">
+                    <Link to="https://maclyonsden.com/user/Neko">
                         <div className="member">
                             <div className="member-name">
                                 <div className="member-image">
@@ -475,14 +476,14 @@ export const History = () => {
                             </div>
 
                         </div>
-                    </a>
+                    </Link>
 
                 </div>
 
                 <div className="member-list">
                     <h2 className="subtitle">Content Creators</h2>
 
-                    <a href="https://maclyonsden.com/user/misheel.bt">
+                    <Link to="https://maclyonsden.com/user/misheel.bt">
                         <div className="member">
                             <div className="member-name">
                                 <div className="member-image">
@@ -499,9 +500,9 @@ export const History = () => {
                             </div>
 
                         </div>
-                    </a>
+                    </Link>
 
-                    <a href="https://maclyonsden.com/user/carminite">
+                    <Link to="https://maclyonsden.com/user/carminite">
                         <div className="member">
                             <div className="member-name">
                                 <div className="member-image">
@@ -518,9 +519,9 @@ export const History = () => {
                             </div>
 
                         </div>
-                    </a>
+                    </Link>
 
-                    <a href="https://maclyonsden.com/user/julianne.ylh">
+                    <Link to="https://maclyonsden.com/user/julianne.ylh">
                         <div className="member">
                             <div className="member-name">
                                 <div className="member-image">
@@ -537,9 +538,9 @@ export const History = () => {
                             </div>
 
                         </div>
-                    </a>
+                    </Link>
 
-                    <a href="https://maclyonsden.com/user/celine_celestium">
+                    <Link to="https://maclyonsden.com/user/celine_celestium">
                         <div className="member">
                             <div className="member-name">
                                 <div className="member-image">
@@ -556,9 +557,9 @@ export const History = () => {
                             </div>
 
                         </div>
-                    </a>
+                    </Link>
 
-                    <a href="https://maclyonsden.com/user/hassankhan8868">
+                    <Link to="https://maclyonsden.com/user/hassankhan8868">
                         <div className="member">
                             <div className="member-name">
                                 <div className="member-image">
@@ -575,14 +576,14 @@ export const History = () => {
                             </div>
 
                         </div>
-                    </a>
+                    </Link>
 
                 </div>
 
                 <div className="member-list">
                     <h2 className="subtitle">Game Developers</h2>
 
-                    <a href="https://maclyonsden.com/user/3xp3rtz">
+                    <Link to="https://maclyonsden.com/user/3xp3rtz">
                         <div className="member">
                             <div className="member-name">
                                 <div className="member-image">
@@ -599,9 +600,9 @@ export const History = () => {
                             </div>
 
                         </div>
-                    </a>
+                    </Link>
 
-                    <a href="https://maclyonsden.com/user/Maplefin">
+                    <Link to="https://maclyonsden.com/user/Maplefin">
                         <div className="member">
                             <div className="member-name">
                                 <div className="member-image">
@@ -618,7 +619,7 @@ export const History = () => {
                             </div>
 
                         </div>
-                    </a>
+                    </Link>
 
                 </div>
 
@@ -628,34 +629,34 @@ export const History = () => {
                 <hr />
                 <p className="text">
                     If you ever find bugs or problems with the site, or need to be granted the staff status,
-                    feel free to <a className="link" href="mailto:hello@maclyonsden.com" target="_blank">email</a> us
+                    feel free to <Link className="link" to="mailto:hello@maclyonsden.com" target="_blank">email</Link> us
                     or use the form below.
                 </p>
                 <ul className="link-section">
                     <div>
                         <li>
-                            <a className="link" href="mailto:hello@maclyonsden.com" target="_blank">
+                            <Link className="link" to="mailto:hello@maclyonsden.com" target="_blank">
                                 <i className="zmdi zmdi-email zmdi-hc-lg" aria-hidden="true"></i>
                                 <p>hello@maclyonsden.com</p>
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a className="link" href="https://github.com/wlmac" target="_blank">
+                            <Link className="link" to="https://github.com/wlmac" target="_blank">
                                 <i className="zmdi zmdi-github zmdi-hc-lg" aria-hidden="true"></i>
                                 <p>wlmac</p>
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a className="link" href="https://www.instagram.com/wlmac.sac/" target="_blank">
+                            <Link className="link" to="https://www.instagram.com/wlmac.sac/" target="_blank">
                                 <i className="zmdi zmdi-instagram zmdi-hc-lg" aria-hidden="true"></i>
                                 <p>@wlmac.sac</p>
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a className="link" href="https://www.facebook.com/groups/keeptrackofmac" target="_blank">
+                            <Link className="link" to="https://www.facebook.com/groups/keeptrackofmac" target="_blank">
                                 <i className="zmdi zmdi-facebook-box zmdi-hc-lg" aria-hidden="true"></i>
                                 <p>Keep Track of MAC</p>
-                            </a>
+                            </Link>
                         </li>
                     </div>
                 </ul>
@@ -676,22 +677,22 @@ export const History = () => {
                 <ul className="link-section">
                     <div>
                         <li>
-                            <a className="link" href="https://wlmac.ca/" target="_blank">
+                            <Link className="link" to="https://wlmac.ca/" target="_blank">
                                 <i className="zmdi zmdi-link zmdi-hc-lg" aria-hidden="true"></i>
                                 <p>WLMCI Offical Website</p>
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a className="link" href="https://goo.gl/maps/WyfTKUqKrbecU4RE9" target="_blank">
+                            <Link className="link" to="https://goo.gl/maps/WyfTKUqKrbecU4RE9" target="_blank">
                                 <i className="zmdi zmdi-map zmdi-hc-lg" aria-hidden="true"></i>
                                 <p>20 Tillplain Road, North York, ON M3H 5R2</p>
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a className="link" href="tel:4163953330">
+                            <Link className="link" to="tel:4163953330">
                                 <i className="zmdi zmdi-phone zmdi-hc-lg" aria-hidden="true"></i>
                                 <p>(416) 395-3330</p>
-                            </a>
+                            </Link>
                         </li>
                     </div>
                 </ul>
@@ -701,23 +702,23 @@ export const History = () => {
                     <div>
                         <h3 className="section-title">Principal</h3>
                         <li>
-                            <a className="link" href="mailto:keith.johnson@tdsb.on.ca" target="_blank">
+                            <Link className="link" to="mailto:keith.johnson@tdsb.on.ca" target="_blank">
                                 <i className="zmdi zmdi-email zmdi-hc-lg" aria-hidden="true"></i>
                                 <p>Keith Johnson (keith.johnson@tdsb.on.ca)</p>
-                            </a>
+                            </Link>
                         </li>
                         <h3 className="section-title">Vice Principals</h3>
                         <li>
-                            <a className="link" href="mailto:joanne.d&#39;addio@tdsb.on.ca" target="_blank">
+                            <Link className="link" to="mailto:joanne.d&#39;addio@tdsb.on.ca" target="_blank">
                                 <i className="zmdi zmdi-email zmdi-hc-lg" aria-hidden="true"></i>
                                 <p>Joanne D'Addio (joanne.d'addio@tdsb.on.ca)</p>
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a className="link" href="mailto:stephen.morris@tdsb.on.ca" target="_blank">
+                            <Link className="link" to="mailto:stephen.morris@tdsb.on.ca" target="_blank">
                                 <i className="zmdi zmdi-email zmdi-hc-lg" aria-hidden="true"></i>
                                 <p>Stephen Morris (stephen.morris@tdsb.on.ca)</p>
-                            </a>
+                            </Link>
                         </li>
                     </div>
                 </ul>
