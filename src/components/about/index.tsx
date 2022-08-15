@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useParams, useNavigate, NavigateFunction } from "react-router-dom";
-import { History } from "./history";
 import { routes } from "./routes";
 
 export const About = (): JSX.Element => {
@@ -9,7 +8,7 @@ export const About = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
 
     const header = (page: string | undefined): Array<JSX.Element> => {
-        return routes.map((route: {id: string, text: string, path: string}) => {
+        return routes.map((route: { id: string, text: string, path: string }) => {
             const headerClass = page === route.id ? "header active" : "header";
             return <li key={route.id} className={headerClass} onClick={() => nav(route.path)}>{route.text}</li>
         });
@@ -56,9 +55,9 @@ export const About = (): JSX.Element => {
     )
 }
 
-const AboutContent = (props: {page: string | undefined}): JSX.Element => {
+const AboutContent = (props: { page: string | undefined }): JSX.Element => {
     for (let comp in routes) {
-        if (comp === props.page) {
+        if (routes[comp].id === props.page) {
             return React.createElement(routes[comp].component);
         }
     }

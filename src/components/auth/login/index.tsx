@@ -2,7 +2,7 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 import { RouterLink } from "../../app/navigation";
 
-export const Login = () => {
+export const Login = (): JSX.Element => {
     function goBack(): void {
         window.history.back();
     }

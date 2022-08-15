@@ -1,40 +1,44 @@
-import { History } from "./history"
+import { ContentHistory } from "./history"
+import { ContentAbout } from "./about"
+import { ContentTeam } from "./team"
+import { ContentSchool } from "./school"
+import { ContentContact } from "./contact"
 
 export const routes = [
     {
         id: "history",
         text: "WLMCI",
         path: "/about/history",
-        component: History,
+        component: ContentHistory,
     },
     {
         id: "about",
         text: "ABOUT",
         path: "/about/about",
-        component: History,
+        component: ContentAbout,
     },
     {
         id: "team",
         text: "TEAM",
         path: "/about/team",
-        component: History,
+        component: ContentTeam,
     },
     {
         id: "map",
         text: "MAP",
         path: "/map",
-        component: History,
+        component: ContentHistory,
     },
     {
         id: "school",
         text: "CONTACT WLMCI",
         path: "/about/school",
-        component: History,
+        component: ContentSchool,
     },
     {
         id: "contact",
         text: "CONTACT US",
         path: "/about/contact",
-        component: History,
+        component: ContentContact,
     },
 ]
