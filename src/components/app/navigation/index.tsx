@@ -46,22 +46,22 @@ export const NavigationBar = (): JSX.Element => {
                     <li>
                         <a className="dropdown-trigger" href="/#!" data-target="dropdownAbout">About<i className="zmdi zmdi-caret-down"></i></a><ul id="dropdownAbout" className="dropdown-content">
                             <li>
-                                <NavLink href="/about/history">WLMCI</NavLink>
+                                <NavLink href="/about?tab=history">WLMCI</NavLink>
                             </li>
                             <li>
-                                <NavLink href="/about/about">About</NavLink>
+                                <NavLink href="/about?tab=about">About</NavLink>
                             </li>
                             <li>
-                                <NavLink href="/about/team">Team</NavLink>
+                                <NavLink href="/about?tab=team">Team</NavLink>
                             </li>
                             <li>
                                 <NavLink href="/map">Map</NavLink>
                             </li>
                             <li>
-                                <NavLink href="/about/school">Contact WLMCI</NavLink>
+                                <NavLink href="/about?tab=school">Contact WLMCI</NavLink>
                             </li>
                             <li>
-                                <NavLink href="/about/contact">Contact Us</NavLink>
+                                <NavLink href="/about?tab=contact">Contact Us</NavLink>
                             </li>
                         </ul>
                     </li>
