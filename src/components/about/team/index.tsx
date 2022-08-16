@@ -39,7 +39,7 @@ export const ContentTeam = (): JSX.Element => {
             <div className="member-list">
                 <h2 className="subtitle">Frontend Developers</h2>
 
-                <Link to="https://maclyonsden.com/user/toaster203">
+                <Link to="/user/toaster203">
                     <div className="member">
                         <div className="member-name">
                             <div className="member-image">
@@ -58,7 +58,7 @@ export const ContentTeam = (): JSX.Element => {
                     </div>
                 </Link>
 
-                <Link to="https://maclyonsden.com/user/lindiana">
+                <Link to="/user/lindiana">
                     <div className="member">
                         <div className="member-name">
                             <div className="member-image">
@@ -77,7 +77,7 @@ export const ContentTeam = (): JSX.Element => {
                     </div>
                 </Link>
 
-                <Link to="https://maclyonsden.com/user/ji.mmyliu">
+                <Link to="/user/ji.mmyliu">
                     <div className="member">
                         <div className="member-name">
                             <div className="member-image">
@@ -96,7 +96,7 @@ export const ContentTeam = (): JSX.Element => {
                     </div>
                 </Link>
 
-                <Link to="https://maclyonsden.com/user/AavaSapkota">
+                <Link to="/user/AavaSapkota">
                     <div className="member">
                         <div className="member-name">
                             <div className="member-image">
@@ -115,7 +115,7 @@ export const ContentTeam = (): JSX.Element => {
                     </div>
                 </Link>
 
-                <Link to="https://maclyonsden.com/user/rcshim04">
+                <Link to="/user/rcshim04">
                     <div className="member">
                         <div className="member-name">
                             <div className="member-image">
@@ -134,7 +134,7 @@ export const ContentTeam = (): JSX.Element => {
                     </div>
                 </Link>
 
-                <Link to="https://maclyonsden.com/user/V1ad20">
+                <Link to="/user/V1ad20">
                     <div className="member">
                         <div className="member-name">
                             <div className="member-image">
@@ -153,7 +153,7 @@ export const ContentTeam = (): JSX.Element => {
                     </div>
                 </Link>
 
-                <Link to="https://maclyonsden.com/user/Trentium">
+                <Link to="/user/Trentium">
                     <div className="member">
                         <div className="member-name">
                             <div className="member-image">
@@ -172,7 +172,7 @@ export const ContentTeam = (): JSX.Element => {
                     </div>
                 </Link>
 
-                <Link to="https://maclyonsden.com/user/justinzhu">
+                <Link to="/user/justinzhu">
                     <div className="member">
                         <div className="member-name">
                             <div className="member-image">
@@ -196,7 +196,7 @@ export const ContentTeam = (): JSX.Element => {
             <div className="member-list">
                 <h2 className="subtitle">Backend Developers</h2>
 
-                <Link to="https://maclyonsden.com/user/4yfc">
+                <Link to="/user/4yfc">
                     <div className="member">
                         <div className="member-name">
                             <div className="member-image">
@@ -215,7 +215,7 @@ export const ContentTeam = (): JSX.Element => {
                     </div>
                 </Link>
 
-                <Link to="https://maclyonsden.com/user/enigma">
+                <Link to="/user/enigma">
                     <div className="member">
                         <div className="member-name">
                             <div className="member-image">
@@ -234,7 +234,7 @@ export const ContentTeam = (): JSX.Element => {
                     </div>
                 </Link>
 
-                <Link to="https://maclyonsden.com/user/nyiyui">
+                <Link to="/user/nyiyui">
                     <div className="member">
                         <div className="member-name">
                             <div className="member-image">
@@ -253,7 +253,7 @@ export const ContentTeam = (): JSX.Element => {
                     </div>
                 </Link>
 
-                <Link to="https://maclyonsden.com/user/retep">
+                <Link to="/user/retep">
                     <div className="member">
                         <div className="member-name">
                             <div className="member-image">
@@ -277,7 +277,7 @@ export const ContentTeam = (): JSX.Element => {
             <div className="member-list">
                 <h2 className="subtitle">App Developers</h2>
 
-                <Link to="https://maclyonsden.com/user/ApocalypseCalculator">
+                <Link to="/user/ApocalypseCalculator">
                     <div className="member">
                         <div className="member-name">
                             <div className="member-image">
@@ -296,7 +296,7 @@ export const ContentTeam = (): JSX.Element => {
                     </div>
                 </Link>
 
-                <Link to="https://maclyonsden.com/user/AZron">
+                <Link to="/user/AZron">
                     <div className="member">
                         <div className="member-name">
                             <div className="member-image">
@@ -320,7 +320,7 @@ export const ContentTeam = (): JSX.Element => {
             <div className="member-list">
                 <h2 className="subtitle">Graphic Designers</h2>
 
-                <Link to="https://maclyonsden.com/user/aliciachung">
+                <Link to="/user/aliciachung">
                     <div className="member">
                         <div className="member-name">
                             <div className="member-image">
@@ -339,7 +339,7 @@ export const ContentTeam = (): JSX.Element => {
                     </div>
                 </Link>
 
-                <Link to="https://maclyonsden.com/user/nisu">
+                <Link to="/user/nisu">
                     <div className="member">
                         <div className="member-name">
                             <div className="member-image">
@@ -358,7 +358,7 @@ export const ContentTeam = (): JSX.Element => {
                     </div>
                 </Link>
 
-                <Link to="https://maclyonsden.com/user/zozoe_fc">
+                <Link to="/user/zozoe_fc">
                     <div className="member">
                         <div className="member-name">
                             <div className="member-image">
@@ -377,7 +377,7 @@ export const ContentTeam = (): JSX.Element => {
                     </div>
                 </Link>
 
-                <Link to="https://maclyonsden.com/user/SidewalkSkunk">
+                <Link to="/user/SidewalkSkunk">
                     <div className="member">
                         <div className="member-name">
                             <div className="member-image">
@@ -396,7 +396,7 @@ export const ContentTeam = (): JSX.Element => {
                     </div>
                 </Link>
 
-                <Link to="https://maclyonsden.com/user/cheollie">
+                <Link to="/user/cheollie">
                     <div className="member">
                         <div className="member-name">
                             <div className="member-image">
@@ -415,7 +415,7 @@ export const ContentTeam = (): JSX.Element => {
                     </div>
                 </Link>
 
-                <Link to="https://maclyonsden.com/user/Neko">
+                <Link to="/user/Neko">
                     <div className="member">
                         <div className="member-name">
                             <div className="member-image">
@@ -439,7 +439,7 @@ export const ContentTeam = (): JSX.Element => {
             <div className="member-list">
                 <h2 className="subtitle">Content Creators</h2>
 
-                <Link to="https://maclyonsden.com/user/misheel.bt">
+                <Link to="/user/misheel.bt">
                     <div className="member">
                         <div className="member-name">
                             <div className="member-image">
@@ -458,7 +458,7 @@ export const ContentTeam = (): JSX.Element => {
                     </div>
                 </Link>
 
-                <Link to="https://maclyonsden.com/user/carminite">
+                <Link to="/user/carminite">
                     <div className="member">
                         <div className="member-name">
                             <div className="member-image">
@@ -477,7 +477,7 @@ export const ContentTeam = (): JSX.Element => {
                     </div>
                 </Link>
 
-                <Link to="https://maclyonsden.com/user/julianne.ylh">
+                <Link to="/user/julianne.ylh">
                     <div className="member">
                         <div className="member-name">
                             <div className="member-image">
@@ -496,7 +496,7 @@ export const ContentTeam = (): JSX.Element => {
                     </div>
                 </Link>
 
-                <Link to="https://maclyonsden.com/user/celine_celestium">
+                <Link to="/user/celine_celestium">
                     <div className="member">
                         <div className="member-name">
                             <div className="member-image">
@@ -515,7 +515,7 @@ export const ContentTeam = (): JSX.Element => {
                     </div>
                 </Link>
 
-                <Link to="https://maclyonsden.com/user/hassankhan8868">
+                <Link to="/user/hassankhan8868">
                     <div className="member">
                         <div className="member-name">
                             <div className="member-image">
@@ -539,7 +539,7 @@ export const ContentTeam = (): JSX.Element => {
             <div className="member-list">
                 <h2 className="subtitle">Game Developers</h2>
 
-                <Link to="https://maclyonsden.com/user/3xp3rtz">
+                <Link to="/user/3xp3rtz">
                     <div className="member">
                         <div className="member-name">
                             <div className="member-image">
@@ -558,7 +558,7 @@ export const ContentTeam = (): JSX.Element => {
                     </div>
                 </Link>
 
-                <Link to="https://maclyonsden.com/user/Maplefin">
+                <Link to="/user/Maplefin">
                     <div className="member">
                         <div className="member-name">
                             <div className="member-image">

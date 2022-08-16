@@ -1,17 +1,18 @@
 import * as React from "react";
 import { useParams, useNavigate, NavigateFunction } from "react-router-dom";
-import { routes } from "./routes";
+import { AboutRoutes } from "./routes";
 import { useQuery } from "../../util/query";
+import { AboutRoute } from "../../util/models";
 
 export const About = (): JSX.Element => {
-    const query = useQuery();
-    const page = query.get("tab");
+    const query: URLSearchParams = useQuery();
+    const page: string | null = query.get("tab");
     const nav: NavigateFunction = useNavigate();
 
     const header = (page: string | null): Array<JSX.Element> => {
-        return routes.map((route: { id: string, text: string, path: string }) => {
-            const headerClass = page === route.id ? "header active" : "header";
-            return <li key={route.id} className={headerClass} onClick={() => nav(route.path)}>{route.text}</li>
+        return AboutRoutes.map((route: AboutRoute): JSX.Element => {
+            const headerClass: string = page === route.id ? "header active" : "header";
+            return <li key={route.id} className={headerClass} onClick={(): void => nav(route.path)}>{route.text}</li>
         });
     }
 
@@ -29,10 +30,10 @@ export const About = (): JSX.Element => {
 }
 
 const AboutContent = (props: { page: string | null }): JSX.Element => {
-    for (let comp in routes) {
-        if (routes[comp].id === props.page) {
-            return React.createElement(routes[comp].component);
+    for (let comp of AboutRoutes) {
+        if (comp.id === props.page) {
+            return React.createElement(comp.component);
         }
     }
-    return React.createElement(routes[0].component); // Return history component by default
+    return React.createElement(AboutRoutes[0].component); // Return history component by default
 }

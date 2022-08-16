@@ -1,8 +1,8 @@
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 
 export const NavigationBar = (): JSX.Element => {
-    const nav = useNavigate();
+    const nav: NavigateFunction = useNavigate();
 
     return (
         <nav>
@@ -19,15 +19,15 @@ export const NavigationBar = (): JSX.Element => {
                         <a className="dropdown-trigger" data-target="dropdownAnnouncements">Announcements<i className="zmdi zmdi-caret-down"></i></a>
                         <ul id="dropdownAnnouncements" className="dropdown-content">
                             <li>
-                                <NavLink href="/announcements/all">All</NavLink>
+                                <NavLink href="/announcements?feed=all">All</NavLink>
                             </li>
 
                             <li>
-                                <NavLink href="/announcements/school">School</NavLink>
+                                <NavLink href="/announcements?feed=school">School</NavLink>
                             </li>
 
                             <li>
-                                <NavLink href="/announcements/studentcouncil">Student Council</NavLink>
+                                <NavLink href="/announcements?feed=studentcouncil">Student Council</NavLink>
                             </li>
                         </ul>
                     </li>
@@ -84,7 +84,7 @@ export const NavigationBar = (): JSX.Element => {
 }
 
 export const NavLink = (props: any) => {
-    const nav = useNavigate();
+    const nav: NavigateFunction = useNavigate();
 
     return (
         <a className="nav-link" href={props.href} onClick={(ev) => {
@@ -95,7 +95,7 @@ export const NavLink = (props: any) => {
 }
 
 export const RouterLink = (props: any) => {
-    const nav = useNavigate();
+    const nav: NavigateFunction = useNavigate();
 
     return (
         <a href={props.href} className={props.className} onClick={(ev) => {

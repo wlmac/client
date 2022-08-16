@@ -3,8 +3,9 @@ import { ContentAbout } from "./about"
 import { ContentTeam } from "./team"
 import { ContentSchool } from "./school"
 import { ContentContact } from "./contact"
+import { AboutRoute } from "../../util/models"
 
-export const routes = [
+export const AboutRoutes: Array<AboutRoute> = [
     {
         id: "history",
         text: "WLMCI",

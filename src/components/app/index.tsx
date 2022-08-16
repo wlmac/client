@@ -1,5 +1,5 @@
 import * as React from "react";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate, NavigateFunction } from "react-router-dom";
 import { NavigationBar } from "./navigation";
 import { Footer } from "./footer";
 import { Home } from "../home";
@@ -15,7 +15,7 @@ import M from 'materialize-css';
 import "./index.scss";
 
 export const _App = (): JSX.Element => {
-    const nav = useNavigate();
+    const nav: NavigateFunction = useNavigate();
 
     React.useEffect((): void => {
         M.AutoInit();
