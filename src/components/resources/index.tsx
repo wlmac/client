@@ -1,7 +1,11 @@
 import * as React from "react";
 
 export const Resources = (): JSX.Element => {
-    function goBack(): void {
+    React.useEffect((): void => {
+        document.title = "Resources | Metropolis";
+    }, []);
+
+    const goBack = (): void => {
         window.history.back();
     }
 

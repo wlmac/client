@@ -2,7 +2,11 @@ import * as React from "react";
 import { RouterLink } from "../../app/navigation";
 
 export const Register = (): JSX.Element => {
-    function goBack(): void {
+    React.useEffect((): void => {
+        document.title = "Sign Up | Metropolis";
+    }, []);
+
+    const goBack = (): void => {
         window.history.back();
     }
 

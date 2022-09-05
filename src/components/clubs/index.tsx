@@ -1,6 +1,10 @@
 import * as React from "react";
 
 export const Clubs = (): JSX.Element => {
+    React.useEffect((): void => {
+        document.title = "Clubs | Metropolis";
+    }, []);
+
     const goBack = (): void => {
         window.history.back();
     }

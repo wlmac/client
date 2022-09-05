@@ -3,20 +3,21 @@ import { Link } from "react-router-dom";
 import { RouterLink } from "../../app/navigation";
 
 export const Login = (): JSX.Element => {
-    function goBack(): void {
-        window.history.back();
-    }
-
-    function removePlaceholder(elmID: string): void {
-        document.getElementById(elmID)!.removeAttribute("placeholder");
-        console.log(document.getElementById(elmID));
-    }
-
     React.useEffect((): void => {
         removePlaceholder("id_login");
         removePlaceholder("id_password");
         removePlaceholder("id_remember");
+        document.title = "Login | Metropolis";
     }, []);
+
+    const goBack = (): void => {
+        window.history.back();
+    }
+
+    const removePlaceholder = (elmID: string): void => {
+        document.getElementById(elmID)!.removeAttribute("placeholder");
+        console.log(document.getElementById(elmID));
+    }
 
     return (
         <div className="login-page">

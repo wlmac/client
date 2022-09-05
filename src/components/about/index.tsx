@@ -9,6 +9,10 @@ export const About = (): JSX.Element => {
     const page: string | null = query.get("tab");
     const nav: NavigateFunction = useNavigate();
 
+    React.useEffect((): void => {
+        document.title = "About | Metropolis";
+    }, []);
+
     const header = (page: string | null): Array<JSX.Element> => {
         return AboutRoutes.map((route: AboutRoute): JSX.Element => {
             const headerClass: string = page === route.id ? "header active" : "header";
