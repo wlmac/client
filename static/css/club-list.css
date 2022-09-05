@@ -1,0 +1,223 @@
+.red-square {
+    height: 20px;
+    width: 20px;
+    background-color: var(--status-red);
+    margin: 6px;
+    border-radius: 20%;
+}
+
+.green-square {
+    height: 20px;
+    width: 20px;
+    background-color: var(--status-green);
+    margin: 6px;
+    border-radius: 20%;
+}
+
+.yellow-square {
+    height: 20px;
+    width: 20px;
+    background-color: var(--status-yellow);
+    margin: 6px;
+    border-radius: 20%;
+}
+
+.message {
+    width: 100%;
+    margin-top: 30px;
+    text-align: center;
+}
+
+.card-container {
+    padding: 40px;
+    padding-bottom: 20px;
+    background-color: white;
+    min-height: calc(100vh - 164px);
+}
+.legend {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+.legend-items {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    margin-right: 1rem;
+}
+.cards {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+}
+.card {
+    margin: 0;
+    margin-bottom: 1.4rem;
+    padding: 20px;
+    width: calc(50% - 1rem);
+    min-height: 275px;
+}
+.card:nth-child(odd) {
+    margin-right: 0.7rem;
+}
+.card:nth-child(even) {
+    margin-left: 0.7rem;
+}
+hr {
+    margin: 20px 0 10px;
+    border: 0px solid var(--light-grey);
+    border-top-width: 2px;
+}
+
+.green-status{
+    border-left: 5px solid var(--status-green);
+}
+
+.red-status{
+    border-left: 5px solid var(--status-red);
+}
+
+.yellow-status{
+    border-left: 5px solid var(--status-yellow);
+}
+
+.title  {
+    font-weight: bold;
+    margin: 0;
+    font-size: 2rem;
+    overflow-wrap: anywhere;
+}
+.title > a {
+    color: inherit
+}
+
+.club-description p {
+    overflow-wrap: anywhere;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+       text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* number of lines to show */
+    -webkit-box-orient: vertical;
+    margin: 0;
+    margin-top: 0;
+    color: gray;
+    font-size: 1rem;
+    line-height: 1.6rem;
+    overflow-wrap: anywhere;
+}
+
+.tag-section {
+    position: relative;
+    bottom: 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-flow: row wrap;
+            flex-flow: row wrap;
+    margin: 0;
+    margin-top: 10px;
+}
+.tag {
+    padding: 2px 7px !important;
+    margin: 3px 6px 3px 0px !important;
+    background-color: lightblue;
+    border-radius: 0.25rem;
+    color: var(--dark-grey);
+    font-size: 0.8rem;
+    font-family: 'Roboto Mono', monospace;
+}
+
+.club-logo {
+    margin-left: 0px !important;
+    margin-right: 20px;
+    padding: 0px !important;
+    width: 100px;
+    height: 100px;
+}
+.club-logo img {
+    -o-object-fit: cover;
+       object-fit: cover;
+    -webkit-box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 20%);
+            box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 20%);
+}
+
+.circle {
+    height: 100px; 
+    width: 100px;
+}
+
+@media screen and (max-width: 800px) {
+    .cards {
+        display: block;
+    }
+    .card {
+        width: 100%;
+        margin: 1.5rem 0;
+        min-height: auto;
+    }
+    .card:nth-child(odd) {
+        margin-right: 0;
+    }
+    .card:nth-child(even) {
+        margin-left: 0;
+    }
+    /* .tag-section {
+        position: relative;
+        bottom: 0;
+    } */
+}
+
+@media screen and (max-width: 600px) {
+    .card-container {
+        padding: 20px;
+        padding-bottom: 10px;
+        min-height: calc(100vh - 96px);
+    }
+    .legend {
+        margin-bottom: 5px;
+    }
+    .title {
+        font-size: 1.5rem;
+    }
+    .circle{
+        height: 57px; 
+        width: 57px;
+    }
+    .club-logo {
+        width: 57px;
+        height: 57px;
+        margin-right: 15px;
+    }
+    .card {
+        padding: 15px;
+        margin: 1rem 0;
+    }
+    hr {
+        margin-top: 12px;
+        margin-bottom: 5px;
+    }
+    .legend-items {
+        zoom: 0.8;
+        -webkit-transform: scale(0.8);
+            -ms-transform: scale(0.8);
+                transform: scale(0.8);
+    }
+    .tag-section {
+        zoom: 0.8;
+        -webkit-transform: scale(0.8);
+            -ms-transform: scale(0.8);
+                transform: scale(0.8);
+    }
+}
+

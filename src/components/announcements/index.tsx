@@ -21,13 +21,15 @@ export const Announcements = (): JSX.Element => {
     }
 
     return (
-        <div className="container">
-            <div className="headers">
-                <ul>
-                    {header(feed)}
-                </ul>
+        <>
+            <link rel="stylesheet" href="static/css/announcement-list.css" />
+            <div className="container">
+                <div className="headers">
+                    <ul>
+                        {header(feed)}
+                    </ul>
 
-                {/* <script type="module">
+                    {/* <script type="module">
             import { loadCheck, mapSetup } from "/static/core/js/announcement/lazy.js";
             const feeds = mapSetup(
                 [
@@ -51,7 +53,7 @@ export const Announcements = (): JSX.Element => {
             }
             window.addEventListener("scroll", listen);
         </script> */}
-                {/* <script>
+                    {/* <script>
             $(document).ready(function() {
                 var urlParams = new URLSearchParams(window.location.search);
                 if(!urlParams.get("feed")) {
@@ -76,9 +78,9 @@ export const Announcements = (): JSX.Element => {
                 });
             });
         </script> */}
-            </div>
-            <div className="card-container">
-                {/* <!-- to-do: search bar, DNR
+                </div>
+                <div className="card-container">
+                    {/* <!-- to-do: search bar, DNR
         <div className="search-items">
             <div className="input-field">
                 <form className="search-form" method="get">
@@ -92,47 +94,47 @@ export const Announcements = (): JSX.Element => {
             </div>
         </div>
         --> */}
-                <div className="cards" id="cards-all">
-                    <div className="card">
-                        <div className="card-headers">
-                            <div className="tag-section">
-                                <p className="tag" style={{ backgroundColor: "#ffccce" }}>club applications</p>
-                                <p className="tag" style={{ backgroundColor: "#f7ccff" }}>accepting applications</p>
-                                <p className="tag" style={{ backgroundColor: "#f3ccff" }}>applications</p>
-                            </div>
-                            <h1 className="title">Project Metropolis - NOW HIRING!</h1>
-                            <div className="card-authors">
-                                <div className="card-authors-image">
-                                    <a href="https://maclyonsden.com/club/metropolis"><img className="circle" src="./Announcements _ Metropolis_files/1ba64f684a334d26bd87add205e97154.png" /></a>
+                    <div className="cards" id="cards-all">
+                        <div className="card">
+                            <div className="card-headers">
+                                <div className="tag-section">
+                                    <p className="tag" style={{ backgroundColor: "#ffccce" }}>club applications</p>
+                                    <p className="tag" style={{ backgroundColor: "#f7ccff" }}>accepting applications</p>
+                                    <p className="tag" style={{ backgroundColor: "#f3ccff" }}>applications</p>
                                 </div>
-                                <div className="card-authors-text">
-                                    <a href="https://maclyonsden.com/club/metropolis" className="link">Project Metropolis</a>,
-                                    <a href="https://maclyonsden.com/user/misheel.bt" className="link">Misheel Batkhuu</a>
-                                    <br />
-                                    {/*<dot>•</dot>*/} • Jul. 15, 2022, 12:05 pm
-                                    {/* <!--
+                                <h1 className="title">Project Metropolis - NOW HIRING!</h1>
+                                <div className="card-authors">
+                                    <div className="card-authors-image">
+                                        <a href="https://maclyonsden.com/club/metropolis"><img className="circle" src="./Announcements _ Metropolis_files/1ba64f684a334d26bd87add205e97154.png" /></a>
+                                    </div>
+                                    <div className="card-authors-text">
+                                        <a href="https://maclyonsden.com/club/metropolis" className="link">Project Metropolis</a>,
+                                        <a href="https://maclyonsden.com/user/misheel.bt" className="link">Misheel Batkhuu</a>
+                                        <br />
+                                        {/*<dot>•</dot>*/} • Jul. 15, 2022, 12:05 pm
+                                        {/* <!--
                                         (Edited)
                                         --> */}
+                                    </div>
                                 </div>
                             </div>
+                            <hr />
+                            <div className="card-body">
+                                <p>Aloha Mac Lyons!<br />Project Metropolis doesn't run itself - behind Mac Lyons' Den young humans are hard at work. In hardly a year, our tightly-knit team developed the Project Metropolis label and everything with it - app, website, podcasts, playlists, and doodle games.<br />Today we are imploring you to apply so you can join in the action!<br />Choose this fulfilling highlight to your high school years, collect transferable skills for any field and application, and create memories to last a lifetime.<br />Bring your vision inspired by passion and fueled by courage. Frontend, Backend, App, Content, and/or Art has a place for your authentic self. Apply today: https://forms.gle/MLrFckYTyYJ3R5KdA</p>
+                            </div>
+                            <br />
+                            <a className="link" href="https://maclyonsden.com/announcement/216">See announcement <i className="zmdi zmdi-chevron-right"></i></a>
                         </div>
-                        <hr />
-                        <div className="card-body">
-                            <p>Aloha Mac Lyons!<br />Project Metropolis doesn't run itself - behind Mac Lyons' Den young humans are hard at work. In hardly a year, our tightly-knit team developed the Project Metropolis label and everything with it - app, website, podcasts, playlists, and doodle games.<br />Today we are imploring you to apply so you can join in the action!<br />Choose this fulfilling highlight to your high school years, collect transferable skills for any field and application, and create memories to last a lifetime.<br />Bring your vision inspired by passion and fueled by courage. Frontend, Backend, App, Content, and/or Art has a place for your authentic self. Apply today: https://forms.gle/MLrFckYTyYJ3R5KdA</p>
-                        </div>
-                        <br />
-                        <a className="link" href="https://maclyonsden.com/announcement/216">See announcement <i className="zmdi zmdi-chevron-right"></i></a>
-                    </div>
 
-                    <div className="card">
-                        <div className="card-headers">
-                            <div className="tag-section">
+                        <div className="card">
+                            <div className="card-headers">
+                                <div className="tag-section">
 
-                                <p className="tag" style={{ backgroundColor: "#e4ffcc" }}>visual art &amp; photography</p>
+                                    <p className="tag" style={{ backgroundColor: "#e4ffcc" }}>visual art &amp; photography</p>
 
-                                <p className="tag" style={{ backgroundColor: "#ccffeb" }}>languages &amp; writing</p>
+                                    <p className="tag" style={{ backgroundColor: "#ccffeb" }}>languages &amp; writing</p>
 
-                                {/* <p className="tag" style="background-color:#f9ccff">cultural &amp; community</p>
+                                    {/* <p className="tag" style="background-color:#f9ccff">cultural &amp; community</p>
             
             <p className="tag" style="background-color:#cce2ff">news</p>
             
@@ -140,41 +142,41 @@ export const Announcements = (): JSX.Element => {
             
             <p className="tag" style="background-color:#faffcc">social</p> */}
 
-                            </div>
-                            <h1 className="title">Issue 4 is here!</h1>
-                            <div className="card-authors">
-                                <div className="card-authors-image">
-                                    <a href="https://maclyonsden.com/club/the-lyon"><img className="circle" src="./Announcements _ Metropolis_files/83522403688c489096bb13b7e56ed6b1.png" /></a>
                                 </div>
-                                <div className="card-authors-text">
-                                    <a href="https://maclyonsden.com/club/the-lyon" className="link">The Lyon</a>,
-                                    <a href="https://maclyonsden.com/user/Kayla" className="link">Kayla Albin-Smith</a>
-                                    <br />
-                                    {/*<dot>•</dot>*/} Jun. 30, 2022, 7:27 pm
-                                    {/* <!--
+                                <h1 className="title">Issue 4 is here!</h1>
+                                <div className="card-authors">
+                                    <div className="card-authors-image">
+                                        <a href="https://maclyonsden.com/club/the-lyon"><img className="circle" src="./Announcements _ Metropolis_files/83522403688c489096bb13b7e56ed6b1.png" /></a>
+                                    </div>
+                                    <div className="card-authors-text">
+                                        <a href="https://maclyonsden.com/club/the-lyon" className="link">The Lyon</a>,
+                                        <a href="https://maclyonsden.com/user/Kayla" className="link">Kayla Albin-Smith</a>
+                                        <br />
+                                        {/*<dot>•</dot>*/} Jun. 30, 2022, 7:27 pm
+                                        {/* <!--
                 (Edited)
                 --> */}
+                                    </div>
                                 </div>
                             </div>
+                            <hr />
+                            <div className="card-body">
+                                <p>Issue 4 of the Lyon is here! Click the link below to read.<br />https://drive.google.com/file/d/1YyxqnbjOSZ29YBQVKDKRF5OZwFnBdmzX/view?usp=sharing</p>
+                            </div>
+                            <br />
+                            <a className="link" href="https://maclyonsden.com/announcement/215">See announcement <i className="zmdi zmdi-chevron-right"></i></a>
                         </div>
-                        <hr />
-                        <div className="card-body">
-                            <p>Issue 4 of the Lyon is here! Click the link below to read.<br />https://drive.google.com/file/d/1YyxqnbjOSZ29YBQVKDKRF5OZwFnBdmzX/view?usp=sharing</p>
-                        </div>
-                        <br />
-                        <a className="link" href="https://maclyonsden.com/announcement/215">See announcement <i className="zmdi zmdi-chevron-right"></i></a>
                     </div>
                 </div>
-            </div>
 
-            {/* to-do: search bar, DNR
+                {/* to-do: search bar, DNR
         <div className="cards" id="cards-search">
             
             <div className="message">There are no announcements that match your search terms</div>
             
         </div> */}
 
-            {/* <script>
+                {/* <script>
             $(document).ready(function() {
                 var urlParams = new URLSearchParams(window.location.search);
                 $(".cards").hide();
@@ -200,6 +202,7 @@ export const Announcements = (): JSX.Element => {
                 }
             });
         </script> */}
-        </div>
+            </div>
+        </>
     );
 }

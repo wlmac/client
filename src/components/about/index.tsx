@@ -17,16 +17,21 @@ export const About = (): JSX.Element => {
     }
 
     return (
-        <div className="container">
-            <div className="headers">
-                <ul>
-                    {header(page)}
-                </ul>
-            </div>
+        <>
+            <link rel="stylesheet" href="static/css/about.css" />
+            <div className="container">
+                <div className="headers">
+                    <ul>
+                        {header(page)}
+                    </ul>
+                </div>
 
-            <AboutContent page={page} />
-        </div>
-    )
+                <div className="content-container">
+                    <AboutContent page={page} />
+                </div>
+            </div>
+        </>
+    );
 }
 
 const AboutContent = (props: { page: string | null }): JSX.Element => {
