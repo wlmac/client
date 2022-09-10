@@ -26,8 +26,8 @@ export const Announcements = (): JSX.Element => {
                 <ul>
                     {header(feed)}
                 </ul>
-
-                {/* <script type="module">
+            </div>
+            {/* <script type="module">
             import { loadCheck, mapSetup } from "/static/core/js/announcement/lazy.js";
             const feeds = mapSetup(
                 [
@@ -51,7 +51,7 @@ export const Announcements = (): JSX.Element => {
             }
             window.addEventListener("scroll", listen);
         </script> */}
-                {/* <script>
+            {/* <script>
             $(document).ready(function() {
                 var urlParams = new URLSearchParams(window.location.search);
                 if(!urlParams.get("feed")) {
@@ -76,7 +76,7 @@ export const Announcements = (): JSX.Element => {
                 });
             });
         </script> */}
-            </div>
+
             <div className="card-container">
                 {/* <!-- to-do: search bar, DNR
         <div className="search-items">
