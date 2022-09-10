@@ -11,7 +11,7 @@ export const Clubs = (): JSX.Element => {
 
     return (
         <>
-            <link rel="stylesheet" href="static/css/club-list.css" />
+            <link rel="stylesheet" href="/static/css/club-list.css" />
 
             <a id="back" onClick={goBack}>
                 <i className="zmdi zmdi-arrow-left"></i>
