@@ -64,7 +64,7 @@ export const Home = (): JSX.Element => {
                 <hr style={{ margin: "10px calc(2% + 10px)", borderTopWidth: "2.5px", borderColor: "#d9d9d9" }} />
                 <div id="recent-announcements" className="center-align">
                     <div id="announcements" className="cards-container">
-                        <div className="announcement-card card  left-align" style={{ borderColor: "#ffccce" }}>
+                        <div className="announcement-card card left-align" style={{ borderColor: "#ffccce" }}>
                             <h5 className="title truncate">Project Metropolis - NOW HIRING!</h5>
                             <div className="authors">
                                 <div className="authors-image">
@@ -81,7 +81,7 @@ export const Home = (): JSX.Element => {
                             </div>
                         </div>
 
-                        <div className="announcement-card card  left-align" style={{ borderColor: "#e4ffcc" }}>
+                        <div className="announcement-card card left-align" style={{ borderColor: "#e4ffcc" }}>
                             <h5 className="title truncate">Issue 4 is here!</h5>
                             <div className="authors">
                                 <div className="authors-image">
@@ -98,7 +98,7 @@ export const Home = (): JSX.Element => {
                             </div>
                         </div>
 
-                        <div className="announcement-card card  hide-on-med-and-down  left-align" style={{ borderColor: "#ffccce" }}>
+                        <div className="announcement-card card hide-on-med-and-down  left-align" style={{ borderColor: "#ffccce" }}>
                             <h5 className="title truncate">MAC DANCE HALL</h5>
                             <div className="authors">
                                 <div className="authors-image">

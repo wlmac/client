@@ -12,7 +12,7 @@ export const AnnouncementFeeds: Array<AnnouncementFeed> = [
         filters: null,
     },
     {
-        id: "studentcouncil",
+        id: "sac",
         text: "STUDENT COUNCIL",
         filters: null,
     }

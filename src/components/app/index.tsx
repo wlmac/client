@@ -7,6 +7,7 @@ import { Announcements } from "../announcements";
 import { NotFound } from "../notfound";
 import { Resources } from "../resources";
 import { About } from "../about";
+import { Clubs } from "../clubs";
 
 import { Login } from "../auth/login";
 import { Register } from "../auth/register";
@@ -29,16 +30,16 @@ export const _App = (): JSX.Element => {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/announcements" element={<Announcements />} />
+                    <Route path="/clubs" element={<Clubs />} />
                     <Route path="/resources" element={<Resources />} />
-
-                    <Route path="/accounts/login" element={<Login />} />
-                    <Route path="/accounts/signup" element={<Register />} />
-
                     <Route path="/about" element={<About />}>
                         <Route path=":page" element={<About />} />
                     </Route>
 
                     <Route path="/map" />
+
+                    <Route path="/accounts/login" element={<Login />} />
+                    <Route path="/accounts/signup" element={<Register />} />
 
                     <Route path="*" element={<NotFound />} />
                 </Routes>

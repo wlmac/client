@@ -9,6 +9,10 @@ export const About = (): JSX.Element => {
     const page: string | null = query.get("tab");
     const nav: NavigateFunction = useNavigate();
 
+    React.useEffect((): void => {
+        document.title = "About | Metropolis";
+    }, []);
+
     const header = (page: string | null): Array<JSX.Element> => {
         return AboutRoutes.map((route: AboutRoute): JSX.Element => {
             const headerClass: string = page === route.id ? "header active" : "header";
@@ -17,16 +21,21 @@ export const About = (): JSX.Element => {
     }
 
     return (
-        <div className="container">
-            <div className="headers">
-                <ul>
-                    {header(page)}
-                </ul>
-            </div>
+        <>
+            <link rel="stylesheet" href="static/css/about.css" />
+            <div className="container">
+                <div className="headers">
+                    <ul>
+                        {header(page)}
+                    </ul>
+                </div>
 
-            <AboutContent page={page} />
-        </div>
-    )
+                <div className="content-container">
+                    <AboutContent page={page} />
+                </div>
+            </div>
+        </>
+    );
 }
 
 const AboutContent = (props: { page: string | null }): JSX.Element => {
