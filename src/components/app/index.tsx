@@ -14,6 +14,7 @@ import { Register } from "../auth/register";
 
 import M from 'materialize-css';
 import "./index.scss";
+import { Blog } from "../blog";
 
 export const _App = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
@@ -31,6 +32,7 @@ export const _App = (): JSX.Element => {
                     <Route path="/" element={<Home />} />
                     <Route path="/announcements" element={<Announcements />} />
                     <Route path="/clubs" element={<Clubs />} />
+                    <Route path="/blog" element={<Blog />} />
                     <Route path="/resources" element={<Resources />} />
                     <Route path="/about" element={<About />}>
                         <Route path=":page" element={<About />} />

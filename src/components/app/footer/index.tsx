@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 
 export const Footer = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
@@ -8,7 +8,7 @@ export const Footer = (): JSX.Element => {
         <div className="footer">
             <div className="footer-title-par">
                 <p className="footer-title">William Lyon Mackenzie's online hub for announcements, calendar events, clubs, and timetables.</p>
-                <p className="footer-title"><a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a></p>
+                <p className="footer-title"><Link to="/terms">Terms of Service</Link> and <Link to="/privacy">Privacy Policy</Link></p>
             </div>
             <hr className="footer-bar"></hr>
             <div className="foooter-icon-par">

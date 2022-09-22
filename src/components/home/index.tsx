@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useNavigate, NavigateFunction } from "react-router-dom";
+import { useNavigate, NavigateFunction, Link } from "react-router-dom";
 
 export const Home = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
@@ -29,7 +29,7 @@ export const Home = (): JSX.Element => {
                     <div className="banner-message center-align">
                         <span>
 
-                            <a href="/accounts/signup/">Sign up</a> and add your timetable to see a personalized schedule here.
+                            <Link to="/accounts/signup/">Sign up</Link> and add your timetable to see a personalized schedule here.
 
                         </span>
                     </div>
@@ -68,10 +68,10 @@ export const Home = (): JSX.Element => {
                             <h5 className="title truncate">Project Metropolis - NOW HIRING!</h5>
                             <div className="authors">
                                 <div className="authors-image">
-                                    <a href="/club/metropolis"><img className="circle" src="./Home _ Metropolis_files/1ba64f684a334d26bd87add205e97154.png" /></a>
+                                    <Link to="/club/metropolis"><img className="circle" src="./Home _ Metropolis_files/1ba64f684a334d26bd87add205e97154.png" /></Link>
                                 </div>
                                 <div className="authors-text">
-                                    <a href="/club/metropolis">Project Metropolis</a>
+                                    <Link to="/club/metropolis">Project Metropolis</Link>
                                 </div>
                             </div>
                             <hr />
@@ -85,10 +85,10 @@ export const Home = (): JSX.Element => {
                             <h5 className="title truncate">Issue 4 is here!</h5>
                             <div className="authors">
                                 <div className="authors-image">
-                                    <a href="/club/the-lyon"><img className="circle" src="./Home _ Metropolis_files/83522403688c489096bb13b7e56ed6b1.png" /></a>
+                                    <Link to="/club/the-lyon"><img className="circle" src="./Home _ Metropolis_files/83522403688c489096bb13b7e56ed6b1.png" /></Link>
                                 </div>
                                 <div className="authors-text">
-                                    <a href="/club/the-lyon">The Lyon</a>
+                                    <Link to="/club/the-lyon">The Lyon</Link>
                                 </div>
                             </div>
                             <hr />
@@ -102,10 +102,10 @@ export const Home = (): JSX.Element => {
                             <h5 className="title truncate">MAC DANCE HALL</h5>
                             <div className="authors">
                                 <div className="authors-image">
-                                    <a href="/club/visual-arts-council"><img className="circle" src="./Home _ Metropolis_files/db0f93bdc7eb40e188a938fa8b1f0591.JPEG" /></a>
+                                    <Link to="/club/visual-arts-council"><img className="circle" src="./Home _ Metropolis_files/db0f93bdc7eb40e188a938fa8b1f0591.JPEG" /></Link>
                                 </div>
                                 <div className="authors-text">
-                                    <a href="/club/visual-arts-council">Visual Arts Council</a>
+                                    <Link to="/club/visual-arts-council">Visual Arts Council</Link>
                                 </div>
                             </div>
                             <hr />
