@@ -1,6 +1,10 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { BlogPost } from "../../util/models";
+import BlogPost from "../../util/core/interfaces/blogpost";
+import Organization from "../../util/core/interfaces/organization";
+import User from "../../util/core/interfaces/user";
+import Media from "../../util/core/misc/media";
+import MembershipStatus from "../../util/core/misc/membership";
 
 export const Blog = (): JSX.Element => {
     return (
@@ -16,16 +20,24 @@ export const Blog = (): JSX.Element => {
 }
 
 const BlogPosts = (): JSX.Element => {
-    const post: BlogPost = {
-        author: 1,
-        organization: 1,
-        tags: [1, 2, 3],
-        status: "approved",
-        featuredImage: "/img",
-    };
+    const myUser: User = { id: 1, slug: "baf", name: ["baf1", "baf2"], bio: "baf", timezone: "baf", graduatingYear: 2023, organizations: [], following: [] };
+    const myMedia: Media = new Media("http://localhost:8080/img/baf", 0);
+    const myOrg: Organization = { name: "baf", id: 1, bio: "baf", footer: "baf", slug: "baf", hideMembers: false, membership: MembershipStatus.Open, owner: myUser, supervisors: [], execs: [], banner: myMedia, icon: myMedia, tags: [], urls: [] };
+    const blogpost: BlogPost = {
+        id: 1,
+        author: myUser,
+        organization: myOrg,
+        created: new Date(),
+        modified: new Date(),
+        title: "baf",
+        body: "baf",
+        featuredImage: new URL("http://localhost:8080/img/baf"),
+        slug: "baf",
+        tags: [],
+    }
 
     return (
-        <BlogPostElement post={post} />
+        <BlogPostElement post={blogpost} />
     )
 }
 
@@ -34,30 +46,30 @@ const BlogPostElement = (props: { post: BlogPost }): JSX.Element => {
     return (
         <div className="card">
             <div className="card-headers">
-                <img className="card-image" src={post.featuredImage} />
+                <img className="card-image" src={post.featuredImage.href} />
                 <div className="card-text">
                     <div className="tag-section">
-
+                        {/* Tags */}
                     </div>
-                    <h1 className="title">Humans of WLMAC</h1>
+                    <h1 className="title">{post.title}</h1>
                     <div className="card-authors">
                         <div className="card-authors-image">
-                            <Link to="/user/carminite"><img className="circle" src="./Blog Posts _ Metropolis_files/c643df5412333b47a4d948c9f1712fa2.png" /></Link>
+                            <Link to={`/user/${post.author.slug}`}><img className="circle" src={"/img/baf"} /></Link>
                         </div>
                         <div className="card-authors-text">
-                            <Link to="/user/carminite" className="link">Bernie Chen</Link>
+                            <Link to={`/user/${post.author.slug}`} className="link">{post.author.name}</Link>
                             <br />
-                            • posted Sep. 19, 2022, 12:16 am
+                            • posted {post.created.toString()}
                         </div>
                     </div>
                 </div>
             </div>
             <hr />
             <div className="card-body">
-                <p>"I'm choking in this dress shirt already, what more do you want?"</p>
+                <p>{post.body}</p>
             </div>
             <br />
-            <a className="link" href="https://maclyonsden.com/blog/HoW-11">Read full blog post <i className="zmdi zmdi-chevron-right"></i></a>
+            <Link className="link" to={`/blog/${post.slug}`}>Read full blog post <i className="zmdi zmdi-chevron-right"></i></Link>
         </div>
     );
 }

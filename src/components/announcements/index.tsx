@@ -1,8 +1,14 @@
 import * as React from "react";
-import { NavigateFunction, useNavigate } from "react-router-dom";
+import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import { useQuery } from "../../util/query";
 import { AnnouncementFeeds } from "./feeds";
 import { AnnouncementFeed } from "../../util/models";
+import Announcement from "../../util/core/interfaces/announcement";
+import User from "../../util/core/interfaces/user";
+import Organization from "../../util/core/interfaces/organization";
+import MembershipStatus from "../../util/core/misc/membership";
+import Media from "../../util/core/misc/media";
+import Tag from "../../util/core/interfaces/tag";
 
 export const Announcements = (): JSX.Element => {
     const query: URLSearchParams = useQuery();
@@ -95,77 +101,7 @@ export const Announcements = (): JSX.Element => {
         </div>
         --> */}
                     <div className="cards" id="cards-all">
-                        <div className="card">
-                            <div className="card-headers">
-                                <div className="tag-section">
-                                    <p className="tag" style={{ backgroundColor: "#ffccce" }}>club applications</p>
-                                    <p className="tag" style={{ backgroundColor: "#f7ccff" }}>accepting applications</p>
-                                    <p className="tag" style={{ backgroundColor: "#f3ccff" }}>applications</p>
-                                </div>
-                                <h1 className="title">Project Metropolis - NOW HIRING!</h1>
-                                <div className="card-authors">
-                                    <div className="card-authors-image">
-                                        <a href="https://maclyonsden.com/club/metropolis"><img className="circle" src="./Announcements _ Metropolis_files/1ba64f684a334d26bd87add205e97154.png" /></a>
-                                    </div>
-                                    <div className="card-authors-text">
-                                        <a href="https://maclyonsden.com/club/metropolis" className="link">Project Metropolis</a>,
-                                        <a href="https://maclyonsden.com/user/misheel.bt" className="link">Misheel Batkhuu</a>
-                                        <br />
-                                        {/*<dot>•</dot>*/} • Jul. 15, 2022, 12:05 pm
-                                        {/* <!--
-                                        (Edited)
-                                        --> */}
-                                    </div>
-                                </div>
-                            </div>
-                            <hr />
-                            <div className="card-body">
-                                <p>Aloha Mac Lyons!<br />Project Metropolis doesn't run itself - behind Mac Lyons' Den young humans are hard at work. In hardly a year, our tightly-knit team developed the Project Metropolis label and everything with it - app, website, podcasts, playlists, and doodle games.<br />Today we are imploring you to apply so you can join in the action!<br />Choose this fulfilling highlight to your high school years, collect transferable skills for any field and application, and create memories to last a lifetime.<br />Bring your vision inspired by passion and fueled by courage. Frontend, Backend, App, Content, and/or Art has a place for your authentic self. Apply today: https://forms.gle/MLrFckYTyYJ3R5KdA</p>
-                            </div>
-                            <br />
-                            <a className="link" href="https://maclyonsden.com/announcement/216">See announcement <i className="zmdi zmdi-chevron-right"></i></a>
-                        </div>
-
-                        <div className="card">
-                            <div className="card-headers">
-                                <div className="tag-section">
-
-                                    <p className="tag" style={{ backgroundColor: "#e4ffcc" }}>visual art &amp; photography</p>
-
-                                    <p className="tag" style={{ backgroundColor: "#ccffeb" }}>languages &amp; writing</p>
-
-                                    {/* <p className="tag" style="background-color:#f9ccff">cultural &amp; community</p>
-            
-            <p className="tag" style="background-color:#cce2ff">news</p>
-            
-            <p className="tag" style="background-color:#ffe8cc">spirit</p>
-            
-            <p className="tag" style="background-color:#faffcc">social</p> */}
-
-                                </div>
-                                <h1 className="title">Issue 4 is here!</h1>
-                                <div className="card-authors">
-                                    <div className="card-authors-image">
-                                        <a href="https://maclyonsden.com/club/the-lyon"><img className="circle" src="./Announcements _ Metropolis_files/83522403688c489096bb13b7e56ed6b1.png" /></a>
-                                    </div>
-                                    <div className="card-authors-text">
-                                        <a href="https://maclyonsden.com/club/the-lyon" className="link">The Lyon</a>,
-                                        <a href="https://maclyonsden.com/user/Kayla" className="link">Kayla Albin-Smith</a>
-                                        <br />
-                                        {/*<dot>•</dot>*/} Jun. 30, 2022, 7:27 pm
-                                        {/* <!--
-                (Edited)
-                --> */}
-                                    </div>
-                                </div>
-                            </div>
-                            <hr />
-                            <div className="card-body">
-                                <p>Issue 4 of the Lyon is here! Click the link below to read.<br />https://drive.google.com/file/d/1YyxqnbjOSZ29YBQVKDKRF5OZwFnBdmzX/view?usp=sharing</p>
-                            </div>
-                            <br />
-                            <a className="link" href="https://maclyonsden.com/announcement/215">See announcement <i className="zmdi zmdi-chevron-right"></i></a>
-                        </div>
+                        <AnnouncementList />
                     </div>
                 </div>
 
@@ -204,5 +140,63 @@ export const Announcements = (): JSX.Element => {
         </script> */}
             </div>
         </>
+    );
+}
+
+const AnnouncementList = (): JSX.Element => {
+    const myUser: User = { id: 1, slug: "baf", name: ["baf1", "baf2"], bio: "baf", timezone: "baf", graduatingYear: 2023, organizations: [], following: [] };
+    const myMedia: Media = new Media("http://localhost:8080/img/baf", 0);
+    const myOrg: Organization = { name: "baf", id: 1, bio: "baf", footer: "baf", slug: "baf", hideMembers: false, membership: MembershipStatus.Open, owner: myUser, supervisors: [], execs: [], banner: myMedia, icon: myMedia, tags: [], urls: [] };
+    const announcement: Announcement = {
+        id: 1,
+        author: myUser,
+        organization: myOrg,
+        created: new Date(),
+        modified: new Date(),
+        title: "baf",
+        body: "baf",
+        supervisor: myUser,
+        tags: [],
+    }
+    return (
+        <AnnouncementElement announcement={announcement} />
+    )
+}
+
+const AnnouncementElement = (props: { announcement: Announcement }): JSX.Element => {
+    const data: Announcement = props.announcement;
+
+    const getTags = (tags: Array<Tag>): Array<JSX.Element> => {
+        return tags.map((tag: Tag): JSX.Element => {
+            return <p className="tag" style={{ backgroundColor: tag.color.value }}>{tag.name}</p>;
+        });
+    }
+
+    return (
+        <div className="card">
+            <div className="card-headers">
+                <div className="tag-section">
+                    {getTags(data.tags)}
+                </div>
+                <h1 className="title">{data.title}</h1>
+                <div className="card-authors">
+                    <div className="card-authors-image">
+                        <Link to={`/club/${data.organization.slug}`}><img className="circle" src={data.organization.banner.src.href} /></Link>
+                    </div>
+                    <div className="card-authors-text">
+                        <Link to={`/club/${data.organization.slug}`} className="link">{data.organization.name}</Link>,
+                        <Link to={`/user/${data.author.slug}`} className="link">{data.author.name}</Link>
+                        <br />
+                        • {data.created.toString()}
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div className="card-body">
+                {data.body}
+            </div>
+            <br />
+            <Link className="link" to={`/announcement/${data.id}`}>See announcement <i className="zmdi zmdi-chevron-right"></i></Link>
+        </div>
     );
 }
