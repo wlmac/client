@@ -1,5 +1,11 @@
 import * as React from "react";
 import { useNavigate, NavigateFunction, Link } from "react-router-dom";
+import Announcement from "../../util/core/interfaces/announcement";
+import BlogPost from "../../util/core/interfaces/blogpost";
+import Organization from "../../util/core/interfaces/organization";
+import User from "../../util/core/interfaces/user";
+import Media from "../../util/core/misc/media";
+import MembershipStatus from "../../util/core/misc/membership";
 
 export const Home = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
@@ -7,6 +13,22 @@ export const Home = (): JSX.Element => {
     React.useEffect((): void => {
         document.title = "Home | Metropolis";
     }, []);
+
+    const myUser: User = { id: 1, slug: "baf", name: ["baf1", "baf2"], bio: "baf", timezone: "baf", graduatingYear: 2023, organizations: [], following: [] };
+    const myMedia: Media = new Media("http://localhost:8080/img/baf", 0);
+    const myOrg: Organization = { name: "baf", id: 1, bio: "baf", footer: "baf", slug: "baf", hideMembers: false, membership: MembershipStatus.Open, owner: myUser, supervisors: [], execs: [], banner: myMedia, icon: myMedia, tags: [], urls: [] };
+    const blogpost: BlogPost = {
+        id: 1,
+        author: myUser,
+        organization: myOrg,
+        created: new Date(),
+        modified: new Date(),
+        title: "baf",
+        body: "baf",
+        featuredImage: new URL("http://localhost:8080/img/baf"),
+        slug: "baf",
+        tags: [],
+    }
 
     return (
         <div id="content-container">
@@ -38,20 +60,7 @@ export const Home = (): JSX.Element => {
             </div>
             <div id="main-container">
 
-                <div className="blog row">
-                    <div className="blog-content s5 col valign-wrapper left-align s5">
-                        <div className="blog-content-container">
-                            <h4 className="title">Sacred Silence - 6 weeks at a glance</h4>
-                            <hr />
-                            <div className="blog-body markdown-container">
-                                <p>Hey Mac! Now that we're at the end of the school year, have you taken the time to finally catch your breath and meditate? Some of us had started this challenge in the middle of culminatings and completed it, hopefully now you can too :)</p>
-                                <a className="full-content-page link" href="/blog/sacred-silence-infographic">Read full blog
-                                    post <i className="zmdi zmdi-chevron-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <img className="blog-image hide-on-small-and-down col s7" src="./Home _ Metropolis_files/ac3ad78602d841cfa346c3d6fc70c659.png" />
-                </div>
+                <FeaturedBlogPost post={blogpost} />
 
                 <div id="recent-events" className="card-list center-align">
                     <div className="cards-container">
@@ -59,68 +68,83 @@ export const Home = (): JSX.Element => {
                         There are no events at this time.
 
                     </div>
-                    <a className="full-content-page link" href="/calendar">View all events <i className="zmdi zmdi-chevron-right"></i></a>
+                    <Link className="full-content-page link" to="/calendar">View all events <i className="zmdi zmdi-chevron-right"></i></Link>
                 </div>
                 <hr style={{ margin: "10px calc(2% + 10px)", borderTopWidth: "2.5px", borderColor: "#d9d9d9" }} />
                 <div id="recent-announcements" className="center-align">
                     <div id="announcements" className="cards-container">
-                        <div className="announcement-card card left-align" style={{ borderColor: "#ffccce" }}>
-                            <h5 className="title truncate">Project Metropolis - NOW HIRING!</h5>
-                            <div className="authors">
-                                <div className="authors-image">
-                                    <Link to="/club/metropolis"><img className="circle" src="./Home _ Metropolis_files/1ba64f684a334d26bd87add205e97154.png" /></Link>
-                                </div>
-                                <div className="authors-text">
-                                    <Link to="/club/metropolis">Project Metropolis</Link>
-                                </div>
-                            </div>
-                            <hr />
-                            <div className="announcement-description markdown-container">
-                                <p>Aloha Mac Lyons!<br />Project Metropolis doesn't run itself - behind Mac Lyons' Den young humans are hard at work. In hardly a year, our tightly-knit team developed the Project Metropolis label and everything with it - app, website, podcasts, playlists, and doodle games.<br />Today we are imploring you to apply so you can join in the action!<br />Choose this fulfilling highlight to your high school years, collect transferable skills for any field and application, and create memories to last a lifetime.<br />Bring your vision inspired by passion and fueled by courage. Frontend, Backend, App, Content, and/or Art has a place for your authentic self. Apply today: https://forms.gle/MLrFckYTyYJ3R5KdA</p>
-                                <a className="link" href="/announcement/216">See announcement <i className="zmdi zmdi-chevron-right"></i></a>
-                            </div>
-                        </div>
-
-                        <div className="announcement-card card left-align" style={{ borderColor: "#e4ffcc" }}>
-                            <h5 className="title truncate">Issue 4 is here!</h5>
-                            <div className="authors">
-                                <div className="authors-image">
-                                    <Link to="/club/the-lyon"><img className="circle" src="./Home _ Metropolis_files/83522403688c489096bb13b7e56ed6b1.png" /></Link>
-                                </div>
-                                <div className="authors-text">
-                                    <Link to="/club/the-lyon">The Lyon</Link>
-                                </div>
-                            </div>
-                            <hr />
-                            <div className="announcement-description markdown-container">
-                                <p>Issue 4 of the Lyon is here! Click the link below to read.<br />https://drive.google.com/file/d/1YyxqnbjOSZ29YBQVKDKRF5OZwFnBdmzX/view?usp=sharing</p>
-                                <a className="link" href="/announcement/215">See announcement <i className="zmdi zmdi-chevron-right"></i></a>
-                            </div>
-                        </div>
-
-                        <div className="announcement-card card hide-on-med-and-down  left-align" style={{ borderColor: "#ffccce" }}>
-                            <h5 className="title truncate">MAC DANCE HALL</h5>
-                            <div className="authors">
-                                <div className="authors-image">
-                                    <Link to="/club/visual-arts-council"><img className="circle" src="./Home _ Metropolis_files/db0f93bdc7eb40e188a938fa8b1f0591.JPEG" /></Link>
-                                </div>
-                                <div className="authors-text">
-                                    <Link to="/club/visual-arts-council">Visual Arts Council</Link>
-                                </div>
-                            </div>
-                            <hr />
-                            <div className="announcement-description markdown-container">
-                                <p>MAC DANCE HALL <br />A 2022 Mackenzie Senior Film Class Production<br />Filmed &amp; Edited at William Lyon Mackenzie CI, Toronto, ON<br />CREATED BY: Senior Film Class 2022<br />PERFORMED BY: Senior Dance Class 2022<br />DANCERS: Alexandria Brown, Zian Chambers, Emmaline Dindial, Linnea Fradley, Julianne Ho, Brianna, Hoang Truong, Celine Hwang, Anjali Joshi, Maya Manchieva, Hannah Melnick, Charlize Novak, Eliana Scanga, Morrie Yalowsky<br />DIRECTOR: Gene Song<br />PRODUCERS: Connie Zomparelli, Mervegul Adsiz, Vanessa Aniuzu<br />CINEMATOGRAPHER: Akisha Torio<br />CAMERA: Akisha Torio, Livia, Kurti, Charlie Shereck, Conrad Sandler<br />EDITORS: Conrad Sandler, Michael Samosin, Akisha Torio, Gene Song<br />CHOREOGRAPHY: Brandon “Bizzy” Owusu<br />STAGING: Alexandra Parravano<br />MUSIC: “Ice Rain” - Mr. Vegas &amp; Massive B / “Head in the Zone” - Sean Paul / “She Wants it Bad” - Lefside &amp; ESCO<br />SPECIAL THANKS TO OUR TEACHERS: Ian Lawrence, Alexandra Parravano, Brandon “Bizzy” Owusu <br />**Link to Music Video: https://www.youtube.com/watch?v=zVXMDwIhiCQ**</p>
-                                <a className="link" href="/announcement/214">See announcement <i className="zmdi zmdi-chevron-right"></i></a>
-                            </div>
-                        </div>
+                        {HomeAnnouncements()}
                     </div>
-                    <a className="full-content-page link" href="/announcements" onClick={(ev) => {
-                        ev.preventDefault();
-                        nav("/announcements");
-                    }}>View all announcements <i className="zmdi zmdi-chevron-right"></i></a>
+                    <Link className="full-content-page link" to="/announcements">View all announcements <i className="zmdi zmdi-chevron-right"></i></Link>
                 </div>
             </div>
         </div>
+    );
+}
+
+const FeaturedBlogPost = (props: { post: BlogPost }): JSX.Element => {
+    const post = props.post;
+    return (
+        <div className="blog row">
+            <div className="blog-content s5 col valign-wrapper left-align s5">
+                <div className="blog-content-container">
+                    <h4 className="title">{post.title}</h4>
+                    <hr />
+                    <div className="blog-body markdown-container">
+                        <p>{post.body}</p>
+                        <a className="full-content-page link" href="/blog/sacred-silence-infographic">Read full blog
+                            post <i className="zmdi zmdi-chevron-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <img className="blog-image hide-on-small-and-down col s7" src={`/media/featured_image/default.png`} />
+        </div>
+    );
+}
+
+const HomeAnnouncements = (): JSX.Element[] => {
+    const myUser: User = { id: 1, slug: "baf", name: ["baf1", "baf2"], bio: "baf", timezone: "baf", graduatingYear: 2023, organizations: [], following: [] };
+    const myMedia: Media = new Media("http://localhost:8080/img/baf", 0);
+    const myOrg: Organization = { name: "baf", id: 1, bio: "baf", footer: "baf", slug: "baf", hideMembers: false, membership: MembershipStatus.Open, owner: myUser, supervisors: [], execs: [], banner: myMedia, icon: myMedia, tags: [], urls: [] };
+    const announcement: Announcement = {
+        id: 1,
+        author: myUser,
+        organization: myOrg,
+        created: new Date(),
+        modified: new Date(),
+        title: "baf",
+        body: "baf",
+        supervisor: myUser,
+        tags: [],
+    }
+    const announcements = [
+        announcement, announcement,
+    ];
+    return announcements.map((announcement: Announcement): JSX.Element => {
+        return <HomeAnnouncement key={announcement.id} announcement={announcement} />
+    });
+}
+
+const HomeAnnouncement = (props: { announcement: Announcement }): JSX.Element => {
+    const announcement = props.announcement;
+    return (
+        <>
+            <div className="announcement-card card left-align" style={{ borderColor: "#ffccce" }}>
+                <h5 className="title truncate">{announcement.title}</h5>
+                <div className="authors">
+                    <div className="authors-image">
+                        <Link to={`/club/${announcement.organization.slug}`}><img className="circle" src="/img/baf" /></Link>
+                    </div>
+                    <div className="authors-text">
+                        <Link to={`/club/${announcement.organization.slug}`}>{announcement.organization.name}</Link>
+                    </div>
+                </div>
+                <hr />
+                <div className="announcement-description markdown-container">
+                    <p>{announcement.body}</p>
+                    <Link className="link" to={`/announcement/${announcement.id}`}>See announcement <i className="zmdi zmdi-chevron-right"></i></Link>
+                </div>
+            </div>
+        </>
     );
 }
