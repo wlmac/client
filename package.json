@@ -15,9 +15,13 @@
   },
   "homepage": "https://github.com/wlmac/client#readme",
   "dependencies": {
+    "@fullcalendar/daygrid": "^5.11.3",
+    "@fullcalendar/interaction": "^5.11.3",
+    "@fullcalendar/react": "^5.11.2",
     "materialize-css": "^1.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-fade-in": "^2.0.1",
     "react-markdown": "^8.0.3",
     "react-router-dom": "^6.3.0",
     "remark-gfm": "^3.0.1"

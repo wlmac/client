@@ -8,6 +8,7 @@ import { NotFound } from "../notfound";
 import { Resources } from "../resources";
 import { About } from "../about";
 import { Clubs } from "../clubs";
+import { Calendar } from "../calendar"
 
 import { Login } from "../auth/login";
 import { Register } from "../auth/register";
@@ -31,6 +32,7 @@ export const _App = (): JSX.Element => {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/announcements" element={<Announcements />} />
+                    <Route path="/calendar" element={<Calendar />} />
                     <Route path="/clubs" element={<Clubs />} />
                     <Route path="/blog" element={<Blog />} />
                     <Route path="/resources" element={<Resources />} />
