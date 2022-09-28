@@ -15,6 +15,8 @@ export const Announcements = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
     const feed: string | null = query.get("feed");
 
+    const [openCreator, setOpenCreator] = React.useState(false);
+
     React.useEffect((): void => {
         document.title = "Announcements | Metropolis";
     }, []);
@@ -26,13 +28,20 @@ export const Announcements = (): JSX.Element => {
         });
     }
 
+    const openModal = () => {
+        setOpenCreator(true);
+    };
+
     return (
         <>
             <link rel="stylesheet" href="static/css/announcement-list.css" />
+            <AnnouncementCreator openCreator={openCreator} setOpenCreator={setOpenCreator}/>
             <div className="container">
+            
                 <div className="headers">
                     <ul>
                         {header(feed)}
+                        <button onClick={openModal}>open</button>
                     </ul>
 
                     {/* <script type="module">
@@ -86,6 +95,7 @@ export const Announcements = (): JSX.Element => {
         </script> */}
                 </div>
                 <div className="card-container">
+                
                     {/* <!-- to-do: search bar, DNR
         <div className="search-items">
             <div className="input-field">
@@ -198,5 +208,43 @@ const AnnouncementElement = (props: { announcement: Announcement }): JSX.Element
             <br />
             <Link className="link" to={`/announcement/${data.id}`}>See announcement <i className="zmdi zmdi-chevron-right"></i></Link>
         </div>
+    );
+}
+
+const AnnouncementCreator = ({openCreator,setOpenCreator}): JSX.Element => {
+    if(!openCreator) return <></>
+    
+    return(
+        <div className="popup">
+            <div className = "modal-a">
+                <div className= "modal-top">
+                    <h5 className = "header-announcement">Add Announcement</h5>
+                    <button onClick={() =>setOpenCreator(false)} className = "cancel">cancel</button>
+                </div>
+                <div className= "modal-content">
+                    <div className="form">
+                        <h6 className="form-label">Organization</h6>
+                        <input type="text" className="textbox"></input>
+                    </div>
+                    <div className="form">
+                        <h6 className="form-label">Title</h6>
+                        <input type="text"></input>
+                    </div>
+                    <div className="form">
+                        <h6 className="form-label">Body</h6>
+                        <input type="text"></input>
+                    </div>
+                    <div className="form">
+                        <h6 className="form-label">Tags</h6>
+                        <input type="text"></input>
+                    </div>
+                    <div className="form">
+                        <h6 className="form-label">Public</h6>
+                        <input type="checkbox" className ="toggle"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
     );
 }
