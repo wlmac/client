@@ -43,7 +43,7 @@ export default class SessionManager {
   }
 
   private refresh(): Promise<void> {
-    let tmpRefreshToken = this.refreshToken;
+    const tmpRefreshToken = this.refreshToken;
     this.refreshToken = '';
     this.accessToken = '';
     return new Promise<void>((resolve, reject) => {

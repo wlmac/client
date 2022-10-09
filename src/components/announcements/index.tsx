@@ -29,7 +29,9 @@ export const Announcements = (): JSX.Element => {
     return (
         <>
             <link rel="stylesheet" href="static/css/announcement-list.css" />
+            <AnnouncementCreator openCreator={openCreator} setOpenCreator={setOpenCreator} />
             <div className="container">
+
                 <div className="headers">
                     <ul>
                         {header(feed)}
@@ -103,7 +105,7 @@ export const Announcements = (): JSX.Element => {
                     <div className="cards" id="cards-all">
                         <AnnouncementList />
                     </div>
-                </div>
+                </div >
 
                 {/* to-do: search bar, DNR
         <div className="cards" id="cards-search">
@@ -138,7 +140,7 @@ export const Announcements = (): JSX.Element => {
                 }
             });
         </script> */}
-            </div>
+            </div >
         </>
     );
 }
@@ -198,5 +200,51 @@ const AnnouncementElement = (props: { announcement: Announcement }): JSX.Element
             <br />
             <Link className="link" to={`/announcement/${data.id}`}>See announcement <i className="zmdi zmdi-chevron-right"></i></Link>
         </div>
+    );
+}
+
+const AnnouncementCreator = ({ openCreator, setOpenCreator }): JSX.Element => {
+    if (!openCreator) return <></>
+
+    return (
+        <div className="popup">
+            <div className="modal-a">
+                <div className="modal-top">
+                    <h5 className="header-announcement">Add Announcement</h5>
+                    <button onClick={() => setOpenCreator(false)} className="cancel">cancel</button>
+                </div>
+                <div className="modal-content">
+                    <div className="form">
+                        <div className="input-row">
+                            <h6 className="form-label">Organization</h6>
+                            <input type="text" className="textbox"></input>
+                        </div>
+                    </div>
+                    <div className="form">
+                        <div className="input-row">
+                            <h6 className="form-label">Title</h6>
+                            <input type="text"></input>
+                        </div>
+                    </div>
+                    <div className="form">
+                        <div className="input-row">
+                            <h6 className="form-label">Body</h6>
+                            <input type="text"></input>
+                        </div>
+                    </div>
+                    <div className="form">
+                        <div className="input-row">
+                            <h6 className="form-label">Tags</h6>
+                            <input type="text"></input>
+                        </div>
+                    </div>
+                    <div className="form">
+                        <h6 className="form-label">Public</h6>
+                        <input type="checkbox" className="toggle" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
     );
 }

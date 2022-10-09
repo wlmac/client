@@ -1,14 +1,14 @@
 const Routes = {
   BASEURL: 'https://maclyonsden.com',
   AUTH: {
-    LOGIN: '/api/auth/token',
-    REFRESH: '/api/auth/token/refresh',
+    LOGIN: 'https://maclyonsden.com/api/auth/token',
+    REFRESH: 'https://maclyonsden.com/api/auth/token/refresh',
   },
   POST: {
-    ANNOUNCEMENT: '/api/v3/announcement',
+    ANNOUNCEMENT: 'https://maclyonsden.com/api/v3/announcement',
   },
-  USER: '/api/v3/user/',
-  OBJECT: "/api/v3/",
+  USER: 'https://maclyonsden.com/api/v3/user/',
+  OBJECT: "https://maclyonsden.com/api/v3/",
 };
 
 export default Routes;

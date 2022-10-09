@@ -1,8 +1,21 @@
+import { default as axios } from 'axios';
 import * as React from "react";
-import { Link } from "react-router-dom";
-import { RouterLink } from "../../app/navigation";
+import { Link, NavigateFunction, useNavigate } from "react-router-dom";
+import { Session, SessionContext } from "../../../util/core/session";
 
 export const Login = (): JSX.Element => {
+    const nav: NavigateFunction = useNavigate();
+    const session: Session = React.useContext(SessionContext);
+    const [csrf, setCsrf] = React.useState("");
+    const [username, setUsername] = React.useState("");
+    const [pwd, setPwd] = React.useState("");
+    const [logging, setLogging] = React.useState(false);
+    const [err, setErr] = React.useState("");
+
+    if (session.user.loggedin) {
+        nav("/");
+    }
+
     React.useEffect((): void => {
         removePlaceholder("id_login");
         removePlaceholder("id_password");
@@ -17,6 +30,11 @@ export const Login = (): JSX.Element => {
     const removePlaceholder = (elmID: string): void => {
         document.getElementById(elmID)!.removeAttribute("placeholder");
         console.log(document.getElementById(elmID));
+    }
+
+    const login = (): void => {
+        setLogging(true);
+
     }
 
     return (
@@ -35,14 +53,14 @@ export const Login = (): JSX.Element => {
                         <div className="form-wrapper">
                             <div className="tab-wrapper row">
                                 <div className="col s6">
-                                    <RouterLink href="/accounts/login/">
+                                    <Link to="/accounts/login/">
                                         <div className="tab current">Log In</div>
-                                    </RouterLink>
+                                    </Link>
                                 </div>
                                 <div className="col s6">
-                                    <RouterLink href="/accounts/signup/">
+                                    <Link to="/accounts/signup/">
                                         <div className="tab">Sign Up</div>
-                                    </RouterLink>
+                                    </Link>
                                 </div>
                             </div>
                             <form className="login" method="POST" action="/accounts/login/">
@@ -69,7 +87,7 @@ export const Login = (): JSX.Element => {
                                 </div>
 
                                 <div>
-                                    <button type="submit" className="btn login-btn ">Sign In</button>
+                                    <button className="btn login-btn " onClick={login}>Sign In</button>
                                 </div>
                                 <p>Forgot your password? Click <Link className="link" to="/accounts/password/reset/">here</Link> to reset.</p>
                             </form>
