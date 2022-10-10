@@ -17,6 +17,7 @@ import M from 'materialize-css';
 import "./index.scss";
 import { Blog } from "../blog";
 import { SessionProvider } from "../../util/core/session";
+import { Profile } from "../account/profile";
 
 export const _App = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
@@ -45,6 +46,8 @@ export const _App = (): JSX.Element => {
 
                     <Route path="/accounts/login" element={<Login />} />
                     <Route path="/accounts/signup" element={<Register />} />
+
+                    <Route path="/user/:username" element={<Profile />} />
 
                     <Route path="*" element={<NotFound />} />
                 </Routes>

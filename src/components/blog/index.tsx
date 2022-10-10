@@ -5,8 +5,12 @@ import Organization from "../../util/core/interfaces/organization";
 import User from "../../util/core/interfaces/user";
 import Media from "../../util/core/misc/media";
 import MembershipStatus from "../../util/core/misc/membership";
+import { SessionContext } from "../../util/core/session";
 
 export const Blog = (): JSX.Element => {
+    const session = React.useContext(SessionContext);
+    console.log("Session:", session.user);
+
     return (
         <>
             <link rel="stylesheet" href="static/css/blog-list.css" />

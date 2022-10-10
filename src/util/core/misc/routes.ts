@@ -1,7 +1,7 @@
 const Routes = {
   BASEURL: 'https://maclyonsden.com',
   AUTH: {
-    LOGIN: 'https://maclyonsden.com/api/auth/token',
+    LOGIN: 'http://localhost:3000/api/auth/token', //'https://maclyonsden.com/api/auth/token',
     REFRESH: 'https://maclyonsden.com/api/auth/token/refresh',
   },
   POST: {

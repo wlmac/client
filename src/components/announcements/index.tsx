@@ -15,6 +15,8 @@ export const Announcements = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
     const feed: string | null = query.get("feed");
 
+    const [openCreator, setOpenCreator] = React.useState(false);
+
     React.useEffect((): void => {
         document.title = "Announcements | Metropolis";
     }, []);
