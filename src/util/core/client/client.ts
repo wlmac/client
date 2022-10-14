@@ -8,11 +8,11 @@ export default class Client {
   private session: SessionManager = new SessionManager();
   constructor() {}
 
-  auth(token: string) {
+  auth(token: string): Promise<void> {
     return this.session.auth(token);
   }
 
-  login(username: string, password: string) {
+  login(username: string, password: string): Promise<void> {
     return this.session.login(username, password);
   }
 }

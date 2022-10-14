@@ -1,8 +1,10 @@
 import * as React from "react";
-import { NavigateFunction, useNavigate } from "react-router-dom";
+import { Link, NavigateFunction, useNavigate } from "react-router-dom";
+import { Session, SessionContext } from "../../../util/core/session";
 
 export const NavigationBar = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
+    const session: Session = React.useContext(SessionContext);
 
     return (
         <>
@@ -118,14 +120,32 @@ export const NavigationBar = (): JSX.Element => {
 
 
                         <li>
-                            <a className="dropdown-trigger" href="/#!" data-target="dropdownAcc">
-                                Login/Sign Up<i className="zmdi zmdi-caret-down"></i>
-                            </a>
+                            {session.user.loggedin ?
+                                <>
+                                    <a className="dropdown-trigger" href="https://maclyonsden.com/user/ji.mmyliu#!" data-target="dropdownAcc">
+                                        Account
+                                        <i className="zmdi zmdi-caret-down"></i>
+                                    </a>
 
-                            <ul id="dropdownAcc" className="dropdown-content" >
-                                <li><RouterLink href="/accounts/login/?next=/">Login</RouterLink></li>
-                                <li><RouterLink href="/accounts/signup/?next=/">Sign Up</RouterLink></li>
-                            </ul>
+                                    <ul id="dropdownAcc" className="dropdown-content" tabIndex={0}>
+                                        <li tabIndex={0}><Link to="/accounts/profile">Profile</Link></li>
+                                        <li tabIndex={0}><Link to="/timetable">Timetable</Link></li>
+                                        <li tabIndex={0}><Link to="/admin/">Admin</Link></li>
+                                        <li tabIndex={0}><Link to="/accounts/logout/">Logout</Link></li>
+                                    </ul>
+                                </>
+                                :
+                                <>
+                                    <a className="dropdown-trigger" href="/#!" data-target="dropdownAcc">
+                                        Login/Sign Up<i className="zmdi zmdi-caret-down"></i>
+                                    </a>
+
+                                    <ul id="dropdownAcc" className="dropdown-content" >
+                                        <li><RouterLink href="/accounts/login/?next=/">Login</RouterLink></li>
+                                        <li><RouterLink href="/accounts/signup/?next=/">Sign Up</RouterLink></li>
+                                    </ul>
+                                </>
+                            }
                         </li>
                     </ul>
                 </div>

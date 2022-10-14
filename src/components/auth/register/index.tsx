@@ -1,8 +1,16 @@
 import * as React from "react";
+import { NavigateFunction, useNavigate } from "react-router-dom";
+import { Session, SessionContext } from "../../../util/core/session";
 import { RouterLink } from "../../app/navigation";
 
 export const Register = (): JSX.Element => {
+    const nav: NavigateFunction = useNavigate();
+    const session: Session = React.useContext(SessionContext);
+
     React.useEffect((): void => {
+        if (session.user.loggedin) {
+            nav("/");
+        }
         document.title = "Sign Up | Metropolis";
     }, []);
 
