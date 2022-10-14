@@ -1,5 +1,10 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
+import Organization from "../../util/core/interfaces/organization";
+import User from "../../util/core/interfaces/user";
+import Media from "../../util/core/misc/media";
+import MembershipStatus from "../../util/core/misc/membership";
+import { getTags } from "../../util/core/tags";
 
 export const Clubs = (): JSX.Element => {
     React.useEffect((): void => {
@@ -40,35 +45,49 @@ export const Clubs = (): JSX.Element => {
 }
 
 const ClubList = (): JSX.Element => {
+    const myUser: User = { id: 1, slug: "baf", name: ["baf1", "baf2"], bio: "baf", timezone: "baf", graduatingYear: 2023, organizations: [], following: [] };
+    const myMedia: Media = new Media("http://localhost:8080/img/baf", 0);
+    const myClub: Organization = {
+        name: "Mackenzie Science Club",
+        id: 0,
+        bio: "We are the science club!",
+        footer: "I am a footer",
+        slug: "msc",
+        hideMembers: false,
+        membership: MembershipStatus.Accepting,
+        owner: myUser,
+        supervisors: [myUser, myUser],
+        execs: [myUser, myUser],
+        banner: myMedia,
+        icon: myMedia,
+        tags: [],
+        urls: [],
+    };
+
+    return (
+        <Club club={myClub} />
+    );
+}
+
+const Club = (props: { club: Organization }): JSX.Element => {
+    const club = props.club;
     return (
         <div className="card green-status">
             <div className="valign-wrapper">
                 <div className="club-logo">
-
-                    <img className="circle" src="./Clubs _ Metropolis_files/a61c314186284959bed2254d5b0d37eb.png" />
-
+                    <img className="circle" src={club.banner.src.href} />
                 </div>
                 <h1 className="title link">
-                    <Link to="/club/msc">Mackenzie Science Club</Link>
+                    <Link to={`/club/${club.slug}`}>Mackenzie Science Club</Link>
                 </h1>
             </div>
 
             <hr />
             <div className="club-description">
-                <p>The Mackenzie Science Club (MSC) hosts weekly STEM events and boasts over 200 members. Alongside being Mackenzie's largest club, MSC is responsible for many of students' favourite STEM and seasonal events throughout the year!
-
-                    Whether you want to showcase your scientific knowledge, race to build the tallest tower, or flaunt your trivia knowledge, no matter the skill level, MSC has got an event for everyone! During the year, members will test their science and problem-solving skills while competing with/against their friends. Top participants are also given the chance to attend the end-of-year Science Olympics hosted by Ontario universities!
-
-                    Keep up to date with MSC through their Discord and google classroom below:
-                    Discord: https://discord.gg/5SgHZ3N
-                    Google Classroom Code: Insite6</p>
+                <p>{club.bio}</p>
             </div>
             <div className="tag-section">
-
-                <p className="tag" style={{ backgroundColor: "#d7ccff" }}>science</p>
-
-                <p className="tag" style={{ backgroundColor: "#ffd3cc" }}>open membership</p>
-
+                {getTags(club.tags)}
             </div>
         </div>
     );

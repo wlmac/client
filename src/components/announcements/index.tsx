@@ -9,6 +9,7 @@ import Organization from "../../util/core/interfaces/organization";
 import MembershipStatus from "../../util/core/misc/membership";
 import Media from "../../util/core/misc/media";
 import Tag from "../../util/core/interfaces/tag";
+import { getTags } from "../../util/core/tags";
 
 export const Announcements = (): JSX.Element => {
     const query: URLSearchParams = useQuery();
@@ -33,115 +34,16 @@ export const Announcements = (): JSX.Element => {
             <link rel="stylesheet" href="static/css/announcement-list.css" />
             <AnnouncementCreator openCreator={openCreator} setOpenCreator={setOpenCreator} />
             <div className="container">
-
                 <div className="headers">
                     <ul>
                         {header(feed)}
                     </ul>
-
-                    {/* <script type="module">
-            import { loadCheck, mapSetup } from "/static/core/js/announcement/lazy.js";
-            const feeds = mapSetup(
-                [
-                    "all",
-                    "school",
-                    "studentcouncil",
-                ],
-                4,
-                2,
-            );
-            const margin = 300;
-            let dontLoad = false;
-            async function listen() {
-                if (!dontLoad)
-                    if (loadCheck(margin)) {
-                        dontLoad = true;
-                        const urlParams = new URLSearchParams(window.location.search);
-                        await feeds.get(urlParams.get("feed"))()
-                        dontLoad = false;
-                    }
-            }
-            window.addEventListener("scroll", listen);
-        </script> */}
-                    {/* <script>
-            $(document).ready(function() {
-                var urlParams = new URLSearchParams(window.location.search);
-                if(!urlParams.get("feed")) {
-                    $("#all").addClass("active");
-                    urlParams.set("feed", "all");
-                }
-                history.replaceState(null, null, "?"+urlParams.toString());
-                $(".header").click(function() {
-                    $(".header").removeClass("active");
-                    $(this).addClass("active");
-                    $(".cards").hide();
-                    $("#cards-"+this.id).show();
-                    urlParams.set("feed", this.id);
-                    history.replaceState(null, null, "?"+urlParams.toString());
-                    /* to-do: search bar, DNR
-                    $("#search-bar").val("");
-                    var urlParams = new URLSearchParams(window.location.search);
-                    urlParams.delete("ft");
-                    urlParams.set("q", "");
-                    history.replaceState(null, null, "?"+urlParams.toString());
-                    
-                });
-            });
-        </script> */}
                 </div>
                 <div className="card-container">
-                    {/* <!-- to-do: search bar, DNR
-        <div className="search-items">
-            <div className="input-field">
-                <form className="search-form" method="get">
-                    <input id="search-bar" type="text" name="q" placeholder="Search">
-                    <button id="search-button" type="submit"><span className="material-icons md-24 md-bold">search</span></button>
-                </form>
-            </div>
-            to-do: filter tags, DNR
-            <div className="filter dropdown">
-                <span className="anchor">Filter Tags <span className="material-icons md-24">arrow_drop_down</span></span>
-            </div>
-        </div>
-        --> */}
                     <div className="cards" id="cards-all">
                         <AnnouncementList />
                     </div>
                 </div >
-
-                {/* to-do: search bar, DNR
-        <div className="cards" id="cards-search">
-            
-            <div className="message">There are no announcements that match your search terms</div>
-            
-        </div> */}
-
-                {/* <script>
-            $(document).ready(function() {
-                var urlParams = new URLSearchParams(window.location.search);
-                $(".cards").hide();
-                if(!$("#cards-"+urlParams.get("feed")).length) {
-                    urlParams.set("feed", "all");
-                    history.replaceState(null, null, "?"+urlParams.toString());
-                } 
-                $("#cards-"+urlParams.get("feed")).show(); //remove when search reimplemented
-                $(".header").removeClass("active");
-                $("#"+urlParams.get("feed")).addClass("active");
-                $(".card-authors-text").find("a").addClass("link");
-                /* to-do: search bar, DNR
-                var urlParams = new URLSearchParams(window.location.search);
-                if(urlParams.get("q")) {
-                    if(urlParams.get("ft") != "get") {
-                        $("#search-bar").val(urlParams.get("q").split("+").join(" "));
-                    }
-                    $(".header").removeClass("active");
-                    $("#all").addClass("active");
-                    $("#cards-search").show();
-                } else {
-                    $("#cards-all").show();
-                }
-            });
-        </script> */}
             </div >
         </>
     );
@@ -169,12 +71,6 @@ const AnnouncementList = (): JSX.Element => {
 
 const AnnouncementElement = (props: { announcement: Announcement }): JSX.Element => {
     const data: Announcement = props.announcement;
-
-    const getTags = (tags: Array<Tag>): Array<JSX.Element> => {
-        return tags.map((tag: Tag): JSX.Element => {
-            return <p className="tag" style={{ backgroundColor: tag.color.value }}>{tag.name}</p>;
-        });
-    }
 
     return (
         <div className="card">
@@ -205,7 +101,8 @@ const AnnouncementElement = (props: { announcement: Announcement }): JSX.Element
     );
 }
 
-const AnnouncementCreator = ({ openCreator, setOpenCreator }): JSX.Element => {
+const AnnouncementCreator = (props: { openCreator: any, setOpenCreator: any }): JSX.Element => {
+    const openCreator = props.openCreator, setOpenCreator = props.setOpenCreator;
     if (!openCreator) return <></>
 
     return (

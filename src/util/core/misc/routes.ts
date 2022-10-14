@@ -5,6 +5,7 @@ const Routes = {
     REFRESH: 'https://maclyonsden.com/api/auth/token/refresh',
   },
   POST: {
+	USER: 'http://maclyonsden.com/api/v3/user',
     ANNOUNCEMENT: 'https://maclyonsden.com/api/v3/announcement',
   },
   USER: 'https://maclyonsden.com/api/v3/user/',
