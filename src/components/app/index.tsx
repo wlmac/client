@@ -16,6 +16,9 @@ import { Register } from "../auth/register";
 import M from 'materialize-css';
 import "./index.scss";
 import { Blog } from "../blog";
+import { SessionProvider } from "../../util/core/session";
+import { Profile } from "../account/profile";
+import { Flatpage } from "../flatpage";
 
 export const _App = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
@@ -32,7 +35,7 @@ export const _App = (): JSX.Element => {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/announcements" element={<Announcements />} />
-                    <Route path="/calendar" element={<Calendar />} />
+                    {/* <Route path="/calendar" element={<Calendar />} /> */}
                     <Route path="/clubs" element={<Clubs />} />
                     <Route path="/blog" element={<Blog />} />
                     <Route path="/resources" element={<Resources />} />
@@ -45,7 +48,9 @@ export const _App = (): JSX.Element => {
                     <Route path="/accounts/login" element={<Login />} />
                     <Route path="/accounts/signup" element={<Register />} />
 
-                    <Route path="*" element={<NotFound />} />
+                    <Route path="/user/:username" element={<Profile />} />
+
+                    <Route path="*" element={<Flatpage />} />
                 </Routes>
             </div>
 
@@ -57,7 +62,9 @@ export const _App = (): JSX.Element => {
 export const App = (): JSX.Element => {
     return (
         <BrowserRouter>
-            <_App />
+            <SessionProvider>
+                <_App />
+            </SessionProvider>
         </BrowserRouter>
     );
 }
