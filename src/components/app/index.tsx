@@ -50,7 +50,8 @@ export const _App = (): JSX.Element => {
 
                     <Route path="/user/:username" element={<Profile />} />
 
-                    <Route path="*" element={<Flatpage />} />
+                    <Route path="/:slug" element={<Flatpage />} />
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
             </div>
 
