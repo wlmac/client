@@ -107,7 +107,8 @@ const AnnouncementElement = (props: { announcement: Announcement }): JSX.Element
     );
 }
 
-const AnnouncementCreator = ({ openCreator, setOpenCreator }): JSX.Element => {
+const AnnouncementCreator = (props: { openCreator: boolean, setOpenCreator: React.Dispatch<any> }): JSX.Element => {
+    const openCreator: boolean = props.openCreator, setOpenCreator: React.Dispatch<any> = props.setOpenCreator;
     if (!openCreator) return <></>
 
     return (
