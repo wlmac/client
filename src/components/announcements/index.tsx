@@ -29,14 +29,20 @@ export const Announcements = (): JSX.Element => {
         });
     }
 
+    const openModal = () => {
+        setOpenCreator(true);
+    };
+
     return (
         <>
             <link rel="stylesheet" href="static/css/announcement-list.css" />
             <AnnouncementCreator openCreator={openCreator} setOpenCreator={setOpenCreator} />
             <div className="container">
+
                 <div className="headers">
                     <ul>
                         {header(feed)}
+                        <button onClick={openModal}>open</button>
                     </ul>
                 </div>
                 <div className="card-container">
@@ -101,8 +107,7 @@ const AnnouncementElement = (props: { announcement: Announcement }): JSX.Element
     );
 }
 
-const AnnouncementCreator = (props: { openCreator: any, setOpenCreator: any }): JSX.Element => {
-    const openCreator = props.openCreator, setOpenCreator = props.setOpenCreator;
+const AnnouncementCreator = ({ openCreator, setOpenCreator }): JSX.Element => {
     if (!openCreator) return <></>
 
     return (
@@ -114,28 +119,20 @@ const AnnouncementCreator = (props: { openCreator: any, setOpenCreator: any }): 
                 </div>
                 <div className="modal-content">
                     <div className="form">
-                        <div className="input-row">
-                            <h6 className="form-label">Organization</h6>
-                            <input type="text" className="textbox"></input>
-                        </div>
+                        <h6 className="form-label">Organization</h6>
+                        <input type="text" className="textbox"></input>
                     </div>
                     <div className="form">
-                        <div className="input-row">
-                            <h6 className="form-label">Title</h6>
-                            <input type="text"></input>
-                        </div>
+                        <h6 className="form-label">Title</h6>
+                        <input type="text"></input>
                     </div>
                     <div className="form">
-                        <div className="input-row">
-                            <h6 className="form-label">Body</h6>
-                            <input type="text"></input>
-                        </div>
+                        <h6 className="form-label">Body</h6>
+                        <input type="text"></input>
                     </div>
                     <div className="form">
-                        <div className="input-row">
-                            <h6 className="form-label">Tags</h6>
-                            <input type="text"></input>
-                        </div>
+                        <h6 className="form-label">Tags</h6>
+                        <input type="text"></input>
                     </div>
                     <div className="form">
                         <h6 className="form-label">Public</h6>
@@ -144,6 +141,5 @@ const AnnouncementCreator = (props: { openCreator: any, setOpenCreator: any }): 
                 </div>
             </div>
         </div>
-
     );
 }
