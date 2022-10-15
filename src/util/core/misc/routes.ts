@@ -8,7 +8,7 @@ const Routes = {
 	USER: 'http://maclyonsden.com/api/v3/user',
     ANNOUNCEMENT: 'https://maclyonsden.com/api/v3/announcement',
   },
-  USER: 'https://maclyonsden.com/api/v3/user/',
+  USER: 'http://localhost:3000/api/v3/user',//'https://maclyonsden.com/api/v3/user/',
   OBJECT: "https://maclyonsden.com/api/v3/",
 };
 
