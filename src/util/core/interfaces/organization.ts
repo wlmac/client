@@ -14,7 +14,7 @@ export default interface Organization {
   owner: User;
   supervisors: Array<User>;
   execs: Array<User>;
-  banner: Media;
+  banner: string;
   icon: Media;
   tags: Array<Tag>;
   urls: Array<URL>;

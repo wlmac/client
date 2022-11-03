@@ -1,15 +1,28 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
+import { default as axios } from 'axios';
+
+import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import Organization from "../../util/core/interfaces/organization";
 import User from "../../util/core/interfaces/user";
 import Media from "../../util/core/misc/media";
 import MembershipStatus from "../../util/core/misc/membership";
-import { getTags } from "../../util/core/tags";
+import { getTags, TagElement } from "../../util/core/tags";
+import { Session, SessionContext } from "../../util/core/session";
+import Routes from "../../util/core/misc/routes";
+import Tag from "../../util/core/interfaces/tag";
 
 export const Clubs = (): JSX.Element => {
     React.useEffect((): void => {
         document.title = "Clubs | Metropolis";
     }, []);
+
+    const nav: NavigateFunction = useNavigate();
+
+    React.useEffect((): void => {
+        if (!localStorage.getItem("token")) {
+            nav("/accounts/login");
+        }
+    });
 
     const goBack = (): void => {
         window.history.back();
@@ -36,7 +49,7 @@ export const Clubs = (): JSX.Element => {
                         </div>
                     </div>
                     <div className="cards">
-                        <ClubList />
+                        {ClubList()}
                     </div>
                 </div>
             </div>
@@ -44,7 +57,7 @@ export const Clubs = (): JSX.Element => {
     );
 }
 
-const ClubList = (): JSX.Element => {
+const ClubList = (): JSX.Element[] => {
     const myUser: User = { id: 1, slug: "baf", name: ["baf1", "baf2"], bio: "baf", timezone: "baf", graduatingYear: 2023, organizations: [], following: [] };
     const myMedia: Media = new Media("http://localhost:8080/img/baf", 0);
     const myClub: Organization = {
@@ -58,27 +71,59 @@ const ClubList = (): JSX.Element => {
         owner: myUser,
         supervisors: [myUser, myUser],
         execs: [myUser, myUser],
-        banner: myMedia,
+        banner: "",
         icon: myMedia,
         tags: [],
         urls: [],
     };
 
-    return (
-        <Club club={myClub} />
-    );
+    const session: Session = React.useContext(SessionContext);
+    const [clubs, setClubs] = React.useState([]);
+
+    React.useEffect(() => {
+        const fetchURL = `${Routes.OBJECT}/organization`;
+        // console.log(`Token: ${session.token}`);
+        // console.log(`Fetching URL: ${fetchURL}`);
+        session.getAPI(fetchURL).then((res) => {
+            console.log("Success:");
+            console.log(res.data.results);
+            setClubs(res.data.results);
+        }).catch((err) => {
+            console.log("Error occured while fetching organizations:");
+            console.log(err);
+            session.refreshAuth();
+        });
+    }, []);
+
+    return clubs.map((club: Organization): JSX.Element => {
+        return <Club club={club} key={club.id} />;
+    });
 }
 
 const Club = (props: { club: Organization }): JSX.Element => {
     const club = props.club;
+    const [tags, setTags] = React.useState([]);
+    const session = React.useContext(SessionContext);
+
+    React.useEffect(() => {
+        session.getAPI(`${Routes.OBJECT}/tag`).then((res) => {
+            const tags = res.data.results;
+            setTags(tags.map((tag: Tag): JSX.Element => {
+                return <TagElement tag={tag} />;
+            }));
+        }).catch(() => {
+            session.refreshAuth();
+        });
+    }, []);
+
     return (
         <div className="card green-status">
             <div className="valign-wrapper">
                 <div className="club-logo">
-                    <img className="circle" src={club.banner.src.href} />
+                    <img className="circle" src={club.banner} />
                 </div>
                 <h1 className="title link">
-                    <Link to={`/club/${club.slug}`}>Mackenzie Science Club</Link>
+                    <Link to={`/club/${club.slug}`}>{club.name}</Link>
                 </h1>
             </div>
 
@@ -87,7 +132,7 @@ const Club = (props: { club: Organization }): JSX.Element => {
                 <p>{club.bio}</p>
             </div>
             <div className="tag-section">
-                {getTags(club.tags)}
+                {tags}
             </div>
         </div>
     );

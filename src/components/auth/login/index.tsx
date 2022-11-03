@@ -8,7 +8,7 @@ export const Login = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
 
     const session = React.useContext(SessionContext);
-    
+
     const [csrf, setCsrf] = React.useState("");
     const [username, setUsername] = React.useState("");
     const [pwd, setPwd] = React.useState("");
@@ -48,10 +48,10 @@ export const Login = (): JSX.Element => {
             // }
         }).then((res) => {
             if (res.data.access) {
-                console.log("Success");
+                console.log(`Success: ${res.data.access}`);
                 session.updateToken(res.data.access);
                 setLogging(false);
-                nav("/");
+                //nav("/");
             }
             else {
                 console.log("Error");
