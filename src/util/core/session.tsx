@@ -124,6 +124,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         }, {}).then((res) => {
             console.log("Refresh success with token:", res.data.token);
             updateToken(res.data.token);
+            setRefresh(res.data.refresh);
         }).catch((err) => {
             console.log("Refresh expired. Logging out.");
             logout();
