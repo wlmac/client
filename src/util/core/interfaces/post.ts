@@ -7,7 +7,7 @@ export default interface Post {
   id: number;
   author: User;
   organization: Organization;
-  tags: Array<Tag>;
+  tags: Array<number>;
   created: Date;
   modified: Date;
   title: string;

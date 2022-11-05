@@ -4,6 +4,6 @@ import Organization from './organization';
 export default interface Tag {
   id: number;
   name: string;
-  color: Color;
+  color: string;
   organization?: Organization;
 }

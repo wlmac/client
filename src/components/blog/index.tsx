@@ -1,59 +1,105 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
+import { default as axios } from 'axios';
+
+import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import BlogPost from "../../util/core/interfaces/blogpost";
 import Organization from "../../util/core/interfaces/organization";
+import Tag from "../../util/core/interfaces/tag";
 import User from "../../util/core/interfaces/user";
 import Media from "../../util/core/misc/media";
 import MembershipStatus from "../../util/core/misc/membership";
-import { SessionContext } from "../../util/core/session";
+import Routes from "../../util/core/misc/routes";
+import { Session, SessionContext } from "../../util/core/session";
+import { getTags, TagElement } from "../../util/core/tags";
+import Markdown from "../markdown";
 
 export const Blog = (): JSX.Element => {
     const session = React.useContext(SessionContext);
+    const nav: NavigateFunction = useNavigate();
     console.log("Session:", session.user);
+
+    React.useEffect((): void => {
+        if (!localStorage.getItem("token")) {
+            nav("/accounts/login");
+        }
+    });
 
     return (
         <>
             <link rel="stylesheet" href="static/css/blog-list.css" />
             <div className="container">
                 <div className="card-container">
-                    <BlogPosts />
+                    {BlogPosts()}
                 </div>
             </div>
         </>
     );
 }
 
-const BlogPosts = (): JSX.Element => {
-    const myUser: User = { id: 1, slug: "baf", name: ["baf1", "baf2"], bio: "baf", timezone: "baf", graduatingYear: 2023, organizations: [], following: [] };
-    const myMedia: Media = new Media("http://localhost:8080/img/baf", 0);
-    const myOrg: Organization = { name: "baf", id: 1, bio: "baf", footer: "baf", slug: "baf", hideMembers: false, membership: MembershipStatus.Open, owner: myUser, supervisors: [], execs: [], banner: myMedia, icon: myMedia, tags: [], urls: [] };
-    const blogpost: BlogPost = {
-        id: 1,
-        author: myUser,
-        organization: myOrg,
-        created: new Date(),
-        modified: new Date(),
-        title: "baf",
-        body: "baf",
-        featuredImage: new URL("http://localhost:8080/img/baf"),
-        slug: "baf",
-        tags: [],
+const BlogPosts = (): JSX.Element[] => {
+    const [posts, setPosts] = React.useState([]);
+    const session: Session = React.useContext(SessionContext);
+
+    const [tags, setTags] = React.useState([]);
+
+    React.useEffect(() => {
+        const fetchURL = `${Routes.OBJECT}/blog-post`;
+        // console.log(`Token: ${session.token}`);
+        // console.log(`Fetching URL: ${fetchURL}`);
+        session.getAPI(fetchURL).then((res) => {
+            console.log("Success:");
+            console.log(res.data.results);
+            setPosts(res.data.results);
+        }).catch((err) => {
+            console.log("Error occured while fetching organizations:");
+            console.log(err);
+            session.refreshAuth();
+        });
+
+        // Tags
+        session.getAPI(`${Routes.OBJECT}/tag`).then((res) => {
+            const tags = res.data.results;
+            setTags(tags);
+        }).catch(() => {
+            session.refreshAuth();
+        });
+    }, []);
+
+    return (
+        posts.map((post: BlogPost) => {
+            let current_tags: Tag[] = [];
+            for (let i = 0; i < post.tags.length; i++) {
+                for (let j = 0; j < tags.length; j++) {
+                    if (post.tags[i] == (tags[j] as Tag).id) {
+                        current_tags.push(tags[j]);
+                    }
+                }
+            }
+            return <BlogPostElement post={post} tags={current_tags} key={post.id} />;
+        })
+    );
+}
+
+const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Element => {
+    const post = props.post;
+
+    async function getAuthor() {
+        const session: Session = React.useContext(SessionContext);
+        const author = await session.getAPI(`${Routes.USER}/${post.author}`);
+        return await author.data;
     }
 
     return (
-        <BlogPostElement post={blogpost} />
-    )
-}
-
-const BlogPostElement = (props: { post: BlogPost }): JSX.Element => {
-    const post = props.post;
-    return (
         <div className="card">
             <div className="card-headers">
-                <img className="card-image" src={post.featuredImage.href} />
+                <img className="card-image" src={post.featured_image} />
                 <div className="card-text">
                     <div className="tag-section">
-                        {/* Tags */}
+                        {
+                            props.tags.map((tag: Tag) => {
+                                return <TagElement key={tag.id} tag={tag} />
+                            })
+                        }
                     </div>
                     <h1 className="title">{post.title}</h1>
                     <div className="card-authors">
@@ -63,14 +109,16 @@ const BlogPostElement = (props: { post: BlogPost }): JSX.Element => {
                         <div className="card-authors-text">
                             <Link to={`/user/${post.author.slug}`} className="link">{post.author.name}</Link>
                             <br />
-                            • posted {post.created.toString()}
+                            • posted {post.created}
                         </div>
                     </div>
                 </div>
             </div>
             <hr />
             <div className="card-body">
-                <p>{post.body}</p>
+                <p>
+                    {post.body}
+                </p>
             </div>
             <br />
             <Link className="link" to={`/blog/${post.slug}`}>Read full blog post <i className="zmdi zmdi-chevron-right"></i></Link>

@@ -16,6 +16,6 @@ export default interface Organization {
   execs: Array<User>;
   banner: string;
   icon: Media;
-  tags: Array<Tag>;
+  tags: Array<number>;
   urls: Array<URL>;
 }

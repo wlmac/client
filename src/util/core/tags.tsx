@@ -15,6 +15,6 @@ export const getTags = (tags: Array<Tag>, callback: Function): void => {
 
 export const TagElement = (props: { tag: Tag }): JSX.Element => {
     return (
-        <p className="tag" style={{ backgroundColor: props.tag.color.value }}>{props.tag.name}</p>
+        <p className="tag" style={{ backgroundColor: props.tag.color }}>{props.tag.name}</p>
     );
 }

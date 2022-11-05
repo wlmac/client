@@ -79,6 +79,7 @@ const ClubList = (): JSX.Element[] => {
 
     const session: Session = React.useContext(SessionContext);
     const [clubs, setClubs] = React.useState([]);
+    const [tags, setTags] = React.useState([]);
 
     React.useEffect(() => {
         const fetchURL = `${Routes.OBJECT}/organization`;
@@ -93,14 +94,30 @@ const ClubList = (): JSX.Element[] => {
             console.log(err);
             session.refreshAuth();
         });
+
+        // Tags
+        session.getAPI(`${Routes.OBJECT}/tag`).then((res) => {
+            const tags = res.data.results;
+            setTags(tags);
+        }).catch(() => {
+            session.refreshAuth();
+        });
     }, []);
 
     return clubs.map((club: Organization): JSX.Element => {
-        return <Club club={club} key={club.id} />;
+        let current_tags: Tag[] = [];
+        for (let i = 0; i < club.tags.length; i++) {
+            for (let j = 0; j < tags.length; j++) {
+                if (club.tags[i] == (tags[j] as Tag).id) {
+                    current_tags.push(tags[j]);
+                }
+            }
+        }
+        return <Club club={club} tags={current_tags} key={club.id} />;
     });
 }
 
-const Club = (props: { club: Organization }): JSX.Element => {
+const Club = (props: { club: Organization, tags: Tag[] }): JSX.Element => {
     const club = props.club;
     const [tags, setTags] = React.useState([]);
     const session = React.useContext(SessionContext);
@@ -132,7 +149,11 @@ const Club = (props: { club: Organization }): JSX.Element => {
                 <p>{club.bio}</p>
             </div>
             <div className="tag-section">
-                {tags}
+                {
+                    props.tags.map((tag: Tag) => {
+                        return <TagElement key={tag.id} tag={tag} />
+                    })
+                }
             </div>
         </div>
     );
