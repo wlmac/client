@@ -1,7 +1,3 @@
-/**
- * React SessionProvider written by Patrick Lin (ApocalypseCalculator)
- */
-
 import * as React from 'react';
 import jwt_decode from "jwt-decode";
 import { default as axios } from 'axios';
