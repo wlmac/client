@@ -36,7 +36,6 @@ export const Login = (): JSX.Element => {
 
     const removePlaceholder = (elmID: string): void => {
         document.getElementById(elmID)!.removeAttribute("placeholder");
-        console.log(document.getElementById(elmID));
     }
 
     const login = (e: React.SyntheticEvent): void => {

@@ -20,7 +20,8 @@ export interface Session {
     updateToken: (token: string) => void,
     getAPI: (url: string) => Promise<any>,
     postAPI: (url: string, data: any) => Promise<any>,
-    refreshAuth: () => void
+    refreshAuth: () => void,
+    logout: () => void
 }
 
 export const SessionContext = React.createContext<Session>({
@@ -32,7 +33,8 @@ export const SessionContext = React.createContext<Session>({
     updateToken: (token: string) => { },
     getAPI: (url: string) => { return {} as Promise<any> },
     postAPI: (url: string, data: any) => { return {} as Promise<any> },
-    refreshAuth: () => { }
+    refreshAuth: () => { },
+    logout: () => { }
 });
 
 export const SessionProvider = (props: { children: React.ReactNode }) => {
@@ -44,7 +46,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     });
     const nav: NavigateFunction = useNavigate();
 
-    function updateToken(token: string) {
+    const updateToken = (token: string): void => {
         setToken(token);
         if (token !== "") {
             let decoded: any = jwt_decode(token);
@@ -116,11 +118,12 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
             registertime: 0
         });
         localStorage.removeItem("token");
+        localStorage.removeItem("refresh");
         nav("/accounts/login");
     }
 
     return (
-        <SessionContext.Provider value={{ user, updateToken, getAPI, postAPI, refreshAuth }}>
+        <SessionContext.Provider value={{ user: user, updateToken: updateToken, getAPI: getAPI, postAPI: postAPI, refreshAuth: refreshAuth, logout: logout }}>
             {props.children}
         </SessionContext.Provider>
     )

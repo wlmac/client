@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
+import { loggedIn } from "../../../util/core/AuthService";
 import { Session, SessionContext } from "../../../util/core/session";
 
 export const NavigationBar = (): JSX.Element => {
@@ -120,7 +121,7 @@ export const NavigationBar = (): JSX.Element => {
 
 
                         <li>
-                            {session.user.loggedin ?
+                            {loggedIn() ?
                                 <>
                                     <a className="dropdown-trigger" href="https://maclyonsden.com/user/ji.mmyliu#!" data-target="dropdownAcc">
                                         Account
@@ -131,7 +132,10 @@ export const NavigationBar = (): JSX.Element => {
                                         <li tabIndex={0}><Link to="/accounts/profile">Profile</Link></li>
                                         <li tabIndex={0}><Link to="/timetable">Timetable</Link></li>
                                         <li tabIndex={0}><Link to="/admin/">Admin</Link></li>
-                                        <li tabIndex={0}><Link to="/accounts/logout/">Logout</Link></li>
+                                        <li tabIndex={0}><a onClick={(ev: React.MouseEvent) => {
+                                            ev.preventDefault();
+                                            session.logout();
+                                        }}>Logout</a></li>
                                     </ul>
                                 </>
                                 :

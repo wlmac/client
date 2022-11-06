@@ -12,13 +12,14 @@ import Routes from "../../util/core/misc/routes";
 import { Session, SessionContext } from "../../util/core/session";
 import { getTags, TagElement } from "../../util/core/tags";
 import Markdown from "../markdown";
+import { loggedIn } from "../../util/core/AuthService";
 
 export const Blog = (): JSX.Element => {
     const session = React.useContext(SessionContext);
     const nav: NavigateFunction = useNavigate();
 
     React.useEffect((): void => {
-        if (!localStorage.getItem("token")) {
+        if (!loggedIn) {
             nav("/accounts/login?next=/blog");
         }
     });
