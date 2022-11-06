@@ -3,13 +3,13 @@ import { default as axios } from 'axios';
 
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import Organization from "../../util/core/interfaces/organization";
-import User from "../../util/core/interfaces/user";
 import Media from "../../util/core/misc/media";
 import MembershipStatus from "../../util/core/misc/membership";
 import { getTags, TagElement } from "../../util/core/tags";
 import { Session, SessionContext } from "../../util/core/session";
 import Routes from "../../util/core/misc/routes";
 import Tag from "../../util/core/interfaces/tag";
+import { loggedIn } from "../../util/core/AuthService";
 
 export const Clubs = (): JSX.Element => {
     React.useEffect((): void => {
@@ -19,7 +19,7 @@ export const Clubs = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
 
     React.useEffect((): void => {
-        if (!localStorage.getItem("token")) {
+        if (!loggedIn()) {
             nav(`/accounts/login?next=/clubs`);
         }
     });
@@ -58,25 +58,6 @@ export const Clubs = (): JSX.Element => {
 }
 
 const ClubList = (): JSX.Element[] => {
-    const myUser: User = { id: 1, slug: "baf", name: ["baf1", "baf2"], bio: "baf", timezone: "baf", graduatingYear: 2023, organizations: [], following: [] };
-    const myMedia: Media = new Media("http://localhost:8080/img/baf", 0);
-    const myClub: Organization = {
-        name: "Mackenzie Science Club",
-        id: 0,
-        bio: "We are the science club!",
-        footer: "I am a footer",
-        slug: "msc",
-        hideMembers: false,
-        membership: MembershipStatus.Accepting,
-        owner: myUser,
-        supervisors: [myUser, myUser],
-        execs: [myUser, myUser],
-        banner: "",
-        icon: myMedia,
-        tags: [],
-        urls: [],
-    };
-
     const session: Session = React.useContext(SessionContext);
     const [clubs, setClubs] = React.useState([]);
     const [tags, setTags] = React.useState([]);

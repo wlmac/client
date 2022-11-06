@@ -5,7 +5,6 @@ import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import BlogPost from "../../util/core/interfaces/blogpost";
 import Organization from "../../util/core/interfaces/organization";
 import Tag from "../../util/core/interfaces/tag";
-import User from "../../util/core/interfaces/user";
 import Media from "../../util/core/misc/media";
 import MembershipStatus from "../../util/core/misc/membership";
 import Routes from "../../util/core/misc/routes";
@@ -98,10 +97,10 @@ const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Eleme
                     <h1 className="title">{post.title}</h1>
                     <div className="card-authors">
                         <div className="card-authors-image">
-                            <Link to={`/user/${post.author.slug}`}><img className="circle" src={"/img/baf"} /></Link>
+                            <Link to={`/user/${post.author}`}><img className="circle" src={"/img/baf"} /></Link>
                         </div>
                         <div className="card-authors-text">
-                            <Link to={`/user/${post.author.slug}`} className="link">{post.author.name}</Link>
+                            <Link to={`/user/${post.author}`} className="link">{post.author}</Link>
                             <br />
                             • posted {post.created}
                         </div>
@@ -115,7 +114,7 @@ const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Eleme
                 </p>
             </div>
             <br />
-            <Link className="link" to={`/blog/${post.slug}`}>Read full blog post <i className="zmdi zmdi-chevron-right"></i></Link>
+            <Link className="link" to={`/blog/${post.id}`}>Read full blog post <i className="zmdi zmdi-chevron-right"></i></Link>
         </div>
     );
 }

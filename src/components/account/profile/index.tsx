@@ -1,20 +1,11 @@
 import * as React from "react";
 import { Link, useParams } from "react-router-dom";
-import User from "../../../util/core/interfaces/user";
+import { Session, SessionContext, User } from "../../../util/core/session";
 
 export const Profile = (): JSX.Element => {
     const { username } = useParams();
-
-    const user: User = {
-        id: 0,
-        slug: username!,
-        name: ["name", "name"],
-        bio: "I love metropolis",
-        timezone: "EST",
-        graduatingYear: 2023,
-        organizations: [],
-        following: [],
-    };
+    const session: Session = React.useContext(SessionContext);
+    const user: User = session.user;
 
     return (
         <>
@@ -67,10 +58,10 @@ export const Profile = (): JSX.Element => {
 
                 <div className="white-bg">
                     <div className="header">
-                        <img className="circle responsive-img profile-picture" src="/img" alt={`${user.slug}'s profile picture`} />
+                        <img className="circle responsive-img profile-picture" src="/img" alt={`${user.username}'s profile picture`} />
                         <div className="name-info">
-                            <h5 className="full-name">{user.name[0]} {user.name[1]}</h5>
-                            <h6 className="username">{user.slug}</h6>
+                            <h5 className="full-name">{user.first_name} {user.last_name}</h5>
+                            <h6 className="username">{user.username}</h6>
                         </div>
 
                         <div className="edit-button">
@@ -81,7 +72,7 @@ export const Profile = (): JSX.Element => {
                     <hr />
                     <div className="body">
                         <div className="field">
-                            <div className="label">Graduating</div><div>{user.graduatingYear}</div>
+                            <div className="label">Graduating</div><div>{user.graduating_year}</div>
                         </div>
                         <div className="field">
                             <div className="label">Executive of</div>
@@ -90,7 +81,11 @@ export const Profile = (): JSX.Element => {
                         </div>
                         <br />
                         <div>
-                            This user has not shared any information.
+                            {user.bio ?
+                                <p>{user.bio}</p>
+                                :
+                                <p>This user has not shared any information.</p>
+                            }
                         </div>
                     </div>
                 </div>

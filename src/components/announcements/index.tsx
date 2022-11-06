@@ -4,12 +4,14 @@ import { useQuery } from "../../util/query";
 import { AnnouncementFeeds } from "./feeds";
 import { AnnouncementFeed } from "../../util/models";
 import Announcement from "../../util/core/interfaces/announcement";
-import User from "../../util/core/interfaces/user";
 import Organization from "../../util/core/interfaces/organization";
 import MembershipStatus from "../../util/core/misc/membership";
 import Media from "../../util/core/misc/media";
 import Tag from "../../util/core/interfaces/tag";
-import { getTags } from "../../util/core/tags";
+import { getTags, TagElement } from "../../util/core/tags";
+import { Session, SessionContext } from "../../util/core/session";
+import Routes from "../../util/core/misc/routes";
+import { loggedIn } from "../../util/core/AuthService";
 
 export const Announcements = (): JSX.Element => {
     const query: URLSearchParams = useQuery();
@@ -21,6 +23,12 @@ export const Announcements = (): JSX.Element => {
     React.useEffect((): void => {
         document.title = "Announcements | Metropolis";
     }, []);
+
+    React.useEffect((): void => {
+        if (!loggedIn()) {
+            nav(`/accounts/login?next=/announcements`);
+        }
+    });
 
     const header = (currentFeed: string | null): Array<JSX.Element> => {
         return AnnouncementFeeds.map((feed: AnnouncementFeed): JSX.Element => {
@@ -47,53 +55,73 @@ export const Announcements = (): JSX.Element => {
                 </div>
                 <div className="card-container">
                     <div className="cards" id="cards-all">
-                        <AnnouncementList />
+                        {AnnouncementList()}
                     </div>
-                </div >
-            </div >
+                </div>
+            </div>
         </>
     );
 }
 
-const AnnouncementList = (): JSX.Element => {
-    const myUser: User = { id: 1, slug: "baf", name: ["baf1", "baf2"], bio: "baf", timezone: "baf", graduatingYear: 2023, organizations: [], following: [] };
-    const myMedia: Media = new Media("http://localhost:8080/img/baf", 0);
-    const myOrg: Organization = { name: "baf", id: 1, bio: "baf", footer: "baf", slug: "baf", hideMembers: false, membership: MembershipStatus.Open, owner: myUser, supervisors: [], execs: [], banner: myMedia, icon: myMedia, tags: [], urls: [] };
-    const announcement: Announcement = {
-        id: 1,
-        author: myUser,
-        organization: myOrg,
-        created: new Date(),
-        modified: new Date(),
-        title: "baf",
-        body: "baf",
-        supervisor: myUser,
-        tags: [],
-    }
-    return (
-        <AnnouncementElement announcement={announcement} />
-    )
+const AnnouncementList = (): JSX.Element[] => {
+    const session: Session = React.useContext(SessionContext);
+
+    React.useEffect(() => {
+        const fetchURL = `${Routes.OBJECT}/announcement`;
+        session.getAPI(fetchURL).then((res) => {
+            setAnnouncements(res.data.results);
+        }).catch((err) => {
+            session.refreshAuth();
+        });
+
+        // Tags
+        session.getAPI(`${Routes.OBJECT}/tag`).then((res) => {
+            const tags = res.data.results;
+            setTags(tags);
+        }).catch(() => {
+            session.refreshAuth();
+        });
+    }, []);
+
+    const [announcements, setAnnouncements] = React.useState([]);
+    const [tags, setTags] = React.useState([]);
+
+    return announcements.map((announcement: Announcement): JSX.Element => {
+        let current_tags: Tag[] = [];
+        for (let i = 0; i < announcement.tags.length; i++) {
+            for (let j = 0; j < tags.length; j++) {
+                if (announcement.tags[i] == (tags[j] as Tag).id) {
+                    current_tags.push(tags[j]);
+                }
+            }
+        }
+        return <AnnouncementElement key={announcement.id} announcement={announcement} tags={current_tags} />;
+    });
 }
 
-const AnnouncementElement = (props: { announcement: Announcement }): JSX.Element => {
+const AnnouncementElement = (props: { announcement: Announcement, tags: Tag[] }): JSX.Element => {
     const data: Announcement = props.announcement;
 
     return (
         <div className="card">
             <div className="card-headers">
                 <div className="tag-section">
-                    {getTags(data.tags)}
+                    {
+                        props.tags.map((tag: Tag): JSX.Element => {
+                            return <TagElement key={tag.id} tag={tag} />
+                        })
+                    }
                 </div>
                 <h1 className="title">{data.title}</h1>
                 <div className="card-authors">
                     <div className="card-authors-image">
-                        <Link to={`/club/${data.organization.slug}`}><img className="circle" src={data.organization.banner.src.href} /></Link>
+                        <Link to={`/club/${data.organization}`}><img className="circle" src={data.organization} /></Link>
                     </div>
                     <div className="card-authors-text">
-                        <Link to={`/club/${data.organization.slug}`} className="link">{data.organization.name}</Link>,
-                        <Link to={`/user/${data.author.slug}`} className="link">{data.author.name}</Link>
+                        <Link to={`/club/${data.organization}`} className="link">{data.organization}</Link>,
+                        <Link to={`/user/${data.author}`} className="link">{data.author}</Link>
                         <br />
-                        • {data.created.toString()}
+                        • {data.created}
                     </div>
                 </div>
             </div>

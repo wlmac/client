@@ -1,7 +1,7 @@
 import { default as axios } from 'axios';
 import * as React from "react";
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
-import { loggedIn } from '../../../util/core/AuthService';
+import { loggedIn, setRefresh } from '../../../util/core/AuthService';
 import Routes from '../../../util/core/misc/routes';
 import { Session, SessionContext } from "../../../util/core/session";
 import { useQuery } from '../../../util/query';
@@ -53,6 +53,7 @@ export const Login = (): JSX.Element => {
             if (res.data.access) {
                 console.log(`Success: ${res.data.access}`);
                 session.updateToken(res.data.access);
+                setRefresh(res.data.refresh);
                 setLogging(false);
                 nav(next ? next : "/");
             }

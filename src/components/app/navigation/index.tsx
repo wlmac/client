@@ -1,6 +1,7 @@
+import jwtDecode from "jwt-decode";
 import * as React from "react";
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
-import { loggedIn } from "../../../util/core/AuthService";
+import { getToken, loggedIn } from "../../../util/core/AuthService";
 import { Session, SessionContext } from "../../../util/core/session";
 
 export const NavigationBar = (): JSX.Element => {
@@ -129,7 +130,7 @@ export const NavigationBar = (): JSX.Element => {
                                     </a>
 
                                     <ul id="dropdownAcc" className="dropdown-content" tabIndex={0}>
-                                        <li tabIndex={0}><Link to="/accounts/profile">Profile</Link></li>
+                                        <li tabIndex={0}><Link to={`/user/${session.user.username}`}>Profile</Link></li>
                                         <li tabIndex={0}><Link to="/timetable">Timetable</Link></li>
                                         <li tabIndex={0}><Link to="/admin/">Admin</Link></li>
                                         <li tabIndex={0}><a onClick={(ev: React.MouseEvent) => {
