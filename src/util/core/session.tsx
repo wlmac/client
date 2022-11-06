@@ -6,9 +6,10 @@ import * as React from 'react';
 import jwt_decode from "jwt-decode";
 import { default as axios } from 'axios';
 import Routes from './misc/routes';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
+import { getToken, setToken, getRefresh, setRefresh, loggedIn } from "./AuthService";
 
 export interface User {
-    loggedin: boolean,
     username: string,
     userid: string,
     registertime: number
@@ -16,8 +17,6 @@ export interface User {
 
 export interface Session {
     user: User,
-    token: string,
-    refresh: string,
     updateToken: (token: string) => void,
     getAPI: (url: string) => Promise<any>,
     postAPI: (url: string, data: any) => Promise<any>,
@@ -26,13 +25,10 @@ export interface Session {
 
 export const SessionContext = React.createContext<Session>({
     user: {
-        loggedin: false,
         username: "",
         userid: "",
         registertime: 0
     },
-    token: "",
-    refresh: "",
     updateToken: (token: string) => { },
     getAPI: (url: string) => { return {} as Promise<any> },
     postAPI: (url: string, data: any) => { return {} as Promise<any> },
@@ -40,18 +36,16 @@ export const SessionContext = React.createContext<Session>({
 });
 
 export const SessionProvider = (props: { children: React.ReactNode }) => {
-    const [token, setToken] = React.useState("");
-    const [refresh, setRefresh] = React.useState("");
     const [user, setUser] = React.useState({
         loggedin: false,
         username: "",
         userid: "",
         registertime: 0
     });
+    const nav: NavigateFunction = useNavigate();
+
     function updateToken(token: string) {
         setToken(token);
-        console.log(`Token just set to ${token}`);
-        localStorage.setItem("token", token);
         if (token !== "") {
             let decoded: any = jwt_decode(token);
             setUser({
@@ -73,54 +67,35 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         }
     }
 
-    const fetchToken = (): string | null => {
-        console.log("Updating storage token.");
-        let storagetoken = localStorage.getItem("token");
-        if (storagetoken) {
-            console.log(`TOKEN: ${storagetoken}`);
-            updateToken(storagetoken);
-            return storagetoken;
-        }
-        return null;
-    }
-
-    React.useEffect(() => {
-        fetchToken();
-    }, []);
-
-    React.useEffect(() => {
-        console.log(`Token got set to: ${token}`);
-    }, [token]);
-
     function getAPI(url: string): Promise<any> {
-        const useToken: string = fetchToken()!;
-        console.log(`Using token ${useToken}`);
+        const token = getToken();
+        console.log(`Using token ${token}`);
         return axios.get(url, {
             headers: {
-                Authorization: `Bearer ${useToken}`
+                Authorization: `Bearer ${token}`
             }
         });
     }
 
     function postAPI(url: string, data: any): Promise<any> {
-        const useToken: string = fetchToken()!;
-        console.log(`Using token ${useToken}`);
+        const token = getToken();
+        console.log(`Using token ${token}`);
         return axios.post(url, data, {
             headers: {
-                Authorization: `Bearer ${useToken}`
+                Authorization: `Bearer ${token}`
             }
         });
     }
 
     function refreshAuth(): void {
-        if (!localStorage.getItem("token")) {
+        if (!loggedIn()) {
             console.log("Not logged in");
             return;
         }
 
         console.log("Refreshing auth...");
         axios.post(Routes.AUTH.REFRESH, {
-            refresh: refresh
+            refresh: getRefresh()
         }, {}).then((res) => {
             console.log("Refresh success with token:", res.data.token);
             updateToken(res.data.token);
@@ -132,7 +107,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     }
 
     function logout(): void {
-        if (!localStorage.getItem("token")) return;
+        if (!loggedIn()) return;
 
         setUser({
             loggedin: false,
@@ -141,11 +116,11 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
             registertime: 0
         });
         localStorage.removeItem("token");
-        window.location.reload();
+        nav("/accounts/login");
     }
 
     return (
-        <SessionContext.Provider value={{ user, token, refresh, updateToken, getAPI, postAPI, refreshAuth }}>
+        <SessionContext.Provider value={{ user, updateToken, getAPI, postAPI, refreshAuth }}>
             {props.children}
         </SessionContext.Provider>
     )

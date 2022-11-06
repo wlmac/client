@@ -20,7 +20,7 @@ export const Clubs = (): JSX.Element => {
 
     React.useEffect((): void => {
         if (!localStorage.getItem("token")) {
-            nav("/accounts/login");
+            nav(`/accounts/login?next=/clubs`);
         }
     });
 
@@ -83,15 +83,9 @@ const ClubList = (): JSX.Element[] => {
 
     React.useEffect(() => {
         const fetchURL = `${Routes.OBJECT}/organization`;
-        // console.log(`Token: ${session.token}`);
-        // console.log(`Fetching URL: ${fetchURL}`);
         session.getAPI(fetchURL).then((res) => {
-            console.log("Success:");
-            console.log(res.data.results);
             setClubs(res.data.results);
         }).catch((err) => {
-            console.log("Error occured while fetching organizations:");
-            console.log(err);
             session.refreshAuth();
         });
 

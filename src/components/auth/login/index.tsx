@@ -1,13 +1,18 @@
 import { default as axios } from 'axios';
 import * as React from "react";
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
+import { loggedIn } from '../../../util/core/AuthService';
 import Routes from '../../../util/core/misc/routes';
 import { Session, SessionContext } from "../../../util/core/session";
+import { useQuery } from '../../../util/query';
 
 export const Login = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
 
     const session = React.useContext(SessionContext);
+
+    const query: URLSearchParams = useQuery();
+    const next: string | null = query.get("next");
 
     const [csrf, setCsrf] = React.useState("");
     const [username, setUsername] = React.useState("");
@@ -16,9 +21,8 @@ export const Login = (): JSX.Element => {
     const [err, setErr] = React.useState("");
 
     React.useEffect((): void => {
-        console.log(session.user.loggedin);
-        if (session.user.loggedin) {
-            nav("/");
+        if (loggedIn()) {
+            nav(next ? next : "/");
         }
         removePlaceholder("id_login");
         removePlaceholder("id_password");
@@ -51,7 +55,7 @@ export const Login = (): JSX.Element => {
                 console.log(`Success: ${res.data.access}`);
                 session.updateToken(res.data.access);
                 setLogging(false);
-                //nav("/");
+                nav(next ? next : "/");
             }
             else {
                 console.log("Error");

@@ -16,11 +16,10 @@ import Markdown from "../markdown";
 export const Blog = (): JSX.Element => {
     const session = React.useContext(SessionContext);
     const nav: NavigateFunction = useNavigate();
-    console.log("Session:", session.user);
 
     React.useEffect((): void => {
         if (!localStorage.getItem("token")) {
-            nav("/accounts/login");
+            nav("/accounts/login?next=/blog");
         }
     });
 
@@ -44,15 +43,9 @@ const BlogPosts = (): JSX.Element[] => {
 
     React.useEffect(() => {
         const fetchURL = `${Routes.OBJECT}/blog-post`;
-        // console.log(`Token: ${session.token}`);
-        // console.log(`Fetching URL: ${fetchURL}`);
         session.getAPI(fetchURL).then((res) => {
-            console.log("Success:");
-            console.log(res.data.results);
             setPosts(res.data.results);
         }).catch((err) => {
-            console.log("Error occured while fetching organizations:");
-            console.log(err);
             session.refreshAuth();
         });
 
