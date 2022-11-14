@@ -1,7 +1,6 @@
 import Media from '../misc/media';
 import MembershipStatus from '../misc/membership';
 import Tag from './tag';
-import User from './user';
 
 export default interface Organization {
   name: string;
@@ -11,11 +10,12 @@ export default interface Organization {
   slug: string;
   hideMembers: boolean;
   membership: MembershipStatus;
-  owner: User;
-  supervisors: Array<User>;
-  execs: Array<User>;
+  owner: number;
+  supervisors: Array<number>;
+  members: Array<number>;
+  execs: Array<number>;
   banner: string;
-  icon: Media;
+  icon: string;
   tags: Array<number>;
-  urls: Array<URL>;
+  links: Array<string>;
 }

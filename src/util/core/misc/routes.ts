@@ -1,15 +1,18 @@
+const BASEURL = "https://maclyonsden.com";
+// const BASEURL = "http://localhost:8000";
+
 const Routes = {
-  BASEURL: 'https://maclyonsden.com',
+  BASEURL: BASEURL,
   AUTH: {
-    LOGIN: 'https://maclyonsden.com/api/auth/token',
-    REFRESH: 'https://maclyonsden.com/api/auth/token/refresh',
+    LOGIN: `${BASEURL}/api/auth/token`,
+    REFRESH: `${BASEURL}/api/auth/token/refresh`,
   },
   POST: {
-	USER: 'http://maclyonsden.com/api/v3/user',
-    ANNOUNCEMENT: 'https://maclyonsden.com/api/v3/announcement',
+    USER: `${BASEURL}/api/v3/user`,
+    ANNOUNCEMENT: `${BASEURL}/api/v3/announcement`,
   },
-  USER: 'https://maclyonsden.com/api/v3/user',
-  OBJECT: "https://maclyonsden.com/api/v3/obj",
+  USER: `${BASEURL}/api/v3/user`,
+  OBJECT: `${BASEURL}/api/v3/obj`,
 };
 
 export default Routes;

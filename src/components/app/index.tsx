@@ -19,6 +19,7 @@ import { Blog } from "../blog";
 import { SessionProvider } from "../../util/core/session";
 import { Profile } from "../account/profile";
 import { Flatpage } from "../flatpage";
+import { ClubDetails } from "../clubs/details";
 
 export const _App = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
@@ -37,6 +38,8 @@ export const _App = (): JSX.Element => {
                     <Route path="/announcements" element={<Announcements />} />
                     {/* <Route path="/calendar" element={<Calendar />} /> */}
                     <Route path="/clubs" element={<Clubs />} />
+                    <Route path="/club/:id" element={<ClubDetails />} />
+
                     <Route path="/blog" element={<Blog />} />
                     <Route path="/resources" element={<Resources />} />
                     <Route path="/about" element={<About />}>
