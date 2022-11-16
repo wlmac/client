@@ -1,5 +1,5 @@
-const BASEURL = "https://maclyonsden.com";
-// const BASEURL = "http://localhost:8000";
+// @ts-ignore
+const BASEURL = import.meta.env.DEV ? "http://localhost:8000" : "https://maclyonsden.com";
 
 const Routes = {
   BASEURL: BASEURL,
