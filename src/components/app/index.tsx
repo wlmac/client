@@ -20,6 +20,7 @@ import { SessionProvider } from "../../util/core/session";
 import { Profile } from "../account/profile";
 import { Flatpage } from "../flatpage";
 import { ClubDetails } from "../clubs/details";
+import { BlogDetails } from "../blog/details";
 
 export const _App = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
@@ -41,6 +42,8 @@ export const _App = (): JSX.Element => {
                     <Route path="/club/:id" element={<ClubDetails />} />
 
                     <Route path="/blog" element={<Blog />} />
+                    <Route path="/blog/:id" element={<BlogDetails />} />
+
                     <Route path="/resources" element={<Resources />} />
                     <Route path="/about" element={<About />}>
                         <Route path=":page" element={<About />} />

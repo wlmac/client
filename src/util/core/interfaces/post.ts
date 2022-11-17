@@ -4,11 +4,11 @@ import Tag from './tag';
 
 export default interface Post {
   id: number;
-  author: string;
+  author: number;
   organization: string;
   tags: Array<number>;
-  created: Date;
-  modified: Date;
+  created_date: Date;
+  last_modified_date: Date;
   title: string;
   body: string;
   status?: ApprovalStatus;

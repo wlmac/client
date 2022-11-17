@@ -65,23 +65,17 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     React.useEffect((): void => {
         if (loggedIn()) {
             updateToken(getToken());
+
+            getAPI(`${Routes.USER}/${user.id}`).then((res) => {
+                setUser({
+                    ...user,
+                    ...res.data
+                });
+            }).catch((err) => {
+                refreshAuth();
+            });
         }
     }, []);
-
-    React.useEffect((): void => {
-        if (!loggedIn()) {
-            console.log("Not logged in yet");
-            return;
-        }
-        getAPI(`${Routes.USER}/${user.id}`).then((res) => {
-            setUser({
-                ...user,
-                ...res.data
-            });
-        }).catch((err) => {
-            refreshAuth();
-        });
-    }, [user]);
 
     const updateToken = (token: string): void => {
         setToken(token);

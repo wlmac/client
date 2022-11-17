@@ -28,17 +28,11 @@ export const ClubDetails = (): JSX.Element => {
         window.history.back();
     }
 
-    // React.useEffect(() => {
-    //     console.warn("Club was set!");
-    // }, [club]);
-
     React.useEffect(() => {
         const fetchURL = `${Routes.OBJECT}/organization/retrieve/${id}`;
         session.getAPI(fetchURL).then((res) => {
             const current_club: Organization = res.data as Organization;
             setClub(current_club);
-            console.log("Execs:", current_club.execs);
-            console.log("Members:", current_club.members);
 
             // Tags
             session.getAPI(`${Routes.OBJECT}/tag`).then((res) => {
