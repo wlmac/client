@@ -1,31 +1,35 @@
 import * as React from "react";
 import { useParams } from "react-router-dom";
 import FlatPage from "../../util/core/interfaces/flatpage";
+import Routes from "../../util/core/misc/routes";
+import { Session, SessionContext } from "../../util/core/session";
 import Markdown from "../markdown";
 import { NotFound } from "../notfound";
 
 export const Flatpage = (): JSX.Element => {
+    const session: Session = React.useContext(SessionContext);
+    const [exists, setExists] = React.useState(false);
+    const [flatpage, setFlatpage] = React.useState({} as FlatPage);
+    const slug = encodeURIComponent(window.location.pathname);
+
     React.useEffect((): void => {
         document.title = "Resources | Metropolis";
+        session.getAPI(`${Routes.OBJECT}/flatpage/retrieve/${slug}/`).then((res: { data: FlatPage }) => {
+            setFlatpage(res.data);
+            setExists(true);
+        }).catch((err) => {
+            if (err.response.status !== 404) {
+                session.refreshAuth();
+            }
+        })
     }, []);
-
-    const { slug } = useParams();
 
     const goBack = (): void => {
         window.history.back();
     }
 
-    const flatpage: FlatPage = {
-        slug: "baf",
-        content: "Hi! **This text is bold**, *This text is italics*, and ~~this text is crossed out~~. This is a link: https://google.ca"
-    };
-
-    const flatpageExists = (slug: string): boolean => {
-        return slug == "baf"; // temporary until fetched api
-    }
-
     return (
-        flatpageExists(slug!) ?
+        exists ?
             <>
                 <link rel="stylesheet" href="/static/css/flatpage.css" />
                 <div className="resources-page">

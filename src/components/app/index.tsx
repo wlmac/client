@@ -44,7 +44,6 @@ export const _App = (): JSX.Element => {
                     <Route path="/blog" element={<Blog />} />
                     <Route path="/blog/:id" element={<BlogDetails />} />
 
-                    <Route path="/resources" element={<Resources />} />
                     <Route path="/about" element={<About />}>
                         <Route path=":page" element={<About />} />
                     </Route>
@@ -56,8 +55,7 @@ export const _App = (): JSX.Element => {
 
                     <Route path="/user/:username" element={<Profile />} />
 
-                    <Route path="/:slug" element={<Flatpage />} />
-                    <Route path="*" element={<NotFound />} />
+                    <Route path="*" element={<Flatpage />} />
                 </Routes>
             </div>
 
