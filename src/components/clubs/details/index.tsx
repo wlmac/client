@@ -108,7 +108,6 @@ export const ClubDetails = (): JSX.Element => {
     return (
         <>
             <link rel="stylesheet" href="/static/css/detail.css" />
-
             <div className="club">
                 <div className="row">
                     <img className="club-banner responsive-img col s12" src={club.banner} alt="banner of organization" />

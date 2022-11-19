@@ -1,11 +1,15 @@
 import * as React from "react";
+import { default as axios } from "axios";
+
 import { useNavigate, NavigateFunction, Link } from "react-router-dom";
+import { loggedIn } from "../../util/core/AuthService";
 import Announcement from "../../util/core/interfaces/announcement";
 import BlogPost from "../../util/core/interfaces/blogpost";
 import Organization from "../../util/core/interfaces/organization";
-import User from "../../util/core/interfaces/user";
 import Media from "../../util/core/misc/media";
 import MembershipStatus from "../../util/core/misc/membership";
+import { User } from "../../util/core/session";
+import Routes from "../../util/core/misc/routes";
 
 export const Home = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
@@ -14,21 +18,14 @@ export const Home = (): JSX.Element => {
         document.title = "Home | Metropolis";
     }, []);
 
-    const myUser: User = { id: 1, slug: "baf", name: ["baf1", "baf2"], bio: "baf", timezone: "baf", graduatingYear: 2023, organizations: [], following: [] };
-    const myMedia: Media = new Media("http://localhost:8080/img/baf", 0);
-    const myOrg: Organization = { name: "baf", id: 1, bio: "baf", footer: "baf", slug: "baf", hideMembers: false, membership: MembershipStatus.Open, owner: myUser, supervisors: [], execs: [], banner: myMedia, icon: myMedia, tags: [], urls: [] };
-    const blogpost: BlogPost = {
-        id: 1,
-        author: myUser,
-        organization: myOrg,
-        created: new Date(),
-        modified: new Date(),
-        title: "baf",
-        body: "baf",
-        featuredImage: new URL("http://localhost:8080/img/baf"),
-        slug: "baf",
-        tags: [],
-    }
+    const [post, setPost] = React.useState({} as BlogPost); // Featured BlogPost
+
+    React.useEffect(() => {
+        const fetchURL = `${Routes.OBJECT}/blog-post`;
+        axios.get(fetchURL).then((res: { data: { results: Array<BlogPost> } }) => {
+            setPost(res.data.results[0]);
+        });
+    }, []);
 
     return (
         <div id="content-container">
@@ -50,23 +47,17 @@ export const Home = (): JSX.Element => {
                 <div className="overlay-container">
                     <div className="banner-message center-align">
                         <span>
-
                             <Link to="/accounts/signup/">Sign up</Link> and add your timetable to see a personalized schedule here.
-
                         </span>
                     </div>
                 </div>
 
             </div>
             <div id="main-container">
-
-                <FeaturedBlogPost post={blogpost} />
-
+                <FeaturedBlogPost post={post} />
                 <div id="recent-events" className="card-list center-align">
                     <div className="cards-container">
-
                         There are no events at this time.
-
                     </div>
                     <Link className="full-content-page link" to="/calendar">View all events <i className="zmdi zmdi-chevron-right"></i></Link>
                 </div>
@@ -92,8 +83,8 @@ const FeaturedBlogPost = (props: { post: BlogPost }): JSX.Element => {
                     <hr />
                     <div className="blog-body markdown-container">
                         <p>{post.body}</p>
-                        <a className="full-content-page link" href="/blog/sacred-silence-infographic">Read full blog
-                            post <i className="zmdi zmdi-chevron-right"></i></a>
+                        <Link className="full-content-page link" to={`/blog/${post.id}`}>Read full blog
+                            post <i className="zmdi zmdi-chevron-right"></i></Link>
                     </div>
                 </div>
             </div>
@@ -103,23 +94,15 @@ const FeaturedBlogPost = (props: { post: BlogPost }): JSX.Element => {
 }
 
 const HomeAnnouncements = (): JSX.Element[] => {
-    const myUser: User = { id: 1, slug: "baf", name: ["baf1", "baf2"], bio: "baf", timezone: "baf", graduatingYear: 2023, organizations: [], following: [] };
-    const myMedia: Media = new Media("http://localhost:8080/img/baf", 0);
-    const myOrg: Organization = { name: "baf", id: 1, bio: "baf", footer: "baf", slug: "baf", hideMembers: false, membership: MembershipStatus.Open, owner: myUser, supervisors: [], execs: [], banner: myMedia, icon: myMedia, tags: [], urls: [] };
-    const announcement: Announcement = {
-        id: 1,
-        author: myUser,
-        organization: myOrg,
-        created: new Date(),
-        modified: new Date(),
-        title: "baf",
-        body: "baf",
-        supervisor: myUser,
-        tags: [],
-    }
-    const announcements = [
-        announcement, announcement,
-    ];
+    const [announcements, setAnnouncements] = React.useState([] as Array<Announcement>);
+
+    React.useEffect(() => {
+        const fetchURL = `${Routes.OBJECT}/announcement`;
+        axios.get(fetchURL).then((res: { data: { results: Array<Announcement> } }) => {
+            setAnnouncements(res.data.results.slice(0, 3));
+        });
+    }, []);
+
     return announcements.map((announcement: Announcement): JSX.Element => {
         return <HomeAnnouncement key={announcement.id} announcement={announcement} />
     });
@@ -133,10 +116,10 @@ const HomeAnnouncement = (props: { announcement: Announcement }): JSX.Element =>
                 <h5 className="title truncate">{announcement.title}</h5>
                 <div className="authors">
                     <div className="authors-image">
-                        <Link to={`/club/${announcement.organization.slug}`}><img className="circle" src="/img/baf" /></Link>
+                        <Link to={`/club/${announcement.organization}`}><img className="circle" src="/img/baf" /></Link>
                     </div>
                     <div className="authors-text">
-                        <Link to={`/club/${announcement.organization.slug}`}>{announcement.organization.name}</Link>
+                        <Link to={`/club/${announcement.organization}`}>{announcement.organization}</Link>
                     </div>
                 </div>
                 <hr />

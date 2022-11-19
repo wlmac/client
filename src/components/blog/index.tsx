@@ -102,7 +102,7 @@ const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Eleme
                         <div className="card-authors-text">
                             <Link to={`/user/${post.author}`} className="link">{post.author}</Link>
                             <br />
-                            • posted {post.created}
+                            • posted {post.created_date}
                         </div>
                     </div>
                 </div>
