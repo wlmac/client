@@ -1,6 +1,7 @@
 .input-row {
     display: flex;
     flex-direction: row;
+    align-items: center;
 }
 
 .form-errors {
@@ -12,4 +13,17 @@
 
 .form-error {
     color: rgb(212, 0, 0);
+}
+
+.header-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.modal-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }

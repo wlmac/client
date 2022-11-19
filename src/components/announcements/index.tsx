@@ -46,12 +46,14 @@ export const Announcements = (): JSX.Element => {
             <link rel="stylesheet" href="static/css/announcement-list.css" />
             <AnnouncementCreator openCreator={openCreator} setOpenCreator={setOpenCreator} />
             <div className="container">
-
-                <div className="headers">
+                <div className="headers header-row">
                     <ul>
                         {header(feed)}
-                        <button onClick={openModal}>open</button>
                     </ul>
+                    <a className="btn-small waves-light red" href="#modal1" onClick={(ev) => {
+                        ev.preventDefault();
+                        M.Modal.getInstance(document.getElementById("announcement-creator")!).open();
+                    }}><i className="material-icons">add</i></a>
                 </div>
                 <div className="card-container">
                     <div className="cards" id="cards-all">
@@ -121,7 +123,7 @@ const AnnouncementElement = (props: { announcement: Announcement, tags: Tag[] })
                         <Link to={`/club/${data.organization}`} className="link">{data.organization}</Link>,
                         <Link to={`/user/${data.author}`} className="link">{data.author}</Link>
                         <br />
-                        • {data.created}
+                        • {data.created_date}
                     </div>
                 </div>
             </div>
@@ -137,38 +139,58 @@ const AnnouncementElement = (props: { announcement: Announcement, tags: Tag[] })
 
 const AnnouncementCreator = (props: { openCreator: boolean, setOpenCreator: React.Dispatch<any> }): JSX.Element => {
     const openCreator: boolean = props.openCreator, setOpenCreator: React.Dispatch<any> = props.setOpenCreator;
-    if (!openCreator) return <></>
+    // if (!openCreator) return <></>
+
+    const [isPublic, setIsPublic] = React.useState(false);
 
     return (
-        <div className="popup">
-            <div className="modal-a">
-                <div className="modal-top">
-                    <h5 className="header-announcement">Add Announcement</h5>
-                    <button onClick={() => setOpenCreator(false)} className="cancel">cancel</button>
-                </div>
-                <div className="modal-content">
-                    <div className="form">
-                        <h6 className="form-label">Organization</h6>
-                        <input type="text" className="textbox"></input>
-                    </div>
-                    <div className="form">
-                        <h6 className="form-label">Title</h6>
-                        <input type="text"></input>
-                    </div>
-                    <div className="form">
-                        <h6 className="form-label">Body</h6>
-                        <input type="text"></input>
-                    </div>
-                    <div className="form">
-                        <h6 className="form-label">Tags</h6>
-                        <input type="text"></input>
-                    </div>
-                    <div className="form">
-                        <h6 className="form-label">Public</h6>
-                        <input type="checkbox" className="toggle" />
-                    </div>
-                </div>
+        <div id="announcement-creator" className="modal">
+            <div className="modal-content">
+                <h4>Modal Header</h4>
+                <p>A bunch of text</p>
+            </div>
+            <div className="modal-footer">
+                <a href="#!" className="modal-close waves-effect waves-green btn-flat">Agree</a>
             </div>
         </div>
     );
+
+    // return (
+    //     <div className="popup">
+    //         <div className="modal-a">
+    //             <div className="modal-top modal-header">
+    //                 <h5 className="header-announcement">Add Announcement</h5>
+    //                 <a className="waves-effect waves-light btn" onClick={(ev: React.MouseEvent) => {
+    //                     ev.preventDefault();
+    //                     setOpenCreator(false);
+    //                 }}>Cancel</a>
+    //             </div>
+    //             <div className="modal-content">
+    //                 <div className="form input-row">
+    //                     <h6 className="form-label">Organization:</h6>
+    //                     <input type="text" className="textbox"></input>
+    //                 </div>
+    //                 <div className="form input-row">
+    //                     <h6 className="form-label">Title:</h6>
+    //                     <input type="text"></input>
+    //                 </div>
+    //                 <div className="form input-row">
+    //                     <h6 className="form-label">Body:</h6>
+    //                     <input type="text"></input>
+    //                 </div>
+    //                 <div className="form input-row">
+    //                     <h6 className="form-label">Tags:</h6>
+    //                     <input type="text"></input>
+    //                 </div>
+    //                 <div className="form input-row">
+    //                     <h6 className="form-label">Public:</h6>
+    //                     <label>
+    //                         <input type="checkbox" className="filled-in" onChange={(ev) => setIsPublic(ev.target.checked)} />
+    //                         <span>Filled in</span>
+    //                     </label>
+    //                 </div>
+    //             </div>
+    //         </div>
+    //     </div>
+    // );
 }
