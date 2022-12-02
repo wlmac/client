@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import FullCalendar  from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import axios from 'axios';
 import FadeIn from 'react-fade-in';
 
 export const Calendar = (): JSX.Element => {
@@ -16,181 +17,22 @@ export const Calendar = (): JSX.Element => {
       // TODO test this lol (used jquery before, but I changed to axios ;-;)
       // get events via url
 
-      // const url = "/api/events?start=" + fetchInfo.startStr + "&end=" + fetchInfo.endStr
-      // axios.get(url).then((response) => {
-      //     if (response.status !== 200) {
-      //         failureCallback("Returned status " + status)
-      //         if(events[key])
-      //     } else {
-      //         events[key] = response.data
-      //         successCallback(parseEvents(events[key]))
-      //         if (selectedDate != null) {
-      //             calendar.select(selectedDate)
-      //         }
-      //     }
-      // })
-
-      let collectedEvents=  [
-    {
-        "id": 202,
-        "organization": {
-            "id": 2,
-            "owner": {
-                "id": 9,
-                "slug": "ApocalypseCalculator"
-            },
-            "supervisors": [
-                {
-                    "id": 9,
-                    "slug": "ApocalypseCalculator"
-                }
-            ],
-            "execs": [
-                {
-                    "id": 97,
-                    "slug": "CarlaMancini"
-                },
-                {
-                    "id": 47,
-                    "slug": "mrquan21"
-                },
-                {
-                    "id": 9,
-                    "slug": "ApocalypseCalculator"
-                }
-            ],
-            "tags": [],
-            "name": "School",
-            "bio": "William Lyon Mackenzie Collegiate Institute",
-            "extra_content": "",
-            "slug": "wlmac",
-            "registered_date": "2021-08-30T22:27:41.554204-04:00",
-            "show_members": true,
-            "is_open": false,
-            "applications_open": false,
-            "banner": "https://maclyonsden.com/media/banners/default.png",
-            "icon": "https://maclyonsden.com/media/icons/8b673e4300b74ff287d06de09e245d2f.png"
-        },
-        "tags": [
-            {
-                "id": 29,
-                "name": "club events",
-                "color": "#f0ccff"
-            }
-        ],
-        "name": "Club Crawl",
-        "description": "",
-        "start_date": "2022-09-29T09:00:00-04:00",
-        "end_date": "2022-09-29T15:15:00-04:00",
-        "is_public": true,
-        "term": 3
-    },
-    {
-        "id": 203,
-        "organization": {
-            "id": 2,
-            "owner": {
-                "id": 9,
-                "slug": "ApocalypseCalculator"
-            },
-            "supervisors": [
-                {
-                    "id": 9,
-                    "slug": "ApocalypseCalculator"
-                }
-            ],
-            "execs": [
-                {
-                    "id": 97,
-                    "slug": "CarlaMancini"
-                },
-                {
-                    "id": 47,
-                    "slug": "mrquan21"
-                },
-                {
-                    "id": 9,
-                    "slug": "ApocalypseCalculator"
-                }
-            ],
-            "tags": [],
-            "name": "School",
-            "bio": "William Lyon Mackenzie Collegiate Institute",
-            "extra_content": "",
-            "slug": "wlmac",
-            "registered_date": "2021-08-30T22:27:41.554204-04:00",
-            "show_members": true,
-            "is_open": false,
-            "applications_open": false,
-            "banner": "https://maclyonsden.com/media/banners/default.png",
-            "icon": "https://maclyonsden.com/media/icons/8b673e4300b74ff287d06de09e245d2f.png"
-        },
-        "tags": [],
-        "name": "Student Photo Day",
-        "description": "",
-        "start_date": "2022-09-29T09:00:00-04:00",
-        "end_date": "2022-09-29T15:15:00-04:00",
-        "is_public": true,
-        "term": 3
-    },
-    {
-        "id": 204,
-        "organization": {
-            "id": 2,
-            "owner": {
-                "id": 9,
-                "slug": "ApocalypseCalculator"
-            },
-            "supervisors": [
-                {
-                    "id": 9,
-                    "slug": "ApocalypseCalculator"
-                }
-            ],
-            "execs": [
-                {
-                    "id": 97,
-                    "slug": "CarlaMancini"
-                },
-                {
-                    "id": 47,
-                    "slug": "mrquan21"
-                },
-                {
-                    "id": 9,
-                    "slug": "ApocalypseCalculator"
-                }
-            ],
-            "tags": [],
-            "name": "School",
-            "bio": "William Lyon Mackenzie Collegiate Institute",
-            "extra_content": "",
-            "slug": "wlmac",
-            "registered_date": "2021-08-30T22:27:41.554204-04:00",
-            "show_members": true,
-            "is_open": false,
-            "applications_open": false,
-            "banner": "https://maclyonsden.com/media/banners/default.png",
-            "icon": "https://maclyonsden.com/media/icons/8b673e4300b74ff287d06de09e245d2f.png"
-        },
-        "tags": [
-            {
-                "id": 15,
-                "name": "cultural & community",
-                "color": "#f9ccff"
-            }
-        ],
-        "name": "Orange Shirt Day",
-        "description": "",
-        "start_date": "2022-09-30T00:00:00-04:00",
-        "end_date": "2022-09-30T23:59:59-04:00",
-        "is_public": true,
-        "term": 3
-    }
-]
-      setEvents(collectedEvents);
-      setEventFetch(key);
-      successCallback(collectedEvents)
+      const url = "https://www.maclyonsden.com/api/events?start=" + fetchInfo.startStr + "&format=json&end=" + fetchInfo.endStr
+      console.log(url);
+      axios.get(url).then((response) => {
+          if (response.status !== 200) {
+              failureCallback("Returned status " + status)
+          } else {
+              events[key] = response.data
+              console.log(response);
+              setEventFetch(key);
+              setEvents(events[key])
+              successCallback(events[key])
+              if (selectedDate != null) {
+                  calendar.select(selectedDate)
+              }
+          }
+      })
     } else {
       successCallback(events);
     }
