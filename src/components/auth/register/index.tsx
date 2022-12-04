@@ -1,12 +1,22 @@
 import * as React from "react";
 import { default as axios } from 'axios';
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
-import { Session, SessionContext } from "../../../util/core/session";
+import { Session, SessionContext, User } from "../../../util/core/session";
 import { RouterLink } from "../../app/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { RegisterInputs } from "../../../util/models";
-import User from "../../../util/core/interfaces/user";
+
 import Routes from "../../../util/core/misc/routes";
+import { loggedIn } from "../../../util/core/AuthService";
+
+interface RegisterUser {
+    first_name: string,
+    last_name: string,
+    graduating_year: number,
+    email: string,
+    username: string,
+    password: string
+}
 
 export const Register = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
@@ -19,7 +29,7 @@ export const Register = (): JSX.Element => {
     }, []);
 
     React.useEffect((): void => {
-        if (session.user.loggedin) {
+        if (loggedIn()) {
             nav("/");
         }
     });
@@ -29,20 +39,22 @@ export const Register = (): JSX.Element => {
     }
 
     const onRegister = (data: RegisterInputs): void => {
-        console.log(data);
-        const new_user: User = {
-            id: 1,
-            slug: data.username,
-            name: [data.first_name, data.last_name],
-            bio: "",
-            timezone: "",
-            graduatingYear: data.graduating_year,
-            organizations: [],
-            following: [],
+        console.log("Submitted data:", data);
+        if (data.password !== data.confirm_password) {
+            setError("Passwords do not match");
+            return;
+        }
+        const new_user: RegisterUser = {
+            first_name: data.first_name,
+            last_name: data.last_name,
+            graduating_year: data.graduating_year,
+            email: data.email,
+            username: data.username,
+            password: data.password
         }
         axios.post(Routes.USER, { new_user }).then((res) => {
             console.log("Successfully registered user");
-            nav("/login");
+            nav("/accounts/login");
         }).catch((err) => {
             console.log("Failed to register user");
             setError("An internal error occurred. Please contact an admin to get it fixed.")
@@ -119,7 +131,7 @@ export const Register = (): JSX.Element => {
                                     </div>
                                 </div>
                                 <p>By clicking this button, you agree to our <Link to="/terms/">terms</Link> and <Link className="link" to="/privacy/">privacy policy</Link>.</p>
-                                {error && 
+                                {error &&
                                     <span className="form-error">
                                         <div className="form-errors">
                                             <i className="material-icons">warning</i>

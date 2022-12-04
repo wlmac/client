@@ -21,3 +21,11 @@ export type RegisterInputs = {
     password: string,
     confirm_password: string,
 }
+
+export type AnnouncementInputs = {
+    title: string,
+    body: string,
+    organization: string,
+    show_after: string,
+    supervisor: string,
+}
