@@ -21,7 +21,7 @@ export interface User {
 export interface Session {
     user: User,
     updateToken: (token: string) => void,
-    getAPI: (url: string) => Promise<any>,
+    getAPI: (url: string, auth: boolean) => Promise<any>,
     postAPI: (url: string, data: any) => Promise<any>,
     refreshAuth: () => void,
     logout: () => void
@@ -41,7 +41,7 @@ export const SessionContext = React.createContext<Session>({
         registertime: 0
     },
     updateToken: (token: string) => { },
-    getAPI: (url: string) => { return {} as Promise<any> },
+    getAPI: (url: string, auth: boolean) => { return {} as Promise<any> },
     postAPI: (url: string, data: any) => { return {} as Promise<any> },
     refreshAuth: () => { },
     logout: () => { }
@@ -66,7 +66,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         if (loggedIn()) {
             updateToken(getToken());
 
-            getAPI(`${Routes.USER}/${user.id}`).then((res) => {
+            getAPI(`${Routes.USER}/${user.id}`, true).then((res) => {
                 setUser({
                     ...user,
                     ...res.data
@@ -103,13 +103,13 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         }
     }
 
-    function getAPI(url: string): Promise<any> {
+    function getAPI(url: string, auth: boolean): Promise<any> {
         const token = getToken();
-        return axios.get(url, {
+        return axios.get(url, auth ? {
             headers: {
                 Authorization: `Bearer ${token}`
             }
-        });
+        } : {});
     }
 
     const postAPI = (url: string, data: any): Promise<any> => {
