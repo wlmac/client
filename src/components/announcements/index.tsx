@@ -26,12 +26,6 @@ export const Announcements = (): JSX.Element => {
         document.title = "Announcements | Metropolis";
     }, []);
 
-    React.useEffect((): void => {
-        if (!loggedIn()) {
-            nav(`/accounts/login?next=/announcements`);
-        }
-    });
-
     const header = (currentFeed: string | null): Array<JSX.Element> => {
         return AnnouncementFeeds.map((feed: AnnouncementFeed): JSX.Element => {
             const headerClass: string = feed.id === currentFeed ? "header header-active" : "header";
