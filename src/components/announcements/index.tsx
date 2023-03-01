@@ -72,14 +72,14 @@ const AnnouncementList = (): JSX.Element[] => {
 
     React.useEffect(() => {
         const fetchURL = `${Routes.OBJECT}/announcement`;
-        session.getAPI(fetchURL).then((res) => {
+        session.getAPI(fetchURL, false).then((res) => {
             setAnnouncements(res.data.results);
         }).catch((err) => {
             session.refreshAuth();
         });
 
         // Tags
-        session.getAPI(`${Routes.OBJECT}/tag`).then((res) => {
+        session.getAPI(`${Routes.OBJECT}/tag`, false).then((res) => {
             const tags = res.data.results;
             setTags(tags);
         }).catch(() => {
