@@ -28,20 +28,24 @@ export const Announcements = (): JSX.Element => {
 
     const header = (currentFeed: string | null): Array<JSX.Element> => {
         return AnnouncementFeeds.map((feed: AnnouncementFeed): JSX.Element => {
+<<<<<<< Updated upstream
             const headerClass: string = feed.id === currentFeed ? "header header-active" : "header";
+=======
+            const headerClass: string = feed.id === currentFeed ? "header active" : "header";
+            
+>>>>>>> Stashed changes
             return <li key={feed.id} className={headerClass} onClick={(): void => nav(`/announcements?feed=${feed.id}`)}>{feed.text}</li>
         });
     }
-
-    const openModal = () => {
-        setOpenCreator(true);
-    };
 
     return (
         <>
             <link rel="stylesheet" href="static/css/announcement-list.css" />
             <AnnouncementCreator openCreator={openCreator} setOpenCreator={setOpenCreator} />
+    
             <div className="container">
+                <AnnouncementPrompt/>
+                <RejectModal openCreator={openCreator} setOpenCreator={setOpenCreator} />
                 <div className="headers header-row">
                     <ul>
                         {header(feed)}
@@ -96,6 +100,55 @@ const AnnouncementList = (): JSX.Element[] => {
         return <AnnouncementElement key={announcement.id} announcement={announcement} tags={current_tags} />;
     });
 }
+
+const AnnouncementPrompt = (props: {}): JSX.Element => {
+    /* idk stuff to do stuff*/
+
+    return (
+        <div className="prompt">
+            <div className = "prompt-text">
+                <p id="approvaltop">The following announcement is awaiting your approval.</p>
+                <h5 id="approvalbot">Approve Announcement?</h5>
+            </div>
+            <div className = "prompt-buttons">
+                <a className="checkmark" onClick={(ev: React.MouseEvent) => {
+
+                }}>✅</a>
+
+                <a className="reject" onClick={(ev: React.MouseEvent) => {
+                        M.Modal.getInstance(document.getElementById("reject-popup")!).open();
+                }}>❌</a>
+            </div>
+            
+        </div>
+    );
+}
+
+const RejectModal = (props: { openCreator: boolean, setOpenCreator: React.Dispatch<any> }): JSX.Element => {
+    const openCreator: boolean = props.openCreator, setOpenCreator: React.Dispatch<any> = props.setOpenCreator;
+    
+    return (
+        <div id="reject-popup" className="modal reject-modal">
+            <div className="modal-top modal-header">
+                <h5 className="header-announcement">Add Announcement</h5>
+            </div>
+            <div className="modal-content">
+                <div className="form reason">
+                    <h6 className="form-label">reason for rejection:</h6>
+                    <input type="text"></input>
+                </div>
+            </div>
+            <div className="modal-footer">
+                <a href="#!" className="modal-close waves-effect waves-red btn-flat">Cancel</a>
+                <a className="waves-effect waves-light btn" onClick={(ev: React.MouseEvent) => {
+
+                }}>Submit!</a>
+            </div>
+        </div>
+    );
+
+}
+
 
 const AnnouncementElement = (props: { announcement: Announcement, tags: Tag[] }): JSX.Element => {
     const data: Announcement = props.announcement;
