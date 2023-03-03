@@ -1,11 +1,40 @@
 import * as React from "react";
 import { Link, useParams } from "react-router-dom";
 import { Session, SessionContext, User } from "../../../util/core/session";
+import Routes from "../../../util/core/misc/routes";
+import Organization from "../../../util/core/interfaces/organization";
 
 export const Profile = (): JSX.Element => {
-    const { username } = useParams();
+    const { userID } = useParams();
     const session: Session = React.useContext(SessionContext);
-    const user: User = session.user;
+    const current_user: User = session.user;
+    const [user, setUser] = React.useState({} as User);
+    const [organizations, setOrganizations] = React.useState([] as Array<Organization>);
+    const [organizationDisplay, setOrganizationDisplay] = React.useState("");
+
+    React.useEffect(() => {
+        document.title = `User ${user.username} | Metropolis`;
+        session.getAPI(`${Routes.USER}/${userID}`, true).then((res) => {
+            const fetched_user: User = res.data as User;
+            setUser(res.data);
+
+
+            session.getAPI(`${Routes.OBJECT}/organization`, false).then((res) => {
+                const all_organizations = res.data.results as Array<Organization>;
+                const organization_display_list: Array<string> = [];
+                all_organizations.forEach((organization: Organization) => {
+                    if (fetched_user.organizations.find(element => element === organization.id)) {
+                        organization_display_list.push(organization.name);
+                    }
+                });
+                setOrganizationDisplay(organization_display_list.join(", "));
+            }).catch((err) => {
+
+            });
+        }).catch(() => {
+            session.refreshAuth();
+        });
+    }, []);
 
     return (
         <>
@@ -14,7 +43,7 @@ export const Profile = (): JSX.Element => {
             <div className="container">
                 <ul className="sidenav secondnav" id="secondary-out">
                     <li>
-                        <a className="sidenav-close" href="https://maclyonsden.com/accounts/profile">Profile</a>
+                        <Link className="sidenav-close" to="/accounts/profile">Profile</Link>
                     </li>
                     <li>
                         <Link className="sidenav-close" to="/timetable">Timetable</Link>
@@ -76,8 +105,7 @@ export const Profile = (): JSX.Element => {
                         </div>
                         <div className="field">
                             <div className="label">Executive of</div>
-                            Project Metropolis,&nbsp;
-                            Mackenzie Computer Programming Team (MCPT)
+                            {organizationDisplay}
                         </div>
                         <br />
                         <div>
