@@ -5,3 +5,15 @@
     -o-object-fit: cover;
        object-fit: cover;
 }
+
+.page-title {
+    padding: 3rem !important;
+}
+
+.edit-club-bio textarea {
+    width: 100%;
+    height: auto;
+    background-color: transparent;
+    resize: none;
+}
+
