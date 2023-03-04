@@ -13,7 +13,7 @@ export const AnnouncementDetail = (): JSX.Element => {
     const session: Session = React.useContext(SessionContext);
     const nav: NavigateFunction = useNavigate();
 
-    const [openCreator, setOpenCreator] = React.useState(false); // Modal
+    const [openCreator, setOpenCreator] = React.useState(true); // Modal
 
     React.useEffect(() => {
         session.getAPI(`${Routes.OBJECT}/announcement/retrieve/${id}`, false).then((res) => {
@@ -59,37 +59,39 @@ export const AnnouncementDetail = (): JSX.Element => {
         );
     }
 
-    const RejectModal = (props: { openCreator: boolean, setOpenCreator: React.Dispatch<any> }): JSX.Element => {
-        const openCreator: boolean = props.openCreator, setOpenCreator: React.Dispatch<any> = props.setOpenCreator;
+    // const RejectModal = (props: { openCreator: boolean, setOpenCreator: React.Dispatch<any> }): JSX.Element => {
+    //     const openCreator: boolean = props.openCreator, setOpenCreator: React.Dispatch<any> = props.setOpenCreator;
 
-        return (
-            <div id="reject-popup" className="modal reject-modal">
-                <div className="modal-top modal-header">
-                    <h5 className="header-announcement">Add Announcement</h5>
-                </div>
-                <div className="modal-content">
-                    <div className="form reason">
-                        <h6 className="form-label">reason for rejection:</h6>
-                        <input type="text"></input>
-                    </div>
-                </div>
-                <div className="modal-footer">
-                    <a href="#!" className="modal-close waves-effect waves-red btn-flat">Cancel</a>
-                    <a className="waves-effect waves-light btn" onClick={(ev: React.MouseEvent) => {
+    //     return (
 
-                    }}>Submit!</a>
-                </div>
-            </div>
-        );
+    //     );
 
-    }
+    // }
 
     return (
         <>
             <link rel="stylesheet" href="/static/css/announcement-detail.css" />
             <div className="container">
                 <AnnouncementPrompt />
-                <RejectModal openCreator={openCreator} setOpenCreator={setOpenCreator} />
+
+                {/* Reject modal */}
+                <div id="reject-popup" className="modal reject-modal">
+                    <div className="modal-top modal-header">
+                        <h5 className="header-announcement">Add Announcement</h5>
+                    </div>
+                    <div className="modal-content">
+                        <div className="form reason">
+                            <h6 className="form-label">Reason for rejection:</h6>
+                            <input type="text"></input>
+                        </div>
+                    </div>
+                    <div className="modal-footer">
+                        <a href="#!" className="modal-close waves-effect waves-red btn-flat">Cancel</a>
+                        <a className="waves-effect waves-light btn" onClick={(ev: React.MouseEvent) => {
+
+                        }}>Submit!</a>
+                    </div>
+                </div>
 
                 <div className="headers">
                     <ul>
