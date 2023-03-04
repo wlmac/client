@@ -64,7 +64,7 @@ export const Login = (): JSX.Element => {
                 // getCsrf();
             }
         }).catch(err => {
-            setErr(err.response.data.error);
+            setErr(err.response.data.detail);
             setLogging(false);
             // getCsrf();
         });
@@ -119,6 +119,11 @@ export const Login = (): JSX.Element => {
                                         </label>
                                     </div>
                                 </div>
+
+                                {
+                                    !!err &&
+                                    <ul className="errorlist nonfield"><li>The username and/or password you specified are not correct.</li></ul>
+                                }
 
                                 <div>
                                     <button className="btn login-btn" onClick={login}>Sign In</button>

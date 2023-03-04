@@ -130,7 +130,7 @@ export const NavigationBar = (): JSX.Element => {
                                     </a>
 
                                     <ul id="dropdownAcc" className="dropdown-content" tabIndex={0}>
-                                        <li tabIndex={0}><Link to={`/user/${session.user.username}`}>Profile</Link></li>
+                                        <li tabIndex={0}><Link to={`/user/${session.user.id}`}>Profile</Link></li>
                                         <li tabIndex={0}><Link to="/timetable">Timetable</Link></li>
                                         <li tabIndex={0}><Link to="/admin/">Admin</Link></li>
                                         <li tabIndex={0}><a onClick={(ev: React.MouseEvent) => {

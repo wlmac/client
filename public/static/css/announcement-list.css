@@ -30,7 +30,7 @@
     -o-transition: color 0.1s linear, border-color 0.1s linear;
     transition: color 0.1s linear, border-color 0.1s linear;
 }
-.active {
+.header-active {
     color: var(--highlight-colour) !important;
     border-color: var(--highlight-colour) !important;
 }

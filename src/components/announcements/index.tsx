@@ -2,7 +2,7 @@ import * as React from "react";
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import { useQuery } from "../../util/query";
 import { AnnouncementFeeds } from "./feeds";
-import { AnnouncementFeed } from "../../util/models";
+import { AnnouncementFeed, AnnouncementInputs } from "../../util/models";
 import Announcement from "../../util/core/interfaces/announcement";
 import Organization from "../../util/core/interfaces/organization";
 import MembershipStatus from "../../util/core/misc/membership";
@@ -12,6 +12,8 @@ import { getTags, TagElement } from "../../util/core/tags";
 import { Session, SessionContext } from "../../util/core/session";
 import Routes from "../../util/core/misc/routes";
 import { loggedIn } from "../../util/core/AuthService";
+
+import { useForm, SubmitHandler } from "react-hook-form";
 
 export const Announcements = (): JSX.Element => {
     const query: URLSearchParams = useQuery();
@@ -24,15 +26,9 @@ export const Announcements = (): JSX.Element => {
         document.title = "Announcements | Metropolis";
     }, []);
 
-    React.useEffect((): void => {
-        if (!loggedIn()) {
-            nav(`/accounts/login?next=/announcements`);
-        }
-    });
-
     const header = (currentFeed: string | null): Array<JSX.Element> => {
         return AnnouncementFeeds.map((feed: AnnouncementFeed): JSX.Element => {
-            const headerClass: string = feed.id === currentFeed ? "header active" : "header";
+            const headerClass: string = feed.id === currentFeed ? "header header-active" : "header";
             return <li key={feed.id} className={headerClass} onClick={(): void => nav(`/announcements?feed=${feed.id}`)}>{feed.text}</li>
         });
     }
@@ -70,14 +66,14 @@ const AnnouncementList = (): JSX.Element[] => {
 
     React.useEffect(() => {
         const fetchURL = `${Routes.OBJECT}/announcement`;
-        session.getAPI(fetchURL).then((res) => {
+        session.getAPI(fetchURL, false).then((res) => {
             setAnnouncements(res.data.results);
         }).catch((err) => {
             session.refreshAuth();
         });
 
         // Tags
-        session.getAPI(`${Routes.OBJECT}/tag`).then((res) => {
+        session.getAPI(`${Routes.OBJECT}/tag`, false).then((res) => {
             const tags = res.data.results;
             setTags(tags);
         }).catch(() => {
@@ -142,43 +138,68 @@ const AnnouncementCreator = (props: { openCreator: boolean, setOpenCreator: Reac
     // if (!openCreator) return <></>
 
     const [isPublic, setIsPublic] = React.useState(false);
+    const session: Session = React.useContext(SessionContext);
+
+    const { register, handleSubmit, watch, formState: { errors } } = useForm<AnnouncementInputs>();
+    const [error, setError] = React.useState("");
+
+    const onCreate = (data: AnnouncementInputs): void => {
+        console.log("Submitted data:", data);
+        session.postAPI(`${Routes.OBJECT}/announcement/new`, {
+            ...data
+        }).then(() => {
+            console.log("Announcement created successfully");
+        }).catch((err) => {
+            console.log("Error:", err);
+            // session.refreshAuth();
+        });
+    }
 
     return (
         <div id="announcement-creator" className="modal">
             <div className="modal-top modal-header">
                 <h5 className="header-announcement">Add Announcement</h5>
             </div>
-            <div className="modal-content">
-                <div className="form input-row">
-                    <h6 className="form-label">Organization:</h6>
-                    <input type="text" className="textbox"></input>
+            <form className="signup" onSubmit={handleSubmit(onCreate)} style={{ paddingLeft: "1rem", paddingTop: "1rem" }}>
+                <div className="row">
+                    <div className="input-field col s12">
+                        <label htmlFor="id_title">Title:</label>
+                        <input {...register("title")} type="text" name="title" required={true} id="id_title" style={{ backgroundImage: "url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHklEQVQ4EaVTO26DQBD1ohQWaS2lg9JybZ+AK7hNwx2oIoVf4UPQ0Lj1FdKktevIpel8AKNUkDcWMxpgSaIEaTVv3sx7uztiTdu2s/98DywOw3Dued4Who/M2aIx5lZV1aEsy0+qiwHELyi+Ytl0PQ69SxAxkWIA4RMRTdNsKE59juMcuZd6xIAFeZ6fGCdJ8kY4y7KAuTRNGd7jyEBXsdOPE3a0QGPsniOnnYMO67LgSQN9T41F2QGrQRRFCwyzoIF2qyBuKKbcOgPXdVeY9rMWgNsjf9ccYesJhk3f5dYT1HX9gR0LLQR30TnjkUEcx2uIuS4RnI+aj6sJR0AM8AaumPaM/rRehyWhXqbFAA9kh3/8/NvHxAYGAsZ/il8IalkCLBfNVAAAAABJRU5ErkJggg==&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;" }} />
+                    </div>
+                </div><div className="row">
+                    <div className="input-field col s12">
+                        <label htmlFor="id_body">Body:</label>
+                        <input {...register("body")} type="text" name="body" minLength={1} required={true} id="id_body" />
+                    </div>
+                </div><div className="row">
+                    <div className="input-field col s12">
+                        <label htmlFor="id_org">Organization:</label>
+                        <input {...register("organization")} type="text" name="organization" minLength={1} required={true} id="id_org" />
+                    </div>
+                </div><div className="row">
+                    <div className="input-field col s12">
+                        <label htmlFor="id_show_after">Show After:</label>
+                        <input {...register("show_after")} type="text" name="show_after" minLength={1} required={true} id="id_show_after" />
+                    </div>
+                </div><div className="row">
+                    <div className="input-field col s12">
+                        <label htmlFor="id_supervisor">Supervisor:</label>
+                        <input {...register("supervisor")} type="text" name="supervisor" minLength={1} required={true} id="id_supervisor" />
+                    </div>
                 </div>
-                <div className="form input-row">
-                    <h6 className="form-label">Title:</h6>
-                    <input type="text"></input>
+                {error &&
+                    <span className="form-error">
+                        <div className="form-errors">
+                            <i className="material-icons">warning</i>
+                            <>{error}</>
+                        </div>
+                    </span>}
+                <div className="modal-footer">
+                    <a href="#!" className="modal-close waves-effect waves-red btn-flat">Cancel</a>
+                    <button className="waves-effect waves-green btn" type="submit">Create!</button>
                 </div>
-                <div className="form input-row">
-                    <h6 className="form-label">Body:</h6>
-                    <input type="text"></input>
-                </div>
-                <div className="form input-row">
-                    <h6 className="form-label">Tags:</h6>
-                    <input type="text"></input>
-                </div>
-                <div className="form input-row">
-                    <h6 className="form-label">Public:</h6>
-                    <label>
-                        <input type="checkbox" className="filled-in" onChange={(ev) => setIsPublic(ev.target.checked)} />
-                        <span>Filled in</span>
-                    </label>
-                </div>
-            </div>
-            <div className="modal-footer">
-                <a href="#!" className="modal-close waves-effect waves-red btn-flat">Cancel</a>
-                <a className="waves-effect waves-light btn" onClick={(ev: React.MouseEvent) => {
+            </form>
 
-                }}>Create!</a>
-            </div>
         </div>
     );
 
