@@ -5,7 +5,7 @@ import { Session, SessionContext } from "../../../util/core/session";
 import { RouterLink } from "../../app/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { RegisterInputs } from "../../../util/models";
-import User from "../../../util/core/interfaces/user";
+import { User } from "../../../util/core/session";
 import Routes from "../../../util/core/misc/routes";
 
 export const Register = (): JSX.Element => {
@@ -32,13 +32,15 @@ export const Register = (): JSX.Element => {
         console.log(data);
         const new_user: User = {
             id: 1,
-            slug: data.username,
-            name: [data.first_name, data.last_name],
+            username: data.username,
+            first_name: data.first_name,
+            last_name : data.last_name,
             bio: "",
             timezone: "",
-            graduatingYear: data.graduating_year,
+            registertime: 0,  // todo set to current time
+            graduating_year: data.graduating_year,
             organizations: [],
-            following: [],
+            tags_following: [],
         }
         axios.post(Routes.USER, { new_user }).then((res) => {
             console.log("Successfully registered user");

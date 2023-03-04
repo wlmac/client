@@ -1,0 +1,7 @@
+.club-banner {
+    border-bottom: 5px black solid;
+    padding: 0 !important;
+    height: 18rem !important;
+    -o-object-fit: cover;
+       object-fit: cover;
+}

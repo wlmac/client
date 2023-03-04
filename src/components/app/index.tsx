@@ -20,6 +20,7 @@ import { SessionProvider } from "../../util/core/session";
 import { Profile } from "../account/profile";
 import { Flatpage } from "../flatpage";
 import { ClubDetails } from "../clubs/details";
+import { EditClubDetails } from "../clubs/details/edit";
 import { BlogDetails } from "../blog/details";
 
 export const _App = (): JSX.Element => {
@@ -37,9 +38,10 @@ export const _App = (): JSX.Element => {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/announcements" element={<Announcements />} />
-                    <Route path="/calendar" element={<Calendar />} />
+                    {/* <Route path="/calendar" element={<Calendar />} /> */}
                     <Route path="/clubs" element={<Clubs />} />
                     <Route path="/club/:id" element={<ClubDetails />} />
+                    <Route path="/club/edit/:id" element={<EditClubDetails />} />
 
                     <Route path="/blog" element={<Blog />} />
                     <Route path="/blog/:id" element={<BlogDetails />} />

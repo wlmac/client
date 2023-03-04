@@ -1,5 +1,6 @@
 // @ts-ignore
-const BASEURL = import.meta.env.DEV ? "http://localhost:8000" : "https://maclyonsden.com";
+//const BASEURL = import.meta.env.DEV ? "http://localhost:8000" : "https://auth.jimmyliu.dev";
+const BASEURL = "https://auth.jimmyliu.dev";
 
 const Routes = {
   BASEURL: BASEURL,

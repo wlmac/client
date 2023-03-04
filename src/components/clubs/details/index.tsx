@@ -1,5 +1,5 @@
 import * as React from "react";
-import { NavigateFunction, useNavigate, useParams } from "react-router-dom";
+import { Link, NavigateFunction, useNavigate, useParams } from "react-router-dom";
 import { loggedIn } from "../../../util/core/AuthService";
 import Organization from "../../../util/core/interfaces/organization";
 import Tag from "../../../util/core/interfaces/tag";
@@ -33,6 +33,7 @@ export const ClubDetails = (): JSX.Element => {
         session.getAPI(fetchURL).then((res) => {
             const current_club: Organization = res.data as Organization;
             setClub(current_club);
+            console.log(fetchURL);
 
             // Tags
             session.getAPI(`${Routes.OBJECT}/tag`).then((res) => {
@@ -108,6 +109,7 @@ export const ClubDetails = (): JSX.Element => {
     return (
         <>
             <link rel="stylesheet" href="/static/css/detail.css" />
+            
             <div className="club">
                 <div className="row">
                     <img className="club-banner responsive-img col s12" src={club.banner} alt="banner of organization" />
@@ -136,11 +138,12 @@ export const ClubDetails = (): JSX.Element => {
                         </div>
                         <div className="row club-info">
                             <div className="col m8">
-                                <p className="bio">
-                                    {club.bio}
-                                </p>
-                                <br /><br />
                                 <div className="description">
+                                    {club.bio}
+                                    <br/><br/>
+                                    {
+                                        club.owner !== session.user.id ? <Link to={`/club/edit/${club.id}`}>Edit club details</Link> : <></>
+                                    }
                                 </div>
                             </div>
                             <div className="col m4">
