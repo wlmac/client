@@ -21,8 +21,9 @@ export interface User {
 export interface Session {
     user: User,
     updateToken: (token: string) => void,
-    getAPI: (url: string, auth: boolean) => Promise<any>,
+    getAPI: (url: string, auth?: boolean) => Promise<any>,
     postAPI: (url: string, data: any) => Promise<any>,
+    putAPI: (url: string, data: any) => Promise<any>,
     refreshAuth: () => void,
     logout: () => void
 }
@@ -41,8 +42,9 @@ export const SessionContext = React.createContext<Session>({
         registertime: 0
     },
     updateToken: (token: string) => { },
-    getAPI: (url: string, auth: boolean) => { return {} as Promise<any> },
+    getAPI: (url: string, auth?: boolean) => { return {} as Promise<any> },
     postAPI: (url: string, data: any) => { return {} as Promise<any> },
+    putAPI: (url: string, data: any) => { return {} as Promise<any> },
     refreshAuth: () => { },
     logout: () => { }
 });
@@ -103,7 +105,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         }
     }
 
-    function getAPI(url: string, auth: boolean): Promise<any> {
+    function getAPI(url: string, auth?: boolean): Promise<any> {
         const token = getToken();
         return axios.get(url, auth ? {
             headers: {
@@ -115,6 +117,15 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     const postAPI = (url: string, data: any): Promise<any> => {
         const token = getToken();
         return axios.post(url, data, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+    }
+
+    const putAPI = (url: string, data: any): Promise<any> => {
+        const token = getToken();
+        return axios.put(url, data, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -156,7 +167,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     }
 
     return (
-        <SessionContext.Provider value={{ user: user, updateToken: updateToken, getAPI: getAPI, postAPI: postAPI, refreshAuth: refreshAuth, logout: logout }}>
+        <SessionContext.Provider value={{ user: user, updateToken: updateToken, getAPI: getAPI, postAPI: postAPI, putAPI: putAPI, refreshAuth: refreshAuth, logout: logout }}>
             {props.children}
         </SessionContext.Provider>
     )

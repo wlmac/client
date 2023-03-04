@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Link, NavigateFunction, useNavigate, useParams } from "react-router-dom";
+import { loggedIn } from "../../../util/core/AuthService";
 import Announcement from "../../../util/core/interfaces/announcement";
 import Routes from "../../../util/core/misc/routes";
 import { Session, SessionContext } from "../../../util/core/session";
@@ -16,10 +17,12 @@ export const AnnouncementDetail = (): JSX.Element => {
     const [openCreator, setOpenCreator] = React.useState(true); // Modal
 
     React.useEffect(() => {
-        session.getAPI(`${Routes.OBJECT}/announcement/retrieve/${id}`, false).then((res) => {
+        console.log(loggedIn());
+        session.getAPI(`${Routes.OBJECT}/announcement/retrieve/${id}`, loggedIn()).then((res) => {
             setAnnouncement(res.data);
         }).catch((err) => {
-
+            console.log(err);
+            session.refreshAuth();
         });
     }, []);
 
@@ -41,8 +44,9 @@ export const AnnouncementDetail = (): JSX.Element => {
                 </div>
                 <div className="prompt-buttons">
                     <a className="checkmark" onClick={(ev: React.MouseEvent) => {
-                        session.postAPI(`${Routes.OBJECT}/announcement/single/${id}`, {
-                            ...announcement
+                        session.putAPI(`${Routes.OBJECT}/announcement/single/${id}`, {
+                            ...announcement,
+                            status: "a"
                         }).then((res) => {
                             console.log("Success!");
                         }).catch((err) => {
@@ -68,6 +72,8 @@ export const AnnouncementDetail = (): JSX.Element => {
 
     // }
 
+    const [rejectionReason, setRejectionReason] = React.useState("");
+
     return (
         <>
             <link rel="stylesheet" href="/static/css/announcement-detail.css" />
@@ -82,13 +88,22 @@ export const AnnouncementDetail = (): JSX.Element => {
                     <div className="modal-content">
                         <div className="form reason">
                             <h6 className="form-label">Reason for rejection:</h6>
-                            <input type="text"></input>
+                            <input type="text" onChange={(ev) => setRejectionReason(ev.target.value)}></input>
                         </div>
                     </div>
                     <div className="modal-footer">
                         <a href="#!" className="modal-close waves-effect waves-red btn-flat">Cancel</a>
                         <a className="waves-effect waves-light btn" onClick={(ev: React.MouseEvent) => {
+                            session.putAPI(`${Routes.OBJECT}/announcement/single/${id}`, {
+                                ...announcement,
+                                status: "r",
+                                rejection_reason: rejectionReason
+                            }).then((res) => {
+                                console.log("Success!");
+                                M.Modal.getInstance(document.getElementById("reject-popup")!).close();
+                            }).catch((err) => {
 
+                            });
                         }}>Submit!</a>
                     </div>
                 </div>
