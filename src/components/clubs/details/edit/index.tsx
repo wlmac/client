@@ -15,7 +15,7 @@ export const EditClubDetails = (): JSX.Element => {
 
     React.useEffect(() => {
         const fetchURL = `${Routes.OBJECT}/organization/retrieve/${id}`;
-        session.getAPI(fetchURL).then((res) => {
+        session.getAPI(fetchURL, false).then((res) => {
             const current_club: Organization = res.data as Organization;
             setClub(current_club);
         })
