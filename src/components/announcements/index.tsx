@@ -185,7 +185,7 @@ const AnnouncementCreator = (props: { openCreator: boolean, setOpenCreator: Reac
             </div>
             <form className="signup" onSubmit={handleSubmit(onCreate)} style={{ paddingLeft: "1rem", paddingTop: "1rem" }}>
                 <div className="row">
-                    <div className="input-field col s12">
+                    <div className="input-field col s12 ">
                         <label htmlFor="id_title">Title:</label>
                         <input {...register("title")} type="text" name="title" required={true} id="id_title" style={{ backgroundImage: "url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHklEQVQ4EaVTO26DQBD1ohQWaS2lg9JybZ+AK7hNwx2oIoVf4UPQ0Lj1FdKktevIpel8AKNUkDcWMxpgSaIEaTVv3sx7uztiTdu2s/98DywOw3Dued4Who/M2aIx5lZV1aEsy0+qiwHELyi+Ytl0PQ69SxAxkWIA4RMRTdNsKE59juMcuZd6xIAFeZ6fGCdJ8kY4y7KAuTRNGd7jyEBXsdOPE3a0QGPsniOnnYMO67LgSQN9T41F2QGrQRRFCwyzoIF2qyBuKKbcOgPXdVeY9rMWgNsjf9ccYesJhk3f5dYT1HX9gR0LLQR30TnjkUEcx2uIuS4RnI+aj6sJR0AM8AaumPaM/rRehyWhXqbFAA9kh3/8/NvHxAYGAsZ/il8IalkCLBfNVAAAAABJRU5ErkJggg==&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;" }} />
                     </div>
@@ -197,7 +197,7 @@ const AnnouncementCreator = (props: { openCreator: boolean, setOpenCreator: Reac
                 </div><div className="row">
                     <div className="col s12">
                         <label htmlFor="id_org">Organization:</label>
-                        <select {...register("organization", {minLength: 1})} name="organization" required={true} id="id_org">
+                        <select {...register("organization", {minLength: 1})} name="organization" required={true} id="id_org" className="browser-default">
                             <option key="-1" value="">Select Club</option>
                             {clubs.map((org) => {return <option key={org.id} value={org.id}>{org.name}</option>})}
                         </select>
@@ -211,9 +211,9 @@ const AnnouncementCreator = (props: { openCreator: boolean, setOpenCreator: Reac
                             }})} type="text" name="show_after" minLength={1} required={true} id="id_show_after"/>
                     </div>
                 </div><div className="row">
-                    <div className="input-field col s12">
+                    <div className="col s12">
                         <label htmlFor="id_supervisor">Supervisor:</label>
-                        <select {...register("supervisor")} name="supervisor" required={true} id="id_supervisor">
+                        <select className="browser-default" {...register("supervisor")} name="supervisor" required={true} id="id_supervisor">
                             <option key="1" value="1">Select Supervisor</option>
                             { orgSupervisors.map((user) => <option key={user.id} value={user.id}>{user.first_name} {user.last_name}</option>)}
                         </select>
