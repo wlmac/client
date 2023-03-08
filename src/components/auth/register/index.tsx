@@ -1,10 +1,11 @@
 import * as React from "react";
 import { default as axios } from 'axios';
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
-import { Session, SessionContext, User } from "../../../util/core/session";
+import { Session, SessionContext} from "../../../util/core/session";
 import { RouterLink } from "../../app/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { RegisterInputs } from "../../../util/models";
+import { User } from "../../../util/core/session";
 
 import Routes from "../../../util/core/misc/routes";
 import { loggedIn } from "../../../util/core/AuthService";

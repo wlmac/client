@@ -1,5 +1,5 @@
 import * as React from "react";
-import { NavigateFunction, useNavigate, useParams } from "react-router-dom";
+import { Link, NavigateFunction, useNavigate, useParams } from "react-router-dom";
 import { loggedIn } from "../../../util/core/AuthService";
 import Organization from "../../../util/core/interfaces/organization";
 import Tag from "../../../util/core/interfaces/tag";
@@ -30,12 +30,13 @@ export const ClubDetails = (): JSX.Element => {
 
     React.useEffect(() => {
         const fetchURL = `${Routes.OBJECT}/organization/retrieve/${id}`;
-        session.getAPI(fetchURL).then((res) => {
+        session.getAPI(fetchURL, false).then((res) => {
             const current_club: Organization = res.data as Organization;
             setClub(current_club);
+            console.log(fetchURL);
 
             // Tags
-            session.getAPI(`${Routes.OBJECT}/tag`).then((res) => {
+            session.getAPI(`${Routes.OBJECT}/tag`, false).then((res) => {
                 const tags_data: Tag[] = res.data.results;
                 console.log(current_club.tags);
                 const current_tags: Tag[] = [];
@@ -53,7 +54,7 @@ export const ClubDetails = (): JSX.Element => {
             });
 
             // Execs and members
-            session.getAPI(`${Routes.OBJECT}/user?limit=99999999`).then((res) => {
+            session.getAPI(`${Routes.OBJECT}/user?limit=99999999`, false).then((res) => {
                 const users_data: User[] = res.data.results;
                 setExecs(current_club.execs.map((execId: number): User => {
                     for (let i = 0; i < users_data.length; i++) {
@@ -84,7 +85,7 @@ export const ClubDetails = (): JSX.Element => {
     const UserElement = (props: { userID: number }): JSX.Element => {
         const [user, setUser] = React.useState({} as User);
         React.useEffect(() => {
-            session.getAPI(`${Routes.OBJECT}/user/retrieve/${props.userID}`).then((res: { data: any }) => {
+            session.getAPI(`${Routes.OBJECT}/user/retrieve/${props.userID}`, false).then((res: { data: any }) => {
                 setUser(res.data as User);
                 console.log("Fetched");
             }).catch(() => {
@@ -108,6 +109,7 @@ export const ClubDetails = (): JSX.Element => {
     return (
         <>
             <link rel="stylesheet" href="/static/css/detail.css" />
+            
             <div className="club">
                 <div className="row">
                     <img className="club-banner responsive-img col s12" src={club.banner} alt="banner of organization" />
@@ -136,11 +138,12 @@ export const ClubDetails = (): JSX.Element => {
                         </div>
                         <div className="row club-info">
                             <div className="col m8">
-                                <p className="bio">
-                                    {club.bio}
-                                </p>
-                                <br /><br />
                                 <div className="description">
+                                    {club.bio}
+                                    <br/><br/>
+                                    {
+                                        club.owner !== session.user.id ? <Link to={`/club/edit/${club.id}`}>Edit club details</Link> : <></>
+                                    }
                                 </div>
                             </div>
                             <div className="col m4">

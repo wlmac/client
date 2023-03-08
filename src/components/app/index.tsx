@@ -20,6 +20,7 @@ import { SessionProvider } from "../../util/core/session";
 import { Profile } from "../account/profile";
 import { Flatpage } from "../flatpage";
 import { ClubDetails } from "../clubs/details";
+import { EditClubDetails } from "../clubs/details/edit";
 import { BlogDetails } from "../blog/details";
 import { AnnouncementDetail } from "../announcements/detail";
 
@@ -42,6 +43,7 @@ export const _App = (): JSX.Element => {
                     {/* <Route path="/calendar" element={<Calendar />} /> */}
                     <Route path="/clubs" element={<Clubs />} />
                     <Route path="/club/:id" element={<ClubDetails />} />
+                    <Route path="/club/edit/:id" element={<EditClubDetails />} />
 
                     <Route path="/blog" element={<Blog />} />
                     <Route path="/blog/:id" element={<BlogDetails />} />
@@ -55,7 +57,7 @@ export const _App = (): JSX.Element => {
                     <Route path="/accounts/login" element={<Login />} />
                     <Route path="/accounts/signup" element={<Register />} />
 
-                    <Route path="/user/:username" element={<Profile />} />
+                    <Route path="/user/:userID" element={<Profile />} />
 
                     <Route path="*" element={<Flatpage />} />
                 </Routes>
