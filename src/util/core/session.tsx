@@ -23,6 +23,7 @@ export interface Session {
     updateToken: (token: string) => void,
     getAPI: (url: string, auth: boolean) => Promise<any>,
     postAPI: (url: string, data: any) => Promise<any>,
+    patchAPI: (url: string, data: any) => Promise<any>,
     refreshAuth: () => void,
     logout: () => void
 }
@@ -43,6 +44,7 @@ export const SessionContext = React.createContext<Session>({
     updateToken: (token: string) => { },
     getAPI: (url: string, auth: boolean) => { return {} as Promise<any> },
     postAPI: (url: string, data: any) => { return {} as Promise<any> },
+    patchAPI: (url: string, data: any) => {return {} as Promise<any>},
     refreshAuth: () => { },
     logout: () => { }
 });
@@ -121,6 +123,15 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         });
     }
 
+    const patchAPI = (url: string, data: any): Promise<any> => {
+        const token = getToken();
+        return axios.patch(url, data, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+    }
+
     const refreshAuth = (): void => {
         if (!loggedIn()) return;
 
@@ -156,7 +167,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     }
 
     return (
-        <SessionContext.Provider value={{ user: user, updateToken: updateToken, getAPI: getAPI, postAPI: postAPI, refreshAuth: refreshAuth, logout: logout }}>
+        <SessionContext.Provider value={{ user: user, updateToken: updateToken, getAPI: getAPI, postAPI: postAPI, patchAPI: patchAPI, refreshAuth: refreshAuth, logout: logout }}>
             {props.children}
         </SessionContext.Provider>
     )
