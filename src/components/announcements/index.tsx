@@ -33,14 +33,11 @@ export const Announcements = (): JSX.Element => {
         });
     }
 
-    const openModal = () => {
-        setOpenCreator(true);
-    };
-
     return (
         <>
             <link rel="stylesheet" href="static/css/announcement-list.css" />
             <AnnouncementCreator openCreator={openCreator} setOpenCreator={setOpenCreator} />
+
             <div className="container">
                 <div className="headers header-row">
                     <ul>
@@ -96,6 +93,9 @@ const AnnouncementList = (): JSX.Element[] => {
         return <AnnouncementElement key={announcement.id} announcement={announcement} tags={current_tags} />;
     });
 }
+
+
+
 
 const AnnouncementElement = (props: { announcement: Announcement, tags: Tag[] }): JSX.Element => {
     const data: Announcement = props.announcement;

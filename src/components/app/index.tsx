@@ -22,6 +22,7 @@ import { Flatpage } from "../flatpage";
 import { ClubDetails } from "../clubs/details";
 import { EditClubDetails } from "../clubs/details/edit";
 import { BlogDetails } from "../blog/details";
+import { AnnouncementDetail } from "../announcements/detail";
 
 export const _App = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
@@ -38,6 +39,7 @@ export const _App = (): JSX.Element => {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/announcements" element={<Announcements />} />
+                    <Route path="/announcement/:id" element={<AnnouncementDetail />} />
                     {/* <Route path="/calendar" element={<Calendar />} /> */}
                     <Route path="/clubs" element={<Clubs />} />
                     <Route path="/club/:id" element={<ClubDetails />} />
