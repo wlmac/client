@@ -46,17 +46,17 @@ export const AnnouncementDetail = (): JSX.Element => {
                     <a className="checkmark" onClick={(ev: React.MouseEvent) => {
                         session.putAPI(`${Routes.OBJECT}/announcement/single/${id}`, {
                             ...announcement,
-                            status: "a"
+                            status: "a" // approved
                         }).then((res) => {
                             console.log("Success!");
                         }).catch((err) => {
 
                         });
-                    }}>✅</a>
+                    }}><div style={{ display: "flex", flexDirection: "column", height: "100%", justifyContent: "center" }}><i className="material-icons">check</i></div></a>
 
                     <a className="reject" onClick={(ev: React.MouseEvent) => {
                         M.Modal.getInstance(document.getElementById("reject-popup")!).open();
-                    }}>❌</a>
+                    }}><div style={{ display: "flex", flexDirection: "column", height: "100%", justifyContent: "center" }}><i className="material-icons" style={{ color: "red" }}>clear</i></div></a>
                 </div>
 
             </div>
