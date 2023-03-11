@@ -7,6 +7,8 @@ import Organization from "../../../util/core/interfaces/organization";
 import Tag from "../../../util/core/interfaces/tag";
 import Routes from "../../../util/core/misc/routes";
 import { Session, SessionContext, User } from "../../../util/core/session";
+import Markdown from "../../markdown";
+import { dateFormat } from "../../../util/core/misc/date";
 
 export const BlogDetails = (): JSX.Element => {
     const { id } = useParams();
@@ -27,7 +29,6 @@ export const BlogDetails = (): JSX.Element => {
 
             // Author
             session.getAPI(`${Routes.USER}/${current_post.author}`).then((res) => {
-                console.log(res.data);
                 setAuthor(res.data);
             }).catch(() => {
                 session.refreshAuth();
@@ -67,18 +68,18 @@ export const BlogDetails = (): JSX.Element => {
                     <h1 className="title">{post.title}</h1>
                     <div className="card-authors">
                         <div className="card-authors-image">
-                            <a href={`/user/${post.author}`}><img className="circle" src="/img/test" /></a>
+                            <Link to={`/user/${post.author}`}><img className="circle" src="/img/test" /></Link>
                         </div>
                         <div className="card-authors-text">
-                            <a href={`/user/${post.author}`} className="link">{`${author.first_name} ${author.last_name}`}</a>
+                            <Link to={`/user/${post.author}`} className="link">{`${author.first_name} ${author.last_name}`}</Link>
                             <br />
-                            • {post.created_date}
+                            • {new Date(post.created_date).toLocaleTimeString(undefined, dateFormat)}
                             {post.created_date !== post.last_modified_date && " (Edited)"}
                         </div>
                     </div>
                     <hr />
                     <div className="card-body">
-                        <p>{post.body}</p>
+                        <Markdown text={post.body} />
                     </div>
                     <br />
                     <Link className="link" to="/blog"><i className="zmdi zmdi-chevron-left"></i> Return to Blog Posts</Link>

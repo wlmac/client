@@ -20,6 +20,10 @@ export const ClubDetails = (): JSX.Element => {
     const [members, setMembers] = React.useState([] as Array<User>);
 
     React.useEffect((): void => {
+        document.title = `${club.name} | Metropolis`;
+    }, [club]);
+
+    React.useEffect((): void => {
         if (!loggedIn()) {
             nav(`/accounts/login?next=/club/${id}`);
         }
@@ -178,7 +182,7 @@ export const ClubDetails = (): JSX.Element => {
                                                     <Link to={`/user/${exec.id}`} key={exec.id}>
                                                         <div className="member">
                                                             <div className="member-image">
-                                                                <img className="circle" src={get_gravatar_uri(exec.email_hash)} alt={`${exec.username}'s profile picture`} />
+                                                                <img className="circle" src={exec.gravatar_url} alt={`${exec.username}'s profile picture`} />
                                                             </div>
                                                             <div className="member-text">
                                                                 {`${exec.first_name} ${exec.last_name}`}

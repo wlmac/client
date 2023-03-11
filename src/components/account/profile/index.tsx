@@ -13,8 +13,11 @@ export const Profile = (): JSX.Element => {
     const [organizations, setOrganizations] = React.useState([] as Array<Organization>);
     const [organizationDisplay, setOrganizationDisplay] = React.useState("");
 
-    React.useEffect(() => {
+    React.useEffect((): void => {
         document.title = `User ${user.username} | Metropolis`;
+    }, [user]);
+
+    React.useEffect(() => {
         session.getAPI(`${Routes.USER}/${userID}`, true).then((res) => {
             const fetched_user: User = res.data as User;
             setUser(res.data);
@@ -88,7 +91,7 @@ export const Profile = (): JSX.Element => {
 
                 <div className="white-bg">
                     <div className="header">
-                        <img className="circle responsive-img profile-picture" src={get_gravatar_uri(user.email_hash)} alt={`${user.username}'s profile picture`} />
+                        <img className="circle responsive-img profile-picture" src={user.gravatar_url} alt={`${user.username}'s profile picture`} />
                         <div className="name-info">
                             <h5 className="full-name">{user.first_name} {user.last_name}</h5>
                             <h6 className="username">{user.username}</h6>

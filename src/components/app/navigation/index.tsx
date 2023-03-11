@@ -132,7 +132,7 @@ export const NavigationBar = (): JSX.Element => {
                                     <ul id="dropdownAcc" className="dropdown-content" tabIndex={0}>
                                         <li tabIndex={0}><Link to={`/user/${session.user.id}`}>Profile</Link></li>
                                         <li tabIndex={0}><Link to="/timetable">Timetable</Link></li>
-                                        <li tabIndex={0}><Link to="/admin/">Admin</Link></li>
+                                        {session.user.is_staff && <li tabIndex={0}><a href="/admin/">Admin</a></li>}
                                         <li tabIndex={0}><a onClick={(ev: React.MouseEvent) => {
                                             ev.preventDefault();
                                             session.logout();

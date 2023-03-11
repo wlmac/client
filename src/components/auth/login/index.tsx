@@ -95,7 +95,7 @@ export const Login = (): JSX.Element => {
                                     </Link>
                                 </div>
                             </div>
-                            <form className="login" method="POST" action="/accounts/login/">
+                            <form className="login" onSubmit={login}>
                                 <input type="hidden" name="csrfmiddlewaretoken" value="CSRFSECRET123" />
                                 <div className="row">
                                     <div className="input-field col s12">
@@ -126,7 +126,7 @@ export const Login = (): JSX.Element => {
                                 }
 
                                 <div>
-                                    <button className="btn login-btn" onClick={login}>Sign In</button>
+                                    <button className="btn login-btn" type="submit">Sign In</button>
                                 </div>
                                 <p>Forgot your password? Click <Link className="link" to="/accounts/password/reset/">here</Link> to reset.</p>
                             </form>
