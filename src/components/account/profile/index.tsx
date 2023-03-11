@@ -4,6 +4,7 @@ import { Session, SessionContext, User } from "../../../util/core/session";
 import Routes from "../../../util/core/misc/routes";
 import Organization from "../../../util/core/interfaces/organization";
 import { get_gravatar_uri } from "../../../util/core/misc/gravatar";
+import { ProfileNav } from "../left-nav";
 
 export const Profile = (): JSX.Element => {
     const { userID } = useParams();
@@ -66,28 +67,7 @@ export const Profile = (): JSX.Element => {
 
                 <a href="/user/ji.mmyliu#" data-target="secondary-out" className="sidenav-trigger secondnav-trigger"><i className="zmdi zmdi-menu"></i></a>
 
-                <div className="secondary-nav-wrapper">
-                    <ul className="secondary-nav">
-                        <li>
-                            <Link className="link current" to="/accounts/profile">Profile</Link>
-                        </li>
-                        <li>
-                            <Link className="link" to="/timetable">Timetable</Link>
-                        </li>
-                        <hr />
-                        <li>
-                            <Link className="link" to="/admin/core/announcement/add/">Announcements</Link>
-                        </li>
-                        <li>
-                            <Link className="link" to="dmin/core/event/add/">Events</Link>
-                        </li>
-                        <hr />
-                        <li>
-                            <Link className="link" to="/accounts/logout/">Logout</Link>
-                        </li>
-                    </ul>
-                </div>
-
+                <ProfileNav />
 
                 <div className="white-bg">
                     <div className="header">

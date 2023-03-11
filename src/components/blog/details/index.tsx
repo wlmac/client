@@ -74,7 +74,7 @@ export const BlogDetails = (): JSX.Element => {
                             <Link to={`/user/${post.author}`} className="link">{`${author.first_name} ${author.last_name}`}</Link>
                             <br />
                             • {new Date(post.created_date).toLocaleTimeString(undefined, dateFormat)}
-                            {post.created_date !== post.last_modified_date && " (Edited)"}
+                            {/* {post.created_date !== post.last_modified_date && " (Edited)"} */}
                         </div>
                     </div>
                     <hr />
