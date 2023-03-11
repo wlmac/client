@@ -15,6 +15,7 @@ export interface User {
     tags_following: Array<number>,
     timezone: string,
     username: string,
+    email_hash: string,
     registertime: number
 }
 
@@ -40,13 +41,14 @@ export const SessionContext = React.createContext<Session>({
         tags_following: [],
         timezone: "",
         username: "",
+        email_hash: "",
         registertime: 0
     },
     updateToken: (token: string) => { },
     getAPI: (url: string, auth?: boolean) => { return {} as Promise<any> },
     postAPI: (url: string, data: any) => { return {} as Promise<any> },
     putAPI: (url: string, data: any) => { return {} as Promise<any> },
-    patchAPI: (url: string, data: any) => {return {} as Promise<any>},
+    patchAPI: (url: string, data: any) => { return {} as Promise<any> },
     refreshAuth: () => { },
     logout: () => { }
 });
@@ -62,6 +64,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         tags_following: [],
         timezone: "",
         username: "",
+        email_hash: "",
         registertime: 0
     });
     const nav: NavigateFunction = useNavigate();
@@ -102,6 +105,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
                 tags_following: [],
                 timezone: "",
                 username: "",
+                email_hash: "",
                 registertime: 0
             });
         }
@@ -133,7 +137,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
             }
         });
     }
-    
+
     const patchAPI = (url: string, data: any): Promise<any> => {
         const token = getToken();
         return axios.patch(url, data, {
@@ -170,6 +174,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
             tags_following: [],
             timezone: "",
             username: "",
+            email_hash: "",
             registertime: 0
         });
         localStorage.removeItem("token");

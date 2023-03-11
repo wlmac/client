@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { Session, SessionContext, User } from "../../../util/core/session";
 import Routes from "../../../util/core/misc/routes";
 import Organization from "../../../util/core/interfaces/organization";
+import { get_gravatar_uri } from "../../../util/core/misc/gravatar";
 
 export const Profile = (): JSX.Element => {
     const { userID } = useParams();
@@ -17,7 +18,7 @@ export const Profile = (): JSX.Element => {
         session.getAPI(`${Routes.USER}/${userID}`, true).then((res) => {
             const fetched_user: User = res.data as User;
             setUser(res.data);
-
+            console.log("Fetched user:", fetched_user);
 
             session.getAPI(`${Routes.OBJECT}/organization`, false).then((res) => {
                 const all_organizations = res.data.results as Array<Organization>;
@@ -60,7 +61,7 @@ export const Profile = (): JSX.Element => {
                     <li><Link to="/accounts/logout/" className="sidenav-close">Logout</Link></li>
                 </ul>
 
-                <a href="https://maclyonsden.com/user/ji.mmyliu#" data-target="secondary-out" className="sidenav-trigger secondnav-trigger"><i className="zmdi zmdi-menu"></i></a>
+                <a href="/user/ji.mmyliu#" data-target="secondary-out" className="sidenav-trigger secondnav-trigger"><i className="zmdi zmdi-menu"></i></a>
 
                 <div className="secondary-nav-wrapper">
                     <ul className="secondary-nav">
@@ -87,7 +88,7 @@ export const Profile = (): JSX.Element => {
 
                 <div className="white-bg">
                     <div className="header">
-                        <img className="circle responsive-img profile-picture" src="/img" alt={`${user.username}'s profile picture`} />
+                        <img className="circle responsive-img profile-picture" src={get_gravatar_uri(user.email_hash)} alt={`${user.username}'s profile picture`} />
                         <div className="name-info">
                             <h5 className="full-name">{user.first_name} {user.last_name}</h5>
                             <h6 className="username">{user.username}</h6>
