@@ -5,7 +5,7 @@ export const NotFound = (): JSX.Element => {
     const [comic, setComic] = React.useState(-1);
 
     React.useEffect((): void => {
-        document.title = "404 Page Not Found";
+        document.title = "404 Page Not Found | Metropolis";
         setComic(Math.floor(Math.random() * 3));
     }, []);
 

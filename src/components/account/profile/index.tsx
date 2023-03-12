@@ -40,10 +40,9 @@ export const Profile = (): JSX.Element => {
 
             });
         }).catch((err) => {
-            if (err.code === "token_not_valid") {
-                session.refreshAuth();
-                fetchUser();
-            }
+            console.log(err);
+            session.refreshAuth();
+            fetchUser();
         });
     }
 
