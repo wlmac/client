@@ -1,14 +1,17 @@
 import * as React from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, NavigateFunction, useNavigate, useParams } from "react-router-dom";
 import { Session, SessionContext, User } from "../../../util/core/session";
 import Routes from "../../../util/core/misc/routes";
 import Organization from "../../../util/core/interfaces/organization";
 import { get_gravatar_uri } from "../../../util/core/misc/gravatar";
 import { ProfileNav } from "../left-nav";
+import { loggedIn } from "../../../util/core/AuthService";
 
 export const Profile = (): JSX.Element => {
     const { userID } = useParams();
     const session: Session = React.useContext(SessionContext);
+    const nav: NavigateFunction = useNavigate();
+
     const current_user: User = session.user;
     const [user, setUser] = React.useState({} as User);
     const [organizations, setOrganizations] = React.useState([] as Array<Organization>);
@@ -43,6 +46,12 @@ export const Profile = (): JSX.Element => {
             }
         });
     }
+
+    React.useEffect(() => {
+        if (!loggedIn()) {
+            nav("/accounts/login");
+        }
+    });
 
     React.useEffect(() => {
         fetchUser();
