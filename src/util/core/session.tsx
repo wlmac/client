@@ -4,6 +4,7 @@ import { default as axios } from 'axios';
 import Routes from './misc/routes';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { getToken, setToken, getRefresh, setRefresh, loggedIn } from "./AuthService";
+import Organization from './interfaces/organization';
 
 export interface User {
     bio: string,
@@ -24,6 +25,7 @@ export interface User {
 export interface Session {
     user: User,
     allUsers: Array<User>,
+    allOrgs: Array<Organization>,
     setUser: (user: User) => void,
     updateToken: (token: string) => void,
     getAPI: (url: string, auth?: boolean) => Promise<any>,
@@ -37,6 +39,7 @@ export interface Session {
 export const SessionContext = React.createContext<Session>({
     user: {} as User,
     allUsers: [],
+    allOrgs: [],
     setUser: (user: User) => { },
     updateToken: (token: string) => { },
     getAPI: (url: string, auth?: boolean) => { return {} as Promise<any> },
@@ -50,6 +53,7 @@ export const SessionContext = React.createContext<Session>({
 export const SessionProvider = (props: { children: React.ReactNode }) => {
     let [user, updateUser] = React.useState({} as User);
     const [allUsers, setAllUsers] = React.useState([] as Array<User>);
+    const [allOrgs, setAllOrgs] = React.useState([] as Array<Organization>);
     const nav: NavigateFunction = useNavigate();
 
     const setUser = (newUser: User): void => {
@@ -74,13 +78,19 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         if (loggedIn()) {
             updateToken(getToken());
             refreshUser();
-
-            getAPI(`${Routes.OBJECT}/user`).then((res) => {
-                setAllUsers(res.data.results);
-            }).catch((err) => {
-
-            });
         }
+
+        getAPI(`${Routes.OBJECT}/user`).then((res) => {
+            setAllUsers(res.data.results);
+        }).catch((err) => {
+
+        });
+
+        getAPI(`${Routes.OBJECT}/organization`).then((res) => {
+            setAllOrgs(res.data.results);
+        }).catch((err) => {
+
+        });
     }, []);
 
     const updateToken = (token: string): void => {
@@ -170,7 +180,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     }
 
     return (
-        <SessionContext.Provider value={{ user: user, allUsers: allUsers, setUser: setUser, updateToken: updateToken, getAPI: getAPI, postAPI: postAPI, putAPI: putAPI, patchAPI: patchAPI, refreshAuth: refreshAuth, logout: logout }}>
+        <SessionContext.Provider value={{ user: user, allUsers: allUsers, allOrgs: allOrgs, setUser: setUser, updateToken: updateToken, getAPI: getAPI, postAPI: postAPI, putAPI: putAPI, patchAPI: patchAPI, refreshAuth: refreshAuth, logout: logout }}>
             {props.children}
         </SessionContext.Provider>
     )

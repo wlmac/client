@@ -2,8 +2,10 @@ import * as React from "react";
 import { Link, NavigateFunction, useNavigate, useParams } from "react-router-dom";
 import { loggedIn } from "../../../util/core/AuthService";
 import Announcement from "../../../util/core/interfaces/announcement";
+import Organization from "../../../util/core/interfaces/organization";
+import { dateFormat } from "../../../util/core/misc/date";
 import Routes from "../../../util/core/misc/routes";
-import { Session, SessionContext } from "../../../util/core/session";
+import { Session, SessionContext, User } from "../../../util/core/session";
 import { AnnouncementFeed } from "../../../util/models";
 import Markdown from "../../markdown";
 import { AnnouncementFeeds } from "../feeds";
@@ -74,6 +76,9 @@ export const AnnouncementDetail = (): JSX.Element => {
 
     const [rejectionReason, setRejectionReason] = React.useState("");
 
+    let organization: Organization = session.allOrgs.find((organization: Organization) => organization.id === announcement.organization)!;
+    let author: User = session.allUsers.find((user: User) => user.id === announcement.author)!;
+
     return (
         <>
             <link rel="stylesheet" href="/static/css/announcement-detail.css" />
@@ -124,13 +129,13 @@ export const AnnouncementDetail = (): JSX.Element => {
                     <h1 className="title">{announcement.title}</h1>
                     <div className="card-authors">
                         <div className="card-authors-image">
-                            <Link to={`/club/${announcement.organization}`}><img className="circle" src={"/img/x.png"} /></Link>
+                            <Link to={`/club/${announcement.organization}`}><img className="circle" src={organization.banner} /></Link>
                         </div>
                         <div className="card-authors-text">
-                            <a href={`/club/${announcement.organization}`} className="link">School</a>,
-                            <a href={`/user/${announcement.author}`} className="link">{announcement.author}</a>
+                            <a href={`/club/${announcement.organization}`} className="link">{organization.name}</a>,
+                            <a href={`/user/${announcement.author}`} className="link">{`${author.first_name} ${author.last_name}`}</a>
                             <br />
-                            • {announcement.created_date}
+                            • {new Date(announcement.created_date).toLocaleTimeString(undefined, dateFormat)}
                         </div>
                     </div>
 
