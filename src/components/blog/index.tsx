@@ -100,7 +100,7 @@ const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Eleme
                     <h1 className="title">{post.title}</h1>
                     <div className="card-authors">
                         <div className="card-authors-image">
-                            <Link to={`/user/${post.author}`}><img className="circle" src={"/img/baf"} /></Link>
+                            <Link to={`/user/${post.author}`}><img className="circle" src={author.gravatar_url} /></Link>
                         </div>
                         <div className="card-authors-text">
                             <Link to={`/user/${post.author}`} className="link">{author && `${author.first_name} ${author.last_name}`}</Link>
