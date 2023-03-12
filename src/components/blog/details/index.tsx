@@ -60,7 +60,7 @@ export const BlogDetails = (): JSX.Element => {
             <link rel="stylesheet" href="/static/css/blog-detail.css" />
             <div className="container">
                 <div className="card-container">
-                    <img className="card-image" src="/img/default.png" />
+                    <img className="card-image" src={post.featured_image} />
                     <div className="tag-section">
                         <p className="tag" style={{ backgroundColor: "#ffcced" }}>test tag</p>
                         <p className="tag" style={{ backgroundColor: "#ccffe1" }}>test tag 2</p>
@@ -68,7 +68,7 @@ export const BlogDetails = (): JSX.Element => {
                     <h1 className="title">{post.title}</h1>
                     <div className="card-authors">
                         <div className="card-authors-image">
-                            <Link to={`/user/${post.author}`}><img className="circle" src="/img/test" /></Link>
+                            <Link to={`/user/${post.author}`}><img className="circle" src={author.gravatar_url} /></Link>
                         </div>
                         <div className="card-authors-text">
                             <Link to={`/user/${post.author}`} className="link">{`${author.first_name} ${author.last_name}`}</Link>

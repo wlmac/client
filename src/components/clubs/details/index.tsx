@@ -208,7 +208,7 @@ export const ClubDetails = (): JSX.Element => {
                                                     <a href={`/user/${member.id}`} key={member.id}>
                                                         <div className="member">
                                                             <div className="member-image">
-                                                                <img className="circle" src="/img/profile_picture" alt={`${member.username}'s profile picture`} />
+                                                                <img className="circle" src={member.gravatar_url} alt={`${member.username}'s profile picture`} />
                                                             </div>
                                                             <div className="member-text">
                                                                 {`${member.first_name} ${member.last_name}`}

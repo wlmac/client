@@ -18,7 +18,7 @@ export const Profile = (): JSX.Element => {
         document.title = `User ${user.username} | Metropolis`;
     }, [user]);
 
-    React.useEffect(() => {
+    const fetchUser = (): void => {
         session.getAPI(`${Routes.USER}/${userID}`, true).then((res) => {
             const fetched_user: User = res.data as User;
             setUser(res.data);
@@ -36,9 +36,16 @@ export const Profile = (): JSX.Element => {
             }).catch((err) => {
 
             });
-        }).catch(() => {
-            session.refreshAuth();
+        }).catch((err) => {
+            if (err.code === "token_not_valid") {
+                session.refreshAuth();
+                fetchUser();
+            }
         });
+    }
+
+    React.useEffect(() => {
+        fetchUser();
     }, []);
 
     return (
@@ -64,8 +71,6 @@ export const Profile = (): JSX.Element => {
                     <li className="divider"></li>
                     <li><Link to="/accounts/logout/" className="sidenav-close">Logout</Link></li>
                 </ul>
-
-                <a href="/user/ji.mmyliu#" data-target="secondary-out" className="sidenav-trigger secondnav-trigger"><i className="zmdi zmdi-menu"></i></a>
 
                 <ProfileNav />
 
