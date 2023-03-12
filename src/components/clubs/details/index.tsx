@@ -4,6 +4,7 @@ import { loggedIn } from "../../../util/core/AuthService";
 import Organization from "../../../util/core/interfaces/organization";
 import Tag from "../../../util/core/interfaces/tag";
 import { APIResponse } from "../../../util/core/managers/session";
+import { get_gravatar_uri } from "../../../util/core/misc/gravatar";
 import Routes from "../../../util/core/misc/routes";
 import { Session, SessionContext, User } from "../../../util/core/session";
 import { TagElement } from "../../../util/core/tags";
@@ -17,6 +18,10 @@ export const ClubDetails = (): JSX.Element => {
     const [tags, setTags] = React.useState([] as Array<Tag>);
     const [execs, setExecs] = React.useState([] as Array<User>);
     const [members, setMembers] = React.useState([] as Array<User>);
+
+    React.useEffect((): void => {
+        document.title = `${club.name} | Metropolis`;
+    }, [club]);
 
     React.useEffect((): void => {
         if (!loggedIn()) {
@@ -82,34 +87,34 @@ export const ClubDetails = (): JSX.Element => {
         )
     }
 
-    const UserElement = (props: { userID: number }): JSX.Element => {
-        const [user, setUser] = React.useState({} as User);
-        React.useEffect(() => {
-            session.getAPI(`${Routes.OBJECT}/user/retrieve/${props.userID}`, false).then((res: { data: any }) => {
-                setUser(res.data as User);
-                console.log("Fetched");
-            }).catch(() => {
-                session.refreshAuth();
-            });
-        }, []);
-        return (
-            <a href={`/user/${user.id}`} key={user.id}>
-                <div className="member">
-                    <div className="member-image">
-                        <img className="circle" src="/img/profile_picture" alt={`${user.username}'s profile picture`} />
-                    </div>
-                    <div className="member-text">
-                        {`${user.first_name} ${user.last_name}`}
-                    </div>
-                </div>
-            </a>
-        );
-    }
+    // const UserElement = (props: { userID: number }): JSX.Element => {
+    //     const [user, setUser] = React.useState({} as User);
+    //     React.useEffect(() => {
+    //         session.getAPI(`${Routes.OBJECT}/user/retrieve/${props.userID}`, false).then((res: { data: any }) => {
+    //             setUser(res.data as User);
+    //             console.log("Fetched");
+    //         }).catch(() => {
+    //             session.refreshAuth();
+    //         });
+    //     }, []);
+    //     return (
+    //         <Link to={`/user/${user.id}`} key={user.id}>
+    //             <div className="member">
+    //                 <div className="member-image">
+    //                     <img className="circle" src="/img/profile_picture" alt={`${user.username}'s profile picture`} />
+    //                 </div>
+    //                 <div className="member-text">
+    //                     {`${user.first_name} ${user.last_name}`}
+    //                 </div>
+    //             </div>
+    //         </Link>
+    //     );
+    // }
 
     return (
         <>
             <link rel="stylesheet" href="/static/css/detail.css" />
-            
+
             <div className="club">
                 <div className="row">
                     <img className="club-banner responsive-img col s12" src={club.banner} alt="banner of organization" />
@@ -140,7 +145,7 @@ export const ClubDetails = (): JSX.Element => {
                             <div className="col m8">
                                 <div className="description">
                                     {club.bio}
-                                    <br/><br/>
+                                    <br /><br />
                                     {
                                         club.owner !== session.user.id ? <Link to={`/club/edit/${club.id}`}>Edit club details</Link> : <></>
                                     }
@@ -172,17 +177,18 @@ export const ClubDetails = (): JSX.Element => {
                                         {
                                             execs.map((exec: User): JSX.Element => {
                                                 if (exec === null) return <></>;
+                                                console.log(exec);
                                                 return (
-                                                    <a href={`/user/${exec.id}`} key={exec.id}>
+                                                    <Link to={`/user/${exec.id}`} key={exec.id}>
                                                         <div className="member">
                                                             <div className="member-image">
-                                                                <img className="circle" src={"/img/profile_picture"} alt={`${exec.username}'s profile picture`} />
+                                                                <img className="circle" src={exec.gravatar_url} alt={`${exec.username}'s profile picture`} />
                                                             </div>
                                                             <div className="member-text">
                                                                 {`${exec.first_name} ${exec.last_name}`}
                                                             </div>
                                                         </div>
-                                                    </a>
+                                                    </Link>
                                                 );
                                             })
                                         }
@@ -202,7 +208,7 @@ export const ClubDetails = (): JSX.Element => {
                                                     <a href={`/user/${member.id}`} key={member.id}>
                                                         <div className="member">
                                                             <div className="member-image">
-                                                                <img className="circle" src="/img/profile_picture" alt={`${member.username}'s profile picture`} />
+                                                                <img className="circle" src={member.gravatar_url} alt={`${member.username}'s profile picture`} />
                                                             </div>
                                                             <div className="member-text">
                                                                 {`${member.first_name} ${member.last_name}`}

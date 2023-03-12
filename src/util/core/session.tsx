@@ -9,17 +9,22 @@ export interface User {
     bio: string,
     first_name: string,
     last_name: string,
+    is_staff: boolean,
     graduating_year: number,
     id: number,
     organizations: Array<number>,
     tags_following: Array<number>,
     timezone: string,
     username: string,
+    email_hash: string,
+    gravatar_url: string,
     registertime: number
 }
 
 export interface Session {
     user: User,
+    allUsers: Array<User>,
+    setUser: (user: User) => void,
     updateToken: (token: string) => void,
     getAPI: (url: string, auth?: boolean) => Promise<any>,
     postAPI: (url: string, data: any) => Promise<any>,
@@ -30,47 +35,31 @@ export interface Session {
 }
 
 export const SessionContext = React.createContext<Session>({
-    user: {
-        bio: "",
-        first_name: "",
-        last_name: "",
-        graduating_year: 0,
-        id: 0,
-        organizations: [],
-        tags_following: [],
-        timezone: "",
-        username: "",
-        registertime: 0
-    },
+    user: {} as User,
+    allUsers: [],
+    setUser: (user: User) => { },
     updateToken: (token: string) => { },
     getAPI: (url: string, auth?: boolean) => { return {} as Promise<any> },
     postAPI: (url: string, data: any) => { return {} as Promise<any> },
     putAPI: (url: string, data: any) => { return {} as Promise<any> },
-    patchAPI: (url: string, data: any) => {return {} as Promise<any>},
+    patchAPI: (url: string, data: any) => { return {} as Promise<any> },
     refreshAuth: () => { },
     logout: () => { }
 });
 
 export const SessionProvider = (props: { children: React.ReactNode }) => {
-    const [user, setUser] = React.useState({
-        bio: "",
-        first_name: "",
-        last_name: "",
-        graduating_year: 0,
-        id: 0,
-        organizations: [],
-        tags_following: [],
-        timezone: "",
-        username: "",
-        registertime: 0
-    });
+    let [user, updateUser] = React.useState({} as User);
+    const [allUsers, setAllUsers] = React.useState([] as Array<User>);
     const nav: NavigateFunction = useNavigate();
 
-    React.useEffect((): void => {
-        if (loggedIn()) {
-            updateToken(getToken());
+    const setUser = (newUser: User): void => {
+        user = newUser;
+        updateUser(newUser);
+    }
 
-            getAPI(`${Routes.USER}/${user.id}`, true).then((res) => {
+    const refreshUser = (): void => {
+        if (loggedIn()) {
+            getAPI(`${Routes.USER}/${user.id}`).then((res) => {
                 setUser({
                     ...user,
                     ...res.data
@@ -79,31 +68,36 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
                 refreshAuth();
             });
         }
+    }
+
+    React.useEffect((): void => {
+        if (loggedIn()) {
+            updateToken(getToken());
+            refreshUser();
+
+            getAPI(`${Routes.OBJECT}/user`).then((res) => {
+                setAllUsers(res.data.results);
+            }).catch((err) => {
+
+            });
+        }
     }, []);
 
     const updateToken = (token: string): void => {
         setToken(token);
         if (token !== "") {
             let decoded: any = jwt_decode(token);
+
             setUser({
                 ...user,
                 id: decoded.user_id,
                 registertime: decoded.iat
             });
+
+            refreshUser();
         }
         else {
-            setUser({
-                bio: "",
-                first_name: "",
-                last_name: "",
-                graduating_year: 0,
-                id: 0,
-                organizations: [],
-                tags_following: [],
-                timezone: "",
-                username: "",
-                registertime: 0
-            });
+            setUser({} as User);
         }
     }
 
@@ -133,7 +127,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
             }
         });
     }
-    
+
     const patchAPI = (url: string, data: any): Promise<any> => {
         const token = getToken();
         return axios.patch(url, data, {
@@ -160,25 +154,14 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     const logout = (): void => {
         if (!loggedIn()) return;
 
-        setUser({
-            bio: "",
-            first_name: "",
-            last_name: "",
-            graduating_year: 0,
-            id: 0,
-            organizations: [],
-            tags_following: [],
-            timezone: "",
-            username: "",
-            registertime: 0
-        });
+        setUser({} as User);
         localStorage.removeItem("token");
         localStorage.removeItem("refresh");
         nav("/accounts/login");
     }
 
     return (
-        <SessionContext.Provider value={{ user: user, updateToken: updateToken, getAPI: getAPI, postAPI: postAPI, putAPI: putAPI, patchAPI: patchAPI, refreshAuth: refreshAuth, logout: logout }}>
+        <SessionContext.Provider value={{ user: user, allUsers: allUsers, setUser: setUser, updateToken: updateToken, getAPI: getAPI, postAPI: postAPI, putAPI: putAPI, patchAPI: patchAPI, refreshAuth: refreshAuth, logout: logout }}>
             {props.children}
         </SessionContext.Provider>
     )
