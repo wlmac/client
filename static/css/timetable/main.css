@@ -1,0 +1,30 @@
+strong{
+    font-weight: bold;
+}
+
+.btn-primary{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 10px;
+    border-radius: 7px;
+    width: 100px;
+}
+
+.card-top{
+    font-size: 150%;
+}
+
+body{
+    background-color: var(--bg-grey);
+}
+
+#id_courses input, #id_position input{
+    position: static;
+    opacity: 100;
+    margin-right: 5px;
+}
+
+hr {
+    border: 0px solid var(--light-grey);
+    border-top-width: 2px;
+}

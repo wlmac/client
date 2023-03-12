@@ -1,0 +1,45 @@
+.club-banner {
+    border-bottom: 5px black solid;
+    padding: 0 !important;
+    height: 18rem !important;
+    -o-object-fit: cover;
+       object-fit: cover;
+}
+
+.page-title {
+    padding: 3rem !important;
+    background: white;
+}
+
+.edit-club-bio textarea {
+    width: 100%;
+    min-height: 150px;
+    padding: 10px;
+    height: auto;
+    background-color: transparent;
+    resize: none;
+    font-size: 18px;
+}
+
+label {
+    background-color: transparent;
+    color: transparent;
+    font-size: 20px;
+}
+
+.field {
+    margin: 3rem;
+    background-color: transparent;
+}
+
+button {
+    margin-right: 1rem;
+}
+
+.editing-fields {
+    background: transparent;
+}
+
+.box-center {
+    margin: 100px;
+}

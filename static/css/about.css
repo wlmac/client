@@ -1,0 +1,222 @@
+.headers {
+    overflow: hidden;
+    background-color: var(--dark-colour);
+    padding: 20px;
+    padding-left: 40px;
+}
+.headers ul {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin: 0;
+}
+.headers li {
+    font-size: 1rem;
+}
+.header {
+    cursor: pointer;
+    text-align: center;
+    padding: 0 30px;
+    padding-bottom: 5px;
+    font-weight: bold;
+    color: var(--link-colour);
+    border-bottom: 2px solid var(--link-colour);
+    display: inline;
+}
+.header:hover {
+    color: var(--mid-colour);
+    border-color: var(--mid-colour);
+    -webkit-transition: color 0.1s linear, border-color 0.1s linear;
+    -o-transition: color 0.1s linear, border-color 0.1s linear;
+    transition: color 0.1s linear, border-color 0.1s linear;
+}
+.active {
+    color: var(--highlight-colour) !important;
+    border-color: var(--highlight-colour) !important;
+}
+.content-container {
+    background-color: white;
+    padding: 40px;
+    min-height: calc(100vh - 226px);
+}
+.content-embed {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    width: 100%;
+    height: 53rem;
+}
+.content-embed iframe {
+    width: 80%;
+    height: 100%;
+}
+.title {
+    font-weight: bold;
+    margin: 0;
+    margin-top: 40px;
+    font-size: 2rem;
+}
+.subtitle {
+    font-weight: bold;
+    margin: 0;
+    margin: 15px 0;
+    font-size: 1.5rem;
+}
+.section-title {
+    font-weight: bold;
+    margin: 0;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+.link-section .section-title:first-child {
+    margin-top: 5px;
+}
+.title:first-child {
+    margin-top: 0;
+}
+.text {
+    color: var(--near-black);
+    line-height: 1.6rem;
+}
+.text:last-child {
+    margin-bottom: 0;
+}
+.member-list:not(:last-child) {
+    margin-bottom: 24px;
+}
+.member {
+    margin: 10px 0;
+    background-color: #F8F8F8;
+    padding: .75rem;
+    border-radius: 8px;}
+.member-name {
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    font-size: 1.2rem;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+}
+.member-image {
+    height: 32px;
+    width: 32px;
+    margin-right: 10px;
+}
+.member-text {
+    font-weight: bold;
+    color: var(--dark-grey);
+    font-size: 1.2rem;
+}
+.member-bio {
+    color: var(--dark-grey);
+    font-size: 1rem;
+}
+.circle {
+    height: 100%;
+    width: 100%;
+}
+.member hr {
+    margin-top: 10px;
+}
+.link-section {
+    margin: 0;
+    margin-bottom: 40px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex; 
+    -webkit-box-pack: start; 
+        -ms-flex-pack: start; 
+            justify-content: flex-start;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+}
+.link-section:last-child {
+    margin: 0;
+}
+.link-section li {
+    margin: 4px 0;
+}
+.link-section li a {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+}
+.link-section li a p {
+    margin: 0;
+    color: inherit;
+}
+.link-section .zmdi {
+    margin: 0;
+    margin-right: 8px;
+}
+.teacher {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.teacher .link {
+    display: flex;
+}
+.teacher .dept {
+    display: flex;
+}
+.teacher .link .zmdi {
+    margin: 0;
+    margin-right: 8px;
+}
+.teacher .dept .zmdi {
+    margin: 0;
+    margin-left: 8px;
+}
+hr {
+    border: 0px solid var(--light-grey);
+    border-top-width: 2px;
+}
+@media screen and (max-width: 768px) {
+    .headers {
+        padding: 10px;
+    }
+    .headers ul {
+        flex-direction: column;
+    }
+    .headers li {
+        border: none;
+    }
+    .header {
+        padding: 2px;
+    }
+    .content-container {
+        padding: 20px;
+        min-height: calc(100vh - 163px);
+    }
+    .content-embed iframe {
+        width: 100%;
+    }
+    .title {
+        font-size: 1.75rem;
+    }
+    .subtitle {
+        font-size: 1.25rem;
+    }
+    .teacher {
+        flex-direction: column;
+        align-items: start;
+        margin: 8px 0 !important;
+    }
+    .teacher .dept {
+        flex-direction: row-reverse;
+    }
+    .teacher .dept .zmdi {
+        margin: 0;
+        margin-right: 8px;
+    }
+}
