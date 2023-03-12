@@ -18,4 +18,9 @@ const loggedIn = (): boolean => {
     return !(!localStorage.getItem("token"));
 }
 
-export { getToken, setToken, getRefresh, setRefresh, loggedIn };
+const logout = (): void => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("refresh");
+}
+
+export { getToken, setToken, getRefresh, setRefresh, loggedIn, logout };

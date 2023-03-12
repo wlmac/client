@@ -144,7 +144,7 @@ const AnnouncementCreator = (props: { openCreator: boolean, setOpenCreator: Reac
     const [error, setError] = React.useState("");
 
     const onCreate = (data: AnnouncementInputs): void => {
-        console.log("Submitted data:", data);
+        // console.log("Submitted data:", data);
         session.postAPI(`${Routes.OBJECT}/announcement/new`, {
             ...data
         }).then(() => {

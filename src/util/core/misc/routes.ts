@@ -1,5 +1,5 @@
 // @ts-ignore
-const BASEURL = /*import.meta.env.DEV ? "http://localhost:8000" :*/ "https://auth.jimmyliu.dev";
+const BASEURL = import.meta.env.DEV ? "https://auth.jimmyliu.dev" : "https://maclyonsden.com";
 
 const Routes = {
   BASEURL: BASEURL,
@@ -8,10 +8,11 @@ const Routes = {
     REFRESH: `${BASEURL}/api/auth/token/refresh`,
   },
   POST: {
-    USER: `${BASEURL}/api/v3/user`,
+    USER: `${BASEURL}/api/v3/obj/user/retrieve`,
     ANNOUNCEMENT: `${BASEURL}/api/v3/announcement`,
   },
-  USER: `${BASEURL}/api/v3/user`,
+  USER: `${BASEURL}/api/v3/obj/user/retrieve`,
+  TIMETABLE: `${BASEURL}/api/me/timetable`,
   OBJECT: `${BASEURL}/api/v3/obj`,
 };
 
