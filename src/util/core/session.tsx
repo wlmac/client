@@ -102,6 +102,9 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     }
 
     function getAPI(url: string, auth?: boolean): Promise<any> {
+        if (auth && !loggedIn()) {
+            nav("/accounts/login");
+        }
         const token = getToken();
         return axios.get(url, auth ? {
             headers: {
@@ -111,6 +114,9 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     }
 
     const postAPI = (url: string, data: any): Promise<any> => {
+        if (!loggedIn()) {
+            nav("/accounts/login");
+        }
         const token = getToken();
         return axios.post(url, data, {
             headers: {
@@ -120,6 +126,9 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     }
 
     const putAPI = (url: string, data: any): Promise<any> => {
+        if (!loggedIn()) {
+            nav("/accounts/login");
+        }
         const token = getToken();
         return axios.put(url, data, {
             headers: {

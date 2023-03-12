@@ -23,12 +23,6 @@ export const ClubDetails = (): JSX.Element => {
         document.title = `${club.name} | Metropolis`;
     }, [club]);
 
-    React.useEffect((): void => {
-        if (!loggedIn()) {
-            nav(`/accounts/login?next=/club/${id}`);
-        }
-    });
-
     const goBack = (): void => {
         window.history.back();
     }
