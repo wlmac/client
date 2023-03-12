@@ -9,11 +9,12 @@ import { User } from "../../../util/core/session";
 
 import Routes from "../../../util/core/misc/routes";
 import { loggedIn } from "../../../util/core/AuthService";
+import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
 interface RegisterUser {
     first_name: string,
     last_name: string,
-    graduating_year: number,
+    graduating_year: number;
     email: string,
     username: string,
     password: string
@@ -24,6 +25,7 @@ export const Register = (): JSX.Element => {
     const session: Session = React.useContext(SessionContext);
     const { register, handleSubmit, watch, formState: { errors } } = useForm<RegisterInputs>();
     const [error, setError] = React.useState("");
+    const [gradYear, setGradYear] = React.useState(0);
 
     React.useEffect((): void => {
         document.title = "Sign Up | Metropolis";
@@ -48,12 +50,13 @@ export const Register = (): JSX.Element => {
         const new_user: RegisterUser = {
             first_name: data.first_name,
             last_name: data.last_name,
-            graduating_year: data.graduating_year,
+            graduating_year: gradYear,
             email: data.email,
             username: data.username,
             password: data.password
         }
-        axios.post(Routes.USER, { new_user }).then((res) => {
+        console.log("New user:", new_user);
+        axios.post(Routes.POST.USER, { new_user }).then((res) => {
             console.log("Successfully registered user");
             nav("/accounts/login");
         }).catch((err) => {
@@ -111,14 +114,36 @@ export const Register = (): JSX.Element => {
                                     </div>
                                 </div><div className="row">
                                     <div className="input-field col s12">
-                                        <span className="grad-year">Graduating Year:</span>
+                                        {/* <span className="grad-year">Graduating Year:</span>
                                         <select {...register("graduating_year")}>
                                             <option value="">Does not apply</option>
                                             <option value="2022">2022</option>
                                             <option value="2023">2023</option>
                                             <option value="2024">2024</option>
                                             <option value="2025">2025</option>
-                                        </select>
+                                        </select> */}
+
+                                        {/* <Box sx={{ minWidth: 120 }}> */}
+                                        {/* <FormControl fullWidth> */}
+                                        {/* <InputLabel>Graduating Year</InputLabel> */}
+                                        <div style={{ display: "flex", flexDirection: "column" }}>
+                                            <span className="grad-year">Graduating Year:</span>
+                                            <Select
+                                                value={gradYear}
+                                                onChange={(ev) => {
+                                                    setGradYear(parseInt(ev.target.value.toString()));
+                                                }}
+                                            // {...register("graduating_year")}
+                                            >
+                                                <MenuItem value={0}>Does not apply</MenuItem>
+                                                <MenuItem value={2022}>2022</MenuItem>
+                                                <MenuItem value={2023}>2023</MenuItem>
+                                                <MenuItem value={2024}>2024</MenuItem>
+                                                <MenuItem value={2025}>2025</MenuItem>
+                                            </Select>
+                                        </div>
+                                        {/* </FormControl> */}
+                                        {/* </Box> */}
                                     </div>
                                 </div><div className="row">
                                     <div className="input-field col s12">

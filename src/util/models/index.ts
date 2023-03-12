@@ -17,7 +17,6 @@ export type RegisterInputs = {
     username: string,
     first_name: string,
     last_name: string,
-    graduating_year: number,
     password: string,
     confirm_password: string,
 }

@@ -8,7 +8,7 @@ const Routes = {
     REFRESH: `${BASEURL}/api/auth/token/refresh`,
   },
   POST: {
-    USER: `${BASEURL}/api/v3/user`,
+    USER: `${BASEURL}/api/v3/obj/user`,
     ANNOUNCEMENT: `${BASEURL}/api/v3/announcement`,
   },
   USER: `${BASEURL}/api/v3/user`,
