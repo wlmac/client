@@ -20,5 +20,7 @@ jobs:
       run: npm install --legacy-peer-deps
     - name: Deploy to GH Pages
       run: |
+        git config --global user.email "jimmyjcl753@gmail.com"
+        git config --global user.name "Jimmy Liu"
         git remote set-url origin https://${{ secrets.GH_PAGES_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git
         npm run deploy
