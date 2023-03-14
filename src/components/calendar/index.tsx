@@ -30,6 +30,18 @@ interface EventJSON {
   end_date: string
 }
 
+interface EventData {
+  name: string,
+  organization: Organization | undefined,
+  description: string,
+  id: number,
+  tags: Tag[],
+  start_date: string,
+  end_date: string,
+  is_public: boolean,
+  term: number
+}
+
 export const Calendar = (): JSX.Element => {
   // raw events, used for caching id's before the session updates
   const [rawEvents, setRawEvents]: [EventJSON[], (x: EventJSON[]) => void] = useState<EventJSON[]>([]);
@@ -51,10 +63,11 @@ export const Calendar = (): JSX.Element => {
   // when the session or events update, try filling in the tags & org
   React.useEffect(() => {
     function parseEventJSON(raw: EventJSON): EventData {
-      return Object.assign(raw, {
+      return ({
+        ...raw,
         organization: session.allOrgs.find(org => org.id === raw.organization),
-        tags: raw.tags.map(id => session.allTags.find(tag => tag.id === id)).filter((tag): tag is Tag => !!tag),
-      })
+        tags: raw.tags.map(id => session.allTags.find(tag => tag.id === id)).filter((tag): tag is Tag => !!tag)
+      }) as EventData
     }
     setEvents(rawEvents.map(parseEventJSON))
   }, [session, rawEvents])
