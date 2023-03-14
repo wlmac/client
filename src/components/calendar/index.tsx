@@ -1,25 +1,26 @@
 import React, {useState} from "react";
-import FullCalendar  from "@fullcalendar/react";
+import "@fullcalendar/react/dist/vdom";
+import FullCalendar, { Interaction }  from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import axios from 'axios';
-import FadeIn from 'react-fade-in';
+
+import { Session, SessionContext } from "../../util/core/session";
+import Routes from "../../util/core/misc/routes";
+import { loggedIn } from "../../util/core/AuthService";
 
 export const Calendar = (): JSX.Element => {
   const [events, setEvents] = useState([]);
   const [eventFetch, setEventFetch] = useState(undefined);
   const [selectedDate, setSelectedDate] = useState(undefined);
   const [eventsOnDay, setEventsOnDay] = useState([]);
+  const session: Session = React.useContext(SessionContext);
 
   const updateEvents = (fetchInfo, successCallback, failureCallback) => {
-    let key = JSON.stringify(fetchInfo);
+    let key: string = JSON.stringify(fetchInfo);
     if (eventFetch !== key){
-      // TODO test this lol (used jquery before, but I changed to axios ;-;)
-      // get events via url
-
-      const url = "https://www.maclyonsden.com/api/events?start=" + fetchInfo.startStr + "&format=json&end=" + fetchInfo.endStr
+      const url = Routes.OBJECT + "/events?start=" + fetchInfo.startStr + "&format=json&end=" + fetchInfo.endStr
       console.log(url);
-      axios.get(url).then((response) => {
+      session.getAPI(url).then((response) => {
           if (response.status !== 200) {
               failureCallback("Returned status " + status)
           } else {
@@ -135,6 +136,16 @@ const CalendarBoard = (props): JSX.Element => {
       }
       return parsed
   }
+
+  function renderEventContent(eventInfo) {
+    return (
+      <>
+        <b>{eventInfo.timeText}</b>
+        <i>{eventInfo.event.title}</i>
+      </>
+    )
+  }
+
   // highlights the number for today
   const highlightSelectedNumber = () => {
       // unselect every cell
@@ -245,7 +256,7 @@ const Card = (props): JSX.Element => {
 
   const tagEls = curEvent.tags.map(tag => <p class="tag" style={{backgroundColor: tag.color}}>tag.name</p>)
 
-  return (<FadeIn>
+  return (
     <table class="dayEvent">
       <tr>
           <td class="leftPanel" style={{backgroundColor: (curEvent.tags.length > 0 ? curEvent.tags[0].color : "lightblue")}}>
@@ -258,8 +269,7 @@ const Card = (props): JSX.Element => {
           </td>
           <DetailPanel curEvent={curEvent} tagEls={tagEls}/>
       </tr>
-      </table>
-    </FadeIn>);
+      </table>);
 }
 
 const DetailPanel = (props): JSX.Element => {
