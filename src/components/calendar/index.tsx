@@ -170,8 +170,12 @@ const CalendarBoard = (props: BoardProps): JSX.Element => {
 
   // reformats a day cell
   const reformatDay = (dayElement: HTMLElement) => {
+<<<<<<< HEAD
     // resize the date cell
     if (dayElement.clientHeight < dayElement.clientWidth / aspectRatio) {
+=======
+    if(dayElement.clientHeight < dayElement.clientWidth / aspectRatio){
+>>>>>>> remove debugging
       dayElement.style.height = dayElement.clientWidth / aspectRatio + "px";
     }
 
