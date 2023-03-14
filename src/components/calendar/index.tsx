@@ -1,12 +1,11 @@
 import React, {useState} from "react";
 import "@fullcalendar/react/dist/vdom";
-import FullCalendar, { Interaction }  from "@fullcalendar/react";
+import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 
 import { Session, SessionContext } from "../../util/core/session";
 import Routes from "../../util/core/misc/routes";
-import { loggedIn } from "../../util/core/AuthService";
 
 import Organization from "../../util/core/interfaces/organization";
 
@@ -164,7 +163,8 @@ const CalendarBoard = (props: BoardProps): JSX.Element => {
   const highlightSelectedNumber = () => {
       // unselect every cell
       document.querySelectorAll(".fc-daygrid-day").forEach(el => {
-          el.querySelector<HTMLElement>(".fc-daygrid-day-number-circle")?.style.background = ""
+          const circle = el.querySelector<HTMLElement>(".fc-daygrid-day-number-circle");
+          if(circle != null) circle.style.background = ""
           el.querySelector<HTMLElement>(".fc-daygrid-day-number")?.removeAttribute("selected")
       })
 
@@ -180,7 +180,8 @@ const CalendarBoard = (props: BoardProps): JSX.Element => {
               }
 
               // change the background color of the circle
-              topEl.querySelector<HTMLElement>(".fc-daygrid-day-number-circle")?.style.backgroundColor = selectedNumberColor;
+              const circle = topEl.querySelector<HTMLElement>(".fc-daygrid-day-number-circle");
+              if(circle != null) circle.style.backgroundColor = selectedNumberColor;
               topEl.querySelector(".fc-daygrid-day-number")?.setAttribute("selected", "true")
           }
       }
