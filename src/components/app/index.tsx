@@ -42,7 +42,7 @@ export const _App = (): JSX.Element => {
                     <Route path="/" element={<Home />} />
                     <Route path="/announcements" element={<Announcements />} />
                     <Route path="/announcement/:id" element={<AnnouncementDetail />} />
-                    {/* <Route path="/calendar" element={<Calendar />} /> */}
+                    <Route path="/calendar" element={<Calendar />} />
                     <Route path="/clubs" element={<Clubs />} />
                     <Route path="/club/:id" element={<ClubDetails />} />
                     <Route path="/club/edit/:id" element={<EditClubDetails />} />
