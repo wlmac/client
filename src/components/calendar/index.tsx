@@ -14,7 +14,7 @@ interface EventData{
   organization: Organization, 
   description: string,
   id: number,
-  tags: {color: string}[],
+  tags: {name: string, color: string}[],
   start_date: string,
   end_date: string,
   is_public: boolean,
@@ -22,15 +22,22 @@ interface EventData{
 }
 
 export const Calendar = (): JSX.Element => {
+  // list of events for the current month
   const [events, setEvents] : [EventData[], (x: EventData[]) => void] = useState<EventData[]>([]);
+  // the month currently displayed
   const [eventFetch, setEventFetch]: [string, (x: string) => void] = useState<string>("");
-  const [selectedDate, setSelectedDate] : [Date | undefined, (x: Date | undefined) => void] = useState<Date | undefined>(new Date(0));
+  // currently selected date
+  const [selectedDate, setSelectedDate] : [Date | undefined, (x: Date | undefined) => void] = useState<Date | undefined>(undefined);
+  // events on the currently selected date
   const [eventsOnDay, setEventsOnDay] : [EventData[], (x: EventData[]) => void] = useState<EventData[]>([]);
+  // current session
   const session: Session = React.useContext(SessionContext);
 
+  // update the events for the current month
   const updateEvents = (fetchInfo: {startStr: string, endStr: string}, successCallback: (x: EventData[]) => void, failureCallback: (x: Error) => void) => {
     let key: string = JSON.stringify(fetchInfo);
     if (eventFetch !== key){
+      // query events for this time period
       const url = Routes.BASEURL + "/api/events?start=" + fetchInfo.startStr + "&format=json&end=" + fetchInfo.endStr
       console.log(url);
       session.getAPI(url, false).then((response) => {
@@ -46,11 +53,14 @@ export const Calendar = (): JSX.Element => {
       successCallback(events);
     }
   }
+
+  // called when a new date is selected
   const newDateSelected = (day: Date | undefined) => {
     setSelectedDate(day);
 
     if(day === undefined) setEventsOnDay([]);
     else {
+      // update the list of events for this dae
       let today = day;
       let eventsToday: EventData[] = []
       let tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000)
@@ -65,6 +75,7 @@ export const Calendar = (): JSX.Element => {
     }
   }
 
+  // the string representation of the current date
   let dateStr = "";
   if(selectedDate !== undefined){
     dateStr = selectedDate.toLocaleDateString(undefined, {
@@ -82,7 +93,7 @@ export const Calendar = (): JSX.Element => {
 
       <div className="container">
         <CalendarBoard updateEvents={updateEvents} selectedDate={selectedDate}
-        setSelectedDate={newDateSelected} eventsOnDay={eventsOnDay}/>
+        setSelectedDate={newDateSelected}/>
 
         <div id="details">
           <div className="container">
@@ -103,25 +114,29 @@ export const Calendar = (): JSX.Element => {
 
 interface BoardProps{
   updateEvents: (x: {startStr: string, endStr: string}, y: (x: EventData[]) => void, z: (x: Error) => void) => void,
-  eventsOnDay: EventData[],
   selectedDate: Date | undefined,
   setSelectedDate: (x: Date | undefined) => void
 };
+
+// the calendar interface itself
 const CalendarBoard = (props: BoardProps): JSX.Element => {
+  // called when events are updated
   const updateEvents = props.updateEvents;
-  const eventsOnDay = props.eventsOnDay;
+  // currently selected date
   const selectedDate : Date | undefined = props.selectedDate;
   const setSelectedDate : (date: Date | undefined) => void = props.setSelectedDate;
   const aspectRatio = 1.7; // width / height
-
+  // color for the currently selectd number
   const selectedNumberColor = "var(--dark-colour)";
 
   // reformats a day cell
   const reformatDay = (dayElement: HTMLElement) => {
+    // resize the date cell
     if(dayElement.clientHeight < dayElement.clientWidth / aspectRatio){
       dayElement.style.height = dayElement.clientWidth / aspectRatio + "px";
     }
 
+    // create a div to house the "number circle"
     let el: HTMLElement | null = dayElement.querySelector<HTMLElement>(".fc-daygrid-day-top")
     if(el === null) throw("rendering error");
     let container = document.createElement("div")
@@ -140,6 +155,7 @@ const CalendarBoard = (props: BoardProps): JSX.Element => {
     container.style.width = container.clientHeight + "px";
   }
 
+  // event parsed for the fullcalendar api
   interface FullCalendarEvent {
     title: string, start: string, end: string, color: string, textColor: string
   }
@@ -225,11 +241,15 @@ const CalendarBoard = (props: BoardProps): JSX.Element => {
     </>);
 }
 
+// UI for the list of cards at the bottom
 const Cards = (props: {eventsToday: EventData[],date: Date | undefined}): JSX.Element => {
+  // list of events for today
   const eventsToday = props.eventsToday;
+  // current date
   const date = props.date;
 
-  const cards = date == undefined ? [] : eventsToday.map((event: EventData) => <Card curEvent={event} date={date} />);
+  // a list of cards
+  const cards = date == undefined ? [] : eventsToday.map((event: EventData) => <Card key={event.id} curEvent={event} date={date} />);
   if(cards.length === 0){
     return (<></>);
   } else {
@@ -237,6 +257,7 @@ const Cards = (props: {eventsToday: EventData[],date: Date | undefined}): JSX.El
   }
 }
 
+// a singular card
 const Card = (props: {curEvent: EventData, date: Date}): JSX.Element => {
   const curEvent = props.curEvent;
   const date = props.date;
@@ -269,10 +290,11 @@ const Card = (props: {curEvent: EventData, date: Date}): JSX.Element => {
   let [endTime, endAMPM] = eventEnd >= new Date(date.getTime() + 24 * 60 * 60 * 1000) ?
       dateTimeRepresentation(eventEnd) : timeRepresentation(eventEnd);
 
-  const tagEls = curEvent.tags.map(tag => <p className="tag" style={{backgroundColor: tag.color}}>tag.name</p>)
+  const tagEls = curEvent.tags.map(tag => <p key={curEvent.name + "|" + tag.name} className="tag" style={{backgroundColor: tag.color}}>tag.name</p>)
 
   return (
     <table className="dayEvent">
+      <tbody>
       <tr>
           <td className="leftPanel" style={{backgroundColor: (curEvent.tags.length > 0 ? curEvent.tags[0].color : "lightblue")}}>
               <span className="timeDisplay" id="event_start">{startTime}</span>
@@ -284,6 +306,7 @@ const Card = (props: {curEvent: EventData, date: Date}): JSX.Element => {
           </td>
           <DetailPanel curEvent={curEvent} tagEls={tagEls}/>
       </tr>
+      </tbody>
       </table>);
 }
 
@@ -292,8 +315,8 @@ interface DetailPanelProps {
   tagEls: JSX.Element[]
 };
 
+// subpanel of a card - displays the details of the card
 const DetailPanel = (props: DetailPanelProps): JSX.Element => {
-  console.log(props);
   const [toTruncate, setToTruncate] = useState(true);
   const curEvent = props.curEvent;
   const tagEls = props.tagEls;
