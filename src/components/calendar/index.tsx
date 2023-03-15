@@ -170,12 +170,8 @@ const CalendarBoard = (props: BoardProps): JSX.Element => {
 
   // reformats a day cell
   const reformatDay = (dayElement: HTMLElement) => {
-<<<<<<< HEAD
     // resize the date cell
     if (dayElement.clientHeight < dayElement.clientWidth / aspectRatio) {
-=======
-    if(dayElement.clientHeight < dayElement.clientWidth / aspectRatio){
->>>>>>> remove debugging
       dayElement.style.height = dayElement.clientWidth / aspectRatio + "px";
     }
 
@@ -348,17 +344,19 @@ const Card = (props: { curEvent: EventData, date: Date }): JSX.Element => {
 
   return (
     <table className="dayEvent">
-      <tr>
-        <td className="leftPanel" style={{ backgroundColor: (curEvent.tags[0] ?? { color: "lightblue" }).color }}>
-          <span className="timeDisplay" id="event_start">{startTime}</span>
-          <span className="ampm" id="event_start_ampm">{startAMPM}</span>
-          <br />
-          <span className="intermediate_to">to</span><br />
-          <span className="timeDisplay" id="event_end">{endTime}</span>
-          <span className="ampm" id="event_end_ampm">{endAMPM}</span>
-        </td>
-        <DetailPanel curEvent={curEvent} tagEls={tagEls} />
-      </tr>
+      <tbody>
+        <tr>
+          <td className="leftPanel" style={{ backgroundColor: (curEvent.tags[0] ?? { color: "lightblue" }).color }}>
+            <span className="timeDisplay" id="event_start">{startTime}</span>
+            <span className="ampm" id="event_start_ampm">{startAMPM}</span>
+            <br />
+            <span className="intermediate_to">to</span><br />
+            <span className="timeDisplay" id="event_end">{endTime}</span>
+            <span className="ampm" id="event_end_ampm">{endAMPM}</span>
+          </td>
+          <DetailPanel curEvent={curEvent} tagEls={tagEls} />
+        </tr>
+      </tbody>
     </table>);
 }
 
