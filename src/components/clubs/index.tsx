@@ -18,12 +18,6 @@ export const Clubs = (): JSX.Element => {
 
     const nav: NavigateFunction = useNavigate();
 
-    React.useEffect((): void => {
-        if (!loggedIn()) {
-            nav(`/accounts/login?next=/clubs`);
-        }
-    });
-
     const goBack = (): void => {
         window.history.back();
     }
@@ -64,14 +58,14 @@ const ClubList = (): JSX.Element[] => {
 
     React.useEffect(() => {
         const fetchURL = `${Routes.OBJECT}/organization`;
-        session.getAPI(fetchURL).then((res) => {
+        session.getAPI(fetchURL, false).then((res) => {
             setClubs(res.data.results);
         }).catch((err) => {
             session.refreshAuth();
         });
 
         // Tags
-        session.getAPI(`${Routes.OBJECT}/tag`).then((res) => {
+        session.getAPI(`${Routes.OBJECT}/tag`, false).then((res) => {
             const tags = res.data.results;
             setTags(tags);
         }).catch(() => {
@@ -98,7 +92,7 @@ const Club = (props: { club: Organization, tags: Tag[] }): JSX.Element => {
     const session = React.useContext(SessionContext);
 
     React.useEffect(() => {
-        session.getAPI(`${Routes.OBJECT}/tag`).then((res) => {
+        session.getAPI(`${Routes.OBJECT}/tag`, false).then((res) => {
             const tags = res.data.results;
             setTags(tags.map((tag: Tag): JSX.Element => {
                 return <TagElement tag={tag} />;

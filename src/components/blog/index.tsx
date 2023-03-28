@@ -8,10 +8,11 @@ import Tag from "../../util/core/interfaces/tag";
 import Media from "../../util/core/misc/media";
 import MembershipStatus from "../../util/core/misc/membership";
 import Routes from "../../util/core/misc/routes";
-import { Session, SessionContext } from "../../util/core/session";
+import { Session, SessionContext, User } from "../../util/core/session";
 import { getTags, TagElement } from "../../util/core/tags";
 import Markdown from "../markdown";
 import { loggedIn } from "../../util/core/AuthService";
+import { dateFormat } from "../../util/core/misc/date";
 
 export const Blog = (): JSX.Element => {
     const session = React.useContext(SessionContext);
@@ -75,6 +76,8 @@ const BlogPosts = (): JSX.Element[] => {
 
 const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Element => {
     const post = props.post;
+    const session: Session = React.useContext(SessionContext);
+    let author: User = session.allUsers.find((user: User) => user.id === post.author)!;
 
     async function getAuthor() {
         const session: Session = React.useContext(SessionContext);
@@ -97,12 +100,12 @@ const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Eleme
                     <h1 className="title">{post.title}</h1>
                     <div className="card-authors">
                         <div className="card-authors-image">
-                            <Link to={`/user/${post.author}`}><img className="circle" src={"/img/baf"} /></Link>
+                            <Link to={`/user/${post.author}`}><img className="circle" src={author.gravatar_url} /></Link>
                         </div>
                         <div className="card-authors-text">
-                            <Link to={`/user/${post.author}`} className="link">{post.author}</Link>
+                            <Link to={`/user/${post.author}`} className="link">{author && `${author.first_name} ${author.last_name}`}</Link>
                             <br />
-                            • posted {post.created_date}
+                            • posted {new Date(post.created_date).toLocaleTimeString(undefined, dateFormat)}
                         </div>
                     </div>
                 </div>

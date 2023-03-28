@@ -14,7 +14,7 @@ export const Flatpage = (): JSX.Element => {
 
     React.useEffect((): void => {
         document.title = "Resources | Metropolis";
-        session.getAPI(`${Routes.OBJECT}/flatpage/retrieve/${slug}/`).then((res: { data: FlatPage }) => {
+        session.getAPI(`${Routes.OBJECT}/flatpage/retrieve/${slug}/`, false).then((res: { data: FlatPage }) => {
             setFlatpage(res.data);
             setExists(true);
         }).catch((err) => {

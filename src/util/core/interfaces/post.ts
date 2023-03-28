@@ -5,7 +5,7 @@ import Tag from './tag';
 export default interface Post {
   id: number;
   author: number;
-  organization: string;
+  organization: number;
   tags: Array<number>;
   created_date: Date;
   last_modified_date: Date;

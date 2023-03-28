@@ -1,9 +1,10 @@
 import * as React from "react";
-import { NavigateFunction, useNavigate, useParams } from "react-router-dom";
+import { Link, NavigateFunction, useNavigate, useParams } from "react-router-dom";
 import { loggedIn } from "../../../util/core/AuthService";
 import Organization from "../../../util/core/interfaces/organization";
 import Tag from "../../../util/core/interfaces/tag";
 import { APIResponse } from "../../../util/core/managers/session";
+import { get_gravatar_uri } from "../../../util/core/misc/gravatar";
 import Routes from "../../../util/core/misc/routes";
 import { Session, SessionContext, User } from "../../../util/core/session";
 import { TagElement } from "../../../util/core/tags";
@@ -19,10 +20,8 @@ export const ClubDetails = (): JSX.Element => {
     const [members, setMembers] = React.useState([] as Array<User>);
 
     React.useEffect((): void => {
-        if (!loggedIn()) {
-            nav(`/accounts/login?next=/club/${id}`);
-        }
-    });
+        document.title = `${club.name} | Metropolis`;
+    }, [club]);
 
     const goBack = (): void => {
         window.history.back();
@@ -30,12 +29,13 @@ export const ClubDetails = (): JSX.Element => {
 
     React.useEffect(() => {
         const fetchURL = `${Routes.OBJECT}/organization/retrieve/${id}`;
-        session.getAPI(fetchURL).then((res) => {
+        session.getAPI(fetchURL, false).then((res) => {
             const current_club: Organization = res.data as Organization;
             setClub(current_club);
+            console.log(fetchURL);
 
             // Tags
-            session.getAPI(`${Routes.OBJECT}/tag`).then((res) => {
+            session.getAPI(`${Routes.OBJECT}/tag`, false).then((res) => {
                 const tags_data: Tag[] = res.data.results;
                 console.log(current_club.tags);
                 const current_tags: Tag[] = [];
@@ -53,7 +53,7 @@ export const ClubDetails = (): JSX.Element => {
             });
 
             // Execs and members
-            session.getAPI(`${Routes.OBJECT}/user?limit=99999999`).then((res) => {
+            session.getAPI(`${Routes.OBJECT}/user?limit=99999999`, false).then((res) => {
                 const users_data: User[] = res.data.results;
                 setExecs(current_club.execs.map((execId: number): User => {
                     for (let i = 0; i < users_data.length; i++) {
@@ -81,33 +81,34 @@ export const ClubDetails = (): JSX.Element => {
         )
     }
 
-    const UserElement = (props: { userID: number }): JSX.Element => {
-        const [user, setUser] = React.useState({} as User);
-        React.useEffect(() => {
-            session.getAPI(`${Routes.OBJECT}/user/retrieve/${props.userID}`).then((res: { data: any }) => {
-                setUser(res.data as User);
-                console.log("Fetched");
-            }).catch(() => {
-                session.refreshAuth();
-            });
-        }, []);
-        return (
-            <a href={`/user/${user.id}`} key={user.id}>
-                <div className="member">
-                    <div className="member-image">
-                        <img className="circle" src="/img/profile_picture" alt={`${user.username}'s profile picture`} />
-                    </div>
-                    <div className="member-text">
-                        {`${user.first_name} ${user.last_name}`}
-                    </div>
-                </div>
-            </a>
-        );
-    }
+    // const UserElement = (props: { userID: number }): JSX.Element => {
+    //     const [user, setUser] = React.useState({} as User);
+    //     React.useEffect(() => {
+    //         session.getAPI(`${Routes.OBJECT}/user/retrieve/${props.userID}`, false).then((res: { data: any }) => {
+    //             setUser(res.data as User);
+    //             console.log("Fetched");
+    //         }).catch(() => {
+    //             session.refreshAuth();
+    //         });
+    //     }, []);
+    //     return (
+    //         <Link to={`/user/${user.id}`} key={user.id}>
+    //             <div className="member">
+    //                 <div className="member-image">
+    //                     <img className="circle" src="/img/profile_picture" alt={`${user.username}'s profile picture`} />
+    //                 </div>
+    //                 <div className="member-text">
+    //                     {`${user.first_name} ${user.last_name}`}
+    //                 </div>
+    //             </div>
+    //         </Link>
+    //     );
+    // }
 
     return (
         <>
             <link rel="stylesheet" href="/static/css/detail.css" />
+
             <div className="club">
                 <div className="row">
                     <img className="club-banner responsive-img col s12" src={club.banner} alt="banner of organization" />
@@ -136,11 +137,12 @@ export const ClubDetails = (): JSX.Element => {
                         </div>
                         <div className="row club-info">
                             <div className="col m8">
-                                <p className="bio">
-                                    {club.bio}
-                                </p>
-                                <br /><br />
                                 <div className="description">
+                                    {club.bio}
+                                    <br /><br />
+                                    {
+                                        club.owner !== session.user.id ? <Link to={`/club/edit/${club.id}`}>Edit club details</Link> : <></>
+                                    }
                                 </div>
                             </div>
                             <div className="col m4">
@@ -169,17 +171,18 @@ export const ClubDetails = (): JSX.Element => {
                                         {
                                             execs.map((exec: User): JSX.Element => {
                                                 if (exec === null) return <></>;
+                                                console.log(exec);
                                                 return (
-                                                    <a href={`/user/${exec.id}`} key={exec.id}>
+                                                    <Link to={`/user/${exec.id}`} key={exec.id}>
                                                         <div className="member">
                                                             <div className="member-image">
-                                                                <img className="circle" src={"/img/profile_picture"} alt={`${exec.username}'s profile picture`} />
+                                                                <img className="circle" src={exec.gravatar_url} alt={`${exec.username}'s profile picture`} />
                                                             </div>
                                                             <div className="member-text">
                                                                 {`${exec.first_name} ${exec.last_name}`}
                                                             </div>
                                                         </div>
-                                                    </a>
+                                                    </Link>
                                                 );
                                             })
                                         }
@@ -199,7 +202,7 @@ export const ClubDetails = (): JSX.Element => {
                                                     <a href={`/user/${member.id}`} key={member.id}>
                                                         <div className="member">
                                                             <div className="member-image">
-                                                                <img className="circle" src="/img/profile_picture" alt={`${member.username}'s profile picture`} />
+                                                                <img className="circle" src={member.gravatar_url} alt={`${member.username}'s profile picture`} />
                                                             </div>
                                                             <div className="member-text">
                                                                 {`${member.first_name} ${member.last_name}`}

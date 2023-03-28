@@ -20,7 +20,11 @@ import { SessionProvider } from "../../util/core/session";
 import { Profile } from "../account/profile";
 import { Flatpage } from "../flatpage";
 import { ClubDetails } from "../clubs/details";
+import { EditClubDetails } from "../clubs/details/edit";
 import { BlogDetails } from "../blog/details";
+import { AnnouncementDetail } from "../announcements/detail";
+import { Logout } from "../auth/logout";
+import { TimetablePage } from "../account/timetable";
 
 export const _App = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
@@ -37,9 +41,11 @@ export const _App = (): JSX.Element => {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/announcements" element={<Announcements />} />
+                    <Route path="/announcement/:id" element={<AnnouncementDetail />} />
                     {/* <Route path="/calendar" element={<Calendar />} /> */}
                     <Route path="/clubs" element={<Clubs />} />
                     <Route path="/club/:id" element={<ClubDetails />} />
+                    <Route path="/club/edit/:id" element={<EditClubDetails />} />
 
                     <Route path="/blog" element={<Blog />} />
                     <Route path="/blog/:id" element={<BlogDetails />} />
@@ -52,8 +58,11 @@ export const _App = (): JSX.Element => {
 
                     <Route path="/accounts/login" element={<Login />} />
                     <Route path="/accounts/signup" element={<Register />} />
+                    <Route path="/accounts/logout" element={<Logout />} />
 
-                    <Route path="/user/:username" element={<Profile />} />
+                    <Route path="/timetable" element={<TimetablePage />} />
+
+                    <Route path="/user/:userID" element={<Profile />} />
 
                     <Route path="*" element={<Flatpage />} />
                 </Routes>

@@ -8,7 +8,7 @@ import BlogPost from "../../util/core/interfaces/blogpost";
 import Organization from "../../util/core/interfaces/organization";
 import Media from "../../util/core/misc/media";
 import MembershipStatus from "../../util/core/misc/membership";
-import { User } from "../../util/core/session";
+import { Session, SessionContext, User } from "../../util/core/session";
 import Routes from "../../util/core/misc/routes";
 
 export const Home = (): JSX.Element => {
@@ -88,7 +88,7 @@ const FeaturedBlogPost = (props: { post: BlogPost }): JSX.Element => {
                     </div>
                 </div>
             </div>
-            <img className="blog-image hide-on-small-and-down col s7" src={`/media/featured_image/default.png`} />
+            <img className="blog-image hide-on-small-and-down col s7" src={post.featured_image} />
         </div>
     );
 }
@@ -109,17 +109,20 @@ const HomeAnnouncements = (): JSX.Element[] => {
 }
 
 const HomeAnnouncement = (props: { announcement: Announcement }): JSX.Element => {
+    const session: Session = React.useContext(SessionContext);
     const announcement = props.announcement;
-    return (
+    let organization: Organization = session.allOrgs.find((organization: Organization) => organization.id === announcement.organization)!;
+
+    return organization ? (
         <>
             <div className="announcement-card card left-align" style={{ borderColor: "#ffccce" }}>
                 <h5 className="title truncate">{announcement.title}</h5>
                 <div className="authors">
                     <div className="authors-image">
-                        <Link to={`/club/${announcement.organization}`}><img className="circle" src="/img/baf" /></Link>
+                        <Link to={`/club/${announcement.organization}`}><img className="circle" src={organization && organization.banner} /></Link>
                     </div>
                     <div className="authors-text">
-                        <Link to={`/club/${announcement.organization}`}>{announcement.organization}</Link>
+                        <Link to={`/club/${announcement.organization}`}>{organization.name}</Link>
                     </div>
                 </div>
                 <hr />
@@ -129,5 +132,5 @@ const HomeAnnouncement = (props: { announcement: Announcement }): JSX.Element =>
                 </div>
             </div>
         </>
-    );
+    ) : <></>;
 }

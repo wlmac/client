@@ -40,7 +40,7 @@ export const Login = (): JSX.Element => {
 
     const login = (e: React.SyntheticEvent): void => {
         e.preventDefault();
-        console.log("Logging in");
+        console.log(`Logging in 3`);
         setLogging(true);
         axios.post(Routes.AUTH.LOGIN, {
             username: username,
@@ -64,7 +64,7 @@ export const Login = (): JSX.Element => {
                 // getCsrf();
             }
         }).catch(err => {
-            setErr(err.response.data.error);
+            setErr(err.response.data.detail);
             setLogging(false);
             // getCsrf();
         });
@@ -95,21 +95,21 @@ export const Login = (): JSX.Element => {
                                     </Link>
                                 </div>
                             </div>
-                            <form className="login" method="POST" action="/accounts/login/">
+                            <form className="login" onSubmit={login}>
                                 <input type="hidden" name="csrfmiddlewaretoken" value="CSRFSECRET123" />
                                 <div className="row">
                                     <div className="input-field col s12">
                                         <label htmlFor="id_login" className="active">Login:</label>
                                         <input type="text" name="login" autoComplete="off" required={true} id="id_login" onChange={(e) => {
                                             setUsername(e.target.value);
-                                        }} style={{ backgroundImage: "url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=&quot;);" }} />
+                                        }} style={{ backgroundImage: "url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=&quot;)" }} />
                                     </div>
                                 </div><div className="row">
                                     <div className="input-field col s12">
                                         <label htmlFor="id_password" className="active">Password:</label>
                                         <input type="password" name="password" autoComplete="off" required={true} id="id_password" onChange={(e) => {
                                             setPwd(e.target.value);
-                                        }} style={{ backgroundImage: "url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=&quot;);" }} />
+                                        }} style={{ backgroundImage: "url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=&quot;)" }} />
                                     </div>
                                 </div><div className="row">
                                     <div className="col s12">
@@ -120,8 +120,13 @@ export const Login = (): JSX.Element => {
                                     </div>
                                 </div>
 
+                                {
+                                    !!err &&
+                                    <ul className="errorlist nonfield"><li>The username and/or password you specified are not correct.</li></ul>
+                                }
+
                                 <div>
-                                    <button className="btn login-btn" onClick={login}>Sign In</button>
+                                    <button className="btn login-btn" type="submit">Sign In</button>
                                 </div>
                                 <p>Forgot your password? Click <Link className="link" to="/accounts/password/reset/">here</Link> to reset.</p>
                             </form>

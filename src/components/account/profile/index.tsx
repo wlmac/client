@@ -1,11 +1,60 @@
 import * as React from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, NavigateFunction, useNavigate, useParams } from "react-router-dom";
 import { Session, SessionContext, User } from "../../../util/core/session";
+import Routes from "../../../util/core/misc/routes";
+import Organization from "../../../util/core/interfaces/organization";
+import { get_gravatar_uri } from "../../../util/core/misc/gravatar";
+import { ProfileNav } from "../left-nav";
+import { loggedIn } from "../../../util/core/AuthService";
 
 export const Profile = (): JSX.Element => {
-    const { username } = useParams();
+    const { userID } = useParams();
     const session: Session = React.useContext(SessionContext);
-    const user: User = session.user;
+    const nav: NavigateFunction = useNavigate();
+
+    const current_user: User = session.user;
+    const [user, setUser] = React.useState({} as User);
+    const [organizations, setOrganizations] = React.useState([] as Array<Organization>);
+    const [organizationDisplay, setOrganizationDisplay] = React.useState("");
+
+    React.useEffect((): void => {
+        document.title = `User ${user.username} | Metropolis`;
+    }, [user]);
+
+    const fetchUser = (): void => {
+        session.getAPI(`${Routes.USER}/${userID}`, true).then((res) => {
+            const fetched_user: User = res.data as User;
+            setUser(res.data);
+            console.log("Fetched user:", fetched_user);
+
+            session.getAPI(`${Routes.OBJECT}/organization`, false).then((res) => {
+                const all_organizations = res.data.results as Array<Organization>;
+                const organization_display_list: Array<string> = [];
+                all_organizations.forEach((organization: Organization) => {
+                    if (fetched_user.organizations.find(element => element === organization.id)) {
+                        organization_display_list.push(organization.name);
+                    }
+                });
+                setOrganizationDisplay(organization_display_list.join(", "));
+            }).catch((err) => {
+
+            });
+        }).catch((err) => {
+            console.log(err);
+            session.refreshAuth();
+            fetchUser();
+        });
+    }
+
+    React.useEffect(() => {
+        if (!loggedIn()) {
+            nav("/accounts/login");
+        }
+    });
+
+    React.useEffect(() => {
+        fetchUser();
+    }, []);
 
     return (
         <>
@@ -14,7 +63,7 @@ export const Profile = (): JSX.Element => {
             <div className="container">
                 <ul className="sidenav secondnav" id="secondary-out">
                     <li>
-                        <a className="sidenav-close" href="https://maclyonsden.com/accounts/profile">Profile</a>
+                        <Link className="sidenav-close" to="/accounts/profile">Profile</Link>
                     </li>
                     <li>
                         <Link className="sidenav-close" to="/timetable">Timetable</Link>
@@ -31,34 +80,11 @@ export const Profile = (): JSX.Element => {
                     <li><Link to="/accounts/logout/" className="sidenav-close">Logout</Link></li>
                 </ul>
 
-                <a href="https://maclyonsden.com/user/ji.mmyliu#" data-target="secondary-out" className="sidenav-trigger secondnav-trigger"><i className="zmdi zmdi-menu"></i></a>
-
-                <div className="secondary-nav-wrapper">
-                    <ul className="secondary-nav">
-                        <li>
-                            <Link className="link current" to="/accounts/profile">Profile</Link>
-                        </li>
-                        <li>
-                            <Link className="link" to="/timetable">Timetable</Link>
-                        </li>
-                        <hr />
-                        <li>
-                            <Link className="link" to="/admin/core/announcement/add/">Announcements</Link>
-                        </li>
-                        <li>
-                            <Link className="link" to="dmin/core/event/add/">Events</Link>
-                        </li>
-                        <hr />
-                        <li>
-                            <Link className="link" to="/accounts/logout/">Logout</Link>
-                        </li>
-                    </ul>
-                </div>
-
+                <ProfileNav />
 
                 <div className="white-bg">
                     <div className="header">
-                        <img className="circle responsive-img profile-picture" src="/img" alt={`${user.username}'s profile picture`} />
+                        <img className="circle responsive-img profile-picture" src={user.gravatar_url} alt={`${user.username}'s profile picture`} />
                         <div className="name-info">
                             <h5 className="full-name">{user.first_name} {user.last_name}</h5>
                             <h6 className="username">{user.username}</h6>
@@ -76,8 +102,7 @@ export const Profile = (): JSX.Element => {
                         </div>
                         <div className="field">
                             <div className="label">Executive of</div>
-                            Project Metropolis,&nbsp;
-                            Mackenzie Computer Programming Team (MCPT)
+                            {organizationDisplay}
                         </div>
                         <br />
                         <div>
