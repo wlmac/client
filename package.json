@@ -24,6 +24,7 @@
     "@fullcalendar/interaction": "^5.11.3",
     "@fullcalendar/react": "^5.11.2",
     "@mui/material": "^5.11.12",
+    "@tinymce/tinymce-react": "^4.3.0",
     "axios": "^1.2.0",
     "gh-pages": "^5.0.0",
     "global": "^4.4.0",
