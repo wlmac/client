@@ -79,7 +79,7 @@ export const AnnouncementDetail = (): JSX.Element => {
     let organization: Organization = session.allOrgs.find((organization: Organization) => organization.id === announcement.organization)!;
     let author: User = session.allUsers.find((user: User) => user.id === announcement.author)!;
 
-    return (
+    return organization && author ? (
         <>
             <link rel="stylesheet" href="/static/css/announcement-detail.css" />
             <div className="container">
@@ -129,7 +129,7 @@ export const AnnouncementDetail = (): JSX.Element => {
                     <h1 className="title">{announcement.title}</h1>
                     <div className="card-authors">
                         <div className="card-authors-image">
-                            <Link to={`/club/${announcement.organization}`}><img className="circle" src={organization.banner} /></Link>
+                            <Link to={`/club/${announcement.organization}`}><img className="circle" src={organization && organization.banner} /></Link>
                         </div>
                         <div className="card-authors-text">
                             <a href={`/club/${announcement.organization}`} className="link">{organization.name}</a>,
@@ -148,6 +148,6 @@ export const AnnouncementDetail = (): JSX.Element => {
                 </div>
             </div>
         </>
-    );
+    ) : <></>;
 }
 

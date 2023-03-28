@@ -9,7 +9,7 @@ import MembershipStatus from "../../util/core/misc/membership";
 import Media from "../../util/core/misc/media";
 import Tag from "../../util/core/interfaces/tag";
 import { getTags, TagElement } from "../../util/core/tags";
-import { Session, SessionContext } from "../../util/core/session";
+import { Session, SessionContext, User } from "../../util/core/session";
 import Routes from "../../util/core/misc/routes";
 import { loggedIn } from "../../util/core/AuthService";
 
@@ -138,6 +138,8 @@ const AnnouncementElement = (props: {
   tags: Tag[];
 }): JSX.Element => {
   const data: Announcement = props.announcement;
+  const session: Session = React.useContext(SessionContext);
+  let organization: Organization = session.allOrgs.find((organization: Organization) => organization.id === data.organization)!;
 
   return (
     <div className="card">
@@ -151,7 +153,7 @@ const AnnouncementElement = (props: {
         <div className="card-authors">
           <div className="card-authors-image">
             <Link to={`/club/${data.organization}`}>
-              <img className="circle" src={data.organization} />
+              <img className="circle" src={organization.icon} />
             </Link>
           </div>
           <div className="card-authors-text">
