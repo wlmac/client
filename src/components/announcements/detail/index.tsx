@@ -79,6 +79,11 @@ export const AnnouncementDetail = (): JSX.Element => {
     let organization: Organization = session.allOrgs.find((organization: Organization) => organization.id === announcement.organization)!;
     let author: User = session.allUsers.find((user: User) => user.id === announcement.author)!;
 
+    const is_supervisor = (): boolean => {
+        let supervisor: number = organization.supervisors.find((supervisor_id: number) => supervisor_id === session.user.id)!;
+        return !!supervisor; // See if supervisor exists
+    }
+
     return organization && author ? (
         <>
             <link rel="stylesheet" href="/static/css/announcement-detail.css" />
