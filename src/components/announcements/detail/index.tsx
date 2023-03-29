@@ -79,11 +79,13 @@ export const AnnouncementDetail = (): JSX.Element => {
     let organization: Organization = session.allOrgs.find((organization: Organization) => organization.id === announcement.organization)!;
     let author: User = session.allUsers.find((user: User) => user.id === announcement.author)!;
 
-    return (
+    return organization && author ? (
         <>
             <link rel="stylesheet" href="/static/css/announcement-detail.css" />
             <div className="container">
-                <AnnouncementPrompt />
+                {
+                    session.user.is_staff && <AnnouncementPrompt /> // To be replaced with is_teacher once available in backend
+                }
 
                 {/* Reject modal */}
                 <div id="reject-popup" className="modal reject-modal">
@@ -148,6 +150,6 @@ export const AnnouncementDetail = (): JSX.Element => {
                 </div>
             </div>
         </>
-    );
+    ) : <></>;
 }
 
