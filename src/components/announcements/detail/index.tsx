@@ -84,6 +84,8 @@ export const AnnouncementDetail = (): JSX.Element => {
         return !!supervisor; // See if supervisor exists
     }
 
+    console.log("Debug:", organization, author)
+
     return organization && author ? (
         <>
             <link rel="stylesheet" href="/static/css/announcement-detail.css" />

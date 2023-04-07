@@ -13,10 +13,11 @@ export const Flatpage = (): JSX.Element => {
     const slug = encodeURIComponent(window.location.pathname);
 
     React.useEffect((): void => {
-        document.title = "Resources | Metropolis";
         session.getAPI(`${Routes.OBJECT}/flatpage/retrieve/${slug}/`, false).then((res: { data: FlatPage }) => {
             setFlatpage(res.data);
             setExists(true);
+
+            document.title = `${res.data.title} | Metropolis`;
         }).catch((err) => {
             if (err.response.status !== 404) {
                 session.refreshAuth();

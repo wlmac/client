@@ -9,11 +9,12 @@ import MembershipStatus from "../../util/core/misc/membership";
 import Media from "../../util/core/misc/media";
 import Tag from "../../util/core/interfaces/tag";
 import { getTags, TagElement } from "../../util/core/tags";
-import { Session, SessionContext } from "../../util/core/session";
+import { Session, SessionContext, User } from "../../util/core/session";
 import Routes from "../../util/core/misc/routes";
 import { loggedIn } from "../../util/core/AuthService";
 
 import { useForm, SubmitHandler } from "react-hook-form";
+import { dateFormat } from "../../util/core/misc/date";
 
 export const Announcements = (): JSX.Element => {
     const query: URLSearchParams = useQuery();
@@ -99,6 +100,9 @@ const AnnouncementList = (): JSX.Element[] => {
 
 const AnnouncementElement = (props: { announcement: Announcement, tags: Tag[] }): JSX.Element => {
     const data: Announcement = props.announcement;
+    const session: Session = React.useContext(SessionContext);
+    let organization: Organization = session.allOrgs.find((organization: Organization) => organization.id === data.organization)!;
+    let author: User = session.allUsers.find((user: User) => user.id === data.author)!;
 
     return (
         <div className="card">
@@ -113,13 +117,13 @@ const AnnouncementElement = (props: { announcement: Announcement, tags: Tag[] })
                 <h1 className="title">{data.title}</h1>
                 <div className="card-authors">
                     <div className="card-authors-image">
-                        <Link to={`/club/${data.organization}`}><img className="circle" src={data.organization} /></Link>
+                        <Link to={`/club/${data.organization}`}><img className="circle" src={author.gravatar_url} /></Link>
                     </div>
                     <div className="card-authors-text">
-                        <Link to={`/club/${data.organization}`} className="link">{data.organization}</Link>,
-                        <Link to={`/user/${data.author}`} className="link">{data.author}</Link>
+                        <Link to={`/club/${data.organization}`} className="link">{organization.name}</Link>,
+                        <Link to={`/user/${data.author}`} className="link">{`${author.first_name} ${author.last_name}`}</Link>
                         <br />
-                        • {data.created_date}
+                        • {new Date(data.created_date).toLocaleTimeString(undefined, dateFormat)}
                     </div>
                 </div>
             </div>
