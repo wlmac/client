@@ -12,19 +12,15 @@ import { getTags, TagElement } from "../../util/core/tags";
 import { Session, SessionContext } from "../../util/core/session";
 import Routes from "../../util/core/misc/routes";
 import { loggedIn } from "../../util/core/AuthService";
-
 import { useForm, SubmitHandler } from "react-hook-form";
+import ReactTags from 'react-tag-autocomplete';
 
 export const Announcements = (): JSX.Element => {
     const query: URLSearchParams = useQuery();
     const nav: NavigateFunction = useNavigate();
     const feed: string | null = query.get("feed");
-
+    const session: Session = React.useContext(SessionContext);
     const [openCreator, setOpenCreator] = React.useState(false);
-
-    React.useEffect((): void => {
-        document.title = "Announcements | Metropolis";
-    }, []);
 
     const header = (currentFeed: string | null): Array<JSX.Element> => {
         return AnnouncementFeeds.map((feed: AnnouncementFeed): JSX.Element => {
@@ -136,12 +132,22 @@ const AnnouncementElement = (props: { announcement: Announcement, tags: Tag[] })
 const AnnouncementCreator = (props: { openCreator: boolean, setOpenCreator: React.Dispatch<any> }): JSX.Element => {
     const openCreator: boolean = props.openCreator, setOpenCreator: React.Dispatch<any> = props.setOpenCreator;
     // if (!openCreator) return <></>
-
+    const [ tagsList, setTagsList ] = React.useState([{} as Tag]);
     const [isPublic, setIsPublic] = React.useState(false);
     const session: Session = React.useContext(SessionContext);
-
     const { register, handleSubmit, watch, formState: { errors } } = useForm<AnnouncementInputs>();
     const [error, setError] = React.useState("");
+
+    React.useEffect((): void => {
+        document.title = "Announcements | Metropolis";
+
+        const fetchURL = `${Routes.OBJECT}/tag`;
+        session.getAPI(fetchURL, false).then((res) => {
+            console.log(JSON.stringify(res.data.results));
+            setTagsList(res.data.results);
+
+        });
+    }, []);
 
     const onCreate = (data: AnnouncementInputs): void => {
         console.log("Submitted data:", data);
@@ -155,6 +161,18 @@ const AnnouncementCreator = (props: { openCreator: boolean, setOpenCreator: Reac
         });
     }
 
+    const onDelete = (i : number) => {
+        const newTags = tagsList;
+        newTags.splice(i, 1);
+        setTagsList(newTags);
+    }
+    
+    const onAddition = (tag: Tag) => {
+        const tags = tagsList;
+        tags.push(tag);
+        setTagsList(tags);
+    }
+
     return (
         <div id="announcement-creator" className="modal">
             <div className="modal-top modal-header">
@@ -166,7 +184,21 @@ const AnnouncementCreator = (props: { openCreator: boolean, setOpenCreator: Reac
                         <label htmlFor="id_title">Title:</label>
                         <input {...register("title")} type="text" name="title" required={true} id="id_title" style={{ backgroundImage: "url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHklEQVQ4EaVTO26DQBD1ohQWaS2lg9JybZ+AK7hNwx2oIoVf4UPQ0Lj1FdKktevIpel8AKNUkDcWMxpgSaIEaTVv3sx7uztiTdu2s/98DywOw3Dued4Who/M2aIx5lZV1aEsy0+qiwHELyi+Ytl0PQ69SxAxkWIA4RMRTdNsKE59juMcuZd6xIAFeZ6fGCdJ8kY4y7KAuTRNGd7jyEBXsdOPE3a0QGPsniOnnYMO67LgSQN9T41F2QGrQRRFCwyzoIF2qyBuKKbcOgPXdVeY9rMWgNsjf9ccYesJhk3f5dYT1HX9gR0LLQR30TnjkUEcx2uIuS4RnI+aj6sJR0AM8AaumPaM/rRehyWhXqbFAA9kh3/8/NvHxAYGAsZ/il8IalkCLBfNVAAAAABJRU5ErkJggg==&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;" }} />
                     </div>
-                </div><div className="row">
+                </div>
+                <div className="row">
+                    <div className="input-field col s12">
+                        <label htmlFor="id_title">Tags:</label>
+                        <ReactTags 
+                            ref={React.createRef()}
+                            tags={[{} as Tag]}
+                            suggestions={tagsList}
+                            onDelete={onDelete}
+                            //to do: figure this method out: onAddition={onAddition}
+                            />
+                        <input {...register("tags")} type="text" name="tags" required={true} id="id_tags" />
+                    </div>
+                </div>
+                <div className="row">
                     <div className="input-field col s12">
                         <label htmlFor="id_body">Body:</label>
                         <input {...register("body")} type="text" name="body" minLength={1} required={true} id="id_body" />

@@ -55,7 +55,7 @@ export const _App = (): JSX.Element => {
                     <Route path="/accounts/login" element={<Login />} />
                     <Route path="/accounts/signup" element={<Register />} />
 
-                    <Route path="/user/:userID" element={<Profile />} />
+                    <Route path="/user/:username" element={<Profile />} />
 
                     <Route path="*" element={<Flatpage />} />
                 </Routes>
