@@ -5,7 +5,7 @@ import Routes from "../../../util/core/misc/routes";
 import Organization from "../../../util/core/interfaces/organization";
 
 export const Profile = (): JSX.Element => {
-    const { userID } = useParams();
+    const { username } = useParams();
     const session: Session = React.useContext(SessionContext);
     const current_user: User = session.user;
     const [user, setUser] = React.useState({} as User);
@@ -14,7 +14,7 @@ export const Profile = (): JSX.Element => {
 
     React.useEffect(() => {
         document.title = `User ${user.username} | Metropolis`;
-        session.getAPI(`${Routes.USER}/${userID}`, true).then((res) => {
+        session.getAPI(`${Routes.USER}-by-handle/${username}`, true).then((res) => {
             const fetched_user: User = res.data as User;
             setUser(res.data);
 

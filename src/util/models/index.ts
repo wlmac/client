@@ -25,6 +25,8 @@ export type RegisterInputs = {
 export type AnnouncementInputs = {
     title: string,
     body: string,
+    // this only stores the ids of the tags
+    tags: Array<number>,
     organization: string,
     show_after: string,
     supervisor: string,
