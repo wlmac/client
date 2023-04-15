@@ -22,11 +22,11 @@ export const AnnouncementDetail = (): JSX.Element => {
     const [organization, setOrganization] = React.useState({} as Organization);
     const [author, setAuthor] = React.useState({} as User);
 
-    React.useEffect(() => {
-        if (!loggedIn()) {
-            nav(`/accounts/login`);
-        }
-    });
+    // React.useEffect(() => {
+    //     if (!loggedIn()) {
+    //         nav(`/accounts/login`);
+    //     }
+    // });
 
     React.useEffect(() => {
         session.getAPI(`${Routes.OBJECT}/announcement/retrieve/${id}`, false).then((res) => {
@@ -46,7 +46,7 @@ export const AnnouncementDetail = (): JSX.Element => {
     React.useEffect(() => {
         console.log("USERS UPDATED:", session.allUsers);
         let found_author = session.allUsers.find((user: User) => user.id === announcement.author)!;
-        
+
         console.log("Looking for:", announcement);
         console.log("Author found:", found_author);
         setAuthor(found_author);
