@@ -15,7 +15,7 @@ import { loggedIn } from "../../util/core/AuthService";
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { dateFormat } from "../../util/core/misc/date";
-import { Checkbox, FormControl, InputLabel, ListItemText, MenuItem, OutlinedInput, Select } from "@mui/material";
+import { Checkbox, FormControl, InputLabel, ListItemText, MenuItem, OutlinedInput, Select, SelectChangeEvent } from "@mui/material";
 
 export const Announcements = (): JSX.Element => {
     const query: URLSearchParams = useQuery();
@@ -150,8 +150,10 @@ const AnnouncementCreator = (props: { openCreator: boolean, setOpenCreator: Reac
     const { register, handleSubmit, watch, formState: { errors } } = useForm<AnnouncementInputs>();
     const [error, setError] = React.useState("");
 
-    const [personName, setPersonName] = React.useState<string[]>([]);
-    const [names, setNames] = React.useState(["hello", "world"]);
+    const [selected, setSelected] = React.useState<string[]>([]);
+    const names = session.allOrgs.map((organization: Organization): string => {
+        return organization.name;
+    });
 
     const onCreate = (data: AnnouncementInputs): void => {
         // console.log("Submitted data:", data);
@@ -169,11 +171,21 @@ const AnnouncementCreator = (props: { openCreator: boolean, setOpenCreator: Reac
     const ITEM_PADDING_TOP = 8;
     const MenuProps = {
         PaperProps: {
-          style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 250,
-          },
+            style: {
+                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+                width: 250,
+            },
         },
+    };
+
+    const handleChange = (event: SelectChangeEvent<typeof selected>) => {
+        const {
+            target: { value },
+        } = event;
+        setSelected(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
     };
 
     return (
@@ -193,24 +205,25 @@ const AnnouncementCreator = (props: { openCreator: boolean, setOpenCreator: Reac
                         <input {...register("body")} type="text" name="body" minLength={1} required={true} id="id_body" />
                     </div>
                 </div><div className="row">
+                    <p style={{ marginLeft: "10.875px" }}>Organization:</p>
                     <div className="input-field col s12">
-                        {/* <label htmlFor="id_org">Organization:</label> */}
+
                         <FormControl sx={{ m: 1, width: 300 }}>
-                            <InputLabel id="demo-multiple-checkbox-label">Tag</InputLabel>
+                            {/* <InputLabel id="demo-multiple-checkbox-label">Tag</InputLabel> */}
                             <Select
                                 labelId="demo-multiple-checkbox-label"
                                 id="demo-multiple-checkbox"
                                 multiple
-                                value={["user", "user2"]}
-                                onChange={() => {}}
-                                input={<OutlinedInput label="Tag" />}
+                                value={selected}
+                                onChange={handleChange}
+                                input={<OutlinedInput />}
                                 renderValue={(selected) => selected.join(', ')}
                                 MenuProps={MenuProps}
                             >
                                 {names.map((name) => (
                                     <MenuItem key={name} value={name}>
-                                    <Checkbox checked={personName.indexOf(name) > -1} />
-                                    <ListItemText primary={name} />
+                                        <Checkbox checked={selected.indexOf(name) > -1} />
+                                        <ListItemText primary={name} />
                                     </MenuItem>
                                 ))}
                             </Select>
