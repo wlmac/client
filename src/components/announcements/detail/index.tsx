@@ -22,11 +22,19 @@ export const AnnouncementDetail = (): JSX.Element => {
     const [organization, setOrganization] = React.useState({} as Organization);
     const [author, setAuthor] = React.useState({} as User);
 
+<<<<<<< HEAD
+    // React.useEffect(() => {
+    //     if (!loggedIn()) {
+    //         nav(`/accounts/login`);
+    //     }
+    // });
+=======
     React.useEffect(() => {
         if (!loggedIn()) {
             nav(`/accounts/login`);
         }
     });
+>>>>>>> master
 
     React.useEffect(() => {
         session.getAPI(`${Routes.OBJECT}/announcement/retrieve/${id}`, false).then((res) => {
@@ -46,7 +54,11 @@ export const AnnouncementDetail = (): JSX.Element => {
     React.useEffect(() => {
         console.log("USERS UPDATED:", session.allUsers);
         let found_author = session.allUsers.find((user: User) => user.id === announcement.author)!;
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> master
         console.log("Looking for:", announcement);
         console.log("Author found:", found_author);
         setAuthor(found_author);
@@ -163,7 +175,7 @@ export const AnnouncementDetail = (): JSX.Element => {
                     <h1 className="title">{announcement.title}</h1>
                     <div className="card-authors">
                         <div className="card-authors-image">
-                            <Link to={`/club/${announcement.organization}`}><img className="circle" src={organization.banner} /></Link>
+                            <Link to={`/club/${announcement.organization}`}><img className="circle" src={organization && organization.banner} /></Link>
                         </div>
                         <div className="card-authors-text">
                             <a href={`/club/${announcement.organization}`} className="link">{organization.name}</a>,

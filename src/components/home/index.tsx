@@ -119,7 +119,7 @@ const HomeAnnouncement = (props: { announcement: Announcement }): JSX.Element =>
                 <h5 className="title truncate">{announcement.title}</h5>
                 <div className="authors">
                     <div className="authors-image">
-                        <Link to={`/club/${announcement.organization}`}><img className="circle" src={organization.banner} /></Link>
+                        <Link to={`/club/${announcement.organization}`}><img className="circle" src={organization && organization.banner} /></Link>
                     </div>
                     <div className="authors-text">
                         <Link to={`/club/${announcement.organization}`}>{organization.name}</Link>
