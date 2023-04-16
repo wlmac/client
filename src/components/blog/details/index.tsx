@@ -55,7 +55,7 @@ export const BlogDetails = (): JSX.Element => {
         });
     }, []);
 
-    return (
+    return author ? (
         <>
             <link rel="stylesheet" href="/static/css/blog-detail.css" />
             <div className="container">
@@ -86,5 +86,5 @@ export const BlogDetails = (): JSX.Element => {
                 </div>
             </div>
         </>
-    );
+    ) : <></>;
 }

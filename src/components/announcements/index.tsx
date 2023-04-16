@@ -148,7 +148,7 @@ const AnnouncementElement = (props: {
     let organization: Organization = session.allOrgs.find((organization: Organization) => organization.id === data.organization)!;
     let author: User = session.allUsers.find((user: User) => user.id === data.author)!;
 
-    return organization ? (
+    return organization && author ? (
         <div className="card">
             <div className="card-headers">
                 <div className="tag-section">
