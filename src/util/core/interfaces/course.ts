@@ -1,4 +1,4 @@
-import User from './user';
+import { User } from "../session";
 
 export default interface Course {
   code: string;

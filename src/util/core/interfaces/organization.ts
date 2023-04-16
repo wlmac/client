@@ -9,7 +9,8 @@ export default interface Organization {
   footer: string;
   slug: string;
   hideMembers: boolean;
-  membership: MembershipStatus;
+  is_open: boolean; // Open Membership
+  applications_open: boolean; // Accepting Applications
   owner: number;
   supervisors: Array<number>;
   members: Array<number>;

@@ -85,7 +85,7 @@ const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Eleme
         return await author.data;
     }
 
-    return (
+    return author ? (
         <div className="card">
             <div className="card-headers">
                 <img className="card-image" src={post.featured_image} />
@@ -119,5 +119,5 @@ const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Eleme
             <br />
             <Link className="link" to={`/blog/${post.id}`}>Read full blog post <i className="zmdi zmdi-chevron-right"></i></Link>
         </div>
-    );
+    ) : <></>;
 }
