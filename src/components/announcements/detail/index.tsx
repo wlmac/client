@@ -18,15 +18,39 @@ export const AnnouncementDetail = (): JSX.Element => {
 
     const [openCreator, setOpenCreator] = React.useState(true); // Modal
 
+    // Announcement properties
+    const [organization, setOrganization] = React.useState({} as Organization);
+    const [author, setAuthor] = React.useState({} as User);
+
+    // React.useEffect(() => {
+    //     if (!loggedIn()) {
+    //         nav(`/accounts/login`);
+    //     }
+    // });
+
     React.useEffect(() => {
-        console.log(loggedIn());
-        session.getAPI(`${Routes.OBJECT}/announcement/retrieve/${id}`, loggedIn()).then((res) => {
+        session.getAPI(`${Routes.OBJECT}/announcement/retrieve/${id}`, false).then((res) => {
             setAnnouncement(res.data);
         }).catch((err) => {
             console.log(err);
             session.refreshAuth();
         });
     }, []);
+
+    React.useEffect(() => {
+        console.log("ORGANIZATIONS UPDATED:", session.allOrgs);
+
+        setOrganization(session.allOrgs.find((organization: Organization) => organization.id === announcement.organization)!);
+    }, [session.allOrgs, announcement]);
+
+    React.useEffect(() => {
+        console.log("USERS UPDATED:", session.allUsers);
+        let found_author = session.allUsers.find((user: User) => user.id === announcement.author)!;
+
+        console.log("Looking for:", announcement);
+        console.log("Author found:", found_author);
+        setAuthor(found_author);
+    }, [session.allUsers, announcement]);
 
     const header = (currentFeed: string | null): Array<JSX.Element> => {
         return AnnouncementFeeds.map((feed: AnnouncementFeed): JSX.Element => {
@@ -76,14 +100,28 @@ export const AnnouncementDetail = (): JSX.Element => {
 
     const [rejectionReason, setRejectionReason] = React.useState("");
 
-    let organization: Organization = session.allOrgs.find((organization: Organization) => organization.id === announcement.organization)!;
-    let author: User = session.allUsers.find((user: User) => user.id === announcement.author)!;
+    const is_supervisor = (): boolean => {
+        let supervisor: number = organization.supervisors.find((supervisor_id: number) => supervisor_id === session.user.id)!;
+        return !!supervisor; // See if supervisor exists
+    }
 
+    console.log("Debug:", organization, author)
+
+    var readyToRender = (): boolean => {
+        return organization && author && "name" in organization && "name" in author;
+    }
+
+<<<<<<< HEAD
+    return organization && author && "name" in organization && "username" in author ? (
+=======
     return organization && author ? (
+>>>>>>> anncreate
         <>
             <link rel="stylesheet" href="/static/css/announcement-detail.css" />
             <div className="container">
-                <AnnouncementPrompt />
+                {
+                    session.user.is_staff && <AnnouncementPrompt /> // To be replaced with is_teacher once available in backend
+                }
 
                 {/* Reject modal */}
                 <div id="reject-popup" className="modal reject-modal">

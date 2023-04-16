@@ -14,9 +14,10 @@ import Routes from "../../util/core/misc/routes";
 import { loggedIn } from "../../util/core/AuthService";
 
 import { useForm, SubmitHandler } from "react-hook-form";
+import { dateFormat } from "../../util/core/misc/date";
+import { Checkbox, FormControl, InputLabel, ListItemText, MenuItem, OutlinedInput, Select, SelectChangeEvent, ownerDocument } from "@mui/material";
 import { useRef } from "react";
 import { Editor } from "@tinymce/tinymce-react";
-import { InputLabel, MenuItem, Select, ownerDocument } from "@mui/material";
 
 export const Announcements = (): JSX.Element => {
     const query: URLSearchParams = useQuery();
@@ -145,6 +146,7 @@ const AnnouncementElement = (props: {
     const data: Announcement = props.announcement;
     const session: Session = React.useContext(SessionContext);
     let organization: Organization = session.allOrgs.find((organization: Organization) => organization.id === data.organization)!;
+    let author: User = session.allUsers.find((user: User) => user.id === data.author)!;
 
     return organization ? (
         <div className="card">
@@ -157,19 +159,13 @@ const AnnouncementElement = (props: {
                 <h1 className="title">{data.title}</h1>
                 <div className="card-authors">
                     <div className="card-authors-image">
-                        <Link to={`/club/${data.organization}`}>
-                            <img className="circle" src={organization.icon} />
-                        </Link>
+                        <Link to={`/club/${data.organization}`}><img className="circle" src={author.gravatar_url} /></Link>
                     </div>
                     <div className="card-authors-text">
-                        <Link to={`/club/${data.organization}`} className="link">
-                            {data.organization}
-                        </Link>
-                        ,
-                        <Link to={`/user/${data.author}`} className="link">
-                            {data.author}
-                        </Link>
-                        <br />• {data.created_date}
+                        <Link to={`/club/${data.organization}`} className="link">{organization.name}</Link>,
+                        <Link to={`/user/${data.author}`} className="link">{`${author.first_name} ${author.last_name}`}</Link>
+                        <br />
+                        • {new Date(data.created_date).toLocaleTimeString(undefined, dateFormat)}
                     </div>
                 </div>
             </div>
@@ -202,6 +198,11 @@ const AnnouncementCreator = (props: {
     } = useForm<AnnouncementInputs>();
     const [error, setError] = React.useState("");
 
+    const [selected, setSelected] = React.useState<string[]>([]);
+    const names = session.allOrgs.map((organization: Organization): string => {
+        return organization.name;
+    });
+
     const onCreate = (data: AnnouncementInputs): void => {
         // console.log("Submitted data:", data);
         session
@@ -215,6 +216,27 @@ const AnnouncementCreator = (props: {
                 console.log("Error:", err);
                 // session.refreshAuth();
             });
+    };
+
+    const ITEM_HEIGHT = 48;
+    const ITEM_PADDING_TOP = 8;
+    const MenuProps = {
+        PaperProps: {
+            style: {
+                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+                width: 250,
+            },
+        },
+    };
+
+    const handleChange = (event: SelectChangeEvent<typeof selected>) => {
+        const {
+            target: { value },
+        } = event;
+        setSelected(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
     };
 
     return (
