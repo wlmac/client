@@ -111,7 +111,11 @@ export const AnnouncementDetail = (): JSX.Element => {
         return organization && author && "name" in organization && "name" in author;
     }
 
+<<<<<<< HEAD
     return organization && author && "name" in organization && "username" in author ? (
+=======
+    return organization && author ? (
+>>>>>>> anncreate
         <>
             <link rel="stylesheet" href="/static/css/announcement-detail.css" />
             <div className="container">
@@ -163,7 +167,7 @@ export const AnnouncementDetail = (): JSX.Element => {
                     <h1 className="title">{announcement.title}</h1>
                     <div className="card-authors">
                         <div className="card-authors-image">
-                            <Link to={`/club/${announcement.organization}`}><img className="circle" src={organization.banner} /></Link>
+                            <Link to={`/club/${announcement.organization}`}><img className="circle" src={organization && organization.banner} /></Link>
                         </div>
                         <div className="card-authors-text">
                             <a href={`/club/${announcement.organization}`} className="link">{organization.name}</a>,
