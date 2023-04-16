@@ -79,7 +79,7 @@ export const AnnouncementDetail = (): JSX.Element => {
     let organization: Organization = session.allOrgs.find((organization: Organization) => organization.id === announcement.organization)!;
     let author: User = session.allUsers.find((user: User) => user.id === announcement.author)!;
 
-    return organization && author ? (
+    return organization && author && "name" in organization && "username" in author ? (
         <>
             <link rel="stylesheet" href="/static/css/announcement-detail.css" />
             <div className="container">
