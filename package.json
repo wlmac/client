@@ -32,7 +32,6 @@
     "materialize-css": "^1.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-fade-in": "^2.0.1",
     "react-hook-form": "^7.37.0",
     "react-markdown": "^8.0.3",
     "react-router-dom": "^6.3.0",
