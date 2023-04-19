@@ -38,8 +38,16 @@ interface EventData {
   tags: Tag[],
   start_date: string,
   end_date: string,
-  is_public: boolean,
-  term: number
+}
+
+interface EventJSON {
+  name: string,
+  organization: number,
+  description: string,
+  id: number,
+  tags: number[],
+  start_date: string,
+  end_date: string
 }
 
 export const Calendar = (): JSX.Element => {
