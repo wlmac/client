@@ -7,21 +7,32 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { Session, SessionContext } from "../../util/core/session";
 import Routes from "../../util/core/misc/routes";
 
+import Tag from "../../util/core/interfaces/tag";
 import Organization from "../../util/core/interfaces/organization";
 
 interface EventData{
   name: string, 
-  organization: Organization, 
+  organization: Organization | undefined, 
   description: string,
   id: number,
-  tags: {name: string, color: string}[],
+  tags: Tag[],
   start_date: string,
   end_date: string,
-  is_public: boolean,
-  term: number
+}
+
+interface EventJSON{
+  name: string,
+  organization: number,
+  description: string,
+  id: number,
+  tags: number[],
+  start_date: string,
+  end_date: string
 }
 
 export const Calendar = (): JSX.Element => {
+  // raw events, used for caching id's before the session updates
+  const [rawEvents, setRawEvents] : [EventJSON[], (x: EventJSON[]) => void] = useState<EventJSON[]>([]);
   // list of events for the current month
   const [events, setEvents] : [EventData[], (x: EventData[]) => void] = useState<EventData[]>([]);
   // the month currently displayed
@@ -33,20 +44,34 @@ export const Calendar = (): JSX.Element => {
   // current session
   const session: Session = React.useContext(SessionContext);
 
+  const getDate = (isoTime: string): string => {
+    return isoTime.split("T")[0];
+  }
+
+  // when the session or events update, try filling in the tags & org
+  React.useEffect(() => {
+    function parseEventJSON(raw : EventJSON) : EventData{
+      return Object.assign(raw, {
+        organization: session.allOrgs.find(org => org.id === raw.organization),
+        tags: raw.tags.map(id => session.allTags.find(tag => tag.id === id)).filter((tag): tag is Tag => !!tag),
+      })
+    }
+    setEvents(rawEvents.map(parseEventJSON))
+  }, [session, rawEvents])
+
   // update the events for the current month
   const updateEvents = (fetchInfo: {startStr: string, endStr: string}, successCallback: (x: EventData[]) => void, failureCallback: (x: Error) => void) => {
     let key: string = JSON.stringify(fetchInfo);
     if (eventFetch !== key){
       // query events for this time period
-      const url = Routes.BASEURL + "/api/events?start=" + fetchInfo.startStr + "&format=json&end=" + fetchInfo.endStr
-      console.log(url);
+      const url = `${Routes.BASEURL}/api/v3/obj/event?start=${getDate(fetchInfo.startStr)}&end=${getDate(fetchInfo.endStr)}`
       session.getAPI(url, false).then((response) => {
           if (response.status !== 200) {
               failureCallback(new Error("Returned status " + response.status))
           } else {
               setEventFetch(key);
-              setEvents(response.data)
-              successCallback(events)
+              setRawEvents(response.data.results);
+              successCallback(events);
           }
       })
     } else {
@@ -128,6 +153,7 @@ const CalendarBoard = (props: BoardProps): JSX.Element => {
   const aspectRatio = 1.7; // width / height
   // color for the currently selectd number
   const selectedNumberColor = "var(--dark-colour)";
+  const session = React.useContext(SessionContext);
 
   // reformats a day cell
   const reformatDay = (dayElement: HTMLElement) => {
@@ -167,7 +193,7 @@ const CalendarBoard = (props: BoardProps): JSX.Element => {
               title: curEvent.name,
               start: curEvent.start_date, // get rid of the "time" element
               end: curEvent.end_date,
-              color: curEvent.tags.length > 0 ? curEvent.tags[0].color : "lightblue",
+              color: (curEvent.tags[0] ?? {color: "lightblue"}).color,
               textColor: "#434343",
           })
       }
@@ -266,6 +292,8 @@ const Card = (props: {curEvent: EventData, date: Date}): JSX.Element => {
   let eventStart = new Date(curEvent.start_date);
   let eventEnd = new Date(curEvent.end_date);
 
+  const session = React.useContext(SessionContext);
+
   // gets the time of the date & formats it
   const timeRepresentation = (date: Date) => {
     let hours = date.getHours();
@@ -290,13 +318,13 @@ const Card = (props: {curEvent: EventData, date: Date}): JSX.Element => {
   let [endTime, endAMPM] = eventEnd >= new Date(date.getTime() + 24 * 60 * 60 * 1000) ?
       dateTimeRepresentation(eventEnd) : timeRepresentation(eventEnd);
 
-  const tagEls = curEvent.tags.map(tag => <p key={curEvent.name + "|" + tag.name} className="tag" style={{backgroundColor: tag.color}}>tag.name</p>)
+  const tagEls = curEvent.tags.map(tag => <p key={curEvent.name + "|" + tag.name} className="tag" style={{backgroundColor: (tag ?? {color: "lightblue"}).color}}>tag.name</p>)
 
   return (
     <table className="dayEvent">
       <tbody>
       <tr>
-          <td className="leftPanel" style={{backgroundColor: (curEvent.tags.length > 0 ? curEvent.tags[0].color : "lightblue")}}>
+          <td className="leftPanel" style={{backgroundColor: (curEvent.tags[0] ?? {color: "lightblue"}).color}}>
               <span className="timeDisplay" id="event_start">{startTime}</span>
               <span className="ampm" id="event_start_ampm">{startAMPM}</span>
               <br />
@@ -320,11 +348,12 @@ const DetailPanel = (props: DetailPanelProps): JSX.Element => {
   const [toTruncate, setToTruncate] = useState(true);
   const curEvent = props.curEvent;
   const tagEls = props.tagEls;
+  const session: Session = React.useContext(SessionContext);
 
   return (
       <td className="detailPanel">
         <h4 className="event_title">{curEvent.name}</h4>
-        <em><a className="eventHost event_host_name">{curEvent.organization.name}</a></em>
+        <em><a className="eventHost event_host_name">{(curEvent.organization ?? {name: ""}).name}</a></em>
         <hr />
         <p className={"event_description " + (toTruncate ? "truncate-100" : "")}
             onClick={() => setToTruncate(!toTruncate)}>
