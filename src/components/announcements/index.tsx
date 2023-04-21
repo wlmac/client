@@ -269,7 +269,7 @@ const AnnouncementCreator = (props: {
                     <>
                         <Editor
                             apiKey="your-api-key"
-                            onInit={(evt, editor) => (editorRef.current = editor)}
+                            onInit={(evt, editor) => { }}
                             init={{
                                 height: 500,
                                 menubar: false,
