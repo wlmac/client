@@ -45,7 +45,7 @@ export const Map = (): JSX.Element => {
                         </div>
 
                     </div>
-                    <div style={{ margin: 0 }}><a href="https://maclyonsden.com/map#help"><i className="small material-icons icon-blue">help</i></a></div>
+                    <div style={{ margin: 0 }}><a href="#help"><i className="small material-icons icon-blue">help</i></a></div>
 
                     <div className="switch-container">
                         <div className="switch" id="floor">
