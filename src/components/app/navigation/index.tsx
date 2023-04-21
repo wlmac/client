@@ -1,7 +1,7 @@
 import jwtDecode from "jwt-decode";
 import * as React from "react";
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
-import { getToken, loggedIn } from "../../../util/core/AuthService";
+import { getToken, loggedIn, logout } from "../../../util/core/AuthService";
 import { Session, SessionContext } from "../../../util/core/session";
 
 export const NavigationBar = (): JSX.Element => {
@@ -56,8 +56,23 @@ export const NavigationBar = (): JSX.Element => {
                     <NavLink href="/about?tab=contact">Contact Us</NavLink>
                 </li>
                 <li className="divider"></li>
-                <li><NavLink href="/accounts/login/?next=/" className="sidenav-close">Login</NavLink></li>
-                <li><NavLink href="/accounts/signup/?next=/" className="sidenav-close">Sign Up</NavLink></li>
+                {
+                    loggedIn() ? 
+                    <>
+                        <li><NavLink href={`/user/${session.user.id}`} className="sidenav-close">Profile</NavLink></li>
+                        <li><NavLink href={`/timetable`} className="sidenav-close">Timetable</NavLink></li>
+                        <li><a className="nav-link" onClick={(ev: React.MouseEvent) => {
+                            ev.preventDefault();
+                            logout();
+                            nav("/accounts/login");
+                        }}>Logout</a></li>
+                    </>
+                    :
+                    <>
+                        <li><NavLink href="/accounts/login/?next=/" className="sidenav-close">Login</NavLink></li>
+                        <li><NavLink href="/accounts/signup/?next=/" className="sidenav-close">Sign Up</NavLink></li>
+                    </>
+                }
             </ul>
             <nav>
                 <div className="nav-wrapper">
