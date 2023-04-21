@@ -25,6 +25,7 @@ import { BlogDetails } from "../blog/details";
 import { AnnouncementDetail } from "../announcements/detail";
 import { Logout } from "../auth/logout";
 import { TimetablePage } from "../account/timetable";
+import { Map } from "../map";
 
 export const _App = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
@@ -54,7 +55,7 @@ export const _App = (): JSX.Element => {
                         <Route path=":page" element={<About />} />
                     </Route>
 
-                    <Route path="/map" />
+                    <Route path="/map" element={<Map />} />
 
                     <Route path="/accounts/login" element={<Login />} />
                     <Route path="/accounts/signup" element={<Register />} />
