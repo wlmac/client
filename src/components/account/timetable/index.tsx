@@ -26,7 +26,7 @@ const TimetableElement = (props: { timetable: Timetable }): JSX.Element => {
             const course = timetable.courses[i];
             courses[course.position] = course;
         }
-        setCourses(courses);
+        setCourses([...courses]);
     }, []);
 
     console.log(courses);
