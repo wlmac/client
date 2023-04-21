@@ -308,7 +308,7 @@ const AnnouncementCreator = (props: {
                     <div className="input-field col s12">
                         <label htmlFor="id_org">Organization:</label>
                         <br />
-                        <select {...register("organization")}>
+                        <select {...register("organization")} className="browser-default">
                             {
                                 session.allOrgs.map((org: Organization) => {
                                     return <option key={org.id} value={org.id}>{org.name}</option>

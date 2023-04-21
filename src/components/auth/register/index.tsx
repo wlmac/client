@@ -112,7 +112,7 @@ export const Register = (): JSX.Element => {
                                 </div><div className="row">
                                     <div className="input-field col s12">
                                         <span className="grad-year">Graduating Year:</span>
-                                        <select {...register("graduating_year")}>
+                                        <select {...register("graduating_year")} className="browser-default">
                                             <option value="">Does not apply</option>
                                             <option value="2022">2022</option>
                                             <option value="2023">2023</option>
