@@ -10,6 +10,7 @@ const Routes = {
   },
   POST: {
     USER: `${BASEURL}/api/v3/obj/user/retrieve`,
+    USER_UPDATE: `${BASEURL}/api/v3/obj/user/single`,
     ANNOUNCEMENT: `${BASEURL}/api/v3/announcement`,
   },
   USER: `${BASEURL}/api/v3/obj/user/retrieve`,

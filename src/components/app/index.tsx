@@ -28,6 +28,8 @@ import { TimetablePage } from "../account/timetable";
 
 // @ts-expect-error
 import Map from "../map";
+import { ProfileView } from "../account/profile/view";
+import { ProfileEdit } from "../account/profile/edit";
 
 export const _App = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
@@ -65,7 +67,17 @@ export const _App = (): JSX.Element => {
 
                     <Route path="/timetable" element={<TimetablePage />} />
 
-                    <Route path="/user/:userID" element={<Profile />} />
+                    <Route path="/user/:userID" element={
+                        <Profile>
+                            <ProfileView />
+                        </Profile>
+                    } />
+
+                    <Route path="/accounts/profile/update" element={
+                        <Profile>
+                            <ProfileEdit />
+                        </Profile>
+                    } />
 
                     <Route path="*" element={<Flatpage />} />
                 </Routes>
