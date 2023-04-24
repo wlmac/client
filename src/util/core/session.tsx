@@ -6,6 +6,8 @@ import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { getToken, setToken, getRefresh, setRefresh, loggedIn } from "./AuthService";
 import Organization from './interfaces/organization';
 import Tag from './interfaces/tag';
+import { AlertColor } from '@mui/material';
+import { Notif } from './interfaces/notification';
 
 export interface User {
     bio: string,
@@ -35,7 +37,10 @@ export interface Session {
     putAPI: (url: string, data: any) => Promise<any>,
     patchAPI: (url: string, data: any) => Promise<any>,
     refreshAuth: () => void,
-    logout: () => void
+    logout: () => void,
+    notify: (message: string, type: AlertColor) => void,
+    notification: Notif,
+    closeNotif: () => void,
 }
 
 export const SessionContext = React.createContext<Session>({
@@ -50,7 +55,10 @@ export const SessionContext = React.createContext<Session>({
     putAPI: (url: string, data: any) => { return {} as Promise<any> },
     patchAPI: (url: string, data: any) => { return {} as Promise<any> },
     refreshAuth: () => { },
-    logout: () => { }
+    logout: () => { },
+    notify: (message: string, type: AlertColor) => { },
+    notification: {} as Notif,
+    closeNotif: () => { }
 });
 
 export const SessionProvider = (props: { children: React.ReactNode }) => {
@@ -59,6 +67,24 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     const [allOrgs, setAllOrgs] = React.useState([] as Array<Organization>);
     const [allTags, setAllTags] = React.useState([] as Array<Tag>);
     const nav: NavigateFunction = useNavigate();
+
+    // Snackbar Notification
+    const [notification, setNotification] = React.useState<Notif>({
+        open: false,
+        type: "" as AlertColor,
+        message: ""
+    });
+
+    const notify = (message: string, type: AlertColor): void => {
+        setNotification({ open: true, type: type, message: message });
+    }
+
+    const closeNotif = (event?: React.SyntheticEvent | Event, reason?: string): void => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setNotification({ ...notification, open: false });
+    }
 
     const setUser = (newUser: User): void => {
         user = newUser;
@@ -192,7 +218,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     }
 
     return (
-        <SessionContext.Provider value={{ user: user, allUsers: allUsers, allOrgs: allOrgs, allTags: allTags, setUser: setUser, updateToken: updateToken, getAPI: getAPI, postAPI: postAPI, putAPI: putAPI, patchAPI: patchAPI, refreshAuth: refreshAuth, logout: logout }}>
+        <SessionContext.Provider value={{ user: user, allUsers: allUsers, allOrgs: allOrgs, allTags: allTags, setUser: setUser, updateToken: updateToken, getAPI: getAPI, postAPI: postAPI, putAPI: putAPI, patchAPI: patchAPI, refreshAuth: refreshAuth, logout: logout, notify: notify, notification: notification, closeNotif: closeNotif }}>
             {props.children}
         </SessionContext.Provider>
     )
