@@ -51,12 +51,12 @@ export const Calendar = (): JSX.Element => {
   // when the session or events update, try filling in the tags & org
   React.useEffect(() => {
     function parseEventJSON(raw : EventJSON) : EventData{
-      return Object.assign(raw, {
+      return Object.assign(Object.assign({}, raw), {
         organization: session.allOrgs.find(org => org.id === raw.organization),
         tags: raw.tags.map(id => session.allTags.find(tag => tag.id === id)).filter((tag): tag is Tag => !!tag),
       })
     }
-    setEvents(rawEvents.map(parseEventJSON))
+    setEvents(rawEvents.map(parseEventJSON));
   }, [session, rawEvents])
 
   // update the events for the current month
@@ -65,6 +65,7 @@ export const Calendar = (): JSX.Element => {
     if (eventFetch !== key){
       // query events for this time period
       const url = `${Routes.BASEURL}/api/v3/obj/event?start=${getDate(fetchInfo.startStr)}&end=${getDate(fetchInfo.endStr)}`
+      console.log(url);
       session.getAPI(url, false).then((response) => {
           if (response.status !== 200) {
               failureCallback(new Error("Returned status " + response.status))
@@ -318,7 +319,7 @@ const Card = (props: {curEvent: EventData, date: Date}): JSX.Element => {
   let [endTime, endAMPM] = eventEnd >= new Date(date.getTime() + 24 * 60 * 60 * 1000) ?
       dateTimeRepresentation(eventEnd) : timeRepresentation(eventEnd);
 
-  const tagEls = curEvent.tags.map(tag => <p key={curEvent.name + "|" + tag.name} className="tag" style={{backgroundColor: (tag ?? {color: "lightblue"}).color}}>tag.name</p>)
+  const tagEls = curEvent.tags.map(tag => <p key={curEvent.name + "|" + tag.name} className="tag" style={{backgroundColor: (tag ?? {color: "lightblue"}).color}}>{tag.name}</p>)
 
   return (
     <table className="dayEvent">
