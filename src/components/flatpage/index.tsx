@@ -10,10 +10,10 @@ export const Flatpage = (): JSX.Element => {
     const session: Session = React.useContext(SessionContext);
     const [exists, setExists] = React.useState(false);
     const [flatpage, setFlatpage] = React.useState({} as FlatPage);
-    const slug = encodeURIComponent(window.location.pathname);
+    const slug = encodeURIComponent(window.location.pathname + "/");
 
     React.useEffect((): void => {
-        session.getAPI(`${Routes.OBJECT}/flatpage/retrieve/${slug}/`, false).then((res: { data: FlatPage }) => {
+        session.getAPI(`${Routes.OBJECT}/flatpage/retrieve/${slug}?lookup=url`, false).then((res: { data: FlatPage }) => {
             setFlatpage(res.data);
             setExists(true);
 
