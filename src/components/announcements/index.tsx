@@ -19,6 +19,8 @@ import { Checkbox, FormControl, InputLabel, ListItemText, MenuItem, OutlinedInpu
 import { useRef } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 
+const ANN_FETCHLIMIT = 10; // how many anns to fetch each api request
+
 export const Announcements = (): JSX.Element => {
     const query: URLSearchParams = useQuery();
     const nav: NavigateFunction = useNavigate();
@@ -91,22 +93,49 @@ export const Announcements = (): JSX.Element => {
     );
 };
 
-const AnnouncementList = (): JSX.Element[] => {
+const AnnouncementList = (): JSX.Element => {
     const session: Session = React.useContext(SessionContext);
 
-    React.useEffect(() => {
-        const fetchURL = `${Routes.OBJECT}/announcement`;
+    const [announcements, setAnnouncements] = React.useState([] as any[]);
+    const [tags, setTags] = React.useState([]);
+    const [offset, setOffset] = React.useState(0);
+
+    function fetchAnns() {
+        const fetchURL = `${Routes.OBJECT}/announcement?limit=${ANN_FETCHLIMIT}&offset=${offset}`;
         session
             .getAPI(fetchURL, !!session.user.id) // !! is explicit cast from truthy to boolean, use credentials if user is logged in
             .then((res) => {
-                setAnnouncements(res.data.results.reverse());
+                setAnnouncements((prevAnns) => prevAnns.concat(res.data.results));
+                if (res.count - offset > ANN_FETCHLIMIT) { // there are more anns!
+                    setOffset(prevOffset => prevOffset + ANN_FETCHLIMIT);
+                }
+                else {
+                    setOffset(-1);
+                }
             })
             .catch((err) => {
                 session.refreshAuth();
             });
+    }
 
+    const listInnerRef = useRef();
+    function trackScroll() {
+        if (listInnerRef.current) {
+            const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
+            if (scrollTop + clientHeight === scrollHeight) {
+                // reached bottom!
+                // https://stackoverflow.com/a/64130642
+                if (offset != -1) { // not -1 means there are more anns to fetch
+                    fetchAnns();
+                }
+            }
+        }
+    }
+
+    React.useEffect(() => {
+        fetchAnns();
         // Tags
-        session
+        session //TODO: fix this shit (it caches the first page of tags only)
             .getAPI(`${Routes.OBJECT}/tag`, false)
             .then((res) => {
                 const tags = res.data.results;
@@ -117,26 +146,27 @@ const AnnouncementList = (): JSX.Element[] => {
             });
     }, []);
 
-    const [announcements, setAnnouncements] = React.useState([]);
-    const [tags, setTags] = React.useState([]);
-
-    return announcements.map((announcement: Announcement): JSX.Element => {
-        let current_tags: Tag[] = [];
-        for (let i = 0; i < announcement.tags.length; i++) {
-            for (let j = 0; j < tags.length; j++) {
-                if (announcement.tags[i] == (tags[j] as Tag).id) {
-                    current_tags.push(tags[j]);
+    return <div id="annlist" onScroll={() => trackScroll()}>
+        {
+            announcements.map((announcement: Announcement): JSX.Element => {
+                let current_tags: Tag[] = [];
+                for (let i = 0; i < announcement.tags.length; i++) {
+                    for (let j = 0; j < tags.length; j++) {
+                        if (announcement.tags[i] == (tags[j] as Tag).id) {
+                            current_tags.push(tags[j]);
+                        }
+                    }
                 }
-            }
+                return (
+                    <AnnouncementElement
+                        key={announcement.id}
+                        announcement={announcement}
+                        tags={current_tags}
+                    />
+                );
+            })
         }
-        return (
-            <AnnouncementElement
-                key={announcement.id}
-                announcement={announcement}
-                tags={current_tags}
-            />
-        );
-    });
+    </div>
 };
 
 const AnnouncementElement = (props: {
