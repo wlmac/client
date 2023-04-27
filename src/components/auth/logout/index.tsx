@@ -15,6 +15,8 @@ export const Logout = (): JSX.Element => {
         document.title = "Logout | Metropolis";
         session.logout();
 
+        session.notify("Successfully logged out. See you later!", "success");
+
         if (next) {
             nav(next);
         }

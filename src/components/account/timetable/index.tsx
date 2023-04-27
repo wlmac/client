@@ -29,8 +29,6 @@ const TimetableElement = (props: { timetable: Timetable }): JSX.Element => {
         setCourses([...courses]);
     }, []);
 
-    console.log(courses);
-
     return (
         <details className="mb-3">
             <summary className="card-top">
