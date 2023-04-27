@@ -97,7 +97,7 @@ const AnnouncementList = (): JSX.Element[] => {
     React.useEffect(() => {
         const fetchURL = `${Routes.OBJECT}/announcement`;
         session
-            .getAPI(fetchURL, false)
+            .getAPI(fetchURL, !!session.user.id) // !! is explicit cast from truthy to boolean, use credentials if user is logged in
             .then((res) => {
                 setAnnouncements(res.data.results.reverse());
             })
