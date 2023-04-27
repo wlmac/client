@@ -113,16 +113,16 @@ const HomeAnnouncement = (props: { announcement: Announcement }): JSX.Element =>
     const announcement = props.announcement;
     let organization: Organization = session.allOrgs.find((organization: Organization) => organization.id === announcement.organization)!;
 
-    return organization ? (
+    return (
         <>
             <div className="announcement-card card left-align" style={{ borderColor: "#ffccce" }}>
                 <h5 className="title truncate">{announcement.title}</h5>
                 <div className="authors">
                     <div className="authors-image">
-                        <Link to={`/club/${announcement.organization}`}><img className="circle" src={organization && organization.banner} /></Link>
+                        <Link to={`/club/${announcement.organization}`}><img className="circle" src={organization ? organization.banner : "/"} /></Link>
                     </div>
                     <div className="authors-text">
-                        <Link to={`/club/${announcement.organization}`}>{organization.name}</Link>
+                        <Link to={`/club/${announcement.organization}`}>{organization ? organization.name : ""}</Link>
                     </div>
                 </div>
                 <hr />
@@ -132,5 +132,5 @@ const HomeAnnouncement = (props: { announcement: Announcement }): JSX.Element =>
                 </div>
             </div>
         </>
-    ) : <></>;
+    );
 }
