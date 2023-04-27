@@ -1,0 +1,9 @@
+form label {
+    font-size: 100%;
+    color: var(--link-colour) !important;
+    font-weight: bolder;
+}
+
+.card-subtitle {
+    font-weight: bold;
+}
