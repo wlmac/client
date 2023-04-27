@@ -99,7 +99,7 @@ const AnnouncementList = (): JSX.Element[] => {
         session
             .getAPI(fetchURL, false)
             .then((res) => {
-                setAnnouncements(res.data.results);
+                setAnnouncements(res.data.results.reverse());
             })
             .catch((err) => {
                 session.refreshAuth();
