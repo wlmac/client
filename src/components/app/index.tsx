@@ -32,6 +32,8 @@ import { ProfileView } from "../account/profile/view";
 import { ProfileEdit } from "../account/profile/edit";
 import { TimetableEdit } from "../account/timetable/edit";
 import { Alert, Snackbar } from "@mui/material";
+import { NewCourse } from "../account/timetable/edit/new-course";
+import RadioButtonsGroup from "../account/timetable/edit/new-course/demo";
 
 export const _App = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
@@ -75,6 +77,11 @@ export const _App = (): JSX.Element => {
                                 <TimetableEdit />
                             </Profile>
                         } />
+                        <Route path="/course/add/term/:ID" element={
+                            <Profile>
+                                <NewCourse />
+                            </Profile>
+                        } />
 
                         <Route path="/user/:userID" element={
                             <Profile>
@@ -87,6 +94,8 @@ export const _App = (): JSX.Element => {
                                 <ProfileEdit />
                             </Profile>
                         } />
+
+                        <Route path="/demo" element={<RadioButtonsGroup />} />
 
                         <Route path="*" element={<Flatpage />} />
                     </Routes>
