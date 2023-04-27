@@ -57,7 +57,7 @@ const TimetableElement = (props: { timetable: Timetable }): JSX.Element => {
                     </tbody>
                 </table>
                 <p></p>
-                <Link to={`/timetable/edit/${timetable.id}`} className="card-link">Edit timetable</Link>
+                <Link to={`/timetable/edit/${timetable.term.id}`} className="card-link">Edit timetable</Link>
             </div>
         </details>
     );

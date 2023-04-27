@@ -15,7 +15,7 @@ export const TimetableEdit = (): JSX.Element => {
     const [selectedCourses, setSelectedCourses] = React.useState<Array<Course>>([]);
 
     React.useEffect(() => {
-        session.getAPI(`${Routes.COURSES}?term=${ID}`).then((res) => {
+        session.getAPI(`${Routes.COURSE}?term=${ID}`).then((res) => {
             setAllCourses(res.data.results);
         }).catch(() => {
             session.refreshAuth();
