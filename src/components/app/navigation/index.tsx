@@ -57,21 +57,21 @@ export const NavigationBar = (): JSX.Element => {
                 </li>
                 <li className="divider"></li>
                 {
-                    loggedIn() ? 
-                    <>
-                        <li><NavLink href={`/user/${session.user.id}`} className="sidenav-close">Profile</NavLink></li>
-                        <li><NavLink href={`/timetable`} className="sidenav-close">Timetable</NavLink></li>
-                        <li><a className="nav-link" onClick={(ev: React.MouseEvent) => {
-                            ev.preventDefault();
-                            logout();
-                            nav("/accounts/login");
-                        }}>Logout</a></li>
-                    </>
-                    :
-                    <>
-                        <li><NavLink href="/accounts/login/?next=/" className="sidenav-close">Login</NavLink></li>
-                        <li><NavLink href="/accounts/signup/?next=/" className="sidenav-close">Sign Up</NavLink></li>
-                    </>
+                    loggedIn() ?
+                        <>
+                            <li><NavLink href={`/user/${session.user.id}`} className="sidenav-close">Profile</NavLink></li>
+                            <li><NavLink href={`/timetable`} className="sidenav-close">Timetable</NavLink></li>
+                            <li><a className="nav-link" onClick={(ev: React.MouseEvent) => {
+                                ev.preventDefault();
+                                logout();
+                                nav("/accounts/login");
+                            }}>Logout</a></li>
+                        </>
+                        :
+                        <>
+                            <li><NavLink href="/accounts/login/?next=/" className="sidenav-close">Login</NavLink></li>
+                            <li><NavLink href="/accounts/signup/?next=/" className="sidenav-close">Sign Up</NavLink></li>
+                        </>
                 }
             </ul>
             <nav>
@@ -148,10 +148,7 @@ export const NavigationBar = (): JSX.Element => {
                                         <li tabIndex={0}><Link to={`/user/${session.user.id}`}>Profile</Link></li>
                                         <li tabIndex={0}><Link to="/timetable">Timetable</Link></li>
                                         {session.user.is_staff && <li tabIndex={0}><a href="/admin/">Admin</a></li>}
-                                        <li tabIndex={0}><a onClick={(ev: React.MouseEvent) => {
-                                            ev.preventDefault();
-                                            session.logout();
-                                        }}>Logout</a></li>
+                                        <li tabIndex={0}><Link to="/accounts/logout">Logout</Link></li>
                                     </ul>
                                 </>
                                 :

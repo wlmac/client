@@ -55,6 +55,7 @@ export const Login = (): JSX.Element => {
                 session.updateToken(res.data.access);
                 setRefresh(res.data.refresh);
                 setLogging(false);
+                session.notify("Successfully logged in!", "success");
                 nav(next ? next : "/");
             }
             else {
