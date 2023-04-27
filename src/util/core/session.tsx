@@ -93,7 +93,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
 
     const refreshUser = (): void => {
         if (loggedIn()) {
-            getAPI(`${Routes.USER}/${user.id}`).then((res) => {
+            getAPI(`${Routes.USER}/retrieve/${user.id}`).then((res) => {
                 setUser({
                     ...user,
                     ...res.data

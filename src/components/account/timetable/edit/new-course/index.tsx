@@ -1,9 +1,34 @@
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material";
 import * as React from "react";
-import { Link } from "react-router-dom";
+import { Link, NavigateFunction, useNavigate, useParams } from "react-router-dom";
+import { Session, SessionContext } from "../../../../../util/core/session";
+import Routes from "../../../../../util/core/misc/routes";
 
 export const NewCourse = (): JSX.Element => {
+    const session: Session = React.useContext(SessionContext);
+    const nav: NavigateFunction = useNavigate();
+    const { ID } = useParams();
+
+    const [code, setCode] = React.useState("");
     const [position, setPosition] = React.useState<number>(-1);
+
+    const submitNewCourse = (): void => {
+        session.postAPI(`${Routes.COURSE}/new`, {
+            code: code,
+            position: position,
+            term: ID
+        }).then(() => {
+            session.notify(`Course ${code} was successfully added!`, "success");
+            nav(`/timetable/edit/${ID}`);
+        }).catch((err) => {
+            if (err.response.status === 401) {
+                session.refreshAuth();
+                submitNewCourse();
+                return;
+            }
+            session.notify("An internal error occurred. Please contact an admin to get it fixed!", "error");
+        });
+    }
 
     return (
         <>
@@ -12,13 +37,15 @@ export const NewCourse = (): JSX.Element => {
             <link rel="stylesheet" href="/static/css/timetable/new_course.css" />
             <form onSubmit={(ev) => {
                 ev.preventDefault();
-                console.log(position);
+                submitNewCourse();
             }}>
                 <h6 className="card-subtitle mb-2 text-muted card-top">Add a course for Test term</h6>
 
                 <label htmlFor="id_code" className="active">Code:</label>
 
-                <input type="text" name="code" maxLength={16} placeholder="Ex. AAA1O1" required id="id_code" />
+                <input type="text" onChange={(ev) => {
+                    setCode(ev.target.value);
+                }} name="code" maxLength={16} placeholder="Ex. AAA1O1" required id="id_code" />
                 <label className="active">On Day 1, which period is this course in?</label>
 
                 {/* <FormControl>
@@ -66,13 +93,13 @@ export const NewCourse = (): JSX.Element => {
 
                     <div>
                         <label htmlFor="id_position_4">
-                            <input type="radio" name="position" value="5" required id="id_position_4" />
+                            <input onClick={() => setPosition(5)} type="radio" name="position" value="5" required id="id_position_4" />
                             This course is a 2-credit Co-op in the morning.
                         </label>
                     </div>
 
                     <div>
-                        <label htmlFor="id_position_5"><input type="radio" name="position" value="6" required id="id_position_5" />
+                        <label onClick={() => setPosition(6)} htmlFor="id_position_5"><input type="radio" name="position" value="6" required id="id_position_5" />
                             This course is a 2-credit Co-op in the afternoon.</label>
                     </div>
                 </div>
