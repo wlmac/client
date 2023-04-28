@@ -251,12 +251,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     }
 
     function headAPI(url: string): Promise<AxiosResponse> {
-        const token = getToken();
-        return axios.head(url, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
+        return axios.head(url);
     }
 
     const refreshAuth = (): void => {
