@@ -13,6 +13,8 @@ import Routes from "../../util/core/misc/routes";
 import Event from "../../util/core/interfaces/event";
 import Tag from "../../util/core/interfaces/tag";
 import { dateFormat } from "../../util/core/misc/date";
+import { Timetable } from "../../util/core/interfaces/timetable";
+import { Course } from "../../util/core/interfaces/timetable";
 
 export const Home = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
@@ -30,31 +32,74 @@ export const Home = (): JSX.Element => {
         });
     }, []);
 
+    const [timetable, setTimetable] = React.useState({} as Timetable);
+    const session: Session = React.useContext(SessionContext);
+
+    React.useEffect(() => {
+        if (!loggedIn()) {
+            nav("/accounts/login");
+        }
+    });
+
+    const fetchTimetable = (): void => {
+        if (loggedIn()) {
+            session.getAPI(Routes.TIMETABLE, true).then((res) => {
+                setTimetable(res.data);
+            }).catch((err) => {
+                if (err.response.status === 404) {
+                    return;
+                }
+                session.refreshAuth();
+                fetchTimetable();
+            });
+        }
+    }
+
+    React.useEffect(() => {
+        fetchTimetable();
+    }, []);
+
+    console.log("Timetable:", timetable);
+
     return (
         <div id="content-container">
             <div className="banner">
-                <div className="background"><img src="/static/img/themes/banners/summer.jpg" /></div>
+                <div className="background"><img alt="" src="/static/img/themes/banners/spring.jpg" /></div>
                 <div className="overlay-container valign-wrapper">
                     <div className="next-class center-align">
-                        <h4 className="schedule-course">No School</h4>
-                        <span className="schedule-description">Enjoy your day!</span>
+                        <h4 className="schedule-course">School Over</h4>
+                        <span className="schedule-description">Enjoy your evening!</span>
                     </div>
                 </div>
                 <div className="schedule-today-overlay hide-on-small-and-down">
                     <div className="schedule-today-overlay-container">
-                        <h4 className="schedule-cycle"></h4>
-                        <div className="schedule-today-courses"></div>
+                        <h4 className="schedule-cycle">Day 1</h4>
+                        <div className="schedule-today-courses">
+                            {/* <span className="schedule-today-course">Period 1 - HZT4U1.2</span><br />
+                            <span className="schedule-today-course">Period 2 - SCH4UP.3</span><br />
+                            <span className="schedule-today-course">Period 4 - MDM4UO.2</span><br /> */}
+                            {
+                                "courses" in timetable && timetable.courses.map((course: Course, idx: number): JSX.Element => {
+                                    return (
+                                        <>
+                                            <span className="schedule-today-course">{`Period ${course.position} - ${course.code}`}</span><br />
+                                        </>
+                                    );
+                                })
+                            }
+                        </div>
                     </div>
                 </div>
-
-                <div className="overlay-container">
-                    <div className="banner-message center-align">
-                        <span>
-                            <Link to="/accounts/signup/">Sign up</Link> and add your timetable to see a personalized schedule here.
-                        </span>
+                {
+                    !loggedIn() &&
+                    <div className="overlay-container">
+                        <div className="banner-message center-align">
+                            <span>
+                                <a href="https://maclyonsden.com/accounts/signup/">Sign up</a> and add your timetable to see a personalized schedule here.
+                            </span>
+                        </div>
                     </div>
-                </div>
-
+                }
             </div>
             <div id="main-container">
                 <FeaturedBlogPost post={post} />
