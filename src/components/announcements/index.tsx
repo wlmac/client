@@ -70,7 +70,7 @@ export const Announcements = (): JSX.Element => {
                         nav(`/announcements?tag=${tag.name}`);
                     }}
                 >
-                    TAG: {tag.name}
+                    TAG: {tag.name.toUpperCase()}
                 </li> : <></>
             }
         </>;
