@@ -28,7 +28,7 @@ export const BlogDetails = (): JSX.Element => {
             setPost(current_post);
 
             // Author
-            session.getAPI(`${Routes.USER}/${current_post.author}`).then((res) => {
+            session.getAPI(`${Routes.USER}/retrieve/${current_post.author}`).then((res) => {
                 setAuthor(res.data);
             }).catch(() => {
                 session.refreshAuth();

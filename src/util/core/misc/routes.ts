@@ -1,6 +1,7 @@
 // @ts-ignore
 const BASEURL = import.meta.env.DEV ? "https://auth.jimmyliu.dev" : "https://maclyonsden.com";
 // const BASEURL = "https://auth.jimmyliu.dev";
+// const BASEURL = "https://maclyonsden.com";
 
 const Routes = {
   BASEURL: BASEURL,
@@ -13,9 +14,9 @@ const Routes = {
     USER_UPDATE: `${BASEURL}/api/v3/obj/user/single`,
     ANNOUNCEMENT: `${BASEURL}/api/v3/announcement`,
   },
-  USER: `${BASEURL}/api/v3/obj/user/retrieve`,
+  USER: `${BASEURL}/api/v3/obj/user`,
   TIMETABLE: `${BASEURL}/api/me/timetable`,
-  COURSES: `${BASEURL}/api/v3/obj/course`,
+  COURSE: `${BASEURL}/api/v3/obj/course`,
   OBJECT: `${BASEURL}/api/v3/obj`,
 };
 

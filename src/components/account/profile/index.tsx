@@ -23,7 +23,7 @@ export const Profile = (props: { children?: JSX.Element }): JSX.Element => {
 
     const fetchUser = (): void => {
         if (!userID) return;
-        session.getAPI(`${Routes.USER}/${userID}`, true).then((res) => {
+        session.getAPI(`${Routes.USER}/retrieve/${userID}`, true).then((res) => {
             const fetched_user: User = res.data as User;
             setUser(res.data);
             console.log("Fetched user:", fetched_user);

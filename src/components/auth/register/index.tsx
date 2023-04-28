@@ -53,7 +53,7 @@ export const Register = (): JSX.Element => {
             username: data.username,
             password: data.password
         }
-        axios.post(Routes.USER, { new_user }).then((res) => {
+        axios.post(`${Routes.USER}/new`, new_user).then((res) => {
             console.log("Successfully registered user");
             nav("/accounts/login");
         }).catch((err) => {
