@@ -1,6 +1,6 @@
 import * as React from 'react';
 import jwt_decode from "jwt-decode";
-import { default as axios } from 'axios';
+import { AxiosResponse, default as axios } from 'axios';
 import Routes from './misc/routes';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { getToken, setToken, getRefresh, setRefresh, loggedIn } from "./AuthService";
@@ -8,6 +8,8 @@ import Organization from './interfaces/organization';
 import Tag from './interfaces/tag';
 import { AlertColor } from '@mui/material';
 import { Notif } from './interfaces/notification';
+
+const BATCH_CACHELIMIT = 100; // how many entities should be requested each iteration in a fetchAll operation
 
 export interface User {
     bio: string,
@@ -104,32 +106,86 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         }
     }
 
-    React.useEffect((): void => {
+    React.useEffect(() => {
         if (loggedIn()) {
             updateToken(getToken());
             refreshUser();
         }
 
-        getAPI(`${Routes.OBJECT}/user`).then((res) => {
-            setAllUsers(res.data.results);
-        }).catch((err) => {
+        cacheRoutine();
 
-        });
-
-        getAPI(`${Routes.OBJECT}/organization`).then((res) => {
-            setAllOrgs(res.data.results);
-        }).catch((err) => {
-
-        });
-
-        getAPI(`${Routes.OBJECT}/tag`).then((res) => {
-            setAllTags(res.data.results);
-        }).catch((err) => {
-
-        })
-
-        // tag things
+        const interval = setInterval(() => {
+            cacheRoutine();
+        }, 5 * 60 * 1000);
+        return () => {
+            clearInterval(interval);
+        }
     }, []);
+
+    const cacheRoutine = async () => {
+        getAll(`user`).then((data) => {
+            setAllUsers(data);
+        }).catch((err) => { });
+
+        getAll(`organization`).then((data) => {
+            setAllOrgs(data);
+        }).catch((err) => { });
+
+        getAll(`tag`).then((data) => {
+            setAllTags(data);
+        }).catch((err) => { });
+    }
+
+    // this function fetches every single entry of given path and caches it locally
+    // a routine is run to download new content if the data is modified
+    // do not supply any query params to the objtype
+    const getAll = async (objtype: string) => {
+        let item = localStorage.getItem(objtype);
+        if (item) {
+            try {
+                let data = JSON.parse(item);
+                let res = await headAPI(`${Routes.OBJECT}/${objtype}?limit=${BATCH_CACHELIMIT}`);
+                if (res.headers["last-modified"] && new Date(res.headers["last-modified"]).getTime() > data.modified) {
+                    return await fetchAll(objtype);
+                }
+                else {
+                    return data.data;
+                }
+            }
+            catch {
+                return await fetchAll(objtype);
+            }
+        }
+        else {
+            return await fetchAll(objtype);
+        }
+    }
+
+    const fetchAll = async (objtype: string): Promise<any[]> => {
+        try {
+            let res = await getAPI(`${Routes.OBJECT}/${objtype}?limit=${BATCH_CACHELIMIT}`);
+            let arr = res.data.results;
+            let i_count = 1; // backoff for spamming reqs
+            while (true) {
+                if (res.data.next) {
+                    await new Promise(r => setTimeout(r, i_count * i_count * 100)); // timeout
+                    // spent like a solid 5 minutes wondering about this function
+                    res = await getAPI(res.data.next);
+                    arr.concat(res.data.results);
+                    i_count++;
+                }
+                else {
+                    break;
+                }
+            }
+            let newobj = JSON.stringify({ modified: Date.now(), data: arr });
+            localStorage.setItem(objtype, newobj);
+            return arr;
+        }
+        catch {
+            return [];
+        }
+    }
 
     const updateToken = (token: string): void => {
         setToken(token);
@@ -149,7 +205,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         }
     }
 
-    function getAPI(url: string, auth?: boolean): Promise<any> {
+    function getAPI(url: string, auth?: boolean): Promise<AxiosResponse> {
         if (auth && !loggedIn()) {
             nav("/accounts/login");
         }
@@ -161,7 +217,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         } : {});
     }
 
-    const postAPI = (url: string, data: any): Promise<any> => {
+    const postAPI = (url: string, data: any): Promise<AxiosResponse> => {
         if (!loggedIn()) {
             nav("/accounts/login");
         }
@@ -173,7 +229,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         });
     }
 
-    const putAPI = (url: string, data: any): Promise<any> => {
+    const putAPI = (url: string, data: any): Promise<AxiosResponse> => {
         if (!loggedIn()) {
             nav("/accounts/login");
         }
@@ -185,13 +241,22 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         });
     }
 
-    const patchAPI = (url: string, data: any): Promise<any> => {
+    const patchAPI = (url: string, data: any): Promise<AxiosResponse> => {
         const token = getToken();
         return axios.patch(url, data, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         })
+    }
+
+    function headAPI(url: string): Promise<AxiosResponse> {
+        const token = getToken();
+        return axios.head(url, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
     }
 
     const refreshAuth = (): void => {
@@ -223,3 +288,4 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         </SessionContext.Provider>
     )
 }
+
