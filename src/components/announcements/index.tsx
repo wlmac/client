@@ -79,15 +79,15 @@ export const Announcements = (): JSX.Element => {
     return (
         <>
             <link rel="stylesheet" href="static/css/announcement-list.css" />
-            <AnnouncementCreator
+            {/* <AnnouncementCreator
                 openCreator={openCreator}
                 setOpenCreator={setOpenCreator}
-            />
+            /> */}
 
             <div className="container">
                 <div className="headers header-row">
                     <ul>{header(tag ? tag.name : feed)}</ul>
-                    <a
+                    {/* <a
                         className="btn-small waves-light red"
                         href="#modal1"
                         onClick={(ev) => {
@@ -102,7 +102,7 @@ export const Announcements = (): JSX.Element => {
                         }}
                     >
                         <i className="material-icons">add</i>
-                    </a>
+                    </a> */}
                 </div>
                 <div className="card-container">
                     <div className="cards" id="cards-all">
@@ -233,222 +233,222 @@ const AnnouncementElement = (props: {
     ) : <></>;
 };
 
-const AnnouncementCreator = (props: {
-    openCreator: boolean;
-    setOpenCreator: React.Dispatch<any>;
-}): JSX.Element => {
-    const openCreator: boolean = props.openCreator,
-        setOpenCreator: React.Dispatch<any> = props.setOpenCreator;
-    // if (!openCreator) return <></>
+// const AnnouncementCreator = (props: {
+//     openCreator: boolean;
+//     setOpenCreator: React.Dispatch<any>;
+// }): JSX.Element => {
+//     const openCreator: boolean = props.openCreator,
+//         setOpenCreator: React.Dispatch<any> = props.setOpenCreator;
+//     // if (!openCreator) return <></>
 
-    const [isPublic, setIsPublic] = React.useState(false);
-    const session: Session = React.useContext(SessionContext);
+//     const [isPublic, setIsPublic] = React.useState(false);
+//     const session: Session = React.useContext(SessionContext);
 
-    const {
-        register,
-        handleSubmit,
-        watch,
-        formState: { errors },
-    } = useForm<AnnouncementInputs>();
-    const [error, setError] = React.useState("");
+//     const {
+//         register,
+//         handleSubmit,
+//         watch,
+//         formState: { errors },
+//     } = useForm<AnnouncementInputs>();
+//     const [error, setError] = React.useState("");
 
-    const [selected, setSelected] = React.useState<string[]>([]);
-    const names = session.allOrgs.map((organization: Organization): string => {
-        return organization.name;
-    });
+//     const [selected, setSelected] = React.useState<string[]>([]);
+//     const names = session.allOrgs.map((organization: Organization): string => {
+//         return organization.name;
+//     });
 
-    const onCreate = (data: AnnouncementInputs): void => {
-        // console.log("Submitted data:", data);
-        session
-            .postAPI(`${Routes.OBJECT}/announcement/new`, {
-                ...data,
-            })
-            .then(() => {
-                console.log("Announcement created successfully");
-            })
-            .catch((err) => {
-                console.log("Error:", err);
-                // session.refreshAuth();
-            });
-    };
+//     const onCreate = (data: AnnouncementInputs): void => {
+//         // console.log("Submitted data:", data);
+//         session
+//             .postAPI(`${Routes.OBJECT}/announcement/new`, {
+//                 ...data,
+//             })
+//             .then(() => {
+//                 console.log("Announcement created successfully");
+//             })
+//             .catch((err) => {
+//                 console.log("Error:", err);
+//                 // session.refreshAuth();
+//             });
+//     };
 
-    const ITEM_HEIGHT = 48;
-    const ITEM_PADDING_TOP = 8;
-    const MenuProps = {
-        PaperProps: {
-            style: {
-                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-                width: 250,
-            },
-        },
-    };
+//     const ITEM_HEIGHT = 48;
+//     const ITEM_PADDING_TOP = 8;
+//     const MenuProps = {
+//         PaperProps: {
+//             style: {
+//                 maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+//                 width: 250,
+//             },
+//         },
+//     };
 
-    const handleChange = (event: SelectChangeEvent<typeof selected>) => {
-        const {
-            target: { value },
-        } = event;
-        setSelected(
-            // On autofill we get a stringified value.
-            typeof value === 'string' ? value.split(',') : value,
-        );
-    };
+//     const handleChange = (event: SelectChangeEvent<typeof selected>) => {
+//         const {
+//             target: { value },
+//         } = event;
+//         setSelected(
+//             // On autofill we get a stringified value.
+//             typeof value === 'string' ? value.split(',') : value,
+//         );
+//     };
 
-    return (
-        <div id="announcement-creator" className="modal">
-            <div className="modal-top modal-header">
-                <h5 className="header-announcement">Add Announcement</h5>
-            </div>
-            <form
-                className="signup"
-                onSubmit={handleSubmit(onCreate)}
-                style={{ paddingLeft: "1rem", paddingTop: "1rem" }}
-            >
-                <div className="row">
-                    <div className="input-field col s12">
-                        <label htmlFor="id_title">Title:</label>
-                        <input
-                            {...register("title")}
-                            type="text"
-                            name="title"
-                            required={true}
-                            id="id_title"
-                        />
-                    </div>
-                </div>
-                <div className="row">
-                    <>
-                        <Editor
-                            apiKey="your-api-key"
-                            onInit={(evt, editor) => { }}
-                            init={{
-                                height: 500,
-                                menubar: false,
-                                plugins: [
-                                    "advlist",
-                                    "autolink",
-                                    "lists",
-                                    "link",
-                                    "image",
-                                    "charmap",
-                                    "preview",
-                                    "anchor",
-                                    "searchreplace",
-                                    "visualblocks",
-                                    "code",
-                                    "fullscreen",
-                                    "insertdatetime",
-                                    "media",
-                                    "table",
-                                    "code",
-                                    "help",
-                                    "wordcount",
-                                ],
-                                toolbar:
-                                    "undo redo | blocks | " +
-                                    "bold italic forecolor | alignleft aligncenter " +
-                                    "alignright alignjustify | bullist numlist outdent indent | " +
-                                    "removeformat | help",
-                                content_style:
-                                    "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                            }}
-                        />
-                    </>
-                </div>
-                <div className="row">
-                    <div className="input-field col s12">
-                        <label htmlFor="id_org">Organization:</label>
-                        <br />
-                        <select {...register("organization")} className="browser-default">
-                            {
-                                session.allOrgs.map((org: Organization) => {
-                                    return <option key={org.id} value={org.id}>{org.name}</option>
-                                })
-                            }
-                        </select>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="input-field col s12">
-                        <label htmlFor="id_show_after">Show After:</label>
-                        <input
-                            {...register("show_after")}
-                            type="text"
-                            name="show_after"
-                            minLength={1}
-                            required={true}
-                            id="id_show_after"
-                        />
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="input-field col s12">
-                        <label htmlFor="id_supervisor">Supervisor:</label>
-                        <input
-                            {...register("supervisor")}
-                            type="text"
-                            name="supervisor"
-                            minLength={1}
-                            required={true}
-                            id="id_supervisor"
-                        />
-                    </div>
-                </div>
-                {error && (
-                    <span className="form-error">
-                        <div className="form-errors">
-                            <i className="material-icons">warning</i>
-                            <>{error}</>
-                        </div>
-                    </span>
-                )}
-                <div className="modal-footer">
-                    <a href="#!" className="modal-close waves-effect waves-red btn-flat">
-                        Cancel
-                    </a>
-                    <button className="waves-effect waves-green btn" type="submit">
-                        Create!
-                    </button>
-                </div>
-            </form>
-        </div>
-    );
+//     return (
+//         <div id="announcement-creator" className="modal">
+//             <div className="modal-top modal-header">
+//                 <h5 className="header-announcement">Add Announcement</h5>
+//             </div>
+//             <form
+//                 className="signup"
+//                 onSubmit={handleSubmit(onCreate)}
+//                 style={{ paddingLeft: "1rem", paddingTop: "1rem" }}
+//             >
+//                 <div className="row">
+//                     <div className="input-field col s12">
+//                         <label htmlFor="id_title">Title:</label>
+//                         <input
+//                             {...register("title")}
+//                             type="text"
+//                             name="title"
+//                             required={true}
+//                             id="id_title"
+//                         />
+//                     </div>
+//                 </div>
+//                 <div className="row">
+//                     <>
+//                         <Editor
+//                             apiKey="your-api-key"
+//                             onInit={(evt, editor) => { }}
+//                             init={{
+//                                 height: 500,
+//                                 menubar: false,
+//                                 plugins: [
+//                                     "advlist",
+//                                     "autolink",
+//                                     "lists",
+//                                     "link",
+//                                     "image",
+//                                     "charmap",
+//                                     "preview",
+//                                     "anchor",
+//                                     "searchreplace",
+//                                     "visualblocks",
+//                                     "code",
+//                                     "fullscreen",
+//                                     "insertdatetime",
+//                                     "media",
+//                                     "table",
+//                                     "code",
+//                                     "help",
+//                                     "wordcount",
+//                                 ],
+//                                 toolbar:
+//                                     "undo redo | blocks | " +
+//                                     "bold italic forecolor | alignleft aligncenter " +
+//                                     "alignright alignjustify | bullist numlist outdent indent | " +
+//                                     "removeformat | help",
+//                                 content_style:
+//                                     "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+//                             }}
+//                         />
+//                     </>
+//                 </div>
+//                 <div className="row">
+//                     <div className="input-field col s12">
+//                         <label htmlFor="id_org">Organization:</label>
+//                         <br />
+//                         <select {...register("organization")} className="browser-default">
+//                             {
+//                                 session.allOrgs.map((org: Organization) => {
+//                                     return <option key={org.id} value={org.id}>{org.name}</option>
+//                                 })
+//                             }
+//                         </select>
+//                     </div>
+//                 </div>
+//                 <div className="row">
+//                     <div className="input-field col s12">
+//                         <label htmlFor="id_show_after">Show After:</label>
+//                         <input
+//                             {...register("show_after")}
+//                             type="text"
+//                             name="show_after"
+//                             minLength={1}
+//                             required={true}
+//                             id="id_show_after"
+//                         />
+//                     </div>
+//                 </div>
+//                 <div className="row">
+//                     <div className="input-field col s12">
+//                         <label htmlFor="id_supervisor">Supervisor:</label>
+//                         <input
+//                             {...register("supervisor")}
+//                             type="text"
+//                             name="supervisor"
+//                             minLength={1}
+//                             required={true}
+//                             id="id_supervisor"
+//                         />
+//                     </div>
+//                 </div>
+//                 {error && (
+//                     <span className="form-error">
+//                         <div className="form-errors">
+//                             <i className="material-icons">warning</i>
+//                             <>{error}</>
+//                         </div>
+//                     </span>
+//                 )}
+//                 <div className="modal-footer">
+//                     <a href="#!" className="modal-close waves-effect waves-red btn-flat">
+//                         Cancel
+//                     </a>
+//                     <button className="waves-effect waves-green btn" type="submit">
+//                         Create!
+//                     </button>
+//                 </div>
+//             </form>
+//         </div>
+//     );
 
-    // return (
-    //     <div className="popup">
-    //         <div className="modal-a">
-    //             <div className="modal-top modal-header">
-    //                 <h5 className="header-announcement">Add Announcement</h5>
-    //                 <a className="waves-effect waves-light btn" onClick={(ev: React.MouseEvent) => {
-    //                     ev.preventDefault();
-    //                     setOpenCreator(false);
-    //                 }}>Cancel</a>
-    //             </div>
-    //             <div className="modal-content">
-    //                 <div className="form input-row">
-    //                     <h6 className="form-label">Organization:</h6>
-    //                     <input type="text" className="textbox"></input>
-    //                 </div>
-    //                 <div className="form input-row">
-    //                     <h6 className="form-label">Title:</h6>
-    //                     <input type="text"></input>
-    //                 </div>
-    //                 <div className="form input-row">
-    //                     <h6 className="form-label">Body:</h6>
-    //                     <input type="text"></input>
-    //                 </div>
-    //                 <div className="form input-row">
-    //                     <h6 className="form-label">Tags:</h6>
-    //                     <input type="text"></input>
-    //                 </div>
-    //                 <div className="form input-row">
-    //                     <h6 className="form-label">Public:</h6>
-    //                     <label>
-    //                         <input type="checkbox" className="filled-in" onChange={(ev) => setIsPublic(ev.target.checked)} />
-    //                         <span>Filled in</span>
-    //                     </label>
-    //                 </div>
-    //             </div>
-    //         </div>
-    //     </div>
-    // );
-};
+//     // return (
+//     //     <div className="popup">
+//     //         <div className="modal-a">
+//     //             <div className="modal-top modal-header">
+//     //                 <h5 className="header-announcement">Add Announcement</h5>
+//     //                 <a className="waves-effect waves-light btn" onClick={(ev: React.MouseEvent) => {
+//     //                     ev.preventDefault();
+//     //                     setOpenCreator(false);
+//     //                 }}>Cancel</a>
+//     //             </div>
+//     //             <div className="modal-content">
+//     //                 <div className="form input-row">
+//     //                     <h6 className="form-label">Organization:</h6>
+//     //                     <input type="text" className="textbox"></input>
+//     //                 </div>
+//     //                 <div className="form input-row">
+//     //                     <h6 className="form-label">Title:</h6>
+//     //                     <input type="text"></input>
+//     //                 </div>
+//     //                 <div className="form input-row">
+//     //                     <h6 className="form-label">Body:</h6>
+//     //                     <input type="text"></input>
+//     //                 </div>
+//     //                 <div className="form input-row">
+//     //                     <h6 className="form-label">Tags:</h6>
+//     //                     <input type="text"></input>
+//     //                 </div>
+//     //                 <div className="form input-row">
+//     //                     <h6 className="form-label">Public:</h6>
+//     //                     <label>
+//     //                         <input type="checkbox" className="filled-in" onChange={(ev) => setIsPublic(ev.target.checked)} />
+//     //                         <span>Filled in</span>
+//     //                     </label>
+//     //                 </div>
+//     //             </div>
+//     //         </div>
+//     //     </div>
+//     // );
+// };
