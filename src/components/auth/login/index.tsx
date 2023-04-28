@@ -103,14 +103,14 @@ export const Login = (): JSX.Element => {
                                         <label htmlFor="id_login" className="active">Login:</label>
                                         <input type="text" name="login" autoComplete="off" required={true} id="id_login" onChange={(e) => {
                                             setUsername(e.target.value);
-                                        }} style={{ backgroundImage: "url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=&quot;)" }} />
+                                        }} />
                                     </div>
                                 </div><div className="row">
                                     <div className="input-field col s12">
                                         <label htmlFor="id_password" className="active">Password:</label>
                                         <input type="password" name="password" autoComplete="off" required={true} id="id_password" onChange={(e) => {
                                             setPwd(e.target.value);
-                                        }} style={{ backgroundImage: "url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=&quot;)" }} />
+                                        }} />
                                     </div>
                                 </div><div className="row">
                                     <div className="col s12">

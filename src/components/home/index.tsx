@@ -35,11 +35,11 @@ export const Home = (): JSX.Element => {
     const [timetable, setTimetable] = React.useState({} as Timetable);
     const session: Session = React.useContext(SessionContext);
 
-    React.useEffect(() => {
-        if (!loggedIn()) {
-            nav("/accounts/login");
-        }
-    });
+    // React.useEffect(() => {
+    //     if (!loggedIn()) {
+    //         nav("/accounts/login");
+    //     }
+    // });
 
     const fetchTimetable = (): void => {
         if (loggedIn()) {
@@ -95,7 +95,7 @@ export const Home = (): JSX.Element => {
                     <div className="overlay-container">
                         <div className="banner-message center-align">
                             <span>
-                                <a href="https://maclyonsden.com/accounts/signup/">Sign up</a> and add your timetable to see a personalized schedule here.
+                                <Link to="/accounts/signup/">Sign up</Link> and add your timetable to see a personalized schedule here.
                             </span>
                         </div>
                     </div>
