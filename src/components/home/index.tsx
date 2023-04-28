@@ -10,6 +10,9 @@ import Media from "../../util/core/misc/media";
 import MembershipStatus from "../../util/core/misc/membership";
 import { Session, SessionContext, User } from "../../util/core/session";
 import Routes from "../../util/core/misc/routes";
+import Event from "../../util/core/interfaces/event";
+import Tag from "../../util/core/interfaces/tag";
+import { dateFormat } from "../../util/core/misc/date";
 
 export const Home = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
@@ -57,7 +60,7 @@ export const Home = (): JSX.Element => {
                 <FeaturedBlogPost post={post} />
                 <div id="recent-events" className="card-list center-align">
                     <div className="cards-container">
-                        There are no events at this time.
+                        <EventsFeed />
                     </div>
                     <Link className="full-content-page link" to="/calendar">View all events <i className="zmdi zmdi-chevron-right"></i></Link>
                 </div>
@@ -90,6 +93,73 @@ const FeaturedBlogPost = (props: { post: BlogPost }): JSX.Element => {
             </div>
             <img className="blog-image hide-on-small-and-down col s7" src={post.featured_image + "?fmt=webp&w=1280"} />
         </div>
+    );
+}
+
+const EventsFeed = (): JSX.Element => {
+    const session: Session = React.useContext(SessionContext);
+
+    const [events, setEvents] = React.useState<Event[]>([]);
+    React.useEffect(() => {
+        const fetchURL = `${Routes.OBJECT}/event`;
+        axios.get(fetchURL).then((res: { data: { results: Array<Event> } }) => {
+            setEvents(res.data.results.slice(0, 3));
+        });
+    }, []);
+
+    const Event = (props: { data: Event }): JSX.Element => {
+        const data = props.data;
+        let organization: Organization = session.allOrgs.find((organization: Organization) => organization.id === data.organization)!;
+        let tag: Tag = session.allTags.find((tag: Tag) => tag.id === data.tags[0])!;
+
+        const toTimeOnly = (dateTime: string): string => {
+            const commaIdx = dateTime.indexOf(",");
+            return dateTime.substring(commaIdx + 2);
+        }
+
+        return (
+            <div className="event-card card ">
+                <div className="event-time right-align valign-wrapper" style={{ backgroundColor: tag ? tag.color : "#ffffff" }}>
+                    <div className="time-container">
+                        <span className="date">{new Date(data.start_date).toLocaleDateString(undefined, {
+                            year: "numeric", month: "long", day: "numeric"
+                        })}</span><br />
+                        <span className="time">{toTimeOnly(new Date(data.start_date).toLocaleDateString(undefined, {
+                            hour: "numeric", minute: "numeric"
+                        }))}</span><br />
+                        <span className="intermediate">to</span><br />
+                        <span className="date">{new Date(data.end_date).toLocaleDateString(undefined, {
+                            year: "numeric", month: "long", day: "numeric"
+                        })}</span><br />
+                        <span className="time">{toTimeOnly(new Date(data.end_date).toLocaleDateString(undefined, {
+                            hour: "numeric", minute: "numeric"
+                        }))}</span><br />
+                    </div>
+                </div>
+                <div className="event-description left-align">
+                    <h5 className="title truncate">{data.name}</h5>
+                    <hr />
+                    <div className="authors">
+                        <div className="authors-image">
+                            <Link to={`/club/${data.id}`}>
+                                <img className="circle" src={organization ? organization.icon : ""} alt={`${organization ? organization.name : ""} logo`} />
+                            </Link>
+                        </div>
+                        <div className="authors-text">
+                            <Link to={`/club/${data.id}`}>{organization ? organization.name : ""}</Link>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <>
+            {events.map((data: Event, idx: number): JSX.Element => {
+                return <Event data={data} key={idx} />
+            })}
+        </>
     );
 }
 
