@@ -97,7 +97,6 @@ const AnnouncementList = (): JSX.Element => {
     const session: Session = React.useContext(SessionContext);
 
     const [announcements, setAnnouncements] = React.useState([] as any[]);
-    const [tags, setTags] = React.useState([]);
     const [offset, setOffset] = React.useState(0);
 
     function fetchAnns() {
@@ -134,16 +133,6 @@ const AnnouncementList = (): JSX.Element => {
 
     React.useEffect(() => {
         fetchAnns();
-        // Tags
-        session //TODO: fix this shit (it caches the first page of tags only)
-            .getAPI(`${Routes.OBJECT}/tag`, false)
-            .then((res) => {
-                const tags = res.data.results;
-                setTags(tags);
-            })
-            .catch(() => {
-                session.refreshAuth();
-            });
     }, []);
 
     return <div id="annlist" onScroll={() => trackScroll()}>
@@ -151,9 +140,9 @@ const AnnouncementList = (): JSX.Element => {
             announcements.map((announcement: Announcement): JSX.Element => {
                 let current_tags: Tag[] = [];
                 for (let i = 0; i < announcement.tags.length; i++) {
-                    for (let j = 0; j < tags.length; j++) {
-                        if (announcement.tags[i] == (tags[j] as Tag).id) {
-                            current_tags.push(tags[j]);
+                    for (let j = 0; j < session.allTags.length; j++) {
+                        if (announcement.tags[i] == (session.allTags[j] as Tag).id) {
+                            current_tags.push(session.allTags[j]);
                         }
                     }
                 }
