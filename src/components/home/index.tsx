@@ -182,10 +182,11 @@ const HomeAnnouncement = (props: { announcement: Announcement }): JSX.Element =>
     const session: Session = React.useContext(SessionContext);
     const announcement = props.announcement;
     let organization: Organization = session.allOrgs.find((organization: Organization) => organization.id === announcement.organization)!;
+    let tag: Tag = session.allTags.find((tag: Tag) => announcement.tags[0])!;
 
     return (
         <>
-            <div className="announcement-card card left-align" style={{ borderColor: "#ffccce" }}>
+            <div className="announcement-card card left-align" style={{ borderColor: tag ? tag.color : "#ffffff" }}>
                 <h5 className="title truncate">{announcement.title}</h5>
                 <div className="authors">
                     <div className="authors-image">
