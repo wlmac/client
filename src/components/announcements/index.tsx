@@ -22,9 +22,12 @@ import { Editor } from "@tinymce/tinymce-react";
 const ANN_FETCHLIMIT = 10; // how many anns to fetch each api request
 
 export const Announcements = (): JSX.Element => {
+    const session: Session = React.useContext(SessionContext);
+
     const query: URLSearchParams = useQuery();
     const nav: NavigateFunction = useNavigate();
     const feed: string | null = query.get("feed");
+    const tag: Tag | null = session.allTags.filter(e => e.name === query.get("tag"))[0];
 
     const [openCreator, setOpenCreator] = React.useState(false);
 
@@ -39,20 +42,36 @@ export const Announcements = (): JSX.Element => {
         document.title = "Announcements | Metropolis";
     }, []);
 
-    const header = (currentFeed: string | null): Array<JSX.Element> => {
-        return AnnouncementFeeds.map((feed: AnnouncementFeed): JSX.Element => {
-            const headerClass: string =
-                feed.id === currentFeed ? "header header-active" : "header";
-            return (
-                <li
-                    key={feed.id}
-                    className={headerClass}
-                    onClick={(): void => nav(`/announcements?feed=${feed.id}`)}
+    const header = (currentFeed: string | null): JSX.Element => {
+        return <> {
+            AnnouncementFeeds.map((feed: AnnouncementFeed): JSX.Element => {
+                const headerClass: string =
+                    feed.id === currentFeed ? "header header-active" : "header";
+                return (
+                    <li
+                        key={feed.id}
+                        className={headerClass}
+                        onClick={(): void => {
+                            nav(`/announcements?feed=${feed.id}`)
+                        }}
+                    >
+                        {feed.text}
+                    </li>
+                );
+            })
+        }
+            {
+                tag ? <li
+                    key={tag.name}
+                    className={tag.name === currentFeed ? "header header-active" : "header"}
+                    onClick={(): void => {
+                        nav(`/announcements?tag=${tag.name}`);
+                    }}
                 >
-                    {feed.text}
-                </li>
-            );
-        });
+                    TAG: {tag.name}
+                </li> : <></>
+            }
+        </>;
     };
 
     return (
@@ -65,7 +84,7 @@ export const Announcements = (): JSX.Element => {
 
             <div className="container">
                 <div className="headers header-row">
-                    <ul>{header(feed)}</ul>
+                    <ul>{header(tag ? tag.name : feed)}</ul>
                     <a
                         className="btn-small waves-light red"
                         href="#modal1"
@@ -85,7 +104,7 @@ export const Announcements = (): JSX.Element => {
                 </div>
                 <div className="card-container">
                     <div className="cards" id="cards-all">
-                        {AnnouncementList()}
+                        <AnnouncementList tag={tag} />
                     </div>
                 </div>
             </div>
@@ -93,18 +112,25 @@ export const Announcements = (): JSX.Element => {
     );
 };
 
-const AnnouncementList = (): JSX.Element => {
+const AnnouncementList = (props: any): JSX.Element => {
     const session: Session = React.useContext(SessionContext);
 
     const [announcements, setAnnouncements] = React.useState([] as any[]);
     const [offset, setOffset] = React.useState(0);
 
-    function fetchAnns() {
-        const fetchURL = `${Routes.OBJECT}/announcement?limit=${ANN_FETCHLIMIT}&offset=${offset}`;
+    function fetchAnns(append: boolean) {
+        const fetchURL = `${Routes.OBJECT}/announcement?limit=${ANN_FETCHLIMIT}&offset=${offset}${props.tag ? `&tag=${props.tag.id}` : ''}`;
         session
             .getAPI(fetchURL, !!session.user.id) // !! is explicit cast from truthy to boolean, use credentials if user is logged in
             .then((res) => {
-                setAnnouncements((prevAnns) => prevAnns.concat(res.data.results));
+                setAnnouncements((prevAnns) => {
+                    if(append) {
+                        return prevAnns.concat(res.data.results);
+                    }
+                    else {
+                        return res.data.results;
+                    }
+                });
                 if (res.count - offset > ANN_FETCHLIMIT) { // there are more anns!
                     setOffset(prevOffset => prevOffset + ANN_FETCHLIMIT);
                 }
@@ -125,15 +151,15 @@ const AnnouncementList = (): JSX.Element => {
                 // reached bottom!
                 // https://stackoverflow.com/a/64130642
                 if (offset != -1) { // not -1 means there are more anns to fetch
-                    fetchAnns();
+                    fetchAnns(true);
                 }
             }
         }
     }
 
     React.useEffect(() => {
-        fetchAnns();
-    }, []);
+        fetchAnns(false);
+    }, [props.tag]);
 
     return <div id="annlist" onScroll={() => trackScroll()}>
         {
@@ -162,6 +188,8 @@ const AnnouncementElement = (props: {
     announcement: Announcement;
     tags: Tag[];
 }): JSX.Element => {
+    const nav: NavigateFunction = useNavigate();
+
     const data: Announcement = props.announcement;
     const session: Session = React.useContext(SessionContext);
     let organization: Organization = session.allOrgs.find((organization: Organization) => organization.id === data.organization)!;
@@ -172,7 +200,12 @@ const AnnouncementElement = (props: {
             <div className="card-headers">
                 <div className="tag-section">
                     {props.tags.map((tag: Tag): JSX.Element => {
-                        return <TagElement key={tag.id} tag={tag} />;
+                        return <a key={tag.id} href={`/announcements?tag=${tag.name}`} onClick={(ev) => {
+                            ev.preventDefault();
+                            nav(`/announcements?tag=${tag.name}`);
+                        }}>
+                            <TagElement tag={tag} />
+                        </a>;
                     })}
                 </div>
                 <h1 className="title">{data.title}</h1>
