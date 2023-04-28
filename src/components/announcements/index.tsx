@@ -19,6 +19,8 @@ import { Checkbox, FormControl, InputLabel, ListItemText, MenuItem, OutlinedInpu
 import { useRef } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 
+import './index.scss';
+
 const ANN_FETCHLIMIT = 10; // how many anns to fetch each api request
 
 export const Announcements = (): JSX.Element => {
@@ -200,7 +202,7 @@ const AnnouncementElement = (props: {
             <div className="card-headers">
                 <div className="tag-section">
                     {props.tags.map((tag: Tag): JSX.Element => {
-                        return <a key={tag.id} href={`/announcements?tag=${tag.name}`} onClick={(ev) => {
+                        return <a className="tag-link" key={tag.id} href={`/announcements?tag=${tag.name}`} onClick={(ev) => {
                             ev.preventDefault();
                             nav(`/announcements?tag=${tag.name}`);
                         }}>
