@@ -1,13 +1,55 @@
 import * as React from "react";
 import { Session, SessionContext, User } from "../../../../util/core/session";
-import { Link } from "react-router-dom";
+import { Link, NavigateFunction, useNavigate, useParams } from "react-router-dom";
 import Organization from "../../../../util/core/interfaces/organization";
+import Routes from "../../../../util/core/misc/routes";
+import { loggedIn } from "../../../../util/core/AuthService";
 
 export const ProfileView = (): JSX.Element => {
-    const session: Session = React.useContext(SessionContext);
-    let user: User = session.user;
-
     const [organizationDisplay, setOrganizationDisplay] = React.useState("");
+
+    const { userID } = useParams();
+    const session: Session = React.useContext(SessionContext);
+    const nav: NavigateFunction = useNavigate();
+
+    const current_user: User = session.user;
+    const [user, setUser] = React.useState({} as User);
+    const [organizations, setOrganizations] = React.useState([] as Array<Organization>);
+
+
+    React.useEffect((): void => {
+        document.title = `User ${user.username} | Metropolis`;
+    }, [user]);
+
+    const fetchUser = (): void => {
+        if (!userID) return;
+        session.getAPI(`${Routes.USER}/retrieve/${userID}`, true).then((res) => {
+            const fetched_user: User = res.data as User;
+            setUser(res.data);
+            console.log("Fetched user:", fetched_user);
+
+            session.getAPI(`${Routes.OBJECT}/organization`, false).then((res) => {
+                const all_organizations = res.data.results as Array<Organization>;
+
+            }).catch((err) => {
+
+            });
+        }).catch((err) => {
+            console.log(err);
+            session.refreshAuth();
+            fetchUser();
+        });
+    }
+
+    React.useEffect(() => {
+        if (!loggedIn()) {
+            nav("/accounts/login");
+        }
+    });
+
+    React.useEffect(() => {
+        fetchUser();
+    }, []);
 
     React.useEffect(() => {
         if (!session.user) return;

@@ -8,49 +8,6 @@ import { ProfileNav } from "../left-nav";
 import { loggedIn } from "../../../util/core/AuthService";
 
 export const Profile = (props: { children?: JSX.Element }): JSX.Element => {
-    const { userID } = useParams();
-    const session: Session = React.useContext(SessionContext);
-    const nav: NavigateFunction = useNavigate();
-
-    const current_user: User = session.user;
-    const [user, setUser] = React.useState({} as User);
-    const [organizations, setOrganizations] = React.useState([] as Array<Organization>);
-
-
-    React.useEffect((): void => {
-        document.title = `User ${user.username} | Metropolis`;
-    }, [user]);
-
-    const fetchUser = (): void => {
-        if (!userID) return;
-        session.getAPI(`${Routes.USER}/retrieve/${userID}`, true).then((res) => {
-            const fetched_user: User = res.data as User;
-            setUser(res.data);
-            console.log("Fetched user:", fetched_user);
-
-            session.getAPI(`${Routes.OBJECT}/organization`, false).then((res) => {
-                const all_organizations = res.data.results as Array<Organization>;
-
-            }).catch((err) => {
-
-            });
-        }).catch((err) => {
-            console.log(err);
-            session.refreshAuth();
-            fetchUser();
-        });
-    }
-
-    React.useEffect(() => {
-        if (!loggedIn()) {
-            nav("/accounts/login");
-        }
-    });
-
-    React.useEffect(() => {
-        fetchUser();
-    }, []);
-
     return (
         <>
             <link rel="stylesheet" href="/static/css/profile/detail.css" />
