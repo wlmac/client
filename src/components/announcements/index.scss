@@ -1,0 +1,8 @@
+.tag-link {
+    text-decoration: none;
+}
+
+.tag-link:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--dark-grey);
+}
