@@ -36,7 +36,7 @@ export const EditClubDetails = (): JSX.Element => {
     React.useEffect(() => {
         if (!loggedIn()) {
             session.notify("Please login to access this page", "info");
-            nav("/accounts/login");
+            nav(`/accounts/login?next=${encodeURIComponent(window.location.pathname)}`);
         }
     });
 
