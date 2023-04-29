@@ -52,7 +52,15 @@ export const ProfileView = (): JSX.Element => {
     }, []);
 
     React.useEffect(() => {
+<<<<<<< HEAD
+<<<<<<< HEAD
         if (!("username" in user)) return;
+=======
+        if (!user) return;
+>>>>>>> Fix profile render error
+=======
+        if (!("username" in user)) return;
+>>>>>>> Fix profile render error 2
         const organization_display_list: Array<String> = [];
         session.allOrgs.forEach((organization: Organization) => {
             if (user.organizations.find((element) => element === organization.id)) {
@@ -71,10 +79,13 @@ export const ProfileView = (): JSX.Element => {
                     <h6 className="username">{user.username}</h6>
                 </div>
 
-                <div className="edit-button">
-                    <i className="zmdi zmdi-fw-3x zmdi-edit"></i>
-                    <Link to="/accounts/profile/update">Edit</Link>
-                </div>
+                {
+                    session.user.id === user.id &&
+                    <div className="edit-button">
+                        <i className="zmdi zmdi-fw-3x zmdi-edit"></i>
+                        <Link to="/accounts/profile/update">Edit</Link>
+                    </div>
+                }
             </div>
             <hr />
             <div className="body">
