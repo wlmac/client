@@ -52,7 +52,7 @@ export const ProfileView = (): JSX.Element => {
     }, []);
 
     React.useEffect(() => {
-        if (!user) return;
+        if (!("username" in user)) return;
         const organization_display_list: Array<String> = [];
         session.allOrgs.forEach((organization: Organization) => {
             if (user.organizations.find((element) => element === organization.id)) {
