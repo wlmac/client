@@ -33,12 +33,12 @@ export const EditClubDetails = (): JSX.Element => {
         setCurrentBio(club.bio);
     }, []);
 
-    React.useEffect(() => {
-        if (!loggedIn()) {
-            session.notify("Please login to access this page", "info");
-            nav(`/accounts/login?next=${encodeURIComponent(window.location.pathname)}`);
-        }
-    });
+    // React.useEffect(() => {
+    //     if (!loggedIn()) {
+    //         session.notify("Please login to access this page", "info");
+    //         nav(`/accounts/login?next=${encodeURIComponent(window.location.pathname)}`);
+    //     }
+    // });
 
     // console.log(`${club.name}'s Bio: ${club.bio}`);
 
