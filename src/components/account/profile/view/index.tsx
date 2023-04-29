@@ -52,7 +52,7 @@ export const ProfileView = (): JSX.Element => {
     }, []);
 
     React.useEffect(() => {
-        if (!session.user) return;
+        if (!user) return;
         const organization_display_list: Array<String> = [];
         session.allOrgs.forEach((organization: Organization) => {
             if (user.organizations.find((element) => element === organization.id)) {
@@ -60,7 +60,7 @@ export const ProfileView = (): JSX.Element => {
             }
         });
         setOrganizationDisplay(organization_display_list.join(", "));
-    }, [session.allOrgs, session.user]);
+    }, [session.allOrgs, user]);
 
     return (
         <>
