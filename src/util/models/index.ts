@@ -8,7 +8,7 @@ export interface AboutRoute {
 export interface AnnouncementFeed {
     id: string;
     text: string;
-    filters: null;
+    filters: string;
 }
 
 export type RegisterInputs = {
