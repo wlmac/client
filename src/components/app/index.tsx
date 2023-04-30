@@ -34,6 +34,7 @@ import { TimetableEdit } from "../account/timetable/edit";
 import { Alert, Snackbar } from "@mui/material";
 import { NewCourse } from "../account/timetable/edit/new-course";
 import RadioButtonsGroup from "../account/timetable/edit/new-course/demo";
+import { LoginRequired } from "../../util/login-required";
 
 export const _App = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
@@ -56,7 +57,11 @@ export const _App = (): JSX.Element => {
                         <Route path="/calendar" element={<Calendar />} />
                         <Route path="/clubs" element={<Clubs />} />
                         <Route path="/club/:id" element={<ClubDetails />} />
-                        <Route path="/club/edit/:id" element={<EditClubDetails />} />
+                        <Route path="/club/edit/:id" element={
+                            <LoginRequired>
+                                <EditClubDetails />
+                            </LoginRequired>
+                        } />
 
                         <Route path="/blog" element={<Blog />} />
                         <Route path="/blog/:id" element={<BlogDetails />} />

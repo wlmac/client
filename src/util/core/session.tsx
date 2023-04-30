@@ -242,6 +242,11 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     }
 
     const patchAPI = (url: string, data: any): Promise<AxiosResponse> => {
+        if (!loggedIn()) {
+            // notify("Please login to access this page", "info");
+            nav("/accounts/login");
+            return {} as Promise<any>;
+        }
         const token = getToken();
         return axios.patch(url, data, {
             headers: {

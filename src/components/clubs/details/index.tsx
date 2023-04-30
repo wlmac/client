@@ -199,7 +199,7 @@ export const ClubDetails = (): JSX.Element => {
                                             members.map((member: User): JSX.Element => {
                                                 if (member === null) return <></>;
                                                 return (
-                                                    <a href={`/user/${member.id}`} key={member.id}>
+                                                    <Link to={`/user/${member.id}`} key={member.id}>
                                                         <div className="member">
                                                             <div className="member-image">
                                                                 <img className="circle" src={member.gravatar_url} alt={`${member.username}'s profile picture`} />
@@ -208,7 +208,7 @@ export const ClubDetails = (): JSX.Element => {
                                                                 {`${member.first_name} ${member.last_name}`}
                                                             </div>
                                                         </div>
-                                                    </a>
+                                                    </Link>
                                                 );
                                             })
                                         }

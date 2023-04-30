@@ -18,12 +18,6 @@ export const Blog = (): JSX.Element => {
     const session = React.useContext(SessionContext);
     const nav: NavigateFunction = useNavigate();
 
-    React.useEffect((): void => {
-        if (!loggedIn) {
-            nav("/accounts/login?next=/blog");
-        }
-    });
-
     return (
         <>
             <link rel="stylesheet" href="static/css/blog-list.css" />
