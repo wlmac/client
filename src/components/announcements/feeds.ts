@@ -4,16 +4,16 @@ export const AnnouncementFeeds: Array<AnnouncementFeed> = [
     {
         id: "all",
         text: "ALL",
-        filters: null,
+        filters: "",
     },
     {
         id: "school",
         text: "SCHOOL",
-        filters: null,
+        filters: "&organization=2",
     },
     {
         id: "sac",
         text: "STUDENT COUNCIL",
-        filters: null,
+        filters: "&organization=8",
     }
 ]

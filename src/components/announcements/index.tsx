@@ -29,8 +29,9 @@ export const Announcements = (): JSX.Element => {
     const query: URLSearchParams = useQuery();
     const nav: NavigateFunction = useNavigate();
     const feed: string | null = query.get("feed");
-    const tag: Tag | null = session.allTags.filter(e => e.name === query.get("tag"))[0];
+    const tag: string | null = query.get("tag");
 
+    const [tagObj, setTagObj] = React.useState({} as Tag);
     const [openCreator, setOpenCreator] = React.useState(false);
 
     const editorRef = useRef(null);
@@ -39,6 +40,11 @@ export const Announcements = (): JSX.Element => {
             //console.log(editorRef.current.getContent());
         }
     };
+
+    React.useEffect(() => {
+        let filtered = session.allTags.filter(e => e.name === tag);
+        setTagObj(filtered.length == 0 ? {} as Tag : filtered[0]);
+    }, [session.allTags, tag]);
 
     React.useEffect((): void => {
         document.title = "Announcements | Metropolis";
@@ -63,14 +69,25 @@ export const Announcements = (): JSX.Element => {
             })
         }
             {
-                tag ? <li
-                    key={tag.name}
-                    className={tag.name === currentFeed ? "header header-active" : "header"}
+                session.user.organizations ? <li
+                    key={"my"}
+                    className={"my" === currentFeed ? "header header-active" : "header"}
                     onClick={(): void => {
-                        nav(`/announcements?tag=${tag.name}`);
+                        nav(`/announcements?feed=my`);
                     }}
                 >
-                    TAG: {tag.name.toUpperCase()}
+                    MY FEED
+                </li> : <></>
+            }
+            {
+                tagObj.id ? <li
+                    key={tagObj.name}
+                    className={tagObj.name === currentFeed ? "header header-active" : "header"}
+                    onClick={(): void => {
+                        nav(`/announcements?tag=${tagObj.name}`);
+                    }}
+                >
+                    TAG: {tagObj.name.toUpperCase()}
                 </li> : <></>
             }
         </>;
@@ -86,7 +103,7 @@ export const Announcements = (): JSX.Element => {
 
             <div className="container">
                 <div className="headers header-row">
-                    <ul>{header(tag ? tag.name : feed)}</ul>
+                    <ul>{header(tagObj.id ? tagObj.name : feed)}</ul>
                     {/* <a
                         className="btn-small waves-light red"
                         href="#modal1"
@@ -106,7 +123,7 @@ export const Announcements = (): JSX.Element => {
                 </div>
                 <div className="card-container">
                     <div className="cards" id="cards-all">
-                        <AnnouncementList tag={tag} />
+                        <AnnouncementList tag={tagObj} feed={feed} />
                     </div>
                 </div>
             </div>
@@ -121,7 +138,28 @@ const AnnouncementList = (props: any): JSX.Element => {
     const [offset, setOffset] = React.useState(0);
 
     function fetchAnns(append: boolean) {
-        const fetchURL = `${Routes.OBJECT}/announcement?limit=${ANN_FETCHLIMIT}&offset=${Math.max(offset, 0)}${props.tag ? `&tag=${props.tag.id}` : ''}`;
+        console.log('fetching ' + append)
+        let param = '';
+        if (props.tag.id) {
+            param = `&tag=${props.tag.id}`;
+        }
+        else if (props.feed) {
+            let feedobj: AnnouncementFeed | null = AnnouncementFeeds.filter(e => e.id === props.feed)[0];
+            if (feedobj) {
+                param = feedobj.filters;
+            }
+            else if (props.feed === "my" && session.user.organizations) {
+                if (session.user.organizations.length == 0) {
+                    setAnnouncements([]);
+                    setOffset(-1);
+                    return;
+                }
+                // kinda wack here but if there isnt anything in session.user.organizations the feed should display no anns at all
+                // if there is this code works :)
+                param = '&organization=' + session.user.organizations.join('&organization=');
+            }
+        }
+        const fetchURL = `${Routes.OBJECT}/announcement?limit=${ANN_FETCHLIMIT}&offset=${Math.max(offset, 0)}${param}`;
         session
             .getAPI(fetchURL, !!session.user.id) // !! is explicit cast from truthy to boolean, use credentials if user is logged in
             .then((res) => {
@@ -150,6 +188,7 @@ const AnnouncementList = (props: any): JSX.Element => {
         if (listInnerRef.current) {
             const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
             if (scrollTop + clientHeight === scrollHeight) {
+                console.log('REACHED BOTTOM');
                 // reached bottom!
                 // https://stackoverflow.com/a/64130642
                 if (offset != -1) { // not -1 means there are more anns to fetch
@@ -160,28 +199,33 @@ const AnnouncementList = (props: any): JSX.Element => {
     }
 
     React.useEffect(() => {
+        // TODO: fix race condition when there is a double update (both tag and feed change simultaneously)
+        // honestly just switch to searchparams from react-router :clown:
         fetchAnns(false);
-    }, [props.tag]);
+    }, [props.tag, props.feed]);
 
     return <div id="annlist" onScroll={() => trackScroll()}>
         {
-            announcements.map((announcement: Announcement): JSX.Element => {
-                let current_tags: Tag[] = [];
-                for (let i = 0; i < announcement.tags.length; i++) {
-                    for (let j = 0; j < session.allTags.length; j++) {
-                        if (announcement.tags[i] == (session.allTags[j] as Tag).id) {
-                            current_tags.push(session.allTags[j]);
+            announcements.length == 0 ? <div>
+                There are no announcements to be shown at this time
+            </div> :
+                announcements.map((announcement: Announcement): JSX.Element => {
+                    let current_tags: Tag[] = [];
+                    for (let i = 0; i < announcement.tags.length; i++) {
+                        for (let j = 0; j < session.allTags.length; j++) {
+                            if (announcement.tags[i] == (session.allTags[j] as Tag).id) {
+                                current_tags.push(session.allTags[j]);
+                            }
                         }
                     }
-                }
-                return (
-                    <AnnouncementElement
-                        key={announcement.id}
-                        announcement={announcement}
-                        tags={current_tags}
-                    />
-                );
-            })
+                    return (
+                        <AnnouncementElement
+                            key={announcement.id}
+                            announcement={announcement}
+                            tags={current_tags}
+                        />
+                    );
+                })
         }
     </div>
 };
