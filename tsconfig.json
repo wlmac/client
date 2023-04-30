@@ -6,7 +6,8 @@
         "jsx": "react",
         "module": "CommonJS",
         "strict": true,
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        "allowJs": true
     },
     "include": [
         "src"

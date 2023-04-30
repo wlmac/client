@@ -1,3 +1,5 @@
 node_modules
 dist
 deploy.sh
+config.js
+config.js.*
