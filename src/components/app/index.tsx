@@ -25,8 +25,6 @@ import { BlogDetails } from "../blog/details";
 import { AnnouncementDetail } from "../announcements/detail";
 import { Logout } from "../auth/logout";
 import { TimetablePage } from "../account/timetable";
-
-// @ts-expect-error
 import Map from "../map";
 import { ProfileView } from "../account/profile/view";
 import { ProfileEdit } from "../account/profile/edit";

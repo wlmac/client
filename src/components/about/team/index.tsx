@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
+import { TeamMember } from "./member";
 
 export const ContentTeam = (): JSX.Element => {
     return (
@@ -15,25 +16,7 @@ export const ContentTeam = (): JSX.Element => {
             <div className="member-list">
                 <h2 className="subtitle">Project Manager</h2>
 
-                <Link to="/user/justinlu">
-                    <div className="member">
-                        <div className="member-name">
-                            <div className="member-image">
-                                <img className="circle" src="./About _ Metropolis_files/7fdefdebc57e64f410fc3b750fcd9c3b.jpeg" />
-                            </div>
-                            <div className="member-text">
-                                Justin Lu
-                            </div>
-                        </div>
-
-                        <hr />
-                        <div className="member-bio">
-                            Saying Justin Lu is only the project manager would be an understatement. He has worked at all ends of development: designed the overall website, recruited/selected other team members, created front-end pages, and as a whole has championed Project Metropolis since its inception in May. When Justin's not dealing with Vice-President responsibilities or schoolwork, he fanboys Johnny Harris (like a true Canadian), grinds the heck out of Genshin Impact, and tries to "live without regret," to varying degrees of success. He's also obsessed with macOS keyboard shortcuts - some of his favourites are CMD + OPT + SHIFT + V and KLDSJFSDF.
-                        </div>
-
-                    </div>
-                </Link>
-
+                <TeamMember memberID={1} />
             </div>
 
             <div className="member-list">

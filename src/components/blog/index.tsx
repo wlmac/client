@@ -71,6 +71,7 @@ const BlogPosts = (): JSX.Element[] => {
 const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Element => {
     const post = props.post;
     const session: Session = React.useContext(SessionContext);
+    console.log("All users:", session.allUsers)
     let author: User = session.allUsers.find((user: User) => user.id === post.author)!;
 
     async function getAuthor() {
@@ -79,7 +80,7 @@ const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Eleme
         return await author.data;
     }
 
-    return author ? (
+    return (
         <div className="card">
             <div className="card-headers">
                 <img className="card-image" src={post.featured_image} />
@@ -94,7 +95,7 @@ const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Eleme
                     <h1 className="title">{post.title}</h1>
                     <div className="card-authors">
                         <div className="card-authors-image">
-                            <Link to={`/user/${post.author}`}><img className="circle" src={author.gravatar_url} /></Link>
+                            <Link to={`/user/${post.author}`}><img className="circle" src={author ? author.gravatar_url : ""} /></Link>
                         </div>
                         <div className="card-authors-text">
                             <Link to={`/user/${post.author}`} className="link">{author && `${author.first_name} ${author.last_name}`}</Link>
@@ -113,5 +114,5 @@ const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Eleme
             <br />
             <Link className="link" to={`/blog/${post.id}`}>Read full blog post <i className="zmdi zmdi-chevron-right"></i></Link>
         </div>
-    ) : <></>;
+    );
 }
