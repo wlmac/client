@@ -8,7 +8,7 @@ import { loggedIn } from "../../../../util/core/AuthService";
 export const ProfileView = (): JSX.Element => {
     const [organizationDisplay, setOrganizationDisplay] = React.useState("");
 
-    const { userID } = useParams();
+    const { username } = useParams();
     const session: Session = React.useContext(SessionContext);
     const nav: NavigateFunction = useNavigate();
 
@@ -22,8 +22,8 @@ export const ProfileView = (): JSX.Element => {
     }, [user]);
 
     const fetchUser = (): void => {
-        if (!userID) return;
-        session.getAPI(`${Routes.USER}/retrieve/${userID}`, true).then((res) => {
+        if (!username) return;
+        session.getAPI(`${Routes.USER}/retrieve/${username}?lookup=username`, true).then((res) => {
             const fetched_user: User = res.data as User;
             setUser(res.data);
             console.log("Fetched user:", fetched_user);
@@ -40,12 +40,6 @@ export const ProfileView = (): JSX.Element => {
             fetchUser();
         });
     }
-
-    React.useEffect(() => {
-        if (!loggedIn()) {
-            nav("/accounts/login");
-        }
-    });
 
     React.useEffect(() => {
         fetchUser();

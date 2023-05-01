@@ -162,11 +162,11 @@ export const AnnouncementDetail = (): JSX.Element => {
                     <h1 className="title">{announcement.title}</h1>
                     <div className="card-authors">
                         <div className="card-authors-image">
-                            <Link to={`/club/${announcement.organization}`}><img className="circle" src={organization && organization.banner} /></Link>
+                            <Link to={`/club/${organization.slug}`}><img className="circle" src={organization && organization.banner} /></Link>
                         </div>
                         <div className="card-authors-text">
-                            <a href={`/club/${announcement.organization}`} className="link">{organization.name}</a>,
-                            <a href={`/user/${announcement.author}`} className="link">{`${author.first_name} ${author.last_name}`}</a>
+                            <Link to={`/club/${organization.slug}`} className="link">{organization.name}</Link>,
+                            <Link to={`/user/${author.username}`} className="link">{`${author.first_name} ${author.last_name}`}</Link>
                             <br />
                             • {new Date(announcement.created_date).toLocaleTimeString(undefined, dateFormat)}
                         </div>

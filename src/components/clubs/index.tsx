@@ -121,7 +121,7 @@ const Club = (props: { club: Organization, tags: Tag[] }): JSX.Element => {
                     <img className="circle" src={club.icon} />
                 </div>
                 <h1 className="title link">
-                    <Link to={`/club/${club.id}`}>{club.name}</Link>
+                    <Link to={`/club/${club.slug}`}>{club.name}</Link>
                 </h1>
             </div>
 

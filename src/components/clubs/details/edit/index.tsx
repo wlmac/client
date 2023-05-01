@@ -12,7 +12,7 @@ import { TagElement } from "../../../../util/core/tags";
 
 export const EditClubDetails = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
-    const { id } = useParams();
+    const { slug } = useParams();
     const session: Session = React.useContext(SessionContext);
     const [club, setClub] = React.useState({} as Organization);
     const [error, setError] = React.useState("");
@@ -23,7 +23,7 @@ export const EditClubDetails = (): JSX.Element => {
 
     //when the page gets loaded, this gets called and all the react states get set to the GET APIs
     React.useEffect(() => {
-        const fetchURL = `${Routes.OBJECT}/organization/retrieve/${id}`;
+        const fetchURL = `${Routes.OBJECT}/organization/retrieve/${slug}?lookup=slug`;
         session.getAPI(fetchURL, false).then((res) => {
             const current_club: Organization = res.data as Organization;
             setClub(current_club);
@@ -113,7 +113,7 @@ export const EditClubDetails = (): JSX.Element => {
                             <div className="field">
                                 <div>
                                     <button type="submit" className="btn">Submit</button>
-                                    <Link to={`/club/${club.id}`} className="btn">Cancel</Link>
+                                    <Link to={`/club/${club.slug}`} className="btn">Cancel</Link>
                                 </div>
                             </div>
                         </form>
