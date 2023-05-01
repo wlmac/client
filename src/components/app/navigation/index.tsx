@@ -59,7 +59,7 @@ export const NavigationBar = (): JSX.Element => {
                 {
                     loggedIn() ?
                         <>
-                            <li><NavLink href={`/user/${session.user.id}`} className="sidenav-close">Profile</NavLink></li>
+                            <li><NavLink href={`/user/${session.user.username}`} className="sidenav-close">Profile</NavLink></li>
                             <li><NavLink href={`/timetable`} className="sidenav-close">Timetable</NavLink></li>
                             <li><a className="nav-link" onClick={(ev: React.MouseEvent) => {
                                 ev.preventDefault();
@@ -139,7 +139,7 @@ export const NavigationBar = (): JSX.Element => {
                         <li>
                             {loggedIn() ?
                                 <>
-                                    <a className="dropdown-trigger" href="https://maclyonsden.com/user/ji.mmyliu#!" data-target="dropdownAcc">
+                                    <a className="dropdown-trigger" href="/user/ji.mmyliu#!" data-target="dropdownAcc">
                                         Account
                                         <i className="zmdi zmdi-caret-down"></i>
                                     </a>
