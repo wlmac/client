@@ -37,6 +37,8 @@ export const Home = (): JSX.Element => {
     const [fetched, setFetched] = React.useState(false);
     const session: Session = React.useContext(SessionContext);
 
+    const [currentTime, setCurrentTime] = React.useState(new Date());
+
     // React.useEffect(() => {
     //     if (!loggedIn()) {
     //         nav("/accounts/login");
@@ -62,6 +64,77 @@ export const Home = (): JSX.Element => {
         fetchSchedule();
     }, []);
 
+    React.useEffect(() => {
+        var timerID = setInterval(() => setCurrentTime(new Date()), 1000);
+
+        return () => clearInterval(timerID);
+    }, []);
+
+    const timeDigitDisplay = (amt: number, unit: string): string => {
+        if (amt <= 0) return '';
+        if (amt === 1) return `${amt} ${unit}, `;
+        else return `${amt} ${unit}s, `;
+    }
+
+    const CurrentCourse = (): JSX.Element => {
+        if (schedule.length === 0) { // No courses
+            return (
+                <>
+                    <h4 className="schedule-course">No School</h4>
+                    <span className="schedule-description">Enjoy your day!</span>
+                </>
+            );
+        }
+
+        let currentCourse: ScheduleSlot = null!;
+        schedule.forEach((slot: ScheduleSlot) => {
+            if (currentTime <= new Date(slot.time.end)) { // Check to see if this course has finished
+                if (!currentCourse || new Date(slot.time.start) < new Date(currentCourse.time.start)) { // Find the course with the earliest start
+                    currentCourse = slot;
+                }
+            }
+        });
+
+        if (!currentCourse) { // No more courses, end of day
+            return (
+                <>
+                    <h4 className="schedule-course">School Over</h4>
+                    <span className="schedule-description">Enjoy your evening!</span>
+                </>
+            );
+        }
+        else if (currentTime >= new Date(currentCourse.time.start)) { // Check if course is in progress
+            var msec = new Date(currentCourse.time.end).getTime() - currentTime.getTime();
+            var hh = Math.floor(msec / 1000 / 60 / 60);
+            msec -= hh * 1000 * 60 * 60;
+            var mm = Math.floor(msec / 1000 / 60);
+            msec -= mm * 1000 * 60;
+            var ss = Math.floor(msec / 1000);
+            msec -= ss * 1000;
+            return (
+                <>
+                    <h4 className="schedule-course">{currentCourse.course}</h4>
+                    <span className="schedule-description">{`${currentCourse.description.course}: Ends in ${timeDigitDisplay(hh, "hour")}${timeDigitDisplay(mm, "minute")}${ss} ${ss === 1 ? 'second' : 'seconds'}`}</span>
+                </>
+            );
+        }
+        else {
+            var msec = new Date(currentCourse.time.start).getTime() - currentTime.getTime();
+            var hh = Math.floor(msec / 1000 / 60 / 60);
+            msec -= hh * 1000 * 60 * 60;
+            var mm = Math.floor(msec / 1000 / 60);
+            msec -= mm * 1000 * 60;
+            var ss = Math.floor(msec / 1000);
+            msec -= ss * 1000;
+            return (
+                <>
+                    <h4 className="schedule-course">{currentCourse.course}</h4>
+                    <span className="schedule-description">{`${currentCourse.description.course}: Starts in ${timeDigitDisplay(hh, "hour")}${timeDigitDisplay(mm, "minute")}${ss} ${ss === 1 ? 'second' : 'seconds'}`}</span>
+                </>
+            );
+        }
+    }
+
     return (
         <div id="content-container">
             <div className="banner">
@@ -70,25 +143,9 @@ export const Home = (): JSX.Element => {
                     <div className="next-class center-align">
                         {
                             fetched ?
-                                schedule.length > 0 ?
-                                    schedule.map((slot: ScheduleSlot): JSX.Element => {
-                                        return (
-                                            <>
-                                                <h4 className="schedule-course">{slot.course}</h4>
-                                                <span className="schedule-description">{`${slot.description.course} ${slot.description.time}`} </span>
-                                            </>
-                                        );
-                                    })
-                                    :
-                                    <>
-                                        <h4 className="schedule-course">School Over</h4>
-                                        <span className="schedule-description">Enjoy your evening!</span>
-                                    </>
+                                <CurrentCourse />
                                 :
-                                <>
-                                    <h4 className="schedule-course">Loading your timetable...</h4>
-                                    {/* <span className="schedule-description">Loading your timetable...</span> */}
-                                </>
+                                <h4 className="schedule-course">Loading your timetable...</h4>
                         }
                     </div>
                 </div>
@@ -108,6 +165,13 @@ export const Home = (): JSX.Element => {
                                     );
                                 })
                             */}
+                            {schedule.map((slot: ScheduleSlot): JSX.Element => {
+                                return (
+                                    <>
+                                        <span className="schedule-today-course">{slot.description.course} - {slot.course}</span><br />
+                                    </>
+                                );
+                            })}
                         </div>
                     </div>
                 </div>
