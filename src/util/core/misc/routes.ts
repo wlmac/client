@@ -16,6 +16,7 @@ const Routes = {
   },
   USER: `${BASEURL}/api/v3/obj/user`,
   TIMETABLE: `${BASEURL}/api/me/timetable`,
+  SCHEDULE: `${BASEURL}/api/me/schedule`,
   COURSE: `${BASEURL}/api/v3/obj/course`,
   OBJECT: `${BASEURL}/api/v3/obj`,
 };
