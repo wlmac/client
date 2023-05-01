@@ -15,6 +15,7 @@ import Tag from "../../util/core/interfaces/tag";
 import { dateFormat } from "../../util/core/misc/date";
 import { Timetable } from "../../util/core/interfaces/timetable";
 import { Course } from "../../util/core/interfaces/timetable";
+import { ScheduleSlot } from "../../util/core/interfaces/schedule";
 
 export const Home = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
@@ -32,7 +33,8 @@ export const Home = (): JSX.Element => {
         });
     }, []);
 
-    const [timetable, setTimetable] = React.useState({} as Timetable);
+    const [schedule, setSchedule] = React.useState<Array<ScheduleSlot>>([]);
+    const [fetched, setFetched] = React.useState(false);
     const session: Session = React.useContext(SessionContext);
 
     // React.useEffect(() => {
@@ -41,25 +43,24 @@ export const Home = (): JSX.Element => {
     //     }
     // });
 
-    const fetchTimetable = (): void => {
+    const fetchSchedule = (): void => {
         if (loggedIn()) {
-            session.getAPI(Routes.TIMETABLE, true).then((res) => {
-                setTimetable(res.data);
+            session.getAPI(Routes.SCHEDULE, true).then((res) => {
+                setSchedule(res.data);
+                setFetched(true);
             }).catch((err) => {
                 if (err.response.status === 404) {
                     return;
                 }
                 session.refreshAuth();
-                fetchTimetable();
+                fetchSchedule();
             });
         }
     }
 
     React.useEffect(() => {
-        fetchTimetable();
+        fetchSchedule();
     }, []);
-
-    console.log("Timetable:", timetable);
 
     return (
         <div id="content-container">
@@ -67,18 +68,38 @@ export const Home = (): JSX.Element => {
                 <div className="background"><img alt="" src="/static/img/themes/banners/spring.jpg" /></div>
                 <div className="overlay-container valign-wrapper">
                     <div className="next-class center-align">
-                        <h4 className="schedule-course">School Over</h4>
-                        <span className="schedule-description">Enjoy your evening!</span>
+                        {
+                            fetched ?
+                                schedule.length > 0 ?
+                                    schedule.map((slot: ScheduleSlot): JSX.Element => {
+                                        return (
+                                            <>
+                                                <h4 className="schedule-course">{slot.course}</h4>
+                                                <span className="schedule-description">{`${slot.description.course} ${slot.description.time}`} </span>
+                                            </>
+                                        );
+                                    })
+                                    :
+                                    <>
+                                        <h4 className="schedule-course">School Over</h4>
+                                        <span className="schedule-description">Enjoy your evening!</span>
+                                    </>
+                                :
+                                <>
+                                    <h4 className="schedule-course">Loading your timetable...</h4>
+                                    {/* <span className="schedule-description">Loading your timetable...</span> */}
+                                </>
+                        }
                     </div>
                 </div>
                 <div className="schedule-today-overlay hide-on-small-and-down">
                     <div className="schedule-today-overlay-container">
-                        <h4 className="schedule-cycle">Day 1</h4>
+                        {fetched && schedule.length > 0 && <h4 className="schedule-cycle">{schedule[0].cycle}</h4>}
                         <div className="schedule-today-courses">
                             {/* <span className="schedule-today-course">Period 1 - HZT4U1.2</span><br />
                             <span className="schedule-today-course">Period 2 - SCH4UP.3</span><br />
                             <span className="schedule-today-course">Period 4 - MDM4UO.2</span><br /> */}
-                            {
+                            {/*
                                 "courses" in timetable && timetable.courses.map((course: Course, idx: number): JSX.Element => {
                                     return (
                                         <>
@@ -86,7 +107,7 @@ export const Home = (): JSX.Element => {
                                         </>
                                     );
                                 })
-                            }
+                            */}
                         </div>
                     </div>
                 </div>
