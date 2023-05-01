@@ -54,15 +54,15 @@ export const _App = (): JSX.Element => {
                         <Route path="/announcement/:id" element={<AnnouncementDetail />} />
                         <Route path="/calendar" element={<Calendar />} />
                         <Route path="/clubs" element={<Clubs />} />
-                        <Route path="/club/:id" element={<ClubDetails />} />
-                        <Route path="/club/edit/:id" element={
+                        <Route path="/club/:slug" element={<ClubDetails />} />
+                        <Route path="/club/edit/:slug" element={
                             <LoginRequired>
                                 <EditClubDetails />
                             </LoginRequired>
                         } />
 
                         <Route path="/blog" element={<Blog />} />
-                        <Route path="/blog/:id" element={<BlogDetails />} />
+                        <Route path="/blog/:slug" element={<BlogDetails />} />
 
                         <Route path="/about" element={<About />}>
                             <Route path=":page" element={<About />} />
@@ -86,7 +86,7 @@ export const _App = (): JSX.Element => {
                             </Profile>
                         } />
 
-                        <Route path="/user/:userID" element={
+                        <Route path="/user/:username" element={
                             <Profile>
                                 <ProfileView />
                             </Profile>
