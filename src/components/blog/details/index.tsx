@@ -23,19 +23,19 @@ export const BlogDetails = (): JSX.Element => {
 
     React.useEffect(() => {
         const fetchURL = `${Routes.OBJECT}/blog-post/retrieve/${slug}?lookup=slug`;
-        session.getAPI(fetchURL).then((res) => {
+        session.request('get', fetchURL).then((res) => {
             const current_post: BlogPost = res.data as BlogPost;
             setPost(current_post);
 
             // Author
-            session.getAPI(`${Routes.USER}/retrieve/${current_post.author}`).then((res) => {
+            session.request('get', `${Routes.USER}/retrieve/${current_post.author}`).then((res) => {
                 setAuthor(res.data);
             }).catch(() => {
                 session.refreshAuth();
             });
 
             // Tags
-            session.getAPI(`${Routes.OBJECT}/tag`).then((res) => {
+            session.request('get', `${Routes.OBJECT}/tag`).then((res) => {
                 const tags_data: Tag[] = res.data.results;
                 const current_tags: Tag[] = [];
                 for (let i = 0; i < current_post.tags.length; i++) {

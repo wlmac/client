@@ -13,18 +13,17 @@ export const Schedule = (): JSX.Element => {
     const [currentTime, setCurrentTime] = React.useState(new Date());
 
     const fetchSchedule = (): void => {
-        if (loggedIn()) {
-            session.getAPI(Routes.SCHEDULE, true).then((res) => {
-                setSchedule(res.data);
-                setFetched(true);
-            }).catch((err) => {
-                if (err.response.status === 404) {
-                    return;
-                }
-                session.refreshAuth();
-                fetchSchedule();
-            });
-        }
+        session.request('get', loggedIn() ? Routes.SCHEDULE.LOGGED_IN : Routes.SCHEDULE.NOT_LOGGED_IN).then((res) => {
+            setSchedule(res.data);
+            setFetched(true);
+        }).catch((err) => {
+            if (err.response.status === 404) {
+                return;
+            }
+            if (err.response.status === 401) {
+                session.refreshAuth(fetchSchedule);
+            }
+        });
     }
 
     React.useEffect(() => {

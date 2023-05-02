@@ -23,11 +23,11 @@ export const ProfileView = (): JSX.Element => {
 
     const fetchUser = (): void => {
         if (!username) return;
-        session.getAPI(`${Routes.USER}/retrieve/${username}?lookup=username`, true).then((res) => {
+        session.request('get', `${Routes.USER}/retrieve/${username}?lookup=username`).then((res) => {
             const fetched_user: User = res.data as User;
             setUser(res.data);
 
-            session.getAPI(`${Routes.OBJECT}/organization`, false).then((res) => {
+            session.request('get', `${Routes.OBJECT}/organization`).then((res) => {
                 const all_organizations = res.data.results as Array<Organization>;
 
             }).catch((err) => {
