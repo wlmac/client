@@ -3,14 +3,12 @@ import { Link } from "react-router-dom";
 import { Session, SessionContext, User } from "../../../../util/core/session";
 import config from "../../../../../config";
 
-export const TeamMember = (props: { memberID: number }): JSX.Element => {
-    const session: Session = React.useContext(SessionContext);
-    console.log("allusers:", session.allUsers);
-    console.log("allusers:", session.allOrgs);
-    let user: User = session.allUsers.find((u: User) => u.id === props.memberID)!;
-
+export const TeamMember = (props: { memberID: number, allUsers: Array<User> }): JSX.Element => {
+    let user: User = props.allUsers.find((u: User) => u.id === props.memberID)!;
+    console.log("All users:", props.allUsers);
+    console.log(config.METROPOLIS_STAFF_BIO)
     return user ? (
-        <Link to="/user/justinlu">
+        <Link to={`/user/${user.username}`}>
             <div className="member">
                 <div className="member-name">
                     <div className="member-image">
@@ -23,7 +21,9 @@ export const TeamMember = (props: { memberID: number }): JSX.Element => {
 
                 <hr />
                 <div className="member-bio">
-                    {/* STILL IN PROGRESS */ config.METROPOLIS_STAFF_BIO[props.memberID]}
+                    {
+                        // @ts-expect-error
+                        config.METROPOLIS_STAFF_BIO[props.memberID]}
                 </div>
             </div>
         </Link>

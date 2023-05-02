@@ -26,7 +26,6 @@ export const ProfileView = (): JSX.Element => {
         session.getAPI(`${Routes.USER}/retrieve/${username}?lookup=username`, true).then((res) => {
             const fetched_user: User = res.data as User;
             setUser(res.data);
-            console.log("Fetched user:", fetched_user);
 
             session.getAPI(`${Routes.OBJECT}/organization`, false).then((res) => {
                 const all_organizations = res.data.results as Array<Organization>;
@@ -35,9 +34,13 @@ export const ProfileView = (): JSX.Element => {
 
             });
         }).catch((err) => {
-            console.log(err);
-            session.refreshAuth();
-            fetchUser();
+            if (err.response.status === 401) {
+                session.refreshAuth();
+                fetchUser();
+            }
+            else {
+                session.notify("An internal error occurred. Please contact an admin to get it fixed!", "error");
+            }
         });
     }
 
