@@ -49,7 +49,7 @@ export const EditClubDetails = (): JSX.Element => {
         const patchURL = `${Routes.OBJECT}/organization/single/${club.id}`;
         session.patchAPI(patchURL, newClub).then((res) => {
             session.notify(`Successfully changed ${club.name}'s details`, "success");
-            nav(`/club/${club.id}`);
+            nav(`/club/${club.slug}`);
         }).catch((err) => {
             console.log(err.response.status);
             if (err.response.status === 401) {

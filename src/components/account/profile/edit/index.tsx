@@ -23,12 +23,6 @@ export const ProfileEdit = (): JSX.Element => {
     const session: Session = React.useContext(SessionContext);
     let user: User = session.user;
 
-    React.useEffect(() => {
-        if (!loggedIn()) {
-            nav("/accounts/login");
-        }
-    });
-
     // Form
     const { register, handleSubmit, watch, reset, formState: { errors } } = useForm<Inputs>();
 
@@ -43,8 +37,7 @@ export const ProfileEdit = (): JSX.Element => {
         console.log(data);
 
         session.putAPI(`${Routes.POST.USER_UPDATE}/${user.id}`, data).then((res) => {
-            console.log("Successfully updated user");
-            nav("/accounts/login");
+            nav(`/user/${user.username}`);
         }).catch((err) => {
             console.log("Failed to update user");
             session.refreshAuth();
