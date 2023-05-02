@@ -8,8 +8,8 @@ export const TeamMember = (props: { memberID: number, allUsers: Array<User> }): 
     console.log("All users:", props.allUsers);
     console.log(config.METROPOLIS_STAFF_BIO)
     return user ? (
-        <Link to={`/user/${user.username}`}>
-            <div className="member">
+        <div className="member">
+            <Link to={`/user/${user.username}`}>
                 <div className="member-name">
                     <div className="member-image">
                         <img className="circle" src={user.gravatar_url} />
@@ -18,14 +18,14 @@ export const TeamMember = (props: { memberID: number, allUsers: Array<User> }): 
                         {`${user.first_name} ${user.last_name}`}
                     </div>
                 </div>
+            </Link>
 
-                <hr />
-                <div className="member-bio">
-                    {
-                        // @ts-expect-error
-                        config.METROPOLIS_STAFF_BIO[props.memberID]}
-                </div>
+            <hr />
+            <div className="member-bio">
+                {
+                    // @ts-expect-error
+                    config.METROPOLIS_STAFF_BIO[props.memberID]}
             </div>
-        </Link>
+        </div>
     ) : <></>;
 }
