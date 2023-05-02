@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link, NavigateFunction, useNavigate } from "react-router-dom";
+import { Link, NavigateFunction, createSearchParams, useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery } from "../../util/query";
 import { AnnouncementFeeds } from "./feeds";
 import { AnnouncementFeed, AnnouncementInputs } from "../../util/models";
@@ -25,13 +25,17 @@ const ANN_FETCHLIMIT = 10; // how many anns to fetch each api request
 
 export const Announcements = (): JSX.Element => {
     const session: Session = React.useContext(SessionContext);
-
-    const query: URLSearchParams = useQuery();
     const nav: NavigateFunction = useNavigate();
-    const feed: string | null = query.get("feed");
-    const tag: string | null = query.get("tag");
 
-    const [tagObj, setTagObj] = React.useState({} as Tag);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const initMount = useRef(true);
+
+    const [feeds, setFeeds] = React.useState(AnnouncementFeeds);
+    const [curContent, setCurContent] = React.useState({
+        isFeed: true, // true = is a feed, false = is a tag
+        feed: {} as AnnouncementFeed, // default is all
+        tag: {} as Tag, // the tag object
+    })
     const [openCreator, setOpenCreator] = React.useState(false);
 
     const editorRef = useRef(null);
@@ -42,56 +46,89 @@ export const Announcements = (): JSX.Element => {
     };
 
     React.useEffect(() => {
-        let filtered = session.allTags.filter(e => e.name === tag);
-        setTagObj(filtered.length == 0 ? {} as Tag : filtered[0]);
-    }, [session.allTags, tag]);
+        if (searchParams.get("tag")) {
+            let filtered = session.allTags.filter(e => e.name === searchParams.get("tag"));
+            setCurContent({
+                isFeed: false,
+                feed: {} as AnnouncementFeed,
+                tag: filtered.length == 0 ? {} as Tag : filtered[0], // the tag object
+            });
+        }
+    }, [session.allTags]);
+
+    React.useEffect(() => {
+        if(session.user.id) {
+            setFeeds((curFeeds) => {
+                // delete existing "my" feed
+                let removeMy = curFeeds.filter(e => e.id !== "my");
+                removeMy.push({
+                    id: 'my',
+                    text: "MY FEED",
+                    filters: (session.user.organizations) ? session.user.organizations.map(e => { return '&organization=' + e }).join('') : ''
+                });
+                return removeMy;
+            })
+        }
+    }, [session.user]);
+
+    function syncParamWithContent() {
+        if (searchParams.get('feed')) {
+            let feedlist = feeds.filter(e => e.id === searchParams.get("feed"));
+            setCurContent({
+                isFeed: true, // true = is a feed, false = is a tag
+                feed: feedlist.length == 0 ? feeds[0] : feedlist[0], // default is all (0 index)
+                tag: {} as Tag, // the tag object
+            });
+        }
+        else if (searchParams.get("tag")) {
+            let filtered = session.allTags.filter(e => e.name === searchParams.get("tag"));
+            setCurContent({
+                isFeed: false,
+                feed: {} as AnnouncementFeed,
+                tag: filtered.length == 0 ? {} as Tag : filtered[0], // the tag object
+            });
+        }
+    }
+
+    React.useEffect(() => {
+        if (initMount.current) {
+            initMount.current = false;
+            //here we "clean up" the searchparam
+            if (searchParams.get("feed")) {
+                let feedlist = feeds.filter(e => e.id === searchParams.get("feed"));
+                if (feedlist.length == 0 && searchParams.get("feed") !== "my") { // my is a special feed
+                    setSearchParams(createSearchParams([["feed", "all"]]));
+                }
+                else {
+                    if (Array.from(searchParams.keys()).length == 1) { // if the only query param is "feed"
+                        syncParamWithContent();
+                    }
+                    else { // because there is another param we will reset it forcefully which also triggers a rerender from the searchParam state
+                        setSearchParams(createSearchParams([["feed", searchParams.get('feed') as string]]));
+                    }
+                }
+            }
+            else if (searchParams.get("tag")) {
+                // because it is a tag it may take some time to cache the actual tag value
+                if (Array.from(searchParams.keys()).length == 1) { // if the only query param is "tag"
+                    syncParamWithContent();
+                }
+                else { // because there is another param we will reset it forcefully which also triggers a rerender from the searchParam state
+                    setSearchParams(createSearchParams([["tag", searchParams.get('tag') as string]]));
+                }
+            }
+            else {
+                setSearchParams(createSearchParams([["feed", "all"]]));
+            }
+        }
+        else {
+            syncParamWithContent();
+        }
+    }, [searchParams, feeds]);
 
     React.useEffect((): void => {
         document.title = "Announcements | Metropolis";
     }, []);
-
-    const header = (currentFeed: string | null): JSX.Element => {
-        return <> {
-            AnnouncementFeeds.map((feed: AnnouncementFeed): JSX.Element => {
-                const headerClass: string =
-                    feed.id === currentFeed ? "header header-active" : "header";
-                return (
-                    <li
-                        key={feed.id}
-                        className={headerClass}
-                        onClick={(): void => {
-                            nav(`/announcements?feed=${feed.id}`)
-                        }}
-                    >
-                        {feed.text}
-                    </li>
-                );
-            })
-        }
-            {
-                session.user.organizations ? <li
-                    key={"my"}
-                    className={"my" === currentFeed ? "header header-active" : "header"}
-                    onClick={(): void => {
-                        nav(`/announcements?feed=my`);
-                    }}
-                >
-                    MY FEED
-                </li> : <></>
-            }
-            {
-                tagObj.id ? <li
-                    key={tagObj.name}
-                    className={tagObj.name === currentFeed ? "header header-active" : "header"}
-                    onClick={(): void => {
-                        nav(`/announcements?tag=${tagObj.name}`);
-                    }}
-                >
-                    TAG: {tagObj.name.toUpperCase()}
-                </li> : <></>
-            }
-        </>;
-    };
 
     return (
         <>
@@ -103,7 +140,35 @@ export const Announcements = (): JSX.Element => {
 
             <div className="container">
                 <div className="headers header-row">
-                    <ul>{header(tagObj.id ? tagObj.name : feed)}</ul>
+                    <ul>{
+                        //this is the header
+                        feeds.map((feed: AnnouncementFeed): JSX.Element => {
+                            const headerClass: string =
+                                (curContent.isFeed && feed.id === curContent.feed.id) ? "header header-active" : "header";
+                            return (
+                                <li
+                                    key={feed.id}
+                                    className={headerClass}
+                                    onClick={(): void => {
+                                        setSearchParams(createSearchParams([["feed", feed.id]]));
+                                    }}
+                                >
+                                    {feed.text}
+                                </li>
+                            );
+                        })
+                    }
+                        {
+                            !curContent.isFeed ? <li
+                                key={curContent.tag.name}
+                                className={"header header-active"}
+                                onClick={(): void => {
+                                    setSearchParams(createSearchParams([["tag", curContent.tag.name]]));
+                                }}
+                            >
+                                TAG: {curContent.tag.name ? curContent.tag.name.toUpperCase() : 'Loading...'}
+                            </li> : <></>
+                        }</ul>
                     {/* <a
                         className="btn-small waves-light red"
                         href="#modal1"
@@ -123,7 +188,7 @@ export const Announcements = (): JSX.Element => {
                 </div>
                 <div className="card-container">
                     <div className="cards" id="cards-all">
-                        <AnnouncementList tag={tagObj} feed={feed} />
+                        <AnnouncementList curContent={curContent} searchParams={searchParams} />
                     </div>
                 </div>
             </div>
@@ -138,25 +203,19 @@ const AnnouncementList = (props: any): JSX.Element => {
     const [offset, setOffset] = React.useState(0);
 
     function fetchAnns(append: boolean) {
-        console.log('fetching ' + append)
         let param = '';
-        if (props.tag.id) {
-            param = `&tag=${props.tag.id}`;
+        if (!props.curContent.isFeed && props.curContent.tag.id) {
+            param = `&tags=${props.curContent.tag.id}`;
         }
-        else if (props.feed) {
-            let feedobj: AnnouncementFeed | null = AnnouncementFeeds.filter(e => e.id === props.feed)[0];
-            if (feedobj) {
-                param = feedobj.filters;
+        else if (props.curContent.isFeed) {
+            if (props.curContent.feed.id === "my" && (!session.user.organizations || session.user.organizations.length == 0)) {
+                // dont display anns if there are on their own feed but havent subscribed to any orgs
+                setAnnouncements([]);
+                setOffset(-1);
+                return;
             }
-            else if (props.feed === "my" && session.user.organizations) {
-                if (session.user.organizations.length == 0) {
-                    setAnnouncements([]);
-                    setOffset(-1);
-                    return;
-                }
-                // kinda wack here but if there isnt anything in session.user.organizations the feed should display no anns at all
-                // if there is this code works :)
-                param = '&organization=' + session.user.organizations.join('&organization=');
+            else {
+                param = props.curContent.feed.filters;
             }
         }
         const fetchURL = `${Routes.OBJECT}/announcement?limit=${ANN_FETCHLIMIT}&offset=${Math.max(offset, 0)}${param}`;
@@ -199,10 +258,8 @@ const AnnouncementList = (props: any): JSX.Element => {
     }
 
     React.useEffect(() => {
-        // TODO: fix race condition when there is a double update (both tag and feed change simultaneously)
-        // honestly just switch to searchparams from react-router :clown:
         fetchAnns(false);
-    }, [props.tag, props.feed]);
+    }, [props.curContent]);
 
     return <div id="annlist" onScroll={() => trackScroll()}>
         {
