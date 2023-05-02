@@ -19,7 +19,7 @@ export const Flatpage = (): JSX.Element => {
     const slug = encodeURIComponent(window.location.pathname + "/");
 
     React.useEffect((): void => {
-        session.getAPI(`${Routes.OBJECT}/flatpage/retrieve/${slug}?lookup=url`, false).then((res: { data: FlatPage }) => {
+        session.request('get', `${Routes.OBJECT}/flatpage/retrieve/${slug}?lookup=url`, false).then((res: { data: FlatPage }) => {
             setFlatpage(res.data);
             setStatus(FlatPageFetchStatus.EXISTS);
 

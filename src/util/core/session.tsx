@@ -1,6 +1,6 @@
 import * as React from 'react';
 import jwt_decode from "jwt-decode";
-import { AxiosResponse, default as axios } from 'axios';
+import { AxiosError, AxiosResponse, default as axios } from 'axios';
 import Routes from './misc/routes';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { getToken, setToken, getRefresh, setRefresh, loggedIn } from "./AuthService";
@@ -41,11 +41,8 @@ export interface Session {
     allTags: Array<Tag>,
     setUser: (user: User) => void,
     updateToken: (token: string) => void,
-    getAPI: (url: string, auth?: boolean) => Promise<any>,
-    postAPI: (url: string, data: any) => Promise<any>,
-    putAPI: (url: string, data: any) => Promise<any>,
-    patchAPI: (url: string, data: any) => Promise<any>,
-    refreshAuth: () => void,
+    request: (method: string, url: string, data?: any) => Promise<any>,
+    refreshAuth: (callback?: () => void) => Promise<void>,
     logout: () => void,
     notify: (message: string, type: AlertColor) => void,
     notification: Notif,
@@ -60,11 +57,8 @@ export const SessionContext = React.createContext<Session>({
     allTags: [],
     setUser: (user: User) => { },
     updateToken: (token: string) => { },
-    getAPI: (url: string, auth?: boolean) => { return {} as Promise<any> },
-    postAPI: (url: string, data: any) => { return {} as Promise<any> },
-    putAPI: (url: string, data: any) => { return {} as Promise<any> },
-    patchAPI: (url: string, data: any) => { return {} as Promise<any> },
-    refreshAuth: () => { },
+    request: () => { return {} as Promise<any> },
+    refreshAuth: () => { return {} as Promise<void> },
     logout: () => { },
     notify: (message: string, type: AlertColor) => { },
     notification: {} as Notif,
@@ -108,13 +102,11 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
 
     const refreshUser = (): void => {
         if (loggedIn()) {
-            getAPI(`${Routes.USER}/retrieve/${user.id}`).then((res) => {
+            request('get', `${Routes.USER}/retrieve/${user.id}`).then((res) => {
                 setUser({
                     ...user,
                     ...res.data
                 });
-            }).catch((err) => {
-                refreshAuth();
             });
         }
     }
@@ -169,7 +161,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         if (item) {
             try {
                 let data = JSON.parse(item);
-                let res = await headAPI(`${Routes.OBJECT}/${objtype}?limit=${BATCH_CACHELIMIT}`);
+                let res = await request('head', `${Routes.OBJECT}/${objtype}?limit=${BATCH_CACHELIMIT}`);
                 if (res.headers["last-modified"] && new Date(res.headers["last-modified"]).getTime() > data.modified) {
                     return await fetchAll(objtype);
                 }
@@ -188,14 +180,14 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
 
     const fetchAll = async (objtype: string): Promise<any[]> => {
         try {
-            let res = await getAPI(`${Routes.OBJECT}/${objtype}?limit=${BATCH_CACHELIMIT}`);
+            let res = await request('get', `${Routes.OBJECT}/${objtype}?limit=${BATCH_CACHELIMIT}`);
             let arr = res.data.results;
             let i_count = 1; // backoff for spamming reqs
             while (true) {
                 if (res.data.next) {
                     await new Promise(r => setTimeout(r, i_count * i_count * 100)); // timeout
                     // spent like a solid 5 minutes wondering about this function
-                    res = await getAPI(res.data.next);
+                    res = await request('get', res.data.next);
                     arr.concat(res.data.results);
                     i_count++;
                 }
@@ -230,72 +222,54 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         }
     }
 
-    function getAPI(url: string, auth?: boolean): Promise<AxiosResponse> {
-        if (auth && !loggedIn()) {
-            nav("/accounts/login");
+    const request = async (method: string, url: string, data?: any): Promise<any> => {
+        if (loggedIn()) {
+            axios.defaults.headers.common['Authorization'] = `Bearer ${getToken()}`;
         }
-        const token = getToken();
-        return axios.get(url, auth ? {
-            headers: {
-                Authorization: `Bearer ${token}`
+
+        try {
+            const res = await axios({
+                method: method,
+                url: url,
+                data: data
+            });
+            return res;
+        }
+        catch (err: any) {
+            if (err.response.status === 401) {
+                refreshAuth(() => request(method, url, data));
             }
-        } : {});
+        }
     }
 
-    const postAPI = (url: string, data: any): Promise<AxiosResponse> => {
+    const refreshAuth = async (callback?: () => void): Promise<void> => {
         if (!loggedIn()) {
-            nav("/accounts/login");
+            notify("Please log back into your account.", "info");
+            nav(`/accounts/login?next=${encodeURIComponent(window.location.pathname)}`);
+            return;
         }
-        const token = getToken();
-        return axios.post(url, data, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-    }
 
-    const putAPI = (url: string, data: any): Promise<AxiosResponse> => {
-        if (!loggedIn()) {
-            nav("/accounts/login");
-        }
-        const token = getToken();
-        return axios.put(url, data, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-    }
+        // axios.post(Routes.AUTH.REFRESH, {
+        //     refresh: getRefresh()
+        // }, {}).then((res) => {
+        //     updateToken(res.data.access);
+        //     setRefresh(res.data.refresh);
+        // }).catch((err) => {
+        //     notify("Your session has expired, please log back in.", "info");
+        //     logout();
+        // });
 
-    const patchAPI = (url: string, data: any): Promise<AxiosResponse> => {
-        if (!loggedIn()) {
-            // notify("Please login to access this page", "info");
-            nav("/accounts/login");
-            return {} as Promise<any>;
-        }
-        const token = getToken();
-        return axios.patch(url, data, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-    }
-
-    function headAPI(url: string): Promise<AxiosResponse> {
-        return axios.head(url);
-    }
-
-    const refreshAuth = (): void => {
-        if (!loggedIn()) return;
-
-        axios.post(Routes.AUTH.REFRESH, {
-            refresh: getRefresh()
-        }, {}).then((res) => {
+        try {
+            const res = await axios.post(Routes.AUTH.REFRESH, {
+                refresh: getRefresh()
+            });
             updateToken(res.data.access);
             setRefresh(res.data.refresh);
-        }).catch((err) => {
-            console.log("Refresh expired. Logging out.");
+            if (callback) callback();
+        }
+        catch (err) {
             logout();
-        });
+        }
     }
 
     const logout = (): void => {
@@ -304,11 +278,11 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         setUser({} as User);
         localStorage.removeItem("token");
         localStorage.removeItem("refresh");
-        nav("/accounts/login");
+        nav(`/accounts/login?next=${encodeURIComponent(window.location.pathname)}`);
     }
 
     return (
-        <SessionContext.Provider value={{ user: user, cacheStatus: cacheStatus, allUsers: allUsers, allOrgs: allOrgs, allTags: allTags, setUser: setUser, updateToken: updateToken, getAPI: getAPI, postAPI: postAPI, putAPI: putAPI, patchAPI: patchAPI, refreshAuth: refreshAuth, logout: logout, notify: notify, notification: notification, closeNotif: closeNotif }}>
+        <SessionContext.Provider value={{ user: user, cacheStatus: cacheStatus, allUsers: allUsers, allOrgs: allOrgs, allTags: allTags, setUser: setUser, updateToken: updateToken, request: request, refreshAuth: refreshAuth, logout: logout, notify: notify, notification: notification, closeNotif: closeNotif }}>
             {props.children}
         </SessionContext.Provider>
     )

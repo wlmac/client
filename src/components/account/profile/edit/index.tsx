@@ -36,12 +36,8 @@ export const ProfileEdit = (): JSX.Element => {
     const onSubmit: SubmitHandler<Inputs> = data => {
         console.log(data);
 
-        session.putAPI(`${Routes.POST.USER_UPDATE}/${user.id}`, data).then((res) => {
+        session.request('put', `${Routes.POST.USER_UPDATE}/${user.id}`, data).then((res) => {
             nav(`/user/${user.username}`);
-        }).catch((err) => {
-            console.log("Failed to update user");
-            session.refreshAuth();
-            // setError("An internal error occurred. Please contact an admin to get it fixed.")
         });
     }
 

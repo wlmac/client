@@ -13,7 +13,7 @@ export const NewCourse = (): JSX.Element => {
     const [position, setPosition] = React.useState<number>(-1);
 
     const submitNewCourse = (): void => {
-        session.postAPI(`${Routes.COURSE}/new`, {
+        session.request('post', `${Routes.COURSE}/new`, {
             code: code,
             position: position,
             term: ID

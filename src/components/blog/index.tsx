@@ -38,14 +38,14 @@ const BlogPosts = (): JSX.Element[] => {
 
     React.useEffect(() => {
         const fetchURL = `${Routes.OBJECT}/blog-post`;
-        session.getAPI(fetchURL).then((res) => {
+        session.request('get', fetchURL).then((res) => {
             setPosts(res.data.results);
         }).catch((err) => {
             session.refreshAuth();
         });
 
         // Tags
-        session.getAPI(`${Routes.OBJECT}/tag`).then((res) => {
+        session.request('get', `${Routes.OBJECT}/tag`).then((res) => {
             const tags = res.data.results;
             setTags(tags);
         }).catch(() => {
@@ -76,7 +76,7 @@ const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Eleme
 
     async function getAuthor() {
         const session: Session = React.useContext(SessionContext);
-        const author = await session.getAPI(`${Routes.USER}/${post.author}`);
+        const author = await session.request('get', `${Routes.USER}/${post.author}`);
         return await author.data;
     }
 
