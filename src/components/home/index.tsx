@@ -72,7 +72,7 @@ const FeaturedBlogPost = (props: { post: BlogPost }): JSX.Element => {
                     </div>
                 </div>
             </div>
-            <img className="blog-image hide-on-small-and-down col s7" src={post.featured_image + "?fmt=webp&w=1280"} />
+            <img className="blog-image hide-on-small-and-down col s7" src={post.featured_image} />
         </div>
     );
 }
