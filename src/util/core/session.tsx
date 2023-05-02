@@ -27,8 +27,15 @@ export interface User {
     registertime: number
 }
 
+interface CacheStatus {
+    tags: boolean,
+    orgs: boolean,
+    users: boolean
+}
+
 export interface Session {
     user: User,
+    cacheStatus: CacheStatus
     allUsers: Array<User>,
     allOrgs: Array<Organization>,
     allTags: Array<Tag>,
@@ -47,6 +54,7 @@ export interface Session {
 
 export const SessionContext = React.createContext<Session>({
     user: {} as User,
+    cacheStatus: {} as CacheStatus,
     allUsers: [],
     allOrgs: [],
     allTags: [],
@@ -68,6 +76,11 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     const [allUsers, setAllUsers] = React.useState([] as Array<User>);
     const [allOrgs, setAllOrgs] = React.useState([] as Array<Organization>);
     const [allTags, setAllTags] = React.useState([] as Array<Tag>);
+    const [cacheStatus, setCacheStatus] = React.useState({
+        tags: false,
+        orgs: false,
+        users: false
+    });
     const nav: NavigateFunction = useNavigate();
 
     // Snackbar Notification
@@ -123,16 +136,28 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     }, []);
 
     const cacheRoutine = async () => {
-        getAll(`user`).then((data) => {
-            setAllUsers(data);
+        getAll(`tag`).then((data) => {
+            setAllTags(data);
+            setCacheStatus((prevStatus) => {
+                prevStatus.tags = true;
+                return prevStatus;
+            })
         }).catch((err) => { });
 
         getAll(`organization`).then((data) => {
             setAllOrgs(data);
+            setCacheStatus((prevStatus) => {
+                prevStatus.orgs = true;
+                return prevStatus;
+            })
         }).catch((err) => { });
 
-        getAll(`tag`).then((data) => {
-            setAllTags(data);
+        getAll(`user`).then((data) => {
+            setAllUsers(data);
+            setCacheStatus((prevStatus) => {
+                prevStatus.users = true;
+                return prevStatus;
+            })
         }).catch((err) => { });
     }
 
@@ -283,7 +308,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     }
 
     return (
-        <SessionContext.Provider value={{ user: user, allUsers: allUsers, allOrgs: allOrgs, allTags: allTags, setUser: setUser, updateToken: updateToken, getAPI: getAPI, postAPI: postAPI, putAPI: putAPI, patchAPI: patchAPI, refreshAuth: refreshAuth, logout: logout, notify: notify, notification: notification, closeNotif: closeNotif }}>
+        <SessionContext.Provider value={{ user: user, cacheStatus: cacheStatus, allUsers: allUsers, allOrgs: allOrgs, allTags: allTags, setUser: setUser, updateToken: updateToken, getAPI: getAPI, postAPI: postAPI, putAPI: putAPI, patchAPI: patchAPI, refreshAuth: refreshAuth, logout: logout, notify: notify, notification: notification, closeNotif: closeNotif }}>
             {props.children}
         </SessionContext.Provider>
     )
