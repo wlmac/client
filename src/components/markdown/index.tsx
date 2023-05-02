@@ -6,7 +6,7 @@ const Markdown = ({ text }: { text: string }): JSX.Element => { //takes markdown
     return (
         <ReactMarkdown children={
             //honest to god I have no idea why tf its like this but wtv it needs exactly 2 spaces before the \n
-            text.replace(/\r\n/g, '  \n')
+            text ? text.replace(/\r\n/g, '  \n') : ''
         } remarkPlugins={[remarkGfm]} components={{
             img: el => {
                 return safeEmbed(el.src!) ? (
