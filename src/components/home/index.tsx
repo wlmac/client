@@ -122,12 +122,12 @@ const EventsFeed = (): JSX.Element => {
                     <hr />
                     <div className="authors">
                         <div className="authors-image">
-                            <Link to={`/club/${data.id}`}>
+                            <Link to={`/club/${organization.slug}`}>
                                 <img className="circle" src={organization ? organization.icon : ""} alt={`${organization ? organization.name : ""} logo`} />
                             </Link>
                         </div>
                         <div className="authors-text">
-                            <Link to={`/club/${data.id}`}>{organization ? organization.name : ""}</Link>
+                            <Link to={`/club/${organization.slug}`}>{organization ? organization.name : ""}</Link>
                         </div>
                     </div>
                 </div>

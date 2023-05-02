@@ -14,7 +14,7 @@ export const ContentTeam = (): JSX.Element => {
 
     React.useEffect(() => {
         // JUST TEMPORARY, WILL FIX ONCE READY
-        session.getAPI(`${Routes.USER}?limit=99999`).then((res) => {
+        session.request('get', `${Routes.USER}?limit=99999`).then((res) => {
             setAllUsers(res.data.results);
         }).catch(() => {
 
