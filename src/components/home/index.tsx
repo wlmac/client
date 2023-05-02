@@ -67,7 +67,7 @@ const FeaturedBlogPost = (props: { post: BlogPost }): JSX.Element => {
                     <hr />
                     <div className="blog-body markdown-container">
                         <p>{post.body}</p>
-                        <Link className="full-content-page link" to={`/blog/${post.id}`}>Read full blog
+                        <Link className="full-content-page link" to={`/blog/${post.slug}`}>Read full blog
                             post <i className="zmdi zmdi-chevron-right"></i></Link>
                     </div>
                 </div>
