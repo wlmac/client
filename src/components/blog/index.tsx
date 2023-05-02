@@ -95,10 +95,10 @@ const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Eleme
                     <h1 className="title">{post.title}</h1>
                     <div className="card-authors">
                         <div className="card-authors-image">
-                            <Link to={`/user/${author.username}`}><img className="circle" src={author ? author.gravatar_url : ""} /></Link>
+                            <Link to={`/user/${author ? author.username : ''}`}><img className="circle" src={author ? author.gravatar_url : ""} /></Link>
                         </div>
                         <div className="card-authors-text">
-                            <Link to={`/user/${author.username}`} className="link">{author && `${author.first_name} ${author.last_name}`}</Link>
+                            <Link to={`/user/${author ? author.username : ''}`} className="link">{author && `${author.first_name} ${author.last_name}`}</Link>
                             <br />
                             • posted {new Date(post.created_date).toLocaleTimeString(undefined, dateFormat)}
                         </div>
