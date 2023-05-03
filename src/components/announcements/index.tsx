@@ -200,7 +200,7 @@ const AnnouncementList = (props: any): JSX.Element => {
     const session: Session = React.useContext(SessionContext);
 
     const [announcements, setAnnouncements] = React.useState([] as any[]);
-    const [offset, setOffset] = React.useState(0);
+    let [offset, setOffset] = React.useState(0);
 
     function fetchAnns(append: boolean) {
         let param = '';
