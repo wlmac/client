@@ -37,6 +37,7 @@ export const ProfileEdit = (): JSX.Element => {
         console.log(data);
 
         session.request('put', `${Routes.POST.USER_UPDATE}/${user.id}`, data).then((res) => {
+            session.refreshUser();
             nav(`/user/${user.username}`);
         });
     }
@@ -983,7 +984,7 @@ export const ProfileEdit = (): JSX.Element => {
             <!-- </div> --> */}
                     <div style={{ display: "flex", alignItems: "center", "gap": "3px" }}>
                         <button type="submit" className="btn">Submit</button>
-                        <NavLink to={`/user/${user.id}`} className="btn" role="button" aria-pressed="true">Cancel</NavLink>
+                        <NavLink to={`/user/${user.username}`} className="btn" role="button" aria-pressed="true">Cancel</NavLink>
                     </div>
                 </form>
             </div>

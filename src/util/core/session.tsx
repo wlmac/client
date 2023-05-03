@@ -40,6 +40,7 @@ export interface Session {
     allOrgs: Array<Organization>,
     allTags: Array<Tag>,
     setUser: (user: User) => void,
+    refreshUser: () => void,
     updateToken: (token: string) => void,
     request: (method: string, url: string, data?: any) => Promise<any>,
     refreshAuth: (callback?: () => void) => Promise<void>,
@@ -56,6 +57,7 @@ export const SessionContext = React.createContext<Session>({
     allOrgs: [],
     allTags: [],
     setUser: (user: User) => { },
+    refreshUser: () => { },
     updateToken: (token: string) => { },
     request: () => { return {} as Promise<any> },
     refreshAuth: () => { return {} as Promise<void> },
@@ -205,6 +207,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     }
 
     const updateToken = (token: string): void => {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         setToken(token);
         if (token !== "") {
             let decoded: any = jwt_decode(token);
@@ -237,7 +240,13 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         }
         catch (err: any) {
             if (err.response.status === 401) {
-                refreshAuth(() => request(method, url, data));
+                try {
+                    const refresh = await refreshAuth();
+                    return request(method, url, data); // Retry if refresh success
+                }
+                catch (err: any) {
+                    logout();
+                }
             }
         }
     }
@@ -249,27 +258,11 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
             return;
         }
 
-        // axios.post(Routes.AUTH.REFRESH, {
-        //     refresh: getRefresh()
-        // }, {}).then((res) => {
-        //     updateToken(res.data.access);
-        //     setRefresh(res.data.refresh);
-        // }).catch((err) => {
-        //     notify("Your session has expired, please log back in.", "info");
-        //     logout();
-        // });
-
-        try {
-            const res = await axios.post(Routes.AUTH.REFRESH, {
-                refresh: getRefresh()
-            });
-            updateToken(res.data.access);
-            setRefresh(res.data.refresh);
-            if (callback) callback();
-        }
-        catch (err) {
-            logout();
-        }
+        const res = await axios.post(Routes.AUTH.REFRESH, {
+            refresh: getRefresh()
+        });
+        updateToken(res.data.access);
+        setRefresh(res.data.refresh);
     }
 
     const logout = (): void => {
@@ -282,7 +275,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     }
 
     return (
-        <SessionContext.Provider value={{ user: user, cacheStatus: cacheStatus, allUsers: allUsers, allOrgs: allOrgs, allTags: allTags, setUser: setUser, updateToken: updateToken, request: request, refreshAuth: refreshAuth, logout: logout, notify: notify, notification: notification, closeNotif: closeNotif }}>
+        <SessionContext.Provider value={{ user: user, cacheStatus: cacheStatus, allUsers: allUsers, allOrgs: allOrgs, allTags: allTags, setUser: setUser, refreshUser: refreshUser, updateToken: updateToken, request: request, refreshAuth: refreshAuth, logout: logout, notify: notify, notification: notification, closeNotif: closeNotif }}>
             {props.children}
         </SessionContext.Provider>
     )
