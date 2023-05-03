@@ -212,16 +212,20 @@ const AnnouncementList = (props: any): JSX.Element => {
                 // dont display anns if there are on their own feed but havent subscribed to any orgs
                 setAnnouncements([]);
                 setOffset(-1);
+                //console.log('hi')
                 return;
             }
             else {
-                param = props.curContent.feed.filters;
+                param = props.curContent.feed.filters ?? '';
             }
         }
         const fetchURL = `${Routes.OBJECT}/announcement?limit=${ANN_FETCHLIMIT}&offset=${Math.max(offset, 0)}${param}`;
         session
             .request('get', fetchURL)
             .then((res) => {
+                /*console.log(fetchURL);
+                console.log(offset);
+                console.log(param);*/
                 setAnnouncements((prevAnns) => {
                     if (append) {
                         return prevAnns.concat(res.data.results);
@@ -230,35 +234,48 @@ const AnnouncementList = (props: any): JSX.Element => {
                         return res.data.results;
                     }
                 });
-                if (res.count - offset > ANN_FETCHLIMIT) { // there are more anns!
-                    setOffset(prevOffset => prevOffset + ANN_FETCHLIMIT);
-                }
-                else {
-                    setOffset(-1);
-                }
+                setOffset((prevOffset) => {
+                    if (res.data.count - prevOffset > ANN_FETCHLIMIT) { // there are more anns!
+                        return prevOffset + ANN_FETCHLIMIT;
+                    }
+                    else {
+                        //console.log('setting -1')
+                        return -1;
+                    }
+                });
             });
     }
 
-    const listInnerRef = useRef();
-    function trackScroll() {
-        if (listInnerRef.current) {
-            const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
-            if (scrollTop + clientHeight === scrollHeight) {
-                console.log('REACHED BOTTOM');
-                // reached bottom!
-                // https://stackoverflow.com/a/64130642
-                if (offset != -1) { // not -1 means there are more anns to fetch
-                    fetchAnns(true);
-                }
-            }
-        }
-    }
+    /*React.useEffect(() => {
+        console.log('state change ' + offset)
+    }, [offset])*/
 
     React.useEffect(() => {
         fetchAnns(false);
+        document.removeEventListener('scroll', trackScrolling);
+        document.addEventListener('scroll', trackScrolling);
+        return () => {
+            document.removeEventListener('scroll', trackScrolling);
+        }
     }, [props.curContent]);
 
-    return <div id="annlist" onScroll={() => trackScroll()}>
+    function isBottom(el: any) {
+        return el.getBoundingClientRect().bottom <= window.innerHeight;
+    }
+
+    function trackScrolling() {
+        const wrappedElement = document.getElementById('annlist');
+        if (isBottom(wrappedElement)) {
+            //reached bottom!
+            //console.log(offset)
+            if (offset != -1) { // not -1 means there are more anns to fetch
+                fetchAnns(true);
+            }
+            document.removeEventListener('scroll', trackScrolling);
+        }
+    }
+
+    return <div id="annlist">
         {
             announcements.length == 0 ? <div>
                 There are no announcements to be shown at this time
