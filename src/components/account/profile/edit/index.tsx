@@ -36,12 +36,9 @@ export const ProfileEdit = (): JSX.Element => {
     const onSubmit: SubmitHandler<Inputs> = data => {
         console.log(data);
 
-        session.putAPI(`${Routes.POST.USER_UPDATE}/${user.id}`, data).then((res) => {
+        session.request('put', `${Routes.POST.USER_UPDATE}/${user.id}`, data).then((res) => {
+            session.refreshUser();
             nav(`/user/${user.username}`);
-        }).catch((err) => {
-            console.log("Failed to update user");
-            session.refreshAuth();
-            // setError("An internal error occurred. Please contact an admin to get it fixed.")
         });
     }
 
@@ -987,7 +984,7 @@ export const ProfileEdit = (): JSX.Element => {
             <!-- </div> --> */}
                     <div style={{ display: "flex", alignItems: "center", "gap": "3px" }}>
                         <button type="submit" className="btn">Submit</button>
-                        <NavLink to={`/user/${user.id}`} className="btn" role="button" aria-pressed="true">Cancel</NavLink>
+                        <NavLink to={`/user/${user.username}`} className="btn" role="button" aria-pressed="true">Cancel</NavLink>
                     </div>
                 </form>
             </div>

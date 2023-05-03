@@ -24,7 +24,7 @@ export const EditClubDetails = (): JSX.Element => {
     //when the page gets loaded, this gets called and all the react states get set to the GET APIs
     React.useEffect(() => {
         const fetchURL = `${Routes.OBJECT}/organization/retrieve/${slug}?lookup=slug`;
-        session.getAPI(fetchURL, false).then((res) => {
+        session.request('get', fetchURL).then((res) => {
             const current_club: Organization = res.data as Organization;
             setClub(current_club);
             setNewClub(current_club);
@@ -47,7 +47,7 @@ export const EditClubDetails = (): JSX.Element => {
         console.log("ogga");
         //come on... do smth
         const patchURL = `${Routes.OBJECT}/organization/single/${club.id}`;
-        session.patchAPI(patchURL, newClub).then((res) => {
+        session.request('patch', patchURL, newClub).then((res) => {
             session.notify(`Successfully changed ${club.name}'s details`, "success");
             nav(`/club/${club.slug}`);
         }).catch((err) => {

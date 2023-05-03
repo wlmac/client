@@ -29,7 +29,7 @@ export const AnnouncementDetail = (): JSX.Element => {
     // });
 
     React.useEffect(() => {
-        session.getAPI(`${Routes.OBJECT}/announcement/retrieve/${id}`, false).then((res) => {
+        session.request('get', `${Routes.OBJECT}/announcement/retrieve/${id}`, false).then((res) => {
             setAnnouncement(res.data);
         }).catch((err) => {
             console.log(err);
@@ -69,7 +69,7 @@ export const AnnouncementDetail = (): JSX.Element => {
                 </div>
                 <div className="prompt-buttons">
                     <a className="checkmark" onClick={(ev: React.MouseEvent) => {
-                        session.putAPI(`${Routes.OBJECT}/announcement/single/${id}`, {
+                        session.request('put', `${Routes.OBJECT}/announcement/single/${id}`, {
                             ...announcement,
                             status: "a" // approved
                         }).then((res) => {
@@ -132,7 +132,7 @@ export const AnnouncementDetail = (): JSX.Element => {
                     <div className="modal-footer">
                         <a href="#!" className="modal-close waves-effect waves-red btn-flat">Cancel</a>
                         <a className="waves-effect waves-light btn" onClick={(ev: React.MouseEvent) => {
-                            session.putAPI(`${Routes.OBJECT}/announcement/single/${id}`, {
+                            session.request('put', `${Routes.OBJECT}/announcement/single/${id}`, {
                                 ...announcement,
                                 status: "r",
                                 rejection_reason: rejectionReason

@@ -68,15 +68,9 @@ export const TimetablePage = (): JSX.Element => {
     const [timetable, setTimetable] = React.useState({} as Timetable);
     const session: Session = React.useContext(SessionContext);
 
-    React.useEffect(() => {
-        if (!loggedIn()) {
-            nav("/accounts/login");
-        }
-    });
-
     const fetchTimetable = (): void => {
         if (loggedIn()) {
-            session.getAPI(Routes.TIMETABLE, true).then((res) => {
+            session.request('get', Routes.PERSONAL_TIMETABLE).then((res) => {
                 setTimetable(res.data);
                 // console.log(res.data[1]);
             }).catch((err) => {

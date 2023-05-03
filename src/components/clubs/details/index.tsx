@@ -29,13 +29,13 @@ export const ClubDetails = (): JSX.Element => {
 
     React.useEffect(() => {
         const fetchURL = `${Routes.OBJECT}/organization/retrieve/${slug}?lookup=slug`;
-        session.getAPI(fetchURL, false).then((res) => {
+        session.request('get', fetchURL).then((res) => {
             const current_club: Organization = res.data as Organization;
             setClub(current_club);
             console.log(fetchURL);
 
             // Tags
-            session.getAPI(`${Routes.OBJECT}/tag`, false).then((res) => {
+            session.request('get', `${Routes.OBJECT}/tag`).then((res) => {
                 const tags_data: Tag[] = res.data.results;
                 console.log(current_club.tags);
                 const current_tags: Tag[] = [];
@@ -53,7 +53,7 @@ export const ClubDetails = (): JSX.Element => {
             });
 
             // Execs and members
-            session.getAPI(`${Routes.OBJECT}/user?limit=99999999`, false).then((res) => {
+            session.request('get', `${Routes.OBJECT}/user?limit=99999999`).then((res) => {
                 const users_data: User[] = res.data.results;
                 setExecs(current_club.execs.map((execId: number): User => {
                     for (let i = 0; i < users_data.length; i++) {
@@ -84,7 +84,7 @@ export const ClubDetails = (): JSX.Element => {
     // const UserElement = (props: { userID: number }): JSX.Element => {
     //     const [user, setUser] = React.useState({} as User);
     //     React.useEffect(() => {
-    //         session.getAPI(`${Routes.OBJECT}/user/retrieve/${props.userID}`, false).then((res: { data: any }) => {
+    //         session.request('get', `${Routes.OBJECT}/user/retrieve/${props.userID}`, false).then((res: { data: any }) => {
     //             setUser(res.data as User);
     //             console.log("Fetched");
     //         }).catch(() => {

@@ -15,8 +15,12 @@ const Routes = {
     ANNOUNCEMENT: `${BASEURL}/api/v3/announcement`,
   },
   USER: `${BASEURL}/api/v3/obj/user`,
-  TIMETABLE: `${BASEURL}/api/me/timetable`,
-  SCHEDULE: `${BASEURL}/api/me/schedule`,
+  PERSONAL_TIMETABLE: `${BASEURL}/api/me/timetable`,
+  TIMETABLE: `${BASEURL}/api/v3/obj/timetable`,
+  SCHEDULE: {
+    LOGGED_IN: `${BASEURL}/api/me/schedule`,
+    NOT_LOGGED_IN: `${BASEURL}/api/term/current/schedule`,
+  },
   COURSE: `${BASEURL}/api/v3/obj/course`,
   OBJECT: `${BASEURL}/api/v3/obj`,
 };
