@@ -242,6 +242,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
             if (err.response.status === 401) {
                 try {
                     const refresh = await refreshAuth();
+                    //todo: use an exponential backoff so we don't end up DoSing the backend
                     return request(method, url, data); // Retry if refresh success
                 }
                 catch (err: any) {
