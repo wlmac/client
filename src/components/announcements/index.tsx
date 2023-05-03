@@ -220,7 +220,7 @@ const AnnouncementList = (props: any): JSX.Element => {
         }
         const fetchURL = `${Routes.OBJECT}/announcement?limit=${ANN_FETCHLIMIT}&offset=${Math.max(offset, 0)}${param}`;
         session
-            .getAPI(fetchURL, !!session.user.id) // !! is explicit cast from truthy to boolean, use credentials if user is logged in
+            .request("get", fetchURL, !!session.user.id) // !! is explicit cast from truthy to boolean, use credentials if user is logged in
             .then((res) => {
                 setAnnouncements((prevAnns) => {
                     if (append) {
