@@ -123,7 +123,7 @@ export const Calendar = (): JSX.Element => {
 
         <div id="details">
           <div className="container">
-            <a href="url_to_calendar">URL to iCalendar (use this to add to Google Calendar, not yet implemented sry :/)</a>
+            <a href="https://maclyonsden.com/calendar.ics">URL to iCalendar (use this to add to Google Calendar)</a>
             <h3 id="detailsCurrentDay">{dateStr}</h3>
             <p id="detailsCurrentWeek"></p>
             <hr />
