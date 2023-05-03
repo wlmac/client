@@ -236,9 +236,6 @@ const AnnouncementList = (props: any): JSX.Element => {
                 else {
                     setOffset(-1);
                 }
-            })
-            .catch((err) => {
-                session.refreshAuth();
             });
     }
 
