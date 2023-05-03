@@ -127,7 +127,7 @@ const EventsFeed = (): JSX.Element => {
                             </Link>
                         </div>
                         <div className="authors-text">
-                            <Link to={`/club/${organization.slug}`}>{organization ? organization.name : ""}</Link>
+                            <Link to={`/club/${organization ? organization.slug : ''}`}>{organization ? organization.name : ""}</Link>
                         </div>
                     </div>
                 </div>
