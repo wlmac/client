@@ -30,7 +30,7 @@ const TimetableElement = (props: { timetable: Timetable }): JSX.Element => {
     }, []);
 
     return (
-        <details className="mb-3">
+        <details className="mb-3" open>
             <summary className="card-top">
                 <span className="card-title"><strong>{timetable.term.name}</strong></span>
             </summary>
