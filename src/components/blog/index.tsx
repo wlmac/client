@@ -40,16 +40,6 @@ const BlogPosts = (): JSX.Element[] => {
         const fetchURL = `${Routes.OBJECT}/blog-post`;
         session.request('get', fetchURL).then((res) => {
             setPosts(res.data.results);
-        }).catch((err) => {
-            session.refreshAuth();
-        });
-
-        // Tags
-        session.request('get', `${Routes.OBJECT}/tag`).then((res) => {
-            const tags = res.data.results;
-            setTags(tags);
-        }).catch(() => {
-            session.refreshAuth();
         });
     }, []);
 
@@ -72,13 +62,12 @@ const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Eleme
     const post = props.post;
     const session: Session = React.useContext(SessionContext);
     console.log("All users:", session.allUsers)
-    let author: User = session.allUsers.find((user: User) => user.id === post.author)!;
-
-    async function getAuthor() {
-        const session: Session = React.useContext(SessionContext);
-        const author = await session.request('get', `${Routes.USER}/${post.author}`);
-        return await author.data;
-    }
+    
+    const [author, setAuthor] = React.useState<User>({} as User);
+    
+    React.useEffect(() => {
+        setAuthor(session.allUsers.find((user: User) => user.id === post.author) || {} as User);
+    }, [session.allUsers]);
 
     return (
         <div className="card">

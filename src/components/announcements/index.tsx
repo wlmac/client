@@ -310,7 +310,11 @@ const AnnouncementElement = (props: {
     const data: Announcement = props.announcement;
     const session: Session = React.useContext(SessionContext);
     let organization: Organization = session.allOrgs.find((organization: Organization) => organization.id === data.organization)!;
-    let author: User = session.allUsers.find((user: User) => user.id === data.author)!;
+    const [author, setAuthor] = React.useState<User>({} as User);
+    
+    React.useEffect(() => {
+        setAuthor(session.allUsers.find((user: User) => user.id === data.author) || {} as User);
+    }, [session.allUsers]);
 
     return organization && author ? (
         <div className="card">
