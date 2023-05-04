@@ -35,10 +35,13 @@ export const TimetableEdit = (): JSX.Element => {
 
     const submitForm = (): void => {
         session.request('put', `${Routes.TIMETABLE}/single/${timetable.id}`, {
-            term: timetable.term,
-            courses: selectedCourses
+            term: timetable.term.id,
+            courses: selectedCourses.map((course: Course): number => {
+                return course.id
+            })
         }).then(() => {
             session.notify("Successfully updated courses!", "success");
+            nav(`/timetable`)
         });
     }
 
@@ -56,25 +59,30 @@ export const TimetableEdit = (): JSX.Element => {
 
                     {/* <label htmlFor="id_courses">Courses:</label> */}
 
-                    <Autocomplete
-                        multiple
-                        onChange={(event, value) => {
-                            setSelectedCourses(value);
-                        }}
-                        id="tags-outlined"
-                        options={allCourses}
-                        getOptionLabel={(option: Course) => option.code}
-                        // defaultValue={[top100Films[13]]}
-                        filterSelectedOptions
-                        renderInput={(params) => (
-                            <TextField
-                                {...params}
-                                label="Courses"
-                                placeholder="Start typing course code..."
-                            />
-                        )}
-                        sx={{ marginTop: "1.25em", marginBottom: "1.25em" }}
-                    />
+                    {
+                        timetable.courses ?
+                        <Autocomplete
+                            multiple
+                            onChange={(event, value) => {
+                                setSelectedCourses(value);
+                            }}
+                            id="tags-outlined"
+                            options={allCourses}
+                            getOptionLabel={(option: Course) => option.code}
+                            defaultValue={timetable.courses}
+                            filterSelectedOptions
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Courses"
+                                    placeholder="Start typing course code..."
+                                />
+                            )}
+                            sx={{ marginTop: "1.25em", marginBottom: "1.25em" }}
+                        />
+                        :
+                        <>Loading courses...</>
+                    }
 
                     <Link to={`/course/add/term/${1}?next=/timetable/edit/2`}>Add a missing course</Link><br />
 
