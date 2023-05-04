@@ -201,10 +201,14 @@ const AnnouncementList = (props: any): JSX.Element => {
 
     const [announcements, setAnnouncements] = React.useState([] as any[]);
     const [offset, setOffset] = React.useState(0);
+    const [loadMsg, setLoadMsg] = React.useState("Loading...");
 
     const initLoadRef = React.useRef(false);
 
     function fetchAnns(append: boolean) {
+        if(initLoadRef.current) {
+            setLoadMsg("Loading more announcements...");
+        }
         let param = '';
         if (!props.curContent.isFeed && props.curContent.tag.id) {
             param = `&tags=${props.curContent.tag.id}`;
@@ -214,7 +218,6 @@ const AnnouncementList = (props: any): JSX.Element => {
                 // dont display anns if there are on their own feed but havent subscribed to any orgs
                 setAnnouncements([]);
                 setOffset(-1);
-                //console.log('hi')
                 return;
             }
             else {
@@ -225,9 +228,6 @@ const AnnouncementList = (props: any): JSX.Element => {
         session
             .request('get', fetchURL)
             .then((res) => {
-                /*console.log(fetchURL);
-                console.log(offset);
-                console.log(param);*/
                 setAnnouncements((prevAnns) => {
                     if (append) {
                         return prevAnns.concat(res.data.results);
@@ -239,10 +239,11 @@ const AnnouncementList = (props: any): JSX.Element => {
                 setOffset((prevOffset) => {
                     if (res.data.count - prevOffset > ANN_FETCHLIMIT) { // there are more anns!
                         document.addEventListener('scroll', trackScrolling);
+                        setLoadMsg("Scroll down to load more announcements...");
                         return prevOffset + ANN_FETCHLIMIT;
                     }
                     else {
-                        //console.log('setting -1')
+                        setLoadMsg("You've reached the end!");
                         return -1;
                     }
                 });
@@ -252,11 +253,8 @@ const AnnouncementList = (props: any): JSX.Element => {
             });
     }
 
-    /*React.useEffect(() => {
-        console.log('state change ' + offset)
-    }, [offset])*/
-
     React.useEffect(() => {
+        initLoadRef.current = false;
         fetchAnns(false);
         document.removeEventListener('scroll', trackScrolling);
         document.addEventListener('scroll', trackScrolling);
@@ -265,16 +263,11 @@ const AnnouncementList = (props: any): JSX.Element => {
         }
     }, [props.curContent]);
 
-    function isBottom(el: any) {
-        return el.getBoundingClientRect().bottom <= window.innerHeight;
-    }
-
     function trackScrolling() {
         const wrappedElement = document.getElementById('annlist');
-        if (isBottom(wrappedElement)) {
+        if (wrappedElement!.getBoundingClientRect().bottom <= window.innerHeight) {
             //reached bottom!
             setOffset((offset) => { // since it is the function it has access to current state despite being rendered from initial state
-                // console.log(offset);
                 if (offset != -1 && initLoadRef.current) { // not -1 means there are more anns to fetch
                     fetchAnns(true);
                 }
@@ -286,9 +279,7 @@ const AnnouncementList = (props: any): JSX.Element => {
 
     return <div id="annlist">
         {
-            announcements.length == 0 ? <div>
-                There are no announcements to be shown at this time
-            </div> :
+            announcements.length == 0 ? <></> :
                 announcements.map((announcement: Announcement): JSX.Element => {
                     let current_tags: Tag[] = [];
                     for (let i = 0; i < announcement.tags.length; i++) {
@@ -307,6 +298,9 @@ const AnnouncementList = (props: any): JSX.Element => {
                     );
                 })
         }
+        <div>
+            {announcements.length == 0 ? 'There are no announcements to be displayed at this time' : loadMsg}
+        </div>
     </div>
 };
 
