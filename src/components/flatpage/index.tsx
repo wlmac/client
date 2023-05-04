@@ -38,7 +38,7 @@ export const Flatpage = (): JSX.Element => {
 
     return (
         status === FlatPageFetchStatus.NOT_FETCHED ?
-            <></>
+            <>Loading...</>
             :
             status === FlatPageFetchStatus.EXISTS ?
                 <>
