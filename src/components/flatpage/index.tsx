@@ -20,15 +20,15 @@ export const Flatpage = (): JSX.Element => {
 
     React.useEffect((): void => {
         session.request('get', `${Routes.OBJECT}/flatpage/retrieve/${slug}?lookup=url`, false).then((res: { data: FlatPage }) => {
-            setFlatpage(res.data);
-            setStatus(FlatPageFetchStatus.EXISTS);
+            if (res) {
+                setFlatpage(res.data);
+                setStatus(FlatPageFetchStatus.EXISTS);
 
-            document.title = `${res.data.title} | Metropolis`;
-        }).catch((err) => {
-            if (err.response.status !== 404) {
-                session.refreshAuth();
+                document.title = `${res.data.title} | Metropolis`;
             }
-            setStatus(FlatPageFetchStatus.NOT_EXISTS);
+            else {
+                setStatus(FlatPageFetchStatus.NOT_EXISTS);
+            }
         })
     }, [location]);
 
@@ -50,7 +50,7 @@ export const Flatpage = (): JSX.Element => {
 
                         <div className="container">
                             <div className="content">
-                                <h1 className="title">Resources</h1>
+                                <h1 className="title">{flatpage.title}</h1>
                                 <hr />
                                 <div className="content-body">
                                     <Markdown text={flatpage.content}></Markdown>
