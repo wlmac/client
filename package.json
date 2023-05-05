@@ -4,7 +4,7 @@
   "description": "Metropolis web client",
   "scripts": {
     "build": "npx vite build",
-    "start": "node server.js",
+    "start": "npx vite",
     "predeploy": "npm run build && echo client.maclyonsden.com > dist/CNAME",
     "deploy": "gh-pages -d dist"
   },
@@ -51,7 +51,7 @@
     "express": "^4.18.1",
     "sass": "^1.49.7",
     "typescript": "^4.7.4",
-    "vite": "^2.9.15",
+    "vite": "^4.3.5",
     "vite-tsconfig-paths": "^3.4.0"
   },
   "main": "server.js",
