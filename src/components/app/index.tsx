@@ -32,6 +32,7 @@ import { TimetableEdit } from "../account/timetable/edit";
 import { Alert, Snackbar } from "@mui/material";
 import { NewCourse } from "../account/timetable/edit/new-course";
 import { LoginRequired } from "../../util/login-required";
+import { MyProfile } from "../account/profile/my-profile";
 
 export const _App = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
@@ -95,6 +96,12 @@ export const _App = (): JSX.Element => {
                             <Profile>
                                 <ProfileEdit />
                             </Profile>
+                        } />
+
+                        <Route path="/accounts/profile" element={
+                            <LoginRequired>
+                                <MyProfile />
+                            </LoginRequired>
                         } />
 
                         <Route path="*" element={<Flatpage />} />
