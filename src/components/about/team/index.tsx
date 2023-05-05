@@ -9,18 +9,6 @@ import config from "../../../../config";
 export const ContentTeam = (): JSX.Element => {
     const session: Session = React.useContext(SessionContext);
 
-    // JUST TEMPORARY, WILL FIX ONCE READY
-    const [allUsers, setAllUsers] = React.useState<Array<User>>([]);
-
-    React.useEffect(() => {
-        // JUST TEMPORARY, WILL FIX ONCE READY
-        session.request('get', `${Routes.USER}?limit=99999`).then((res) => {
-            setAllUsers(res.data.results);
-        }).catch(() => {
-
-        });
-    }, []);
-
     const memberCount = (): number => {
         let sum = 0;
         for (const branchName in config.METROPOLIS_STAFFS) {
@@ -30,10 +18,14 @@ export const ContentTeam = (): JSX.Element => {
         return sum;
     }
 
-    let branches: Array<JSX.Element> = [];
-    for (const branchName in config.METROPOLIS_STAFFS) {
-        branches.push(<BranchList name={branchName} allUsers={allUsers} />);
+    const branches = (): Array<JSX.Element> => {
+        let new_branches: Array<JSX.Element> = [];
+        for (const branchName in config.METROPOLIS_STAFFS) {
+            new_branches.push(<BranchList name={branchName} allUsers={session.allUsers} key={branchName} />);
+        }
+        return new_branches;
     }
+
 
     return (
         <div className="content" id="content-team">
@@ -45,7 +37,7 @@ export const ContentTeam = (): JSX.Element => {
             <h1 className="title">Members</h1>
             <hr />
 
-            {branches}
+            {branches()}
         </div>
     )
 }
