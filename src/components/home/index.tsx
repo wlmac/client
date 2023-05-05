@@ -1,5 +1,4 @@
 import * as React from "react";
-import { default as axios } from "axios";
 
 import { useNavigate, NavigateFunction, Link } from "react-router-dom";
 import { loggedIn } from "../../util/core/AuthService";
@@ -20,6 +19,7 @@ import { Schedule } from "./schedule";
 
 export const Home = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
+    const session: Session = React.useContext(SessionContext);
 
     React.useEffect((): void => {
         document.title = "Home | Metropolis";
@@ -29,7 +29,7 @@ export const Home = (): JSX.Element => {
 
     React.useEffect(() => {
         const fetchURL = `${Routes.OBJECT}/blog-post`;
-        axios.get(fetchURL).then((res: { data: { results: Array<BlogPost> } }) => {
+        session.request('get', fetchURL).then((res: { data: { results: Array<BlogPost> } }) => {
             setPost(res.data.results[0]);
         });
     }, []);
@@ -83,7 +83,7 @@ const EventsFeed = (): JSX.Element => {
     const [events, setEvents] = React.useState<Event[]>([]);
     React.useEffect(() => {
         const fetchURL = `${Routes.OBJECT}/event`;
-        axios.get(fetchURL).then((res: { data: { results: Array<Event> } }) => {
+        session.request('get', fetchURL).then((res: { data: { results: Array<Event> } }) => {
             setEvents(res.data.results.slice(0, 3));
         });
     }, []);
@@ -146,10 +146,11 @@ const EventsFeed = (): JSX.Element => {
 
 const HomeAnnouncements = (): JSX.Element[] => {
     const [announcements, setAnnouncements] = React.useState([] as Array<Announcement>);
+    const session: Session = React.useContext(SessionContext);
 
     React.useEffect(() => {
         const fetchURL = `${Routes.OBJECT}/announcement`;
-        axios.get(fetchURL).then((res: { data: { results: Array<Announcement> } }) => {
+        session.request('get', fetchURL).then((res: { data: { results: Array<Announcement> } }) => {
             setAnnouncements(res.data.results.slice(0, 3));
         });
     }, []);
