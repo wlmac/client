@@ -94,18 +94,24 @@ const BlogPosts = () => {
     return (
         <div id="bloglist">
             {
-                posts.map((post: BlogPost) => {
-                    let current_tags: Tag[] = [];
-                    for (let i = 0; i < post.tags.length; i++) {
-                        for (let j = 0; j < session.allTags.length; j++) {
-                            if (post.tags[i] == (session.allTags[j] as Tag).id) {
-                                current_tags.push(session.allTags[j]);
+                posts.length == 0 ? <></> :
+                    posts.map((post: BlogPost) => {
+                        let current_tags: Tag[] = [];
+                        for (let i = 0; i < post.tags.length; i++) {
+                            for (let j = 0; j < session.allTags.length; j++) {
+                                if (post.tags[i] == (session.allTags[j] as Tag).id) {
+                                    current_tags.push(session.allTags[j]);
+                                }
                             }
                         }
-                    }
-                    return <BlogPostElement post={post} tags={current_tags} key={post.id} />;
-                })
+                        return <BlogPostElement post={post} tags={current_tags} key={post.id} />;
+                    })
             }
+            <div>
+                {
+                    (posts.length == 0 && initLoadRef.current) ? 'There are no blog posts to be shown at this time' : loadMsg
+                }
+            </div>
         </div>
     );
 }
