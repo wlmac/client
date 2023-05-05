@@ -146,13 +146,13 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
             })
         }).catch((err) => { });
 
-        getAll(`user`).then((data) => {
+        fetchAll(`user`).then((data) => {
             setAllUsers(data);
             setCacheStatus((prevStatus) => {
                 prevStatus.users = true;
                 return prevStatus;
             })
-        }).catch((err) => { });
+        }).catch((err) => { console.log(err); });
     }
 
     // this function fetches every single entry of given path and caches it locally
@@ -190,7 +190,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
                     await new Promise(r => setTimeout(r, i_count * i_count * 100)); // timeout
                     // spent like a solid 5 minutes wondering about this function
                     res = await request('get', res.data.next);
-                    arr.concat(res.data.results);
+                    arr = [...arr, ...res.data.results];
                     i_count++;
                 }
                 else {
@@ -202,6 +202,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
             return arr;
         }
         catch {
+            console.log("Exception");
             return [];
         }
     }
