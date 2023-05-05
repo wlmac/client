@@ -299,7 +299,7 @@ const AnnouncementList = (props: any): JSX.Element => {
                 })
         }
         <div>
-            {announcements.length == 0 ? 'There are no announcements to be displayed at this time' : loadMsg}
+            {(announcements.length == 0 && initLoadRef.current) ? 'There are no announcements to be displayed at this time' : loadMsg}
         </div>
     </div>
 };
