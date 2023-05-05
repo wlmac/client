@@ -206,7 +206,7 @@ const AnnouncementList = (props: any): JSX.Element => {
     const initLoadRef = React.useRef(false);
 
     function fetchAnns(append: boolean) {
-        if(initLoadRef.current) {
+        if (initLoadRef.current) {
             setLoadMsg("Loading more announcements...");
         }
         let param = '';
@@ -247,7 +247,7 @@ const AnnouncementList = (props: any): JSX.Element => {
                         return -1;
                     }
                 });
-                if(!initLoadRef.current) {
+                if (!initLoadRef.current) {
                     initLoadRef.current = true;
                 }
             });
@@ -312,12 +312,14 @@ const AnnouncementElement = (props: {
 
     const data: Announcement = props.announcement;
     const session: Session = React.useContext(SessionContext);
-    let organization: Organization = session.allOrgs.find((organization: Organization) => organization.id === data.organization)!;
+
     const [author, setAuthor] = React.useState<User>({} as User);
-    
+    const [organization, setOrganization] = React.useState<Organization>({} as Organization);
+
     React.useEffect(() => {
-        setAuthor(session.allUsers.find((user: User) => user.id === data.author) || {} as User);
-    }, [session.allUsers]);
+        setAuthor(session.allUsers.find((user: User) => user.id === data.author)!);
+        setOrganization(session.allOrgs.find((organization: Organization) => organization.id === data.organization)!);
+    }, [session.allUsers, session.allOrgs]);
 
     return organization && author ? (
         <div className="card">
@@ -335,7 +337,7 @@ const AnnouncementElement = (props: {
                 <h1 className="title">{data.title}</h1>
                 <div className="card-authors">
                     <div className="card-authors-image">
-                        <Link to={`/club/${organization.slug}`}><img className="circle" src={author.gravatar_url} /></Link>
+                        <Link to={`/club/${organization.slug}`}><img className="circle" src={organization.icon} /></Link>
                     </div>
                     <div className="card-authors-text">
                         <Link to={`/club/${organization.slug}`} className="link">{organization.name}</Link>,
@@ -352,7 +354,7 @@ const AnnouncementElement = (props: {
                 See announcement <i className="zmdi zmdi-chevron-right"></i>
             </Link>
         </div>
-    ) : <></>;
+    ) : <div className="card">Loading...</div>;
 };
 
 // const AnnouncementCreator = (props: {

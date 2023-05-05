@@ -31,7 +31,6 @@ import { ProfileEdit } from "../account/profile/edit";
 import { TimetableEdit } from "../account/timetable/edit";
 import { Alert, Snackbar } from "@mui/material";
 import { NewCourse } from "../account/timetable/edit/new-course";
-import RadioButtonsGroup from "../account/timetable/edit/new-course/demo";
 import { LoginRequired } from "../../util/login-required";
 
 export const _App = (): JSX.Element => {
@@ -97,8 +96,6 @@ export const _App = (): JSX.Element => {
                                 <ProfileEdit />
                             </Profile>
                         } />
-
-                        <Route path="/demo" element={<RadioButtonsGroup />} />
 
                         <Route path="*" element={<Flatpage />} />
                     </Routes>
