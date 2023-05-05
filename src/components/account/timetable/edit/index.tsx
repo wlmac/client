@@ -61,30 +61,30 @@ export const TimetableEdit = (): JSX.Element => {
 
                     {
                         timetable.courses ?
-                        <Autocomplete
-                            multiple
-                            onChange={(event, value) => {
-                                setSelectedCourses(value);
-                            }}
-                            id="tags-outlined"
-                            options={allCourses}
-                            getOptionLabel={(option: Course) => option.code}
-                            defaultValue={timetable.courses}
-                            filterSelectedOptions
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    label="Courses"
-                                    placeholder="Start typing course code..."
-                                />
-                            )}
-                            sx={{ marginTop: "1.25em", marginBottom: "1.25em" }}
-                        />
-                        :
-                        <>Loading courses...</>
+                            <Autocomplete
+                                multiple
+                                onChange={(event, value) => {
+                                    setSelectedCourses(value);
+                                }}
+                                id="tags-outlined"
+                                options={allCourses}
+                                getOptionLabel={(option: Course) => option.code}
+                                defaultValue={timetable.courses}
+                                filterSelectedOptions
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Courses"
+                                        placeholder="Start typing course code..."
+                                    />
+                                )}
+                                sx={{ marginTop: "1.25em", marginBottom: "1.25em" }}
+                            />
+                            :
+                            <>Loading courses...</>
                     }
 
-                    <Link to={`/course/add/term/${1}?next=/timetable/edit/2`}>Add a missing course</Link><br />
+                    <Link to={`/course/add/term/${timetable.term}?next=${encodeURIComponent(window.location.pathname)}`}>Add a missing course</Link><br />
 
                     <div style={{ display: "flex", alignItems: "center", "gap": "3px", marginTop: "1.5em" }}>
                         <button type="submit" className="btn btn-primary mr-2">Save</button>
