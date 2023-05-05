@@ -1,28 +1,13 @@
 let config = {
-    // METROPOLIS_STAFFS: {
-    //     "Project Manager": [9],
-    //     "Frontend Developers": [],
-    //     "Backend Developers": [],
-    //     "App Developers": [],
-    //     "Graphic Designers": [],
-    //     "Content Creators": [],
-    //     "Game Developers": [],
-    //     "Alumnui": []
-    // },
-    // METROPOLIS_STAFF_BIO: {
-    //     "1": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    //     "2": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    //     "9": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    // }
     METROPOLIS_STAFFS: {
         "Project Manager": [9],
-        "Frontend Developer": [25, 265, 37, 338, 360, 139, 220, 222, 411],
-        "Backend Developer": [1, 20, 165, 746, 156],
-        "App Developer": [21, 56, 66, 799],
-        "Graphic Designer": [5, 13, 267, 18, 347, 62, 35, 78],
-        "Content Creator": [8, 14, 103, 145, 183, 57, 414, 235, 157, 677, 659, 729, 843],
-        "Game Developer": [475, 61],
-        "Alumnus": [3, 4, 6, 16, 32, 33, 98, 297]
+        "Frontend Developers": [25, 265, 37, 338, 360, 139, 220, 222, 411],
+        "Backend Developers": [1, 20, 165, 746, 156],
+        "App Developers": [21, 56, 66, 799],
+        "Graphic Designers": [5, 13, 267, 18, 347, 62, 35, 78],
+        "Content Creators": [8, 14, 103, 145, 183, 57, 414, 235, 157, 677, 659, 729, 843],
+        "Game Developers": [475, 61],
+        "Alumni": [3, 4, 6, 16, 32, 33, 98, 297]
     },
     
     METROPOLIS_STAFF_BIO: {
