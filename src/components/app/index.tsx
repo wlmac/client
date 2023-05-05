@@ -40,7 +40,8 @@ export const _App = (): JSX.Element => {
 
     React.useEffect((): void => {
         M.AutoInit();
-    });
+        window.scrollTo(0, 0);
+    }, []);
 
     return (
         <>
