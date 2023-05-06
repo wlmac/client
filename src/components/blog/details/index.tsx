@@ -9,6 +9,7 @@ import Routes from "../../../util/core/misc/routes";
 import { Session, SessionContext, User } from "../../../util/core/session";
 import Markdown from "../../markdown";
 import { dateFormat } from "../../../util/core/misc/date";
+import { TagElement } from "../../../util/core/tags";
 
 export const BlogDetails = (): JSX.Element => {
     const { slug } = useParams();
@@ -33,27 +34,26 @@ export const BlogDetails = (): JSX.Element => {
             }).catch(() => {
                 session.refreshAuth();
             });
-
-            // Tags
-            session.request('get', `${Routes.OBJECT}/tag`).then((res) => {
-                const tags_data: Tag[] = res.data.results;
-                const current_tags: Tag[] = [];
-                for (let i = 0; i < current_post.tags.length; i++) {
-                    for (let j = 0; j < tags_data.length; j++) {
-                        if (current_post.tags[i] === (tags_data[j] as Tag).id) {
-                            current_tags.push(tags_data[j]);
-                            break;
-                        }
-                    }
-                }
-                setTags(current_tags);
-            }).catch(() => {
-                session.refreshAuth();
-            });
         }).catch((err) => {
             session.refreshAuth();
         });
     }, []);
+
+    React.useEffect(() => {
+        if (post.id) { //if it exists
+            // Tags
+            const current_tags: Tag[] = [];
+            for (let i = 0; i < post.tags.length; i++) {
+                for (let j = 0; j < session.allTags.length; j++) {
+                    if (post.tags[i] === (session.allTags[j] as Tag).id) {
+                        current_tags.push(session.allTags[j]);
+                        break;
+                    }
+                }
+            }
+            setTags(current_tags);
+        }
+    }, [session.allTags, post]);
 
     return author ? (
         <>
@@ -62,8 +62,11 @@ export const BlogDetails = (): JSX.Element => {
                 <div className="card-container">
                     <img className="card-image" src={post.featured_image} />
                     <div className="tag-section">
-                        <p className="tag" style={{ backgroundColor: "#ffcced" }}>test tag</p>
-                        <p className="tag" style={{ backgroundColor: "#ccffe1" }}>test tag 2</p>
+                        {
+                            tags.map((tag: Tag) => {
+                                return <TagElement key={tag.id} tag={tag} />
+                            })
+                        }
                     </div>
                     <h1 className="title">{post.title}</h1>
                     <div className="card-authors">
