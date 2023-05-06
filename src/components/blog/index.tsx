@@ -40,11 +40,11 @@ const BlogPosts = () => {
 
     const initLoadRef = React.useRef(false);
 
-    function fetchBlog() {
+    function fetchBlog(offsetOverride?: number) {
         if (initLoadRef.current) {
             setLoadMsg("Loading more posts...");
         }
-        const fetchURL = `${Routes.OBJECT}/blog-post?limit=${BLOG_FETCHLIMIT}&offset=${offset}`;
+        const fetchURL = `${Routes.OBJECT}/blog-post?limit=${BLOG_FETCHLIMIT}&offset=${offsetOverride ?? offset}`;
         session
             .request('get', fetchURL)
             .then((res) => {
@@ -82,8 +82,9 @@ const BlogPosts = () => {
         if (wrappedElement!.getBoundingClientRect().bottom <= window.innerHeight) {
             //reached bottom!
             setOffset((offset) => { // since it is the function it has access to current state despite being rendered from initial state
+                console.log(offset);
                 if (offset != -1 && initLoadRef.current) { // not -1 means there are more blogs to fetch
-                    fetchBlog();
+                    fetchBlog(offset);
                 }
                 return offset;
             })
