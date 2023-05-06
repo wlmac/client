@@ -28,7 +28,7 @@ export const Home = (): JSX.Element => {
     const [post, setPost] = React.useState({} as BlogPost); // Featured BlogPost
 
     React.useEffect(() => {
-        const fetchURL = `${Routes.OBJECT}/blog-post`;
+        const fetchURL = `${Routes.OBJECT}/blog-post?limit=1`;
         session.request('get', fetchURL).then((res: { data: { results: Array<BlogPost> } }) => {
             setPost(res.data.results[0]);
         });
@@ -82,9 +82,9 @@ const EventsFeed = (): JSX.Element => {
 
     const [events, setEvents] = React.useState<Event[]>([]);
     React.useEffect(() => {
-        const fetchURL = `${Routes.OBJECT}/event`;
+        const fetchURL = `${Routes.OBJECT}/event?limit=3`;
         session.request('get', fetchURL).then((res: { data: { results: Array<Event> } }) => {
-            setEvents(res.data.results.slice(0, 3));
+            setEvents(res.data.results);
         });
     }, []);
 
@@ -149,9 +149,9 @@ const HomeAnnouncements = (): JSX.Element[] => {
     const session: Session = React.useContext(SessionContext);
 
     React.useEffect(() => {
-        const fetchURL = `${Routes.OBJECT}/announcement`;
+        const fetchURL = `${Routes.OBJECT}/announcement?limit=3`;
         session.request('get', fetchURL).then((res: { data: { results: Array<Announcement> } }) => {
-            setAnnouncements(res.data.results.slice(0, 3));
+            setAnnouncements(res.data.results);
         });
     }, []);
 
