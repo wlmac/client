@@ -60,40 +60,45 @@ export const ProfileView = (): JSX.Element => {
     }, [session.allOrgs, user]);
 
     return (
-        <>
-            <div className="header">
-                <img className="circle responsive-img profile-picture" src={user.gravatar_url} alt={`${user.username}'s profile picture`} />
-                <div className="name-info">
-                    <h5 className="full-name">{user.first_name} {user.last_name}</h5>
-                    <h6 className="username">{user.username}</h6>
-                </div>
-
-                {
-                    session.user.id === user.id &&
-                    <div className="edit-button">
-                        <i className="zmdi zmdi-fw-3x zmdi-edit"></i>
-                        <Link to="/accounts/profile/update">Edit</Link>
+        "username" in user ?
+            <>
+                <div className="header">
+                    <img className="circle responsive-img profile-picture" src={user.gravatar_url} alt={`${user.username}'s profile picture`} />
+                    <div className="name-info">
+                        <h5 className="full-name">{user.first_name} {user.last_name}</h5>
+                        <h6 className="username">{user.username}</h6>
                     </div>
-                }
-            </div>
-            <hr />
-            <div className="body">
-                <div className="field">
-                    <div className="label">Graduating</div><div>{user.graduating_year}</div>
-                </div>
-                <div className="field">
-                    <div className="label">Executive of</div>
-                    {organizationDisplay}
-                </div>
-                <br />
-                <div>
-                    {user.bio ?
-                        <p>{user.bio}</p>
-                        :
-                        <p>This user has not shared any information.</p>
+
+                    {
+                        session.user.id === user.id &&
+                        <div className="edit-button">
+                            <i className="zmdi zmdi-fw-3x zmdi-edit"></i>
+                            <Link to="/accounts/profile/update">Edit</Link>
+                        </div>
                     }
                 </div>
+                <hr />
+                <div className="body">
+                    <div className="field">
+                        <div className="label">Graduating</div><div>{user.graduating_year}</div>
+                    </div>
+                    <div className="field">
+                        <div className="label">Executive of</div>
+                        {organizationDisplay}
+                    </div>
+                    <br />
+                    <div>
+                        {user.bio ?
+                            <p>{user.bio}</p>
+                            :
+                            <p>This user has not shared any information.</p>
+                        }
+                    </div>
+                </div>
+            </>
+            :
+            <div className="header">
+                <h6 className="username">Loading...</h6>
             </div>
-        </>
     );
 }
