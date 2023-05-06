@@ -35,6 +35,9 @@ export const NavigationBar = (): JSX.Element => {
                 <li>
                     <NavLink href="/resources" className="sidenav-close">Resources</NavLink>
                 </li>
+                <li>
+                    <NavLink href="/map" className="sidenav-close">Map</NavLink>
+                </li>
                 <li className="divider"></li>
                 <li>
                 </li><li>
@@ -45,9 +48,6 @@ export const NavigationBar = (): JSX.Element => {
                 </li>
                 <li>
                     <NavLink href="/about?tab=team">Team</NavLink>
-                </li>
-                <li>
-                    <NavLink href="/map">Map</NavLink>
                 </li>
                 <li>
                     <NavLink href="/about?tab=school">Contact WLMCI</NavLink>
@@ -112,6 +112,9 @@ export const NavigationBar = (): JSX.Element => {
                         <li className="nav-item">
                             <NavLink href="/resources">Resources</NavLink>
                         </li>
+                        <li className="nav-item">
+                            <NavLink href="/map">Map</NavLink>
+                        </li>
                         <li>
                             <a className="dropdown-trigger" href="/#!" data-target="dropdownAbout">About<i className="zmdi zmdi-caret-down"></i></a><ul id="dropdownAbout" className="dropdown-content">
                                 <li>
@@ -122,9 +125,6 @@ export const NavigationBar = (): JSX.Element => {
                                 </li>
                                 <li>
                                     <NavLink href="/about?tab=team">Team</NavLink>
-                                </li>
-                                <li>
-                                    <NavLink href="/map">Map</NavLink>
                                 </li>
                                 <li>
                                     <NavLink href="/about?tab=school">Contact WLMCI</NavLink>
