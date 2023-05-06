@@ -20,13 +20,6 @@ export const NewCourse = (): JSX.Element => {
         }).then(() => {
             session.notify(`Course ${code} was successfully added!`, "success");
             nav(`/timetable/edit/${ID}`);
-        }).catch((err) => {
-            if (err.response.status === 401) {
-                session.refreshAuth();
-                submitNewCourse();
-                return;
-            }
-            session.notify("An internal error occurred. Please contact an admin to get it fixed!", "error");
         });
     }
 
