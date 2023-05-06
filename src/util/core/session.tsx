@@ -189,7 +189,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
                 if (res.data.next) {
                     await new Promise(r => setTimeout(r, i_count * i_count * 100)); // timeout
                     // spent like a solid 5 minutes wondering about this function
-                    res = await request('get', res.data.next);
+                    res = await request('get', `${Routes.OBJECT}/${objtype}?limit=${BATCH_CACHELIMIT}&offset=${(i_count-1)*BATCH_CACHELIMIT}`);
                     arr = [...arr, ...res.data.results];
                     i_count++;
                 }
