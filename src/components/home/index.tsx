@@ -164,7 +164,10 @@ const HomeAnnouncement = (props: { announcement: Announcement }): JSX.Element =>
     const session: Session = React.useContext(SessionContext);
     const announcement = props.announcement;
     let organization: Organization = session.allOrgs.find((organization: Organization) => organization.id === announcement.organization)!;
-    let tag: Tag = session.allTags.find((tag: Tag) => announcement.tags[0])!;
+    let [tag, setTag] = React.useState({} as Tag);
+    React.useEffect(() => {
+        setTag(session.allTags.filter((tag: Tag) => tag.id == announcement.tags[0])[0]);
+    }, [session.allTags]);
 
     return (
         <>
