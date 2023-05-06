@@ -44,7 +44,7 @@ const BlogPosts = () => {
         if (initLoadRef.current) {
             setLoadMsg("Loading more posts...");
         }
-        const fetchURL = `${Routes.OBJECT}/blog-post?limit=${BLOG_FETCHLIMIT}&offset=${offsetOverride ?? offset}`;
+        const fetchURL = `${Routes.OBJECT}/blog-post?limit=${BLOG_FETCHLIMIT}&offset=${offsetOverride ?? Math.max(offset, 0)}`;
         session
             .request('get', fetchURL)
             .then((res) => {
@@ -77,7 +77,7 @@ const BlogPosts = () => {
         }
     }, []);
 
-    function trackScrolling() {
+    const trackScrolling = React.useCallback(() => {
         const wrappedElement = document.getElementById('bloglist');
         if (wrappedElement!.getBoundingClientRect().bottom <= window.innerHeight) {
             //reached bottom!
@@ -90,7 +90,7 @@ const BlogPosts = () => {
             })
             document.removeEventListener('scroll', trackScrolling);
         }
-    }
+    }, []);
 
     return (
         <div id="bloglist">

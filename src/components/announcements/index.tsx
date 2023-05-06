@@ -205,7 +205,7 @@ const AnnouncementList = (props: any): JSX.Element => {
 
     const initLoadRef = React.useRef(false);
 
-    function fetchAnns(append: boolean) {
+    function fetchAnns(append: boolean, offsetOverride?: number) {
         if (initLoadRef.current) {
             setLoadMsg("Loading more announcements...");
         }
@@ -224,7 +224,7 @@ const AnnouncementList = (props: any): JSX.Element => {
                 param = props.curContent.feed.filters ?? '';
             }
         }
-        const fetchURL = `${Routes.OBJECT}/announcement?limit=${ANN_FETCHLIMIT}&offset=${Math.max(offset, 0)}${param}`;
+        const fetchURL = `${Routes.OBJECT}/announcement?limit=${ANN_FETCHLIMIT}&offset=${offsetOverride ?? Math.max(offset, 0)}${param}`;
         session
             .request('get', fetchURL)
             .then((res) => {
@@ -263,19 +263,19 @@ const AnnouncementList = (props: any): JSX.Element => {
         }
     }, [props.curContent]);
 
-    function trackScrolling() {
+    const trackScrolling = React.useCallback(() => {
         const wrappedElement = document.getElementById('annlist');
         if (wrappedElement!.getBoundingClientRect().bottom <= window.innerHeight) {
             //reached bottom!
             setOffset((offset) => { // since it is the function it has access to current state despite being rendered from initial state
                 if (offset != -1 && initLoadRef.current) { // not -1 means there are more anns to fetch
-                    fetchAnns(true);
+                    fetchAnns(true, offset);
                 }
                 return offset;
             })
             document.removeEventListener('scroll', trackScrolling);
         }
-    }
+    }, []);
 
     return <div id="annlist">
         {
