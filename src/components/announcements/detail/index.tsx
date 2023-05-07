@@ -162,7 +162,7 @@ export const AnnouncementDetail = (): JSX.Element => {
                     <h1 className="title">{announcement.title}</h1>
                     <div className="card-authors">
                         <div className="card-authors-image">
-                            <Link to={`/club/${organization.slug}`}><img className="circle" src={organization && organization.banner} /></Link>
+                            <Link to={`/club/${organization.slug}`}><img className="circle" src={organization && organization.icon} /></Link>
                         </div>
                         <div className="card-authors-text">
                             <Link to={`/club/${organization.slug}`} className="link">{organization.name}</Link>,
