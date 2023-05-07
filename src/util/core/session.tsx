@@ -146,7 +146,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
             })
         }).catch((err) => { });
 
-        fetchAll(`user`).then((data) => {
+        getAll(`user`).then((data) => {
             setAllUsers(data);
             setCacheStatus((prevStatus) => {
                 prevStatus.users = true;
