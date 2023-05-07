@@ -14,7 +14,7 @@ export const ClubDetails = (): JSX.Element => {
 
     const nav: NavigateFunction = useNavigate();
     const session: Session = React.useContext(SessionContext);
-    const [club, setClub] = React.useState({} as Organization);
+    const [club, setClub] = React.useState({name: "Loading..."} as Organization);
     const [tags, setTags] = React.useState([] as Array<Tag>);
     const [execs, setExecs] = React.useState([] as Array<User>);
     const [members, setMembers] = React.useState([] as Array<User>);
