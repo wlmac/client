@@ -5,6 +5,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 
 import { Session, SessionContext } from "../../util/core/session";
+import { getPaginatedAPI } from "../../util/query/apiQuerying";
 import Routes from "../../util/core/misc/routes";
 
 import Tag from "../../util/core/interfaces/tag";
@@ -64,14 +65,17 @@ export const Calendar = (): JSX.Element => {
     if (eventFetch !== key){
       // query events for this time period
       const url = `${Routes.BASEURL}/api/v3/obj/event?start=${getDate(fetchInfo.startStr)}&end=${getDate(fetchInfo.endStr)}`
-      session.getAPI(url, false).then((response) => {
-          if (response.status !== 200) {
-              failureCallback(new Error("Returned status " + response.status))
-          } else {
-              setEventFetch(key);
-              setRawEvents(response.data.results);
-              successCallback(events);
-          }
+
+      // gets all urls of a paginated url
+      getPaginatedAPI(session, url).then((response) => {
+        // cache current event
+        setEventFetch(key);
+
+        // set the current raw events (organization needs to be queried later)
+        setRawEvents(response);
+        successCallback(events);
+      }, (rejection) => {
+        failureCallback(new Error(rejection))
       })
     } else {
       successCallback(events);
