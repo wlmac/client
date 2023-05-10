@@ -1,7 +1,7 @@
 import {Session} from "../core/session";
 
 // used to extract all objects from a paginated api
-export const getPaginatedAPI = (session: Session, url: string): Promise<any[]> => {
+export const getPaginatedAPI = (getAPI: (url: string) => Promise<any>, url: string): Promise<any[]> => {
     return new Promise((resolve, reject) => {
         // the list of objects
         let objs: any[] = [];
@@ -14,7 +14,7 @@ export const getPaginatedAPI = (session: Session, url: string): Promise<any[]> =
 
                 // if there is another page, add it
                 if(response.data.next !== null){
-                    session.getAPI(response.data.next, false).then(addData)
+                    getAPI(response.data.next).then(addData)
                 } else {
                     resolve(objs);
                 }
@@ -24,6 +24,6 @@ export const getPaginatedAPI = (session: Session, url: string): Promise<any[]> =
         }
 
         // call the method
-        session.getAPI(url, false).then(addData);
+        getAPI(url).then(addData);
     })
 }

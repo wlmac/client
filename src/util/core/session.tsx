@@ -6,6 +6,7 @@ import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { getToken, setToken, getRefresh, setRefresh, loggedIn } from "./AuthService";
 import Organization from './interfaces/organization';
 import Tag from './interfaces/tag';
+import { getPaginatedAPI } from '../query/apiQuerying';
 
 export interface User {
     bio: string,
@@ -81,19 +82,17 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
             refreshUser();
         }
 
-        getAPI(`${Routes.OBJECT}/user`).then((res) => {
-            setAllUsers(res.data.results);
-        }).catch((err) => {
+        getPaginatedAPI(getAPI, `${Routes.OBJECT}/user`).then((res) => {
+            setAllUsers(res)
+        }, (failMessage) => {
+            console.error(failMessage);
+        })
 
-        });
-
-        getAPI(`${Routes.OBJECT}/organization`).then((res) => {
-            setAllOrgs(res.data.results);
-        }).catch((err) => {
-
-        });
-
-        // tag things
+        getPaginatedAPI(getAPI, `${Routes.OBJECT}/organization`).then((res) => {
+            setAllOrgs(res)
+        }, (failMessage) => {
+            console.error(failMessage);
+        })
     }, []);
 
     const updateToken = (token: string): void => {

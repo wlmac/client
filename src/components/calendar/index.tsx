@@ -67,7 +67,7 @@ export const Calendar = (): JSX.Element => {
       const url = `${Routes.BASEURL}/api/v3/obj/event?start=${getDate(fetchInfo.startStr)}&end=${getDate(fetchInfo.endStr)}`
 
       // gets all urls of a paginated url
-      getPaginatedAPI(session, url).then((response) => {
+      getPaginatedAPI(session.getAPI, url).then((response) => {
         // cache current event
         setEventFetch(key);
 
