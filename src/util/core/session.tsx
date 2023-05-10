@@ -27,7 +27,6 @@ export interface Session {
     user: User,
     allUsers: Array<User>,
     allOrgs: Array<Organization>,
-    allTags: Array<Tag>,
     setUser: (user: User) => void,
     updateToken: (token: string) => void,
     getAPI: (url: string, auth?: boolean) => Promise<any>,
@@ -42,7 +41,6 @@ export const SessionContext = React.createContext<Session>({
     user: {} as User,
     allUsers: [],
     allOrgs: [],
-    allTags: [],
     setUser: (user: User) => { },
     updateToken: (token: string) => { },
     getAPI: (url: string, auth?: boolean) => { return {} as Promise<any> },
@@ -57,7 +55,6 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     let [user, updateUser] = React.useState({} as User);
     const [allUsers, setAllUsers] = React.useState([] as Array<User>);
     const [allOrgs, setAllOrgs] = React.useState([] as Array<Organization>);
-    const [allTags, setAllTags] = React.useState([] as Array<Tag>);
     const nav: NavigateFunction = useNavigate();
 
     const setUser = (newUser: User): void => {
@@ -95,12 +92,6 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         }).catch((err) => {
 
         });
-
-        getAPI(`${Routes.OBJECT}/tag`).then((res) => {
-            setAllTags(res.data.results);
-        }).catch((err) => {
-
-        })
 
         // tag things
     }, []);
@@ -192,7 +183,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     }
 
     return (
-        <SessionContext.Provider value={{ user: user, allUsers: allUsers, allOrgs: allOrgs, allTags: allTags, setUser: setUser, updateToken: updateToken, getAPI: getAPI, postAPI: postAPI, putAPI: putAPI, patchAPI: patchAPI, refreshAuth: refreshAuth, logout: logout }}>
+        <SessionContext.Provider value={{ user: user, allUsers: allUsers, allOrgs: allOrgs, setUser: setUser, updateToken: updateToken, getAPI: getAPI, postAPI: postAPI, putAPI: putAPI, patchAPI: patchAPI, refreshAuth: refreshAuth, logout: logout }}>
             {props.children}
         </SessionContext.Provider>
     )

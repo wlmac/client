@@ -25,7 +25,7 @@ interface EventJSON{
   organization: number,
   description: string,
   id: number,
-  tags: number[],
+  tags: Tag[],
   start_date: string,
   end_date: string
 }
@@ -50,10 +50,9 @@ export const Calendar = (): JSX.Element => {
 
   // when the session or events update, try filling in the tags & org
   React.useEffect(() => {
-    function parseEventJSON(raw : EventJSON) : EventData{
-      return Object.assign(raw, {
-        organization: session.allOrgs.find(org => org.id === raw.organization),
-        tags: raw.tags.map(id => session.allTags.find(tag => tag.id === id)).filter((tag): tag is Tag => !!tag),
+    function parseEventJSON(raw: EventJSON): EventData {
+      return Object.assign(Object.assign({}, raw), {
+        organization: session.allOrgs.find(org => org.id === raw.organization)
       })
     }
     setEvents(rawEvents.map(parseEventJSON))
