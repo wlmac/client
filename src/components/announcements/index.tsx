@@ -378,37 +378,37 @@ const AnnouncementElement = (props: {
 //     const [isPublic, setIsPublic] = React.useState(false);
 //     const session: Session = React.useContext(SessionContext);
 
-    const [currentTags, setCurrentTags] = React.useState([]);
-    const [showTags, setShowTags] = React.useState(false);
-    const [selectedTags, setSelectedTags] = React.useState(new Set<Tag>([]));
+    // const [currentTags, setCurrentTags] = React.useState([]);
+    // const [showTags, setShowTags] = React.useState(false);
+    // const [selectedTags, setSelectedTags] = React.useState(new Set<Tag>([]));
 
-    const {
-        register,
-        handleSubmit,
-        watch,
-        formState: { errors },
-    } = useForm<AnnouncementInputs>();
-    const [error, setError] = React.useState("");
+    // const {
+    //     register,
+    //     handleSubmit,
+    //     watch,
+    //     formState: { errors },
+    // } = useForm<AnnouncementInputs>();
+    // const [error, setError] = React.useState("");
 
 //     const [selected, setSelected] = React.useState<string[]>([]);
 //     const names = session.allOrgs.map((organization: Organization): string => {
 //         return organization.name;
 //     });
 
-    const onCreate = (data: AnnouncementInputs): void => {
-        console.log("Submitted data:", data);
-        session
-            .postAPI(`${Routes.OBJECT}/announcement/new`, {
-                ...data,
-            })
-            .then(() => {
-                console.log("Announcement created successfully");
-            })
-            .catch((err) => {
-                console.log("Error:", err);
-                // session.refreshAuth();
-            });
-    };
+    // const onCreate = (data: AnnouncementInputs): void => {
+    //     console.log("Submitted data:", data);
+    //     session
+    //         .postAPI(`${Routes.OBJECT}/announcement/new`, {
+    //             ...data,
+    //         })
+    //         .then(() => {
+    //             console.log("Announcement created successfully");
+    //         })
+    //         .catch((err) => {
+    //             console.log("Error:", err);
+    //             // session.refreshAuth();
+    //         });
+    // };
 
 //     const ITEM_HEIGHT = 48;
 //     const ITEM_PADDING_TOP = 8;
@@ -431,198 +431,198 @@ const AnnouncementElement = (props: {
 //         );
 //     };
 
-    const handleTagInput = (event: any) => {  // event: any might be really bad type hinting
-      const text = event.target.value;
-      session
-        .getAPI(`${Routes.OBJECT}/tag`, false)
-        .then((res) => {
-          const tags = res.data.results;
+    // const handleTagInput = (event: any) => {  // event: any might be really bad type hinting
+    //   const text = event.target.value;
+    //   session
+    //     .getAPI(`${Routes.OBJECT}/tag`, false)
+    //     .then((res) => {
+    //       const tags = res.data.results;
 
-          const tempTags = tags.filter(
-            (element: Tag) => text.length !== 0 && element.name.toLowerCase().includes(text.toLowerCase())
-          );
+    //       const tempTags = tags.filter(
+    //         (element: Tag) => text.length !== 0 && element.name.toLowerCase().includes(text.toLowerCase())
+    //       );
 
-          setShowTags(tempTags.length !== 0);
-          setCurrentTags(tempTags);
+    //       setShowTags(tempTags.length !== 0);
+    //       setCurrentTags(tempTags);
 
-        })
-        .catch(() => {
-            session.refreshAuth();
-        });
-    }
+    //     })
+    //     .catch(() => {
+    //         session.refreshAuth();
+    //     });
+    // }
 
-    const handleClick = (tag: Tag) => {
-      const unionSet = new Set<Tag>([]);
-      selectedTags.forEach((t: Tag) => unionSet.add(t));
-      const found = [...selectedTags].some(el => el.id === tag.id);
-      !found && unionSet.add(tag);
+    // const handleClick = (tag: Tag) => {
+    //   const unionSet = new Set<Tag>([]);
+    //   selectedTags.forEach((t: Tag) => unionSet.add(t));
+    //   const found = [...selectedTags].some(el => el.id === tag.id);
+    //   !found && unionSet.add(tag);
 
-      setSelectedTags(unionSet);
-    }
+    //   setSelectedTags(unionSet);
+    // }
 
-    const deleteTag = (tag: Tag) => {
-      const unionSet = new Set<Tag>([]);
-      selectedTags.forEach((t: Tag) => unionSet.add(t));
-      const found = [...selectedTags].some(el => el.id === tag.id);
-      found && unionSet.delete(tag);
+    // const deleteTag = (tag: Tag) => {
+    //   const unionSet = new Set<Tag>([]);
+    //   selectedTags.forEach((t: Tag) => unionSet.add(t));
+    //   const found = [...selectedTags].some(el => el.id === tag.id);
+    //   found && unionSet.delete(tag);
 
-      setSelectedTags(unionSet);
-    }
+    //   setSelectedTags(unionSet);
+    // }
 
-    return (
-        <div id="announcement-creator" className="modal">
-            <div className="modal-top modal-header">
-                <h5 className="header-announcement">Add Announcement</h5>
-            </div>
-            <form
-                className="signup"
-                onSubmit={handleSubmit(onCreate)}
-                style={{ paddingLeft: "1rem", paddingTop: "1rem" }}
-            >
-                <div className="row">
-                    <div className="input-field col s12">
-                        <label htmlFor="id_title">Title:</label>
-                        <input
-                            {...register("title")}
-                            type="text"
-                            name="title"
-                            required={true}
-                            id="id_title"
-                            style={{
-                                backgroundImage:
-                                    "url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHklEQVQ4EaVTO26DQBD1ohQWaS2lg9JybZ+AK7hNwx2oIoVf4UPQ0Lj1FdKktevIpel8AKNUkDcWMxpgSaIEaTVv3sx7uztiTdu2s/98DywOw3Dued4Who/M2aIx5lZV1aEsy0+qiwHELyi+Ytl0PQ69SxAxkWIA4RMRTdNsKE59juMcuZd6xIAFeZ6fGCdJ8kY4y7KAuTRNGd7jyEBXsdOPE3a0QGPsniOnnYMO67LgSQN9T41F2QGrQRRFCwyzoIF2qyBuKKbcOgPXdVeY9rMWgNsjf9ccYesJhk3f5dYT1HX9gR0LLQR30TnjkUEcx2uIuS4RnI+aj6sJR0AM8AaumPaM/rRehyWhXqbFAA9kh3/8/NvHxAYGAsZ/il8IalkCLBfNVAAAAABJRU5ErkJggg==&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;",
-                            }}
-                        />
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="input-field col s12">
-                        <label htmlFor="id_tags">Tags:</label>
-                        <input
-                            {...register("tags")}
-                            type="text"
-                            name="tags"
-                            required={true}
-                            id="id_tags"
-                            onChange={handleTagInput}
-                        />
+    // return (
+    //     <div id="announcement-creator" className="modal">
+    //         <div className="modal-top modal-header">
+    //             <h5 className="header-announcement">Add Announcement</h5>
+    //         </div>
+    //         <form
+    //             className="signup"
+    //             onSubmit={handleSubmit(onCreate)}
+    //             style={{ paddingLeft: "1rem", paddingTop: "1rem" }}
+    //         >
+    //             <div className="row">
+    //                 <div className="input-field col s12">
+    //                     <label htmlFor="id_title">Title:</label>
+    //                     <input
+    //                         {...register("title")}
+    //                         type="text"
+    //                         name="title"
+    //                         required={true}
+    //                         id="id_title"
+    //                         style={{
+    //                             backgroundImage:
+    //                                 "url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHklEQVQ4EaVTO26DQBD1ohQWaS2lg9JybZ+AK7hNwx2oIoVf4UPQ0Lj1FdKktevIpel8AKNUkDcWMxpgSaIEaTVv3sx7uztiTdu2s/98DywOw3Dued4Who/M2aIx5lZV1aEsy0+qiwHELyi+Ytl0PQ69SxAxkWIA4RMRTdNsKE59juMcuZd6xIAFeZ6fGCdJ8kY4y7KAuTRNGd7jyEBXsdOPE3a0QGPsniOnnYMO67LgSQN9T41F2QGrQRRFCwyzoIF2qyBuKKbcOgPXdVeY9rMWgNsjf9ccYesJhk3f5dYT1HX9gR0LLQR30TnjkUEcx2uIuS4RnI+aj6sJR0AM8AaumPaM/rRehyWhXqbFAA9kh3/8/NvHxAYGAsZ/il8IalkCLBfNVAAAAABJRU5ErkJggg==&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;",
+    //                         }}
+    //                     />
+    //                 </div>
+    //             </div>
+    //             <div className="row">
+    //                 <div className="input-field col s12">
+    //                     <label htmlFor="id_tags">Tags:</label>
+    //                     <input
+    //                         {...register("tags")}
+    //                         type="text"
+    //                         name="tags"
+    //                         required={true}
+    //                         id="id_tags"
+    //                         onChange={handleTagInput}
+    //                     />
 
-                        <div className="tag-section">
-                          {
-                            [...selectedTags].map((tag: Tag): JSX.Element => {
-                              return <DeletableTagElement key={tag.id} tag={tag} onClick={deleteTag} />;
-                            })
-                          }
-                        </div>
+    //                     <div className="tag-section">
+    //                       {
+    //                         [...selectedTags].map((tag: Tag): JSX.Element => {
+    //                           return <DeletableTagElement key={tag.id} tag={tag} onClick={deleteTag} />;
+    //                         })
+    //                       }
+    //                     </div>
                         
-                        <ClickAwayListener onClickAway={() => setShowTags(false)}>
-                          <Fade in={showTags}>
-                            <List component={Paper} sx={{ mt: 1 }}>
-                              {currentTags.slice(0, 5/* get first 5 elements */).map((tag: Tag): JSX.Element => {
-                                  return <ListItemButton onClick={() => handleClick(tag)}>{tag.name}</ListItemButton>;
-                              })}
-                            </List>
-                          </Fade>
-                        </ClickAwayListener>
-                    </div>
-                </div>
-                <div className="row">
-                    <>
-                        <Editor
-                            apiKey="your-api-key"
-                            onInit={(evt, editor) => (editorRef.current = editor)}
-                            init={{
-                                height: 500,
-                                menubar: false,
-                                plugins: [
-                                    "advlist",
-                                    "autolink",
-                                    "lists",
-                                    "link",
-                                    "image",
-                                    "charmap",
-                                    "preview",
-                                    "anchor",
-                                    "searchreplace",
-                                    "visualblocks",
-                                    "code",
-                                    "fullscreen",
-                                    "insertdatetime",
-                                    "media",
-                                    "table",
-                                    "code",
-                                    "help",
-                                    "wordcount",
-                                ],
-                                toolbar:
-                                    "undo redo | blocks | " +
-                                    "bold italic forecolor | alignleft aligncenter " +
-                                    "alignright alignjustify | bullist numlist outdent indent | " +
-                                    "removeformat | help",
-                                content_style:
-                                    "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                            }}
-                        />
-                    </>
-                </div>
-                <div className="row">
-                    <div className="input-field col s12">
-                        <label htmlFor="id_org">Organization:</label>
-                        <br />
-                        <select {...register("organization")}>
-                            {
-                                session.allOrgs.map((org: Organization) => {
-                                    return <option key={org.id} value={org.id}>{org.name}</option>
-                                })
-                            }
-                        </select>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="input-field col s12">
-                        <label htmlFor="id_show_after">Show After:</label>
-                        <input
-                            {...register("show_after")}
-                            type="text"
-                            name="show_after"
-                            minLength={1}
-                            required={true}
-                            id="id_show_after"
-                        />
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="input-field col s12">
-                        <label htmlFor="id_supervisor">Supervisor:</label>
-                        <input
-                            {...register("supervisor")}
-                            type="text"
-                            name="supervisor"
-                            minLength={1}
-                            required={true}
-                            id="id_supervisor"
-                        />
-                    </div>
-                </div>
-                {error && (
-                    <span className="form-error">
-                        <div className="form-errors">
-                            <i className="material-icons">warning</i>
-                            <>{error}</>
-                        </div>
-                    </span>
-                )}
-                <div className="modal-footer">
-                    <a href="#!" className="modal-close waves-effect waves-red btn-flat">
-                        Cancel
-                    </a>
-                    <button className="waves-effect waves-green btn" type="submit">
-                        Create!
-                    </button>
-                </div>
-            </form>
-        </div>
-    );
+    //                     <ClickAwayListener onClickAway={() => setShowTags(false)}>
+    //                       <Fade in={showTags}>
+    //                         <List component={Paper} sx={{ mt: 1 }}>
+    //                           {currentTags.slice(0, 5/* get first 5 elements */).map((tag: Tag): JSX.Element => {
+    //                               return <ListItemButton onClick={() => handleClick(tag)}>{tag.name}</ListItemButton>;
+    //                           })}
+    //                         </List>
+    //                       </Fade>
+    //                     </ClickAwayListener>
+    //                 </div>
+    //             </div>
+    //             <div className="row">
+    //                 <>
+    //                     <Editor
+    //                         apiKey="your-api-key"
+    //                         onInit={(evt, editor) => (editorRef.current = editor)}
+    //                         init={{
+    //                             height: 500,
+    //                             menubar: false,
+    //                             plugins: [
+    //                                 "advlist",
+    //                                 "autolink",
+    //                                 "lists",
+    //                                 "link",
+    //                                 "image",
+    //                                 "charmap",
+    //                                 "preview",
+    //                                 "anchor",
+    //                                 "searchreplace",
+    //                                 "visualblocks",
+    //                                 "code",
+    //                                 "fullscreen",
+    //                                 "insertdatetime",
+    //                                 "media",
+    //                                 "table",
+    //                                 "code",
+    //                                 "help",
+    //                                 "wordcount",
+    //                             ],
+    //                             toolbar:
+    //                                 "undo redo | blocks | " +
+    //                                 "bold italic forecolor | alignleft aligncenter " +
+    //                                 "alignright alignjustify | bullist numlist outdent indent | " +
+    //                                 "removeformat | help",
+    //                             content_style:
+    //                                 "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+    //                         }}
+    //                     />
+    //                 </>
+    //             </div>
+    //             <div className="row">
+    //                 <div className="input-field col s12">
+    //                     <label htmlFor="id_org">Organization:</label>
+    //                     <br />
+    //                     <select {...register("organization")}>
+    //                         {
+    //                             session.allOrgs.map((org: Organization) => {
+    //                                 return <option key={org.id} value={org.id}>{org.name}</option>
+    //                             })
+    //                         }
+    //                     </select>
+    //                 </div>
+    //             </div>
+    //             <div className="row">
+    //                 <div className="input-field col s12">
+    //                     <label htmlFor="id_show_after">Show After:</label>
+    //                     <input
+    //                         {...register("show_after")}
+    //                         type="text"
+    //                         name="show_after"
+    //                         minLength={1}
+    //                         required={true}
+    //                         id="id_show_after"
+    //                     />
+    //                 </div>
+    //             </div>
+    //             <div className="row">
+    //                 <div className="input-field col s12">
+    //                     <label htmlFor="id_supervisor">Supervisor:</label>
+    //                     <input
+    //                         {...register("supervisor")}
+    //                         type="text"
+    //                         name="supervisor"
+    //                         minLength={1}
+    //                         required={true}
+    //                         id="id_supervisor"
+    //                     />
+    //                 </div>
+    //             </div>
+    //             {error && (
+    //                 <span className="form-error">
+    //                     <div className="form-errors">
+    //                         <i className="material-icons">warning</i>
+    //                         <>{error}</>
+    //                     </div>
+    //                 </span>
+    //             )}
+    //             <div className="modal-footer">
+    //                 <a href="#!" className="modal-close waves-effect waves-red btn-flat">
+    //                     Cancel
+    //                 </a>
+    //                 <button className="waves-effect waves-green btn" type="submit">
+    //                     Create!
+    //                 </button>
+    //             </div>
+    //         </form>
+    //     </div>
+    // );
 
     // return (
     //     <div className="popup">
@@ -662,4 +662,4 @@ const AnnouncementElement = (props: {
     //         </div>
     //     </div>
     // );
-};
+// };
