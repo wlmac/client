@@ -1,23 +1,23 @@
 import ApprovalStatus from '../misc/approvalstatus';
 
-interface UserSlug{
+interface UserField{
   id: number;
   username: string;
   first_name: string;
   last_name: string;
 }
 
-interface OrganizationSlug{
+interface OrganizationField{
   id: number;
   name: string;
   slug: string;
-  icon: string;
+  icon: string; // a url!
 }
 
 export default interface Post {
   id: number;
-  author: UserSlug;
-  organization: OrganizationSlug;
+  author: UserField;
+  organization: OrganizationField;
   tags: Array<number>;
   created_date: Date;
   last_modified_date: Date;
