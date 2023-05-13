@@ -11,11 +11,15 @@ import { TagElement } from "../../../util/core/tags";
 import { AnnouncementElement } from "../../announcements";
 import Announcement from "../../../util/core/interfaces/announcement";
 
+// A module for displaying club announcements
 const ClubAnnouncements = (props: {orgID: number}): JSX.Element => {
+    // club id
     const id: number = props.orgID;
+    // list of posts
     const [posts, setPosts] = React.useState<Announcement[] | null>(null);
     const session: Session = React.useContext(SessionContext);
     React.useEffect(() => {
+        // get a list of club announcements
         session.request("get", `${Routes.OBJECT}/announcement?organization=${id}`).then((response) => {
             console.log(response);
             if(response){
@@ -24,6 +28,7 @@ const ClubAnnouncements = (props: {orgID: number}): JSX.Element => {
         }).catch(console.error)
     }, [id]);
 
+    // return posts mapped to components
     const postEls = posts?.map(post => <AnnouncementElement announcement={post} tags={post.tags} key={post.id}></AnnouncementElement>);
     return <>
         {postEls}
