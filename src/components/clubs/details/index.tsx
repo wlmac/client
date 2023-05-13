@@ -81,30 +81,6 @@ export const ClubDetails = (): JSX.Element => {
         )
     }
 
-    // const UserElement = (props: { userID: number }): JSX.Element => {
-    //     const [user, setUser] = React.useState({} as User);
-    //     React.useEffect(() => {
-    //         session.request('get', `${Routes.OBJECT}/user/retrieve/${props.userID}`, false).then((res: { data: any }) => {
-    //             setUser(res.data as User);
-    //             console.log("Fetched");
-    //         }).catch(() => {
-    //             session.refreshAuth();
-    //         });
-    //     }, []);
-    //     return (
-    //         <Link to={`/user/${user.id}`} key={user.id}>
-    //             <div className="member">
-    //                 <div className="member-image">
-    //                     <img className="circle" src="/img/profile_picture" alt={`${user.username}'s profile picture`} />
-    //                 </div>
-    //                 <div className="member-text">
-    //                     {`${user.first_name} ${user.last_name}`}
-    //                 </div>
-    //             </div>
-    //         </Link>
-    //     );
-    // }
-
     return (
         <>
             <link rel="stylesheet" href="/static/css/detail.css" />
@@ -211,12 +187,6 @@ export const ClubDetails = (): JSX.Element => {
                                                 );
                                             })
                                         }
-                                        {/* {
-                                            ("members" in club) ?
-                                                club.members.map((memberID: number): React.ReactNode => {
-                                                    return <UserElement userID={memberID} />
-                                                }) : <></>
-                                        } */}
                                     </div>
                                 </section>
                             </div>
