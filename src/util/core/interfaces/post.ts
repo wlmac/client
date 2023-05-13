@@ -2,12 +2,16 @@ import ApprovalStatus from '../misc/approvalstatus';
 
 interface UserSlug{
   id: number;
-  slug: string;
+  username: string;
+  first_name: string;
+  last_name: string;
 }
 
 interface OrganizationSlug{
   id: number;
+  name: string;
   slug: string;
+  icon: string;
 }
 
 export default interface Post {
