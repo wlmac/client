@@ -291,14 +291,7 @@ const AnnouncementList = (props: any): JSX.Element => {
         {
             announcements.length == 0 ? <></> :
                 announcements.map((announcement: Announcement): JSX.Element => {
-                    let current_tags: Tag[] = [];
-                    for (let i = 0; i < announcement.tags.length; i++) {
-                        for (let j = 0; j < session.allTags.length; j++) {
-                            if (announcement.tags[i] == (session.allTags[j] as Tag).id) {
-                                current_tags.push(session.allTags[j]);
-                            }
-                        }
-                    }
+                    let current_tags: Tag[] = announcement.tags;
                     return (
                         <AnnouncementElement
                             key={announcement.id}
@@ -314,7 +307,7 @@ const AnnouncementList = (props: any): JSX.Element => {
     </div>
 };
 
-const AnnouncementElement = (props: {
+export const AnnouncementElement = (props: {
     announcement: Announcement;
     tags: Tag[];
 }): JSX.Element => {
@@ -327,7 +320,7 @@ const AnnouncementElement = (props: {
     const [organization, setOrganization] = React.useState<Organization>({} as Organization);
 
     React.useEffect(() => {
-        setAuthor(session.allUsers.find((user: User) => user.id === data.author.id)!);
+        if(data.author) setAuthor(session.allUsers.find((user: User) => user.id === data.author.id)!);
         setOrganization(session.allOrgs.find((organization: Organization) => organization.id === data.organization.id)!);
     }, [session.allUsers, session.allOrgs]);
 
