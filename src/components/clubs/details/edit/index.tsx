@@ -12,8 +12,8 @@ import { TagElement } from "../../../../util/core/tags";
 
 export const EditClubDetails = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
-    const { id } = useParams(); 
-    const session: Session = React.useContext(SessionContext); 
+    const { slug } = useParams();
+    const session: Session = React.useContext(SessionContext);
     const [club, setClub] = React.useState({} as Organization);
     const [error, setError] = React.useState("");
 
@@ -23,8 +23,8 @@ export const EditClubDetails = (): JSX.Element => {
 
     //when the page gets loaded, this gets called and all the react states get set to the GET APIs
     React.useEffect(() => {
-        const fetchURL = `${Routes.OBJECT}/organization/retrieve/${id}`;
-        session.getAPI(fetchURL, false).then((res) => {
+        const fetchURL = `${Routes.OBJECT}/organization/retrieve/${slug}?lookup=slug`;
+        session.request('get', fetchURL).then((res) => {
             const current_club: Organization = res.data as Organization;
             setClub(current_club);
             setNewClub(current_club);
@@ -33,19 +33,32 @@ export const EditClubDetails = (): JSX.Element => {
         setCurrentBio(club.bio);
     }, []);
 
-    console.log(`${club.name}'s Bio: ${club.bio}`);
+    // React.useEffect(() => {
+    //     if (!loggedIn()) {
+    //         session.notify("Please login to access this page", "info");
+    //         nav(`/accounts/login?next=${encodeURIComponent(window.location.pathname)}`);
+    //     }
+    // });
 
-    const handleSubmit = (event: any) => {
-        event.preventDefault();
+    // console.log(`${club.name}'s Bio: ${club.bio}`);
+
+    const handleSubmit = (event?: any) => {
+        if (event) event.preventDefault();
         console.log("ogga");
         //come on... do smth
         const patchURL = `${Routes.OBJECT}/organization/single/${club.id}`;
-        session.patchAPI(patchURL, newClub).then((res) => {
-            console.log(`Successfully changed ${club.name}'s details`);
-            nav(`/club/${club.id}`);
+        session.request('patch', patchURL, newClub).then((res) => {
+            session.notify(`Successfully changed ${club.name}'s details`, "success");
+            nav(`/club/${club.slug}`);
         }).catch((err) => {
-            console.log(`Failed to change ${club.name}'s details`);
-            setError(`An internal error occured. Please contact an admin to get it fixed.`)
+            console.log(err.response.status);
+            if (err.response.status === 401) {
+                session.refreshAuth();
+                handleSubmit();
+                return;
+            }
+            // session.notify(`Failed to change ${club.name}'s details`, "error");
+            session.notify(`An internal error occured. Please contact an admin to get it fixed.`, "error")
         });
     }
 
@@ -82,7 +95,7 @@ export const EditClubDetails = (): JSX.Element => {
                                     <option value="Closed Applications">Closed Applications</option>
                                 </select>
 
-                                
+
                             </div>
 
                             <div className="field">
@@ -96,11 +109,11 @@ export const EditClubDetails = (): JSX.Element => {
                                 profile picture and banner picture (somewhat hard)
                                 */}
                             </div>
-                            
+
                             <div className="field">
                                 <div>
                                     <button type="submit" className="btn">Submit</button>
-                                    <a href={`/club/${club.id}`} className="btn">Cancel</a>
+                                    <Link to={`/club/${club.slug}`} className="btn">Cancel</Link>
                                 </div>
                             </div>
                         </form>

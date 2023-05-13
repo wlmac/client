@@ -11,7 +11,7 @@ import Markdown from "../../markdown";
 import { dateFormat } from "../../../util/core/misc/date";
 
 export const BlogDetails = (): JSX.Element => {
-    const { id } = useParams();
+    const { slug } = useParams();
 
     const nav: NavigateFunction = useNavigate();
     const session: Session = React.useContext(SessionContext);
@@ -22,20 +22,20 @@ export const BlogDetails = (): JSX.Element => {
     const [members, setMembers] = React.useState([] as Array<User>);
 
     React.useEffect(() => {
-        const fetchURL = `${Routes.OBJECT}/blog-post/retrieve/${id}`;
-        session.getAPI(fetchURL).then((res) => {
+        const fetchURL = `${Routes.OBJECT}/blog-post/retrieve/${slug}?lookup=slug`;
+        session.request('get', fetchURL).then((res) => {
             const current_post: BlogPost = res.data as BlogPost;
             setPost(current_post);
 
             // Author
-            session.getAPI(`${Routes.USER}/${current_post.author}`).then((res) => {
+            session.request('get', `${Routes.USER}/retrieve/${current_post.author}`).then((res) => {
                 setAuthor(res.data);
             }).catch(() => {
                 session.refreshAuth();
             });
 
             // Tags
-            session.getAPI(`${Routes.OBJECT}/tag`).then((res) => {
+            session.request('get', `${Routes.OBJECT}/tag`).then((res) => {
                 const tags_data: Tag[] = res.data.results;
                 const current_tags: Tag[] = [];
                 for (let i = 0; i < current_post.tags.length; i++) {
@@ -68,10 +68,10 @@ export const BlogDetails = (): JSX.Element => {
                     <h1 className="title">{post.title}</h1>
                     <div className="card-authors">
                         <div className="card-authors-image">
-                            <Link to={`/user/${post.author}`}><img className="circle" src={author.gravatar_url} /></Link>
+                            <Link to={`/user/${author.username}`}><img className="circle" src={author.gravatar_url} /></Link>
                         </div>
                         <div className="card-authors-text">
-                            <Link to={`/user/${post.author}`} className="link">{`${author.first_name} ${author.last_name}`}</Link>
+                            <Link to={`/user/${author.username}`} className="link">{`${author.first_name} ${author.last_name}`}</Link>
                             <br />
                             • {new Date(post.created_date).toLocaleTimeString(undefined, dateFormat)}
                             {/* {post.created_date !== post.last_modified_date && " (Edited)"} */}

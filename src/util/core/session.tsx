@@ -1,10 +1,15 @@
 import * as React from 'react';
 import jwt_decode from "jwt-decode";
-import { default as axios } from 'axios';
+import { AxiosError, AxiosResponse, default as axios } from 'axios';
 import Routes from './misc/routes';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { getToken, setToken, getRefresh, setRefresh, loggedIn } from "./AuthService";
 import Organization from './interfaces/organization';
+import Tag from './interfaces/tag';
+import { AlertColor } from '@mui/material';
+import { Notif } from './interfaces/notification';
+
+const BATCH_CACHELIMIT = 100; // how many entities should be requested each iteration in a fetchAll operation
 
 export interface User {
     bio: string,
@@ -22,39 +27,75 @@ export interface User {
     registertime: number
 }
 
+interface CacheStatus {
+    tags: boolean,
+    orgs: boolean,
+    users: boolean
+}
+
 export interface Session {
     user: User,
+    cacheStatus: CacheStatus
     allUsers: Array<User>,
     allOrgs: Array<Organization>,
+    allTags: Array<Tag>,
     setUser: (user: User) => void,
+    refreshUser: () => void,
     updateToken: (token: string) => void,
-    getAPI: (url: string, auth?: boolean) => Promise<any>,
-    postAPI: (url: string, data: any) => Promise<any>,
-    putAPI: (url: string, data: any) => Promise<any>,
-    patchAPI: (url: string, data: any) => Promise<any>,
-    refreshAuth: () => void,
-    logout: () => void
+    request: (method: string, url: string, data?: any) => Promise<any>,
+    refreshAuth: (callback?: () => void) => Promise<void>,
+    logout: () => void,
+    notify: (message: string, type: AlertColor) => void,
+    notification: Notif,
+    closeNotif: () => void,
 }
 
 export const SessionContext = React.createContext<Session>({
     user: {} as User,
+    cacheStatus: {} as CacheStatus,
     allUsers: [],
     allOrgs: [],
+    allTags: [],
     setUser: (user: User) => { },
+    refreshUser: () => { },
     updateToken: (token: string) => { },
-    getAPI: (url: string, auth?: boolean) => { return {} as Promise<any> },
-    postAPI: (url: string, data: any) => { return {} as Promise<any> },
-    putAPI: (url: string, data: any) => { return {} as Promise<any> },
-    patchAPI: (url: string, data: any) => { return {} as Promise<any> },
-    refreshAuth: () => { },
-    logout: () => { }
+    request: () => { return {} as Promise<any> },
+    refreshAuth: () => { return {} as Promise<void> },
+    logout: () => { },
+    notify: (message: string, type: AlertColor) => { },
+    notification: {} as Notif,
+    closeNotif: () => { }
 });
 
 export const SessionProvider = (props: { children: React.ReactNode }) => {
     let [user, updateUser] = React.useState({} as User);
     const [allUsers, setAllUsers] = React.useState([] as Array<User>);
     const [allOrgs, setAllOrgs] = React.useState([] as Array<Organization>);
+    const [allTags, setAllTags] = React.useState([] as Array<Tag>);
+    const [cacheStatus, setCacheStatus] = React.useState({
+        tags: false,
+        orgs: false,
+        users: false
+    });
     const nav: NavigateFunction = useNavigate();
+
+    // Snackbar Notification
+    const [notification, setNotification] = React.useState<Notif>({
+        open: false,
+        type: "" as AlertColor,
+        message: ""
+    });
+
+    const notify = (message: string, type: AlertColor): void => {
+        setNotification({ open: true, type: type, message: message });
+    }
+
+    const closeNotif = (event?: React.SyntheticEvent | Event, reason?: string): void => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setNotification({ ...notification, open: false });
+    }
 
     const setUser = (newUser: User): void => {
         user = newUser;
@@ -63,37 +104,111 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
 
     const refreshUser = (): void => {
         if (loggedIn()) {
-            getAPI(`${Routes.USER}/${user.id}`).then((res) => {
+            request('get', `${Routes.USER}/retrieve/${user.id}`).then((res) => {
                 setUser({
                     ...user,
                     ...res.data
                 });
-            }).catch((err) => {
-                refreshAuth();
             });
         }
     }
 
-    React.useEffect((): void => {
+    React.useEffect(() => {
         if (loggedIn()) {
             updateToken(getToken());
             refreshUser();
         }
 
-        getAPI(`${Routes.OBJECT}/user`).then((res) => {
-            setAllUsers(res.data.results);
-        }).catch((err) => {
+        cacheRoutine();
 
-        });
-
-        getAPI(`${Routes.OBJECT}/organization`).then((res) => {
-            setAllOrgs(res.data.results);
-        }).catch((err) => {
-
-        });
+        const interval = setInterval(() => {
+            cacheRoutine();
+        }, 5 * 60 * 1000);
+        return () => {
+            clearInterval(interval);
+        }
     }, []);
 
+    const cacheRoutine = async () => {
+        getAll(`tag`).then((data) => {
+            setAllTags(data);
+            setCacheStatus((prevStatus) => {
+                prevStatus.tags = true;
+                return prevStatus;
+            })
+        }).catch((err) => { });
+
+        getAll(`organization`).then((data) => {
+            setAllOrgs(data);
+            setCacheStatus((prevStatus) => {
+                prevStatus.orgs = true;
+                return prevStatus;
+            })
+        }).catch((err) => { });
+
+        fetchAll(`user`).then((data) => {
+            setAllUsers(data);
+            setCacheStatus((prevStatus) => {
+                prevStatus.users = true;
+                return prevStatus;
+            })
+        }).catch((err) => { console.log(err); });
+    }
+
+    // this function fetches every single entry of given path and caches it locally
+    // a routine is run to download new content if the data is modified
+    // do not supply any query params to the objtype
+    const getAll = async (objtype: string) => {
+        let item = localStorage.getItem(objtype);
+        if (item) {
+            try {
+                let data = JSON.parse(item);
+                let res = await request('head', `${Routes.OBJECT}/${objtype}?limit=${BATCH_CACHELIMIT}`);
+                if (res.headers["last-modified"] && new Date(res.headers["last-modified"]).getTime() > data.modified) {
+                    return await fetchAll(objtype);
+                }
+                else {
+                    return data.data;
+                }
+            }
+            catch {
+                return await fetchAll(objtype);
+            }
+        }
+        else {
+            return await fetchAll(objtype);
+        }
+    }
+
+    const fetchAll = async (objtype: string): Promise<any[]> => {
+        try {
+            let res = await request('get', `${Routes.OBJECT}/${objtype}?limit=${BATCH_CACHELIMIT}`);
+            let arr = res.data.results;
+            let i_count = 1; // backoff for spamming reqs
+            while (true) {
+                if (res.data.next) {
+                    await new Promise(r => setTimeout(r, i_count * i_count * 100)); // timeout
+                    // spent like a solid 5 minutes wondering about this function
+                    res = await request('get', res.data.next);
+                    arr = [...arr, ...res.data.results];
+                    i_count++;
+                }
+                else {
+                    break;
+                }
+            }
+            let newobj = JSON.stringify({ modified: Date.now(), data: arr });
+            localStorage.setItem(objtype, newobj);
+            return arr;
+        }
+        catch {
+            console.log("Exception");
+            return [];
+        }
+    }
+
     const updateToken = (token: string): void => {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         setToken(token);
         if (token !== "") {
             let decoded: any = jwt_decode(token);
@@ -111,63 +226,45 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         }
     }
 
-    function getAPI(url: string, auth?: boolean): Promise<any> {
-        if (auth && !loggedIn()) {
-            nav("/accounts/login");
+    const request = async (method: string, url: string, data?: any): Promise<any> => {
+        if (loggedIn()) {
+            axios.defaults.headers.common['Authorization'] = `Bearer ${getToken()}`;
         }
-        const token = getToken();
-        return axios.get(url, auth ? {
-            headers: {
-                Authorization: `Bearer ${token}`
+
+        try {
+            const res = await axios({
+                method: method,
+                url: url,
+                data: data
+            });
+            return res;
+        }
+        catch (err: any) {
+            if (err.response.status === 401) {
+                try {
+                    const refresh = await refreshAuth();
+                    //todo: use an exponential backoff so we don't end up DoSing the backend
+                    return request(method, url, data); // Retry if refresh success
+                }
+                catch (err: any) {
+                    logout();
+                }
             }
-        } : {});
+        }
     }
 
-    const postAPI = (url: string, data: any): Promise<any> => {
+    const refreshAuth = async (callback?: () => void): Promise<void> => {
         if (!loggedIn()) {
-            nav("/accounts/login");
+            notify("Please log back into your account.", "info");
+            nav(`/accounts/login?next=${encodeURIComponent(window.location.pathname)}`);
+            return;
         }
-        const token = getToken();
-        return axios.post(url, data, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-    }
 
-    const putAPI = (url: string, data: any): Promise<any> => {
-        if (!loggedIn()) {
-            nav("/accounts/login");
-        }
-        const token = getToken();
-        return axios.put(url, data, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-    }
-
-    const patchAPI = (url: string, data: any): Promise<any> => {
-        const token = getToken();
-        return axios.patch(url, data, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-    }
-
-    const refreshAuth = (): void => {
-        if (!loggedIn()) return;
-
-        axios.post(Routes.AUTH.REFRESH, {
+        const res = await axios.post(Routes.AUTH.REFRESH, {
             refresh: getRefresh()
-        }, {}).then((res) => {
-            updateToken(res.data.access);
-            setRefresh(res.data.refresh);
-        }).catch((err) => {
-            console.log("Refresh expired. Logging out.");
-            logout();
         });
+        updateToken(res.data.access);
+        setRefresh(res.data.refresh);
     }
 
     const logout = (): void => {
@@ -176,12 +273,13 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         setUser({} as User);
         localStorage.removeItem("token");
         localStorage.removeItem("refresh");
-        nav("/accounts/login");
+        nav(`/accounts/login?next=${encodeURIComponent(window.location.pathname)}`);
     }
 
     return (
-        <SessionContext.Provider value={{ user: user, allUsers: allUsers, allOrgs: allOrgs, setUser: setUser, updateToken: updateToken, getAPI: getAPI, postAPI: postAPI, putAPI: putAPI, patchAPI: patchAPI, refreshAuth: refreshAuth, logout: logout }}>
+        <SessionContext.Provider value={{ user: user, cacheStatus: cacheStatus, allUsers: allUsers, allOrgs: allOrgs, allTags: allTags, setUser: setUser, refreshUser: refreshUser, updateToken: updateToken, request: request, refreshAuth: refreshAuth, logout: logout, notify: notify, notification: notification, closeNotif: closeNotif }}>
             {props.children}
         </SessionContext.Provider>
     )
 }
+

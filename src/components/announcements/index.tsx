@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link, NavigateFunction, useNavigate } from "react-router-dom";
+import { Link, NavigateFunction, createSearchParams, useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery } from "../../util/query";
 import { AnnouncementFeeds } from "./feeds";
 import { AnnouncementFeed, AnnouncementInputs } from "../../util/models";
@@ -28,11 +28,23 @@ import { Checkbox, FormControl, InputLabel, ListItemText, MenuItem, OutlinedInpu
 import { useRef } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 
-export const Announcements = (): JSX.Element => {
-    const query: URLSearchParams = useQuery();
-    const nav: NavigateFunction = useNavigate();
-    const feed: string | null = query.get("feed");
+import './index.scss';
 
+const ANN_FETCHLIMIT = 10; // how many anns to fetch each api request
+
+export const Announcements = (): JSX.Element => {
+    const session: Session = React.useContext(SessionContext);
+    const nav: NavigateFunction = useNavigate();
+
+    const [searchParams, setSearchParams] = useSearchParams();
+    const initMount = useRef(true);
+
+    const [feeds, setFeeds] = React.useState(AnnouncementFeeds);
+    const [curContent, setCurContent] = React.useState({
+        isFeed: true, // true = is a feed, false = is a tag
+        feed: {} as AnnouncementFeed, // default is all
+        tag: {} as Tag, // the tag object
+    })
     const [openCreator, setOpenCreator] = React.useState(false);
     const editorRef = useRef(null);
 
@@ -43,38 +55,131 @@ export const Announcements = (): JSX.Element => {
         }
     };
 
+    React.useEffect(() => {
+        if (searchParams.get("tag")) {
+            let filtered = session.allTags.filter(e => e.name === searchParams.get("tag"));
+            setCurContent({
+                isFeed: false,
+                feed: {} as AnnouncementFeed,
+                tag: filtered.length == 0 ? {} as Tag : filtered[0], // the tag object
+            });
+        }
+    }, [session.allTags]);
+
+    React.useEffect(() => {
+        if (session.user.id) {
+            setFeeds((curFeeds) => {
+                // delete existing "my" feed
+                let removeMy = curFeeds.filter(e => e.id !== "my");
+                removeMy.push({
+                    id: 'my',
+                    text: "MY FEED",
+                    filters: (session.user.organizations) ? session.user.organizations.map(e => { return '&organization=' + e }).join('') : ''
+                });
+                return removeMy;
+            })
+        }
+    }, [session.user]);
+
+    function syncParamWithContent() {
+        if (searchParams.get('feed')) {
+            let feedlist = feeds.filter(e => e.id === searchParams.get("feed"));
+            setCurContent({
+                isFeed: true, // true = is a feed, false = is a tag
+                feed: feedlist.length == 0 ? feeds[0] : feedlist[0], // default is all (0 index)
+                tag: {} as Tag, // the tag object
+            });
+        }
+        else if (searchParams.get("tag")) {
+            let filtered = session.allTags.filter(e => e.name === searchParams.get("tag"));
+            setCurContent({
+                isFeed: false,
+                feed: {} as AnnouncementFeed,
+                tag: filtered.length == 0 ? {} as Tag : filtered[0], // the tag object
+            });
+        }
+    }
+
+    React.useEffect(() => {
+        if (initMount.current) {
+            initMount.current = false;
+            //here we "clean up" the searchparam
+            if (searchParams.get("feed")) {
+                let feedlist = feeds.filter(e => e.id === searchParams.get("feed"));
+                if (feedlist.length == 0 && searchParams.get("feed") !== "my") { // my is a special feed
+                    setSearchParams(createSearchParams([["feed", "all"]]));
+                }
+                else {
+                    if (Array.from(searchParams.keys()).length == 1) { // if the only query param is "feed"
+                        syncParamWithContent();
+                    }
+                    else { // because there is another param we will reset it forcefully which also triggers a rerender from the searchParam state
+                        setSearchParams(createSearchParams([["feed", searchParams.get('feed') as string]]));
+                    }
+                }
+            }
+            else if (searchParams.get("tag")) {
+                // because it is a tag it may take some time to cache the actual tag value
+                if (Array.from(searchParams.keys()).length == 1) { // if the only query param is "tag"
+                    syncParamWithContent();
+                }
+                else { // because there is another param we will reset it forcefully which also triggers a rerender from the searchParam state
+                    setSearchParams(createSearchParams([["tag", searchParams.get('tag') as string]]));
+                }
+            }
+            else {
+                setSearchParams(createSearchParams([["feed", "all"]]));
+            }
+        }
+        else {
+            syncParamWithContent();
+        }
+    }, [searchParams, feeds]);
+
     React.useEffect((): void => {
         document.title = "Announcements | Metropolis";
     }, []);
 
-    const header = (currentFeed: string | null): Array<JSX.Element> => {
-        return AnnouncementFeeds.map((feed: AnnouncementFeed): JSX.Element => {
-            const headerClass: string =
-                feed.id === currentFeed ? "header header-active" : "header";
-            return (
-                <li
-                    key={feed.id}
-                    className={headerClass}
-                    onClick={(): void => nav(`/announcements?feed=${feed.id}`)}
-                >
-                    {feed.text}
-                </li>
-            );
-        });
-    };
-
     return (
         <>
             <link rel="stylesheet" href="static/css/announcement-list.css" />
-            <AnnouncementCreator
+            {/* <AnnouncementCreator
                 openCreator={openCreator}
                 setOpenCreator={setOpenCreator}
-            />
+            /> */}
 
             <div className="container">
                 <div className="headers header-row">
-                    <ul>{header(feed)}</ul>
-                    <a
+                    <ul>{
+                        //this is the header
+                        feeds.map((feed: AnnouncementFeed): JSX.Element => {
+                            const headerClass: string =
+                                (curContent.isFeed && feed.id === curContent.feed.id) ? "header header-active" : "header";
+                            return (
+                                <li
+                                    key={feed.id}
+                                    className={headerClass}
+                                    onClick={(): void => {
+                                        setSearchParams(createSearchParams([["feed", feed.id]]));
+                                    }}
+                                >
+                                    {feed.text}
+                                </li>
+                            );
+                        })
+                    }
+                        {
+                            !curContent.isFeed ? <li
+                                key={curContent.tag.name}
+                                className={"header header-active"}
+                                onClick={(): void => {
+                                    setSearchParams(createSearchParams([["tag", curContent.tag.name]]));
+                                }}
+                            >
+                                TAG: {curContent.tag.name ? curContent.tag.name.toUpperCase() : 'Loading...'}
+                            </li> : <></>
+                        }</ul>
+                    {/* <a
                         className="btn-small waves-light red"
                         href="#modal1"
                         onClick={(ev) => {
@@ -89,11 +194,11 @@ export const Announcements = (): JSX.Element => {
                         }}
                     >
                         <i className="material-icons">add</i>
-                    </a>
+                    </a> */}
                 </div>
                 <div className="card-container">
                     <div className="cards" id="cards-all">
-                        {AnnouncementList()}
+                        <AnnouncementList curContent={curContent} searchParams={searchParams} />
                     </div>
                 </div>
             </div>
@@ -101,79 +206,152 @@ export const Announcements = (): JSX.Element => {
     );
 };
 
-const AnnouncementList = (): JSX.Element[] => {
+const AnnouncementList = (props: any): JSX.Element => {
     const session: Session = React.useContext(SessionContext);
 
-    React.useEffect(() => {
-        const fetchURL = `${Routes.OBJECT}/announcement`;
-        session
-            .getAPI(fetchURL, false)
-            .then((res) => {
-                setAnnouncements(res.data.results);
-            })
-            .catch((err) => {
-                session.refreshAuth();
-            });
+    const [announcements, setAnnouncements] = React.useState([] as any[]);
+    const [offset, setOffset] = React.useState(0);
+    const [loadMsg, setLoadMsg] = React.useState("Loading...");
 
-        // Tags
-        session
-            .getAPI(`${Routes.OBJECT}/tag`, false)
-            .then((res) => {
-                const tags = res.data.results;
-                setTags(tags);
-            })
-            .catch(() => {
-                session.refreshAuth();
-            });
-    }, []);
+    const initLoadRef = React.useRef(false);
 
-    const [announcements, setAnnouncements] = React.useState([]);
-    const [tags, setTags] = React.useState([]);
-
-    return announcements.map((announcement: Announcement): JSX.Element => {
-        let current_tags: Tag[] = [];
-        for (let i = 0; i < announcement.tags.length; i++) {
-            for (let j = 0; j < tags.length; j++) {
-                if (announcement.tags[i] == (tags[j] as Tag).id) {
-                    current_tags.push(tags[j]);
-                }
+    function fetchAnns(append: boolean) {
+        if (initLoadRef.current) {
+            setLoadMsg("Loading more announcements...");
+        }
+        let param = '';
+        if (!props.curContent.isFeed && props.curContent.tag.id) {
+            param = `&tags=${props.curContent.tag.id}`;
+        }
+        else if (props.curContent.isFeed) {
+            if (props.curContent.feed.id === "my" && (!session.user.organizations || session.user.organizations.length == 0)) {
+                // dont display anns if there are on their own feed but havent subscribed to any orgs
+                setAnnouncements([]);
+                setOffset(-1);
+                return;
+            }
+            else {
+                param = props.curContent.feed.filters ?? '';
             }
         }
-        return (
-            <AnnouncementElement
-                key={announcement.id}
-                announcement={announcement}
-                tags={current_tags}
-            />
-        );
-    });
+        const fetchURL = `${Routes.OBJECT}/announcement?limit=${ANN_FETCHLIMIT}&offset=${Math.max(offset, 0)}${param}`;
+        session
+            .request('get', fetchURL)
+            .then((res) => {
+                setAnnouncements((prevAnns) => {
+                    if (append) {
+                        return prevAnns.concat(res.data.results);
+                    }
+                    else {
+                        return res.data.results;
+                    }
+                });
+                setOffset((prevOffset) => {
+                    if (res.data.count - prevOffset > ANN_FETCHLIMIT) { // there are more anns!
+                        document.addEventListener('scroll', trackScrolling);
+                        setLoadMsg("Scroll down to load more announcements...");
+                        return prevOffset + ANN_FETCHLIMIT;
+                    }
+                    else {
+                        setLoadMsg("You've reached the end!");
+                        return -1;
+                    }
+                });
+                if (!initLoadRef.current) {
+                    initLoadRef.current = true;
+                }
+            });
+    }
+
+    React.useEffect(() => {
+        initLoadRef.current = false;
+        fetchAnns(false);
+        document.removeEventListener('scroll', trackScrolling);
+        document.addEventListener('scroll', trackScrolling);
+        return () => {
+            document.removeEventListener('scroll', trackScrolling);
+        }
+    }, [props.curContent]);
+
+    function trackScrolling() {
+        const wrappedElement = document.getElementById('annlist');
+        if (wrappedElement!.getBoundingClientRect().bottom <= window.innerHeight) {
+            //reached bottom!
+            setOffset((offset) => { // since it is the function it has access to current state despite being rendered from initial state
+                if (offset != -1 && initLoadRef.current) { // not -1 means there are more anns to fetch
+                    fetchAnns(true);
+                }
+                return offset;
+            })
+            document.removeEventListener('scroll', trackScrolling);
+        }
+    }
+
+    return <div id="annlist">
+        {
+            announcements.length == 0 ? <></> :
+                announcements.map((announcement: Announcement): JSX.Element => {
+                    let current_tags: Tag[] = [];
+                    for (let i = 0; i < announcement.tags.length; i++) {
+                        for (let j = 0; j < session.allTags.length; j++) {
+                            if (announcement.tags[i] == (session.allTags[j] as Tag).id) {
+                                current_tags.push(session.allTags[j]);
+                            }
+                        }
+                    }
+                    return (
+                        <AnnouncementElement
+                            key={announcement.id}
+                            announcement={announcement}
+                            tags={current_tags}
+                        />
+                    );
+                })
+        }
+        <div>
+            {(announcements.length == 0 && initLoadRef.current) ? 'There are no announcements to be displayed at this time' : loadMsg}
+        </div>
+    </div>
 };
 
 const AnnouncementElement = (props: {
     announcement: Announcement;
     tags: Tag[];
 }): JSX.Element => {
+    const nav: NavigateFunction = useNavigate();
+
     const data: Announcement = props.announcement;
     const session: Session = React.useContext(SessionContext);
-    let organization: Organization = session.allOrgs.find((organization: Organization) => organization.id === data.organization)!;
-    let author: User = session.allUsers.find((user: User) => user.id === data.author)!;
+
+    const [author, setAuthor] = React.useState<User>({} as User);
+    const [organization, setOrganization] = React.useState<Organization>({} as Organization);
+
+    React.useEffect(() => {
+        setAuthor(session.allUsers.find((user: User) => user.id === data.author)!);
+        setOrganization(session.allOrgs.find((organization: Organization) => organization.id === data.organization)!);
+    }, [session.allUsers, session.allOrgs]);
 
     return organization && author ? (
         <div className="card">
             <div className="card-headers">
                 <div className="tag-section">
                     {props.tags.map((tag: Tag): JSX.Element => {
-                        return <TagElement key={tag.id} tag={tag} />;
+                        return <a className="tag-link" key={tag.id} href={`/announcements?tag=${tag.name}`} onClick={(ev) => {
+                            ev.preventDefault();
+                            nav(`/announcements?tag=${tag.name}`);
+                        }}>
+                            <TagElement tag={tag} />
+                        </a>;
                     })}
                 </div>
                 <h1 className="title">{data.title}</h1>
                 <div className="card-authors">
                     <div className="card-authors-image">
-                        <Link to={`/club/${data.organization}`}><img className="circle" src={author.gravatar_url} /></Link>
+                        <Link to={`/club/${organization.slug}`}><img className="circle" src={organization.icon} /></Link>
                     </div>
                     <div className="card-authors-text">
-                        <Link to={`/club/${data.organization}`} className="link">{organization.name}</Link>,
-                        <Link to={`/user/${data.author}`} className="link">{`${author.first_name} ${author.last_name}`}</Link>
+                        <Link to={`/club/${organization.slug}`} className="link">{organization.name}</Link>,
+                        <Link to={`/user/${author.username}`} className="link">{`${author.first_name} ${author.last_name}`}</Link>
                         <br />
                         • {new Date(data.created_date).toLocaleTimeString(undefined, dateFormat)}
                     </div>
@@ -186,19 +364,19 @@ const AnnouncementElement = (props: {
                 See announcement <i className="zmdi zmdi-chevron-right"></i>
             </Link>
         </div>
-    ) : <></>;
+    ) : <div className="card">Loading...</div>;
 };
 
-const AnnouncementCreator = (props: {
-    openCreator: boolean;
-    setOpenCreator: React.Dispatch<any>;
-}): JSX.Element => {
-    const openCreator: boolean = props.openCreator,
-        setOpenCreator: React.Dispatch<any> = props.setOpenCreator;
-    // if (!openCreator) return <></>
+// const AnnouncementCreator = (props: {
+//     openCreator: boolean;
+//     setOpenCreator: React.Dispatch<any>;
+// }): JSX.Element => {
+//     const openCreator: boolean = props.openCreator,
+//         setOpenCreator: React.Dispatch<any> = props.setOpenCreator;
+//     // if (!openCreator) return <></>
 
-    const [isPublic, setIsPublic] = React.useState(false);
-    const session: Session = React.useContext(SessionContext);
+//     const [isPublic, setIsPublic] = React.useState(false);
+//     const session: Session = React.useContext(SessionContext);
 
     const [currentTags, setCurrentTags] = React.useState([]);
     const [showTags, setShowTags] = React.useState(false);
@@ -212,10 +390,10 @@ const AnnouncementCreator = (props: {
     } = useForm<AnnouncementInputs>();
     const [error, setError] = React.useState("");
 
-    const [selected, setSelected] = React.useState<string[]>([]);
-    const names = session.allOrgs.map((organization: Organization): string => {
-        return organization.name;
-    });
+//     const [selected, setSelected] = React.useState<string[]>([]);
+//     const names = session.allOrgs.map((organization: Organization): string => {
+//         return organization.name;
+//     });
 
     const onCreate = (data: AnnouncementInputs): void => {
         console.log("Submitted data:", data);
@@ -232,26 +410,26 @@ const AnnouncementCreator = (props: {
             });
     };
 
-    const ITEM_HEIGHT = 48;
-    const ITEM_PADDING_TOP = 8;
-    const MenuProps = {
-        PaperProps: {
-            style: {
-                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-                width: 250,
-            },
-        },
-    };
+//     const ITEM_HEIGHT = 48;
+//     const ITEM_PADDING_TOP = 8;
+//     const MenuProps = {
+//         PaperProps: {
+//             style: {
+//                 maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+//                 width: 250,
+//             },
+//         },
+//     };
 
-    const handleChange = (event: SelectChangeEvent<typeof selected>) => {
-        const {
-            target: { value },
-        } = event;
-        setSelected(
-            // On autofill we get a stringified value.
-            typeof value === 'string' ? value.split(',') : value,
-        );
-    };
+//     const handleChange = (event: SelectChangeEvent<typeof selected>) => {
+//         const {
+//             target: { value },
+//         } = event;
+//         setSelected(
+//             // On autofill we get a stringified value.
+//             typeof value === 'string' ? value.split(',') : value,
+//         );
+//     };
 
     const handleTagInput = (event: any) => {  // event: any might be really bad type hinting
       const text = event.target.value;

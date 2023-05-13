@@ -58,14 +58,14 @@ const ClubList = (): JSX.Element[] => {
 
     React.useEffect(() => {
         const fetchURL = `${Routes.OBJECT}/organization`;
-        session.getAPI(fetchURL, false).then((res) => {
+        session.request('get', fetchURL, false).then((res) => {
             setClubs(res.data.results);
         }).catch((err) => {
             session.refreshAuth();
         });
 
         // Tags
-        session.getAPI(`${Routes.OBJECT}/tag`, false).then((res) => {
+        session.request('get', `${Routes.OBJECT}/tag`, false).then((res) => {
             const tags = res.data.results;
             setTags(tags);
         }).catch(() => {
@@ -104,7 +104,7 @@ const Club = (props: { club: Organization, tags: Tag[] }): JSX.Element => {
     }
 
     React.useEffect(() => {
-        session.getAPI(`${Routes.OBJECT}/tag`, false).then((res) => {
+        session.request('get', `${Routes.OBJECT}/tag`, false).then((res) => {
             const tags = res.data.results;
             setTags(tags.map((tag: Tag): JSX.Element => {
                 return <TagElement tag={tag} />;
@@ -121,7 +121,7 @@ const Club = (props: { club: Organization, tags: Tag[] }): JSX.Element => {
                     <img className="circle" src={club.icon} />
                 </div>
                 <h1 className="title link">
-                    <Link to={`/club/${club.id}`}>{club.name}</Link>
+                    <Link to={`/club/${club.slug}`}>{club.name}</Link>
                 </h1>
             </div>
 
