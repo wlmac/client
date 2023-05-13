@@ -327,8 +327,8 @@ const AnnouncementElement = (props: {
     const [organization, setOrganization] = React.useState<Organization>({} as Organization);
 
     React.useEffect(() => {
-        setAuthor(session.allUsers.find((user: User) => user.id === data.author)!);
-        setOrganization(session.allOrgs.find((organization: Organization) => organization.id === data.organization)!);
+        setAuthor(session.allUsers.find((user: User) => user.id === data.author.id)!);
+        setOrganization(session.allOrgs.find((organization: Organization) => organization.id === data.organization.id)!);
     }, [session.allUsers, session.allOrgs]);
 
     return organization && author ? (

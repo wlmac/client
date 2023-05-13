@@ -1,11 +1,19 @@
 import ApprovalStatus from '../misc/approvalstatus';
-import Organization from './organization';
-import Tag from './tag';
+
+interface UserSlug{
+  id: number;
+  slug: string;
+}
+
+interface OrganizationSlug{
+  id: number;
+  slug: string;
+}
 
 export default interface Post {
   id: number;
-  author: number;
-  organization: number;
+  author: UserSlug;
+  organization: OrganizationSlug;
   tags: Array<number>;
   created_date: Date;
   last_modified_date: Date;
