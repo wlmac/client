@@ -111,6 +111,7 @@ export const ClubDetails = (): JSX.Element => {
         height: "inherit",
         overflow: "scroll",
         maxHeight: "50em",
+        padding: "5px",
     }
 
     return (
