@@ -29,7 +29,7 @@ export const AnnouncementDetail = (): JSX.Element => {
     // });
 
     React.useEffect(() => {
-        session.getAPI(`${Routes.OBJECT}/announcement/retrieve/${id}`, false).then((res) => {
+        session.request('get', `${Routes.OBJECT}/announcement/retrieve/${id}`, false).then((res) => {
             setAnnouncement(res.data);
         }).catch((err) => {
             console.log(err);
@@ -69,7 +69,7 @@ export const AnnouncementDetail = (): JSX.Element => {
                 </div>
                 <div className="prompt-buttons">
                     <a className="checkmark" onClick={(ev: React.MouseEvent) => {
-                        session.putAPI(`${Routes.OBJECT}/announcement/single/${id}`, {
+                        session.request('put', `${Routes.OBJECT}/announcement/single/${id}`, {
                             ...announcement,
                             status: "a" // approved
                         }).then((res) => {
@@ -132,7 +132,7 @@ export const AnnouncementDetail = (): JSX.Element => {
                     <div className="modal-footer">
                         <a href="#!" className="modal-close waves-effect waves-red btn-flat">Cancel</a>
                         <a className="waves-effect waves-light btn" onClick={(ev: React.MouseEvent) => {
-                            session.putAPI(`${Routes.OBJECT}/announcement/single/${id}`, {
+                            session.request('put', `${Routes.OBJECT}/announcement/single/${id}`, {
                                 ...announcement,
                                 status: "r",
                                 rejection_reason: rejectionReason
@@ -162,11 +162,11 @@ export const AnnouncementDetail = (): JSX.Element => {
                     <h1 className="title">{announcement.title}</h1>
                     <div className="card-authors">
                         <div className="card-authors-image">
-                            <Link to={`/club/${announcement.organization}`}><img className="circle" src={organization && organization.banner} /></Link>
+                            <Link to={`/club/${organization.slug}`}><img className="circle" src={organization && organization.icon} /></Link>
                         </div>
                         <div className="card-authors-text">
-                            <a href={`/club/${announcement.organization}`} className="link">{organization.name}</a>,
-                            <a href={`/user/${announcement.author}`} className="link">{`${author.first_name} ${author.last_name}`}</a>
+                            <Link to={`/club/${organization.slug}`} className="link">{organization.name}</Link>,
+                            <Link to={`/user/${author.username}`} className="link">{`${author.first_name} ${author.last_name}`}</Link>
                             <br />
                             • {new Date(announcement.created_date).toLocaleTimeString(undefined, dateFormat)}
                         </div>

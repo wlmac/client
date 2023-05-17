@@ -1,0 +1,17 @@
+let config = {
+    METROPOLIS_STAFFS: {
+        "Project Manager": [],
+        "Frontend Developer": [],
+        "Backend Developer": [],
+        "App Developer": [],
+        "Graphic Designer": [],
+        "Content Creator": [],
+        "Game Developer": [],
+        "Alumnus": []
+    },
+    METROPOLIS_STAFF_BIO: {
+        
+    }
+};
+
+export default config;

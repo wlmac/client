@@ -26,13 +26,11 @@ const TimetableElement = (props: { timetable: Timetable }): JSX.Element => {
             const course = timetable.courses[i];
             courses[course.position] = course;
         }
-        setCourses(courses);
+        setCourses([...courses]);
     }, []);
 
-    console.log(courses);
-
     return (
-        <details className="mb-3">
+        <details className="mb-3" open>
             <summary className="card-top">
                 <span className="card-title"><strong>{timetable.term.name}</strong></span>
             </summary>
@@ -59,7 +57,7 @@ const TimetableElement = (props: { timetable: Timetable }): JSX.Element => {
                     </tbody>
                 </table>
                 <p></p>
-                <Link to={`/timetable/edit/${timetable.id}`} className="card-link">Edit timetable</Link>
+                <Link to={`/timetable/edit/${timetable.term.id}`} className="card-link">Edit timetable</Link>
             </div>
         </details>
     );
@@ -70,15 +68,9 @@ export const TimetablePage = (): JSX.Element => {
     const [timetable, setTimetable] = React.useState({} as Timetable);
     const session: Session = React.useContext(SessionContext);
 
-    React.useEffect(() => {
-        if (!loggedIn()) {
-            nav("/accounts/login");
-        }
-    });
-
     const fetchTimetable = (): void => {
         if (loggedIn()) {
-            session.getAPI(Routes.TIMETABLE, true).then((res) => {
+            session.request('get', Routes.PERSONAL_TIMETABLE).then((res) => {
                 setTimetable(res.data);
                 // console.log(res.data[1]);
             }).catch((err) => {

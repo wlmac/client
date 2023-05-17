@@ -3,13 +3,10 @@ import Tag from "./interfaces/tag";
 import Routes from "./misc/routes";
 import { Session, SessionContext } from "./session";
 
-export const getTags = (tags: Array<Tag>, callback: Function): void => {
+export const getTags = (tags: Array<Tag>, callback: Function): JSX.Element[] => {
     const session: Session = React.useContext(SessionContext);
-    session.getAPI(`${Routes.OBJECT}/tag`).then((res) => {
-        const tags = res.data.results;
-        callback(tags.map((tag: Tag): JSX.Element => {
-            return <TagElement tag={tag} />;
-        }));
+    return session.allTags.map((tag: Tag): JSX.Element => {
+        return <TagElement tag={tag} />;
     });
 }
 

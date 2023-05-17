@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "@fullcalendar/react/dist/vdom";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -11,9 +11,9 @@ import Routes from "../../util/core/misc/routes";
 import Tag from "../../util/core/interfaces/tag";
 import Organization from "../../util/core/interfaces/organization";
 
-interface EventData{
-  name: string, 
-  organization: Organization | undefined, 
+interface EventData {
+  name: string,
+  organization: Organization | undefined,
   description: string,
   id: number,
   tags: Tag[],
@@ -21,7 +21,7 @@ interface EventData{
   end_date: string,
 }
 
-interface EventJSON{
+interface EventJSON {
   name: string,
   organization: number,
   description: string,
@@ -33,15 +33,15 @@ interface EventJSON{
 
 export const Calendar = (): JSX.Element => {
   // raw events, used for caching id's before the session updates
-  const [rawEvents, setRawEvents] : [EventJSON[], (x: EventJSON[]) => void] = useState<EventJSON[]>([]);
+  const [rawEvents, setRawEvents]: [EventJSON[], (x: EventJSON[]) => void] = useState<EventJSON[]>([]);
   // list of events for the current month
-  const [events, setEvents] : [EventData[], (x: EventData[]) => void] = useState<EventData[]>([]);
+  const [events, setEvents]: [EventData[], (x: EventData[]) => void] = useState<EventData[]>([]);
   // the month currently displayed
   const [eventFetch, setEventFetch]: [string, (x: string) => void] = useState<string>("");
   // currently selected date
-  const [selectedDate, setSelectedDate] : [Date | undefined, (x: Date | undefined) => void] = useState<Date | undefined>(undefined);
+  const [selectedDate, setSelectedDate]: [Date | undefined, (x: Date | undefined) => void] = useState<Date | undefined>(undefined);
   // events on the currently selected date
-  const [eventsOnDay, setEventsOnDay] : [EventData[], (x: EventData[]) => void] = useState<EventData[]>([]);
+  const [eventsOnDay, setEventsOnDay]: [EventData[], (x: EventData[]) => void] = useState<EventData[]>([]);
   // current session
   const session: Session = React.useContext(SessionContext);
 
@@ -56,13 +56,13 @@ export const Calendar = (): JSX.Element => {
         organization: session.allOrgs.find(org => org.id === raw.organization)
       })
     }
-    setEvents(rawEvents.map(parseEventJSON))
+    setEvents(rawEvents.map(parseEventJSON));
   }, [session, rawEvents])
 
   // update the events for the current month
-  const updateEvents = (fetchInfo: {startStr: string, endStr: string}, successCallback: (x: EventData[]) => void, failureCallback: (x: Error) => void) => {
+  const updateEvents = (fetchInfo: { startStr: string, endStr: string }, successCallback: (x: EventData[]) => void, failureCallback: (x: Error) => void) => {
     let key: string = JSON.stringify(fetchInfo);
-    if (eventFetch !== key){
+    if (eventFetch !== key) {
       // query events for this time period
       const url = `${Routes.BASEURL}/api/v3/obj/event?start=${getDate(fetchInfo.startStr)}&end=${getDate(fetchInfo.endStr)}`
 
@@ -86,18 +86,18 @@ export const Calendar = (): JSX.Element => {
   const newDateSelected = (day: Date | undefined) => {
     setSelectedDate(day);
 
-    if(day === undefined) setEventsOnDay([]);
+    if (day === undefined) setEventsOnDay([]);
     else {
       // update the list of events for this dae
       let today = day;
       let eventsToday: EventData[] = []
       let tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000)
       for (let curEvent of events) {
-          let eventStart = new Date(curEvent.start_date)
-          let eventEnd = new Date(curEvent.end_date)
-          if (eventStart < tomorrow && eventEnd >= today) {
-              eventsToday.push(curEvent);
-          }
+        let eventStart = new Date(curEvent.start_date)
+        let eventEnd = new Date(curEvent.end_date)
+        if (eventStart < tomorrow && eventEnd >= today) {
+          eventsToday.push(curEvent);
+        }
       }
       setEventsOnDay(eventsToday);
     }
@@ -105,34 +105,34 @@ export const Calendar = (): JSX.Element => {
 
   // the string representation of the current date
   let dateStr = "";
-  if(selectedDate !== undefined){
+  if (selectedDate !== undefined) {
     dateStr = selectedDate.toLocaleDateString(undefined, {
-          day: "numeric",
-          year: "numeric",
-          weekday: "long",
-          month: "long"
-      })
+      day: "numeric",
+      year: "numeric",
+      weekday: "long",
+      month: "long"
+    })
   }
 
   return (
     <>
-      <link rel="stylesheet" href="static/css/fullcalendar.min.css" type="text/css"/>
-      <link rel="stylesheet" href="static/css/calendar/view.css" type="text/css"/>
+      <link rel="stylesheet" href="static/css/fullcalendar.min.css" type="text/css" />
+      <link rel="stylesheet" href="static/css/calendar/view.css" type="text/css" />
 
       <div className="container">
         <CalendarBoard updateEvents={updateEvents} selectedDate={selectedDate}
-        setSelectedDate={newDateSelected}/>
+          setSelectedDate={newDateSelected} />
 
         <div id="details">
           <div className="container">
-              <a href="url_to_calendar">URL to iCalendar (use this to add to Google Calendar, not yet implemented sry :/)</a>
-              <h3 id="detailsCurrentDay">{dateStr}</h3>
-              <p id="detailsCurrentWeek"></p>
-              <hr />
-              <p className="no-event-inform">No events on this day</p>
-              <div id="eventDetails">
-                <Cards eventsToday={eventsOnDay} date={selectedDate} />
-              </div>
+            <a href="https://maclyonsden.com/calendar.ics">URL to iCalendar (use this to add to Google Calendar)</a>
+            <h3 id="detailsCurrentDay">{dateStr}</h3>
+            <p id="detailsCurrentWeek"></p>
+            <hr />
+            <p className="no-event-inform">No events on this day</p>
+            <div id="eventDetails">
+              <Cards eventsToday={eventsOnDay} date={selectedDate} />
+            </div>
           </div>
         </div>
       </div>
@@ -140,8 +140,8 @@ export const Calendar = (): JSX.Element => {
   );
 }
 
-interface BoardProps{
-  updateEvents: (x: {startStr: string, endStr: string}, y: (x: EventData[]) => void, z: (x: Error) => void) => void,
+interface BoardProps {
+  updateEvents: (x: { startStr: string, endStr: string }, y: (x: EventData[]) => void, z: (x: Error) => void) => void,
   selectedDate: Date | undefined,
   setSelectedDate: (x: Date | undefined) => void
 };
@@ -151,8 +151,8 @@ const CalendarBoard = (props: BoardProps): JSX.Element => {
   // called when events are updated
   const updateEvents = props.updateEvents;
   // currently selected date
-  const selectedDate : Date | undefined = props.selectedDate;
-  const setSelectedDate : (date: Date | undefined) => void = props.setSelectedDate;
+  const selectedDate: Date | undefined = props.selectedDate;
+  const setSelectedDate: (date: Date | undefined) => void = props.setSelectedDate;
   const aspectRatio = 1.7; // width / height
   // color for the currently selectd number
   const selectedNumberColor = "var(--dark-colour)";
@@ -161,20 +161,20 @@ const CalendarBoard = (props: BoardProps): JSX.Element => {
   // reformats a day cell
   const reformatDay = (dayElement: HTMLElement) => {
     // resize the date cell
-    if(dayElement.clientHeight < dayElement.clientWidth / aspectRatio){
+    if (dayElement.clientHeight < dayElement.clientWidth / aspectRatio) {
       dayElement.style.height = dayElement.clientWidth / aspectRatio + "px";
     }
 
     // create a div to house the "number circle"
     let el: HTMLElement | null = dayElement.querySelector<HTMLElement>(".fc-daygrid-day-top")
-    if(el === null) throw("rendering error");
+    if (el === null) throw ("rendering error");
     let container = document.createElement("div")
     container.classList.add("fc-daygrid-day-number-circle")
 
     // place the number of the current day inside the container div
     document.createElement("li")
     const curDate = el.querySelector<HTMLElement>(".fc-daygrid-day-number")
-    if(curDate != null) container.appendChild<HTMLElement>(curDate)
+    if (curDate != null) container.appendChild<HTMLElement>(curDate)
 
     // reset the top, and append the container
     el.innerHTML = ""
@@ -190,45 +190,45 @@ const CalendarBoard = (props: BoardProps): JSX.Element => {
   }
   // convert the events into smth that fullCalendar uses
   const parseEvents = (toParse: EventData[]): FullCalendarEvent[] => {
-      const parsed = [];
-      for (let curEvent of toParse) {
-          parsed.push({
-              title: curEvent.name,
-              start: curEvent.start_date, // get rid of the "time" element
-              end: curEvent.end_date,
-              color: (curEvent.tags[0] ?? {color: "lightblue"}).color,
-              textColor: "#434343",
-          })
-      }
-      return parsed;
+    const parsed = [];
+    for (let curEvent of toParse) {
+      parsed.push({
+        title: curEvent.name,
+        start: curEvent.start_date, // get rid of the "time" element
+        end: curEvent.end_date,
+        color: (curEvent.tags[0] ?? { color: "lightblue" }).color,
+        textColor: "#434343",
+      })
+    }
+    return parsed;
   }
 
   // highlights the number for today
   const highlightSelectedNumber = () => {
-      // unselect every cell
-      document.querySelectorAll(".fc-daygrid-day").forEach(el => {
-          const circle = el.querySelector<HTMLElement>(".fc-daygrid-day-number-circle");
-          if(circle != null) circle.style.background = ""
-          el.querySelector<HTMLElement>(".fc-daygrid-day-number")?.removeAttribute("selected")
-      })
+    // unselect every cell
+    document.querySelectorAll(".fc-daygrid-day").forEach(el => {
+      const circle = el.querySelector<HTMLElement>(".fc-daygrid-day-number-circle");
+      if (circle != null) circle.style.background = ""
+      el.querySelector<HTMLElement>(".fc-daygrid-day-number")?.removeAttribute("selected")
+    })
 
-      if (selectedDate !== undefined) {
-          // get the selected element
-          let selectedEl = document.querySelector<HTMLElement>("[data-date='" + selectedDate.toISOString().split("T")[0] + "']")
-          if (selectedEl != null) {
-              let topEl = selectedEl.querySelector<HTMLElement>(".fc-daygrid-day-top")
-              if(topEl == null) throw("reformat error")
-              if (topEl.children.length !== 1 || !topEl.children[0].classList.contains(".fc-daygrid-day-number-circle")) {
-                  // something weird is going on so we must fix it
-                  reformatDay(selectedEl)
-              }
+    if (selectedDate !== undefined) {
+      // get the selected element
+      let selectedEl = document.querySelector<HTMLElement>("[data-date='" + selectedDate.toISOString().split("T")[0] + "']")
+      if (selectedEl != null) {
+        let topEl = selectedEl.querySelector<HTMLElement>(".fc-daygrid-day-top")
+        if (topEl == null) throw ("reformat error")
+        if (topEl.children.length !== 1 || !topEl.children[0].classList.contains(".fc-daygrid-day-number-circle")) {
+          // something weird is going on so we must fix it
+          reformatDay(selectedEl)
+        }
 
-              // change the background color of the circle
-              const circle = topEl.querySelector<HTMLElement>(".fc-daygrid-day-number-circle");
-              if(circle != null) circle.style.backgroundColor = selectedNumberColor;
-              topEl.querySelector(".fc-daygrid-day-number")?.setAttribute("selected", "true")
-          }
+        // change the background color of the circle
+        const circle = topEl.querySelector<HTMLElement>(".fc-daygrid-day-number-circle");
+        if (circle != null) circle.style.backgroundColor = selectedNumberColor;
+        topEl.querySelector(".fc-daygrid-day-number")?.setAttribute("selected", "true")
       }
+    }
   }
 
   highlightSelectedNumber();
@@ -237,7 +237,7 @@ const CalendarBoard = (props: BoardProps): JSX.Element => {
     <FullCalendar
       plugins={[dayGridPlugin, interactionPlugin]}
       initialView="dayGridMonth"
-      headerToolbar={{right: "today prev,next"}}
+      headerToolbar={{ right: "today prev,next" }}
       views={{
         dayGridMonth: {
           dayCellDidMount: (dayRenderInfo) => {
@@ -256,22 +256,22 @@ const CalendarBoard = (props: BoardProps): JSX.Element => {
       unselect={() => {
         setSelectedDate(undefined)
       }}
-      events = {(fetchInfo, successCallback, failureCallback) => {
-        updateEvents(fetchInfo, (event_list: EventData[]) => {successCallback(parseEvents(event_list))}, failureCallback);
+      events={(fetchInfo, successCallback, failureCallback) => {
+        updateEvents(fetchInfo, (event_list: EventData[]) => { successCallback(parseEvents(event_list)) }, failureCallback);
       }}
       height={"auto"}
       selectLongPressDelay={0}
     />
 
-    return (<>
-      <div id="calendar">
-       {calendar}
-      </div>
-    </>);
+  return (<>
+    <div id="calendar">
+      {calendar}
+    </div>
+  </>);
 }
 
 // UI for the list of cards at the bottom
-const Cards = (props: {eventsToday: EventData[],date: Date | undefined}): JSX.Element => {
+const Cards = (props: { eventsToday: EventData[], date: Date | undefined }): JSX.Element => {
   // list of events for today
   const eventsToday = props.eventsToday;
   // current date
@@ -279,7 +279,7 @@ const Cards = (props: {eventsToday: EventData[],date: Date | undefined}): JSX.El
 
   // a list of cards
   const cards = date == undefined ? [] : eventsToday.map((event: EventData) => <Card key={event.id} curEvent={event} date={date} />);
-  if(cards.length === 0){
+  if (cards.length === 0) {
     return (<></>);
   } else {
     return <>{cards}</>;
@@ -287,7 +287,7 @@ const Cards = (props: {eventsToday: EventData[],date: Date | undefined}): JSX.El
 }
 
 // a singular card
-const Card = (props: {curEvent: EventData, date: Date}): JSX.Element => {
+const Card = (props: { curEvent: EventData, date: Date }): JSX.Element => {
   const curEvent = props.curEvent;
   const date = props.date;
 
@@ -319,30 +319,30 @@ const Card = (props: {curEvent: EventData, date: Date}): JSX.Element => {
   // if the start date is different from the current date, then we must also add the date information
   let [startTime, startAMPM] = eventStart < date ? dateTimeRepresentation(eventStart) : timeRepresentation(eventStart);
   let [endTime, endAMPM] = eventEnd >= new Date(date.getTime() + 24 * 60 * 60 * 1000) ?
-      dateTimeRepresentation(eventEnd) : timeRepresentation(eventEnd);
+    dateTimeRepresentation(eventEnd) : timeRepresentation(eventEnd);
 
-  const tagEls = curEvent.tags.map(tag => <p key={curEvent.name + "|" + tag.name} className="tag" style={{backgroundColor: (tag ?? {color: "lightblue"}).color}}>tag.name</p>)
+  const tagEls = curEvent.tags.map(tag => <p key={curEvent.name + "|" + tag.name} className="tag" style={{ backgroundColor: (tag ?? { color: "lightblue" }).color }}>{tag.name}</p>)
 
   return (
     <table className="dayEvent">
       <tbody>
-      <tr>
-          <td className="leftPanel" style={{backgroundColor: (curEvent.tags[0] ?? {color: "lightblue"}).color}}>
-              <span className="timeDisplay" id="event_start">{startTime}</span>
-              <span className="ampm" id="event_start_ampm">{startAMPM}</span>
-              <br />
-              <span className="intermediate_to">to</span><br />
-              <span className="timeDisplay" id="event_end">{endTime}</span>
-              <span className="ampm" id="event_end_ampm">{endAMPM}</span>
+        <tr>
+          <td className="leftPanel" style={{ backgroundColor: (curEvent.tags[0] ?? { color: "lightblue" }).color }}>
+            <span className="timeDisplay" id="event_start">{startTime}</span>
+            <span className="ampm" id="event_start_ampm">{startAMPM}</span>
+            <br />
+            <span className="intermediate_to">to</span><br />
+            <span className="timeDisplay" id="event_end">{endTime}</span>
+            <span className="ampm" id="event_end_ampm">{endAMPM}</span>
           </td>
-          <DetailPanel curEvent={curEvent} tagEls={tagEls}/>
-      </tr>
+          <DetailPanel curEvent={curEvent} tagEls={tagEls} />
+        </tr>
       </tbody>
-      </table>);
+    </table>);
 }
 
 interface DetailPanelProps {
-  curEvent: EventData, 
+  curEvent: EventData,
   tagEls: JSX.Element[]
 };
 
@@ -354,15 +354,15 @@ const DetailPanel = (props: DetailPanelProps): JSX.Element => {
   const session: Session = React.useContext(SessionContext);
 
   return (
-      <td className="detailPanel">
-        <h4 className="event_title">{curEvent.name}</h4>
-        <em><a className="eventHost event_host_name">{(curEvent.organization ?? {name: ""}).name}</a></em>
-        <hr />
-        <p className={"event_description " + (toTruncate ? "truncate-100" : "")}
-            onClick={() => setToTruncate(!toTruncate)}>
-          {curEvent.description.replace(/(?:\r\n|\r|\n)/g, '<br>')}
-        </p>
-        <div className="tag-section">{tagEls}</div>
-      </td>
+    <td className="detailPanel">
+      <h4 className="event_title">{curEvent.name}</h4>
+      <em><a className="eventHost event_host_name">{(curEvent.organization ?? { name: "" }).name}</a></em>
+      <hr />
+      <p className={"event_description " + (toTruncate ? "truncate-100" : "")}
+        onClick={() => setToTruncate(!toTruncate)}>
+        {curEvent.description.replace(/(?:\r\n|\r|\n)/g, '<br>')}
+      </p>
+      <div className="tag-section">{tagEls}</div>
+    </td>
   );
 }

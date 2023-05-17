@@ -41,8 +41,8 @@ export const ContentContact = (): JSX.Element => {
             </ul>
             <br />
             <div className="content-embed">
-                <iframe src="./About _ Metropolis_files/viewform.html" frameBorder={0} marginHeight={0} marginWidth={0}>
-                    Loading…
+                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSerD9wL2Sg8AIEVxc7ZPPIYcNPnCBnUuXTxOajhkvv8TMxwAw/viewform?embedded=true" style={{ borderWidth: 0, margin: 0 }}>
+                    Loading...
                 </iframe>
             </div>
         </div>

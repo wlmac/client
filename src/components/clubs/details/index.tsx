@@ -10,11 +10,11 @@ import { Session, SessionContext, User } from "../../../util/core/session";
 import { TagElement } from "../../../util/core/tags";
 
 export const ClubDetails = (): JSX.Element => {
-    const { id } = useParams();
+    const { slug } = useParams();
 
     const nav: NavigateFunction = useNavigate();
     const session: Session = React.useContext(SessionContext);
-    const [club, setClub] = React.useState({} as Organization);
+    const [club, setClub] = React.useState({name: "Loading..."} as Organization);
     const [tags, setTags] = React.useState([] as Array<Tag>);
     const [execs, setExecs] = React.useState([] as Array<User>);
     const [members, setMembers] = React.useState([] as Array<User>);
@@ -28,14 +28,14 @@ export const ClubDetails = (): JSX.Element => {
     }
 
     React.useEffect(() => {
-        const fetchURL = `${Routes.OBJECT}/organization/retrieve/${id}`;
-        session.getAPI(fetchURL, false).then((res) => {
+        const fetchURL = `${Routes.OBJECT}/organization/retrieve/${slug}?lookup=slug`;
+        session.request('get', fetchURL).then((res) => {
             const current_club: Organization = res.data as Organization;
             setClub(current_club);
             console.log(fetchURL);
 
             // Tags
-            session.getAPI(`${Routes.OBJECT}/tag`, false).then((res) => {
+            session.request('get', `${Routes.OBJECT}/tag`).then((res) => {
                 const tags_data: Tag[] = res.data.results;
                 console.log(current_club.tags);
                 const current_tags: Tag[] = [];
@@ -53,7 +53,7 @@ export const ClubDetails = (): JSX.Element => {
             });
 
             // Execs and members
-            session.getAPI(`${Routes.OBJECT}/user?limit=99999999`, false).then((res) => {
+            session.request('get', `${Routes.OBJECT}/user?limit=99999999`).then((res) => {
                 const users_data: User[] = res.data.results;
                 setExecs(current_club.execs.map((execId: number): User => {
                     for (let i = 0; i < users_data.length; i++) {
@@ -84,7 +84,7 @@ export const ClubDetails = (): JSX.Element => {
     // const UserElement = (props: { userID: number }): JSX.Element => {
     //     const [user, setUser] = React.useState({} as User);
     //     React.useEffect(() => {
-    //         session.getAPI(`${Routes.OBJECT}/user/retrieve/${props.userID}`, false).then((res: { data: any }) => {
+    //         session.request('get', `${Routes.OBJECT}/user/retrieve/${props.userID}`, false).then((res: { data: any }) => {
     //             setUser(res.data as User);
     //             console.log("Fetched");
     //         }).catch(() => {
@@ -141,7 +141,7 @@ export const ClubDetails = (): JSX.Element => {
                                     {club.bio}
                                     <br /><br />
                                     {
-                                        club.owner !== session.user.id ? <Link to={`/club/edit/${club.id}`}>Edit club details</Link> : <></>
+                                        club.owner !== session.user.id ? <Link to={`/club/edit/${club.slug}`}>Edit club details</Link> : <></>
                                     }
                                 </div>
                             </div>
@@ -171,9 +171,8 @@ export const ClubDetails = (): JSX.Element => {
                                         {
                                             execs.map((exec: User): JSX.Element => {
                                                 if (exec === null) return <></>;
-                                                console.log(exec);
                                                 return (
-                                                    <Link to={`/user/${exec.id}`} key={exec.id}>
+                                                    <Link to={`/user/${exec.username}`} key={exec.id}>
                                                         <div className="member">
                                                             <div className="member-image">
                                                                 <img className="circle" src={exec.gravatar_url} alt={`${exec.username}'s profile picture`} />
@@ -199,7 +198,7 @@ export const ClubDetails = (): JSX.Element => {
                                             members.map((member: User): JSX.Element => {
                                                 if (member === null) return <></>;
                                                 return (
-                                                    <a href={`/user/${member.id}`} key={member.id}>
+                                                    <Link to={`/user/${member.username}`} key={member.id}>
                                                         <div className="member">
                                                             <div className="member-image">
                                                                 <img className="circle" src={member.gravatar_url} alt={`${member.username}'s profile picture`} />
@@ -208,7 +207,7 @@ export const ClubDetails = (): JSX.Element => {
                                                                 {`${member.first_name} ${member.last_name}`}
                                                             </div>
                                                         </div>
-                                                    </a>
+                                                    </Link>
                                                 );
                                             })
                                         }
