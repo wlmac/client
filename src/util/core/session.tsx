@@ -38,6 +38,7 @@ export interface Session {
     cacheStatus: CacheStatus
     allUsers: Array<User>,
     allOrgs: Array<Organization>,
+    allTags: Array<Tag>,
     setUser: (user: User) => void,
     refreshUser: () => void,
     updateToken: (token: string) => void,
@@ -54,6 +55,7 @@ export const SessionContext = React.createContext<Session>({
     cacheStatus: {} as CacheStatus,
     allUsers: [],
     allOrgs: [],
+    allTags: [],
     setUser: (user: User) => { },
     refreshUser: () => { },
     updateToken: (token: string) => { },
@@ -125,11 +127,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         return () => {
             clearInterval(interval);
         }
-        getPaginatedAPI(getAPI, `${Routes.OBJECT}/user`).then((res) => {
-            setAllUsers(res)
-        }, (failMessage) => {
-            console.error(failMessage);
-        })
+    }, []);
 
     const cacheRoutine = async () => {
         getAll(`tag`).then((data) => {
@@ -284,4 +282,3 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         </SessionContext.Provider>
     )
 }
-
