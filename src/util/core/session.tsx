@@ -283,4 +283,3 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         </SessionContext.Provider>
     )
 }
-
