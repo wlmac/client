@@ -10,7 +10,7 @@ import MembershipStatus from "../../util/core/misc/membership";
 import Routes from "../../util/core/misc/routes";
 import { Session, SessionContext, User } from "../../util/core/session";
 import { getTags, TagElement } from "../../util/core/tags";
-import Markdown from "../markdown";
+import Markdown, { markdownToPlainText } from "../markdown";
 import { loggedIn } from "../../util/core/AuthService";
 import { dateFormat } from "../../util/core/misc/date";
 
@@ -120,7 +120,7 @@ const BlogPosts = () => {
 const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Element => {
     const post = props.post;
     const session: Session = React.useContext(SessionContext);
-    
+
     const [author, setAuthor] = React.useState<User>({} as User);
 
     React.useEffect(() => {
@@ -143,20 +143,20 @@ const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Eleme
                     <div className="card-authors">
                         {
                             "username" in author ?
-                            <>
-                                <div className="card-authors-image">
-                                    <Link to={`/user/${author ? author.username : ''}`}><img className="circle" src={author ? author.gravatar_url : ""} /></Link>
-                                </div>
+                                <>
+                                    <div className="card-authors-image">
+                                        <Link to={`/user/${author ? author.username : ''}`}><img className="circle" src={author ? author.gravatar_url : ""} /></Link>
+                                    </div>
+                                    <div className="card-authors-text">
+                                        <Link to={`/user/${author ? author.username : ''}`} className="link">{author && `${author.first_name} ${author.last_name}`}</Link>
+                                        <br />
+                                        • posted {new Date(post.created_date).toLocaleTimeString(undefined, dateFormat)}
+                                    </div>
+                                </>
+                                :
                                 <div className="card-authors-text">
-                                    <Link to={`/user/${author ? author.username : ''}`} className="link">{author && `${author.first_name} ${author.last_name}`}</Link>
-                                    <br />
-                                    • posted {new Date(post.created_date).toLocaleTimeString(undefined, dateFormat)}
+                                    Loading...
                                 </div>
-                            </>
-                            :
-                            <div className="card-authors-text">
-                                Loading...
-                            </div>
                         }
                     </div>
                 </div>
@@ -164,7 +164,7 @@ const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Eleme
             <hr />
             <div className="card-body">
                 <p>
-                    {post.body}
+                    {markdownToPlainText(post.body)}
                 </p>
             </div>
             <br />

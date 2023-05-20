@@ -50,6 +50,7 @@ function safeEmbed(url: string) {
 import { marked } from "marked"
 
 export function markdownToPlainText(markdownString: string): string {
+    if (!markdownString) return "";
     const html = marked(markdownString);
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
