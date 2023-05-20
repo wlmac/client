@@ -121,54 +121,43 @@ const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Eleme
     const post = props.post;
     const session: Session = React.useContext(SessionContext);
 
-    const [author, setAuthor] = React.useState<User>({} as User);
-
-    React.useEffect(() => {
-        setAuthor(session.allUsers.find((user: User) => user.id === post.author) || {} as User);
-    }, [session.allUsers]);
-
     return (
-        <div className="card">
-            <div className="card-headers">
-                <img className="card-image" src={post.featured_image} />
-                <div className="card-text">
-                    <div className="tag-section">
-                        {
-                            props.tags.map((tag: Tag) => {
-                                return <TagElement key={tag.id} tag={tag} />
-                            })
-                        }
-                    </div>
-                    <h1 className="title">{post.title}</h1>
-                    <div className="card-authors">
-                        {
-                            "username" in author ?
-                                <>
-                                    <div className="card-authors-image">
-                                        <Link to={`/user/${author ? author.username : ''}`}><img className="circle" src={author ? author.gravatar_url : ""} /></Link>
-                                    </div>
-                                    <div className="card-authors-text">
-                                        <Link to={`/user/${author ? author.username : ''}`} className="link">{author && `${author.first_name} ${author.last_name}`}</Link>
-                                        <br />
-                                        • posted {new Date(post.created_date).toLocaleTimeString(undefined, dateFormat)}
-                                    </div>
-                                </>
-                                :
-                                <div className="card-authors-text">
-                                    Loading...
+        <>
+            <div className="card">
+                <div className="card-headers">
+                    <img className="card-image" src={post.featured_image} />
+                    <div className="card-text">
+                        <div className="tag-section">
+                            {
+                                props.tags.map((tag: Tag) => {
+                                    return <TagElement key={tag.id} tag={tag} />
+                                })
+                            }
+                        </div>
+                        <h1 className="title">{post.title}</h1>
+                        <div className="card-authors">
+                            <>
+                                <div className="card-authors-image">
+                                    <Link to={`/user/${post.author.username}`}><img className="circle" src={post.author.gravatar_url} /></Link>
                                 </div>
-                        }
+                                <div className="card-authors-text">
+                                    <Link to={`/user/${post.author.username}`} className="link">{`${post.author.first_name} ${post.author.last_name}`}</Link>
+                                    <br />
+                                    • posted {new Date(post.created_date).toLocaleTimeString(undefined, dateFormat)}
+                                </div>
+                            </>
+                        </div>
                     </div>
                 </div>
+                <hr />
+                <div className="card-body">
+                    <p>
+                        {markdownToPlainText(post.body)}
+                    </p>
+                </div>
+                <br />
+                <Link className="link" to={`/blog/${post.slug}`}>Read full blog post <i className="zmdi zmdi-chevron-right"></i></Link>
             </div>
-            <hr />
-            <div className="card-body">
-                <p>
-                    {markdownToPlainText(post.body)}
-                </p>
-            </div>
-            <br />
-            <Link className="link" to={`/blog/${post.slug}`}>Read full blog post <i className="zmdi zmdi-chevron-right"></i></Link>
-        </div>
+        </>
     );
 }

@@ -164,7 +164,6 @@ const HomeAnnouncements = (): JSX.Element[] => {
 const HomeAnnouncement = (props: { announcement: Announcement }): JSX.Element => {
     const session: Session = React.useContext(SessionContext);
     const announcement = props.announcement;
-    let organization: Organization = session.allOrgs.find((organization: Organization) => organization.id === announcement.organization)!;
     let [tag, setTag] = React.useState({} as Tag);
     React.useEffect(() => {
         setTag(session.allTags.filter((tag: Tag) => tag.id == announcement.tags[0])[0]);
@@ -176,10 +175,10 @@ const HomeAnnouncement = (props: { announcement: Announcement }): JSX.Element =>
                 <h5 className="title truncate">{announcement.title}</h5>
                 <div className="authors">
                     <div className="authors-image">
-                        <Link to={`/club/${organization ? organization.slug : ''}`}><img className="circle" src={organization ? organization.icon : "/"} /></Link>
+                        <Link to={`/club/${announcement.organization.slug}`}><img className="circle" src={announcement.organization.icon} /></Link>
                     </div>
                     <div className="authors-text">
-                        <Link to={`/club/${organization ? organization.slug : ''}`}>{organization ? organization.name : ""}</Link>
+                        <Link to={`/club/${announcement.organization.slug}`}>{announcement.organization.name}</Link>
                     </div>
                 </div>
                 <hr />

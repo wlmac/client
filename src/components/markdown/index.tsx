@@ -45,6 +45,8 @@ function safeEmbed(url: string) {
 
 /**
  * Parsing Markdown into Plaintext
+ * @param markdownString The original Markdown body string
+ * @returns Plaintext string version of input string without Markdown annotations
  */
 
 import { marked } from "marked"
