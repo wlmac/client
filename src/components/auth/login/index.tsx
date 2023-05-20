@@ -40,7 +40,6 @@ export const Login = (): JSX.Element => {
 
     const login = (e: React.SyntheticEvent): void => {
         e.preventDefault();
-        console.log(`Logging in 3`);
         setLogging(true);
         axios.post(Routes.AUTH.LOGIN, {
             username: username,

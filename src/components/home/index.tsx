@@ -28,7 +28,7 @@ export const Home = (): JSX.Element => {
     const [post, setPost] = React.useState({} as BlogPost); // Featured BlogPost
 
     React.useEffect(() => {
-        const fetchURL = `${Routes.OBJECT}/blog-post`;
+        const fetchURL = `${Routes.OBJECT}/blog-post?limit=1`;
         session.request('get', fetchURL).then((res: { data: { results: Array<BlogPost> } }) => {
             setPost(res.data.results[0]);
         });
@@ -82,9 +82,10 @@ const EventsFeed = (): JSX.Element => {
 
     const [events, setEvents] = React.useState<Event[]>([]);
     React.useEffect(() => {
-        const fetchURL = `${Routes.OBJECT}/event`;
+        const currentDate = new Date();
+        const fetchURL = `${Routes.OBJECT}/event?limit=3&start=${currentDate.getFullYear()}-${currentDate.getMonth()}-${currentDate.getDay()}`;
         session.request('get', fetchURL).then((res: { data: { results: Array<Event> } }) => {
-            setEvents(res.data.results.slice(0, 3));
+            setEvents(res.data.results);
         });
     }, []);
 
@@ -149,9 +150,9 @@ const HomeAnnouncements = (): JSX.Element[] => {
     const session: Session = React.useContext(SessionContext);
 
     React.useEffect(() => {
-        const fetchURL = `${Routes.OBJECT}/announcement`;
+        const fetchURL = `${Routes.OBJECT}/announcement?limit=3`;
         session.request('get', fetchURL).then((res: { data: { results: Array<Announcement> } }) => {
-            setAnnouncements(res.data.results.slice(0, 3));
+            setAnnouncements(res.data.results);
         });
     }, []);
 
@@ -164,7 +165,10 @@ const HomeAnnouncement = (props: { announcement: Announcement }): JSX.Element =>
     const session: Session = React.useContext(SessionContext);
     const announcement = props.announcement;
     let organization: Organization = session.allOrgs.find((organization: Organization) => organization.id === announcement.organization)!;
-    let tag: Tag = session.allTags.find((tag: Tag) => announcement.tags[0])!;
+    let [tag, setTag] = React.useState({} as Tag);
+    React.useEffect(() => {
+        setTag(session.allTags.filter((tag: Tag) => tag.id == announcement.tags[0])[0]);
+    }, [session.allTags]);
 
     return (
         <>
@@ -172,7 +176,7 @@ const HomeAnnouncement = (props: { announcement: Announcement }): JSX.Element =>
                 <h5 className="title truncate">{announcement.title}</h5>
                 <div className="authors">
                     <div className="authors-image">
-                        <Link to={`/club/${organization ? organization.slug : ''}`}><img className="circle" src={organization ? organization.banner : "/"} /></Link>
+                        <Link to={`/club/${organization ? organization.slug : ''}`}><img className="circle" src={organization ? organization.icon : "/"} /></Link>
                     </div>
                     <div className="authors-text">
                         <Link to={`/club/${organization ? organization.slug : ''}`}>{organization ? organization.name : ""}</Link>

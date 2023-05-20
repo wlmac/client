@@ -8,6 +8,7 @@ import Organization from './interfaces/organization';
 import Tag from './interfaces/tag';
 import { AlertColor } from '@mui/material';
 import { Notif } from './interfaces/notification';
+import { RequestMethod } from './managers/session';
 
 const BATCH_CACHELIMIT = 100; // how many entities should be requested each iteration in a fetchAll operation
 
@@ -42,7 +43,7 @@ export interface Session {
     setUser: (user: User) => void,
     refreshUser: () => void,
     updateToken: (token: string) => void,
-    request: (method: string, url: string, data?: any) => Promise<any>,
+    request: (method: RequestMethod, url: string, data?: any) => Promise<any>,
     refreshAuth: (callback?: () => void) => Promise<void>,
     logout: () => void,
     notify: (message: string, type: AlertColor) => void,
@@ -82,7 +83,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     // Snackbar Notification
     const [notification, setNotification] = React.useState<Notif>({
         open: false,
-        type: "" as AlertColor,
+        type: "info",
         message: ""
     });
 
@@ -146,7 +147,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
             })
         }).catch((err) => { });
 
-        fetchAll(`user`).then((data) => {
+        getAll(`user`).then((data) => {
             setAllUsers(data);
             setCacheStatus((prevStatus) => {
                 prevStatus.users = true;
@@ -189,7 +190,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
                 if (res.data.next) {
                     await new Promise(r => setTimeout(r, i_count * i_count * 100)); // timeout
                     // spent like a solid 5 minutes wondering about this function
-                    res = await request('get', res.data.next);
+                    res = await request('get', `${Routes.OBJECT}/${objtype}?limit=${BATCH_CACHELIMIT}&offset=${(i_count - 1) * BATCH_CACHELIMIT}`);
                     arr = [...arr, ...res.data.results];
                     i_count++;
                 }
@@ -226,7 +227,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         }
     }
 
-    const request = async (method: string, url: string, data?: any): Promise<any> => {
+    const request = async (method: RequestMethod, url: string, data?: any): Promise<any> => {
         if (loggedIn()) {
             axios.defaults.headers.common['Authorization'] = `Bearer ${getToken()}`;
         }
@@ -282,4 +283,3 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         </SessionContext.Provider>
     )
 }
-

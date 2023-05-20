@@ -5,6 +5,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 
 import { Session, SessionContext } from "../../util/core/session";
+import { getPaginatedAPI } from "../../util/query/apiQuerying";
 import Routes from "../../util/core/misc/routes";
 
 import Tag from "../../util/core/interfaces/tag";
@@ -25,7 +26,7 @@ interface EventJSON {
   organization: number,
   description: string,
   id: number,
-  tags: number[],
+  tags: Tag[],
   start_date: string,
   end_date: string
 }
@@ -52,8 +53,7 @@ export const Calendar = (): JSX.Element => {
   React.useEffect(() => {
     function parseEventJSON(raw: EventJSON): EventData {
       return Object.assign(Object.assign({}, raw), {
-        organization: session.allOrgs.find(org => org.id === raw.organization),
-        tags: raw.tags.map(id => session.allTags.find(tag => tag.id === id)).filter((tag): tag is Tag => !!tag),
+        organization: session.allOrgs.find(org => org.id === raw.organization)
       })
     }
     setEvents(rawEvents.map(parseEventJSON));
@@ -65,15 +65,17 @@ export const Calendar = (): JSX.Element => {
     if (eventFetch !== key) {
       // query events for this time period
       const url = `${Routes.BASEURL}/api/v3/obj/event?start=${getDate(fetchInfo.startStr)}&end=${getDate(fetchInfo.endStr)}`
-      console.log(url);
-      session.request('get', url).then((response) => {
-        if (response.status !== 200) {
-          failureCallback(new Error("Returned status " + response.status))
-        } else {
-          setEventFetch(key);
-          setRawEvents(response.data.results);
-          successCallback(events);
-        }
+
+      // gets all urls of a paginated url
+      getPaginatedAPI((url: string) => session.request("get", url), url).then((response) => {
+        // cache current event
+        setEventFetch(key);
+
+        // set the current raw events (organization needs to be queried later)
+        setRawEvents(response);
+        successCallback(events);
+      }, (rejection) => {
+        failureCallback(new Error(rejection))
       })
     } else {
       successCallback(events);
