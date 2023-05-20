@@ -20,6 +20,7 @@ import { useRef } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 
 import './index.scss';
+import { markdownToPlainText } from "../markdown";
 
 const ANN_FETCHLIMIT = 10; // how many anns to fetch each api request
 
@@ -348,7 +349,7 @@ const AnnouncementElement = (props: {
                 </div>
             </div>
             <hr />
-            <div className="card-body">{data.body}</div>
+            <div className="card-body">{markdownToPlainText(data.body)}</div>
             <br />
             <Link className="link" to={`/announcement/${data.id}`}>
                 See announcement <i className="zmdi zmdi-chevron-right"></i>
