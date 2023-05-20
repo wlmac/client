@@ -82,8 +82,7 @@ const EventsFeed = (): JSX.Element => {
 
     const [events, setEvents] = React.useState<Event[]>([]);
     React.useEffect(() => {
-        const currentDate = new Date();
-        const fetchURL = `${Routes.OBJECT}/event?limit=3&start=${currentDate.getFullYear()}-${currentDate.getMonth()}-${currentDate.getDay()}`;
+        const fetchURL = `${Routes.OBJECT}/event?limit=3&start=${new Date().toISOString().substring(0, 10)}`;
         session.request('get', fetchURL).then((res: { data: { results: Array<Event> } }) => {
             setEvents(res.data.results);
         });
