@@ -1,3 +1,5 @@
+import Tag from "./tag";
+
 export default interface Event {
     id: number;
     name: string;
@@ -6,5 +8,5 @@ export default interface Event {
     organization: number;
     should_announce: boolean;
     description: string;
-    tags: Array<Number>;
+    tags: Array<Tag>;
 }

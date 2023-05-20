@@ -282,19 +282,11 @@ const AnnouncementList = (props: any): JSX.Element => {
         {
             announcements.length == 0 ? <></> :
                 announcements.map((announcement: Announcement): JSX.Element => {
-                    let current_tags: Tag[] = [];
-                    for (let i = 0; i < announcement.tags.length; i++) {
-                        for (let j = 0; j < session.allTags.length; j++) {
-                            if (announcement.tags[i] == (session.allTags[j] as Tag).id) {
-                                current_tags.push(session.allTags[j]);
-                            }
-                        }
-                    }
                     return (
                         <AnnouncementElement
                             key={announcement.id}
                             announcement={announcement}
-                            tags={current_tags}
+                            tags={announcement.tags}
                         />
                     );
                 })
