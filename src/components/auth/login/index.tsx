@@ -50,7 +50,6 @@ export const Login = (): JSX.Element => {
             // }
         }).then((res) => {
             if (res.data.access) {
-                console.log(`Success: ${res.data.access}`);
                 session.updateToken(res.data.access);
                 setRefresh(res.data.refresh);
                 setLogging(false);
@@ -58,7 +57,6 @@ export const Login = (): JSX.Element => {
                 nav(next ? next : "/");
             }
             else {
-                console.log("Error");
                 setErr(res.data.error);
                 setLogging(false);
                 // getCsrf();

@@ -82,7 +82,6 @@ const BlogPosts = () => {
         if (wrappedElement!.getBoundingClientRect().bottom <= window.innerHeight) {
             //reached bottom!
             setOffset((offset) => { // since it is the function it has access to current state despite being rendered from initial state
-                console.log(offset);
                 if (offset != -1 && initLoadRef.current) { // not -1 means there are more blogs to fetch
                     fetchBlog(offset);
                 }
