@@ -22,7 +22,6 @@ export const AnnouncementDetail = (): JSX.Element => {
         session.request('get', `${Routes.OBJECT}/announcement/retrieve/${id}`, false).then((res) => {
             setAnnouncement(res.data);
         }).catch((err) => {
-            console.log(err);
             session.refreshAuth();
         });
     }, []);
@@ -49,7 +48,7 @@ export const AnnouncementDetail = (): JSX.Element => {
                             ...announcement,
                             status: "a" // approved
                         }).then((res) => {
-                            console.log("Success!");
+
                         }).catch((err) => {
 
                         });
@@ -107,7 +106,6 @@ export const AnnouncementDetail = (): JSX.Element => {
                                 status: "r",
                                 rejection_reason: rejectionReason
                             }).then((res) => {
-                                console.log("Success!");
                                 M.Modal.getInstance(document.getElementById("reject-popup")!).close();
                             }).catch((err) => {
 

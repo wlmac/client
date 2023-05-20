@@ -203,7 +203,6 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
             return arr;
         }
         catch {
-            console.log("Exception");
             return [];
         }
     }
