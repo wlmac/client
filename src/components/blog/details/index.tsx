@@ -39,22 +39,6 @@ export const BlogDetails = (): JSX.Element => {
         });
     }, []);
 
-    React.useEffect(() => {
-        if (post.id) { //if it exists
-            // Tags
-            const current_tags: Tag[] = [];
-            for (let i = 0; i < post.tags.length; i++) {
-                for (let j = 0; j < session.allTags.length; j++) {
-                    if (post.tags[i] === (session.allTags[j] as Tag).id) {
-                        current_tags.push(session.allTags[j]);
-                        break;
-                    }
-                }
-            }
-            setTags(current_tags);
-        }
-    }, [session.allTags, post]);
-
     return author ? (
         <>
             <link rel="stylesheet" href="/static/css/blog-detail.css" />

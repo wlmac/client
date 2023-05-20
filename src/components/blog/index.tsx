@@ -97,15 +97,7 @@ const BlogPosts = () => {
             {
                 posts.length == 0 ? <></> :
                     posts.map((post: BlogPost) => {
-                        let current_tags: Tag[] = [];
-                        for (let i = 0; i < post.tags.length; i++) {
-                            for (let j = 0; j < session.allTags.length; j++) {
-                                if (post.tags[i] == (session.allTags[j] as Tag).id) {
-                                    current_tags.push(session.allTags[j]);
-                                }
-                            }
-                        }
-                        return <BlogPostElement post={post} tags={current_tags} key={post.id} />;
+                        return <BlogPostElement post={post} tags={post.tags} key={post.id} />;
                     })
             }
             <div>
@@ -120,6 +112,8 @@ const BlogPosts = () => {
 const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Element => {
     const post = props.post;
     const session: Session = React.useContext(SessionContext);
+
+    console.log(post.author);
 
     return (
         <>

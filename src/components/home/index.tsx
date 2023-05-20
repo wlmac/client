@@ -92,7 +92,6 @@ const EventsFeed = (): JSX.Element => {
     const Event = (props: { data: Event }): JSX.Element => {
         const data = props.data;
         let organization: Organization = session.allOrgs.find((organization: Organization) => organization.id === data.organization)!;
-        let tag: Tag = session.allTags.find((tag: Tag) => tag.id === data.tags[0])!;
 
         const toTimeOnly = (dateTime: string): string => {
             const commaIdx = dateTime.indexOf(",");
@@ -101,7 +100,7 @@ const EventsFeed = (): JSX.Element => {
 
         return (
             <div className="event-card card ">
-                <div className="event-time right-align valign-wrapper" style={{ backgroundColor: tag ? tag.color : "#ffffff" }}>
+                <div className="event-time right-align valign-wrapper" style={{ backgroundColor: data.tags.length > 0 ? data.tags[0].color : "#ffffff" }}>
                     <div className="time-container">
                         <span className="date">{new Date(data.start_date).toLocaleDateString(undefined, {
                             year: "numeric", month: "long", day: "numeric"
@@ -164,14 +163,10 @@ const HomeAnnouncements = (): JSX.Element[] => {
 const HomeAnnouncement = (props: { announcement: Announcement }): JSX.Element => {
     const session: Session = React.useContext(SessionContext);
     const announcement = props.announcement;
-    let [tag, setTag] = React.useState({} as Tag);
-    React.useEffect(() => {
-        setTag(session.allTags.filter((tag: Tag) => tag.id == announcement.tags[0])[0]);
-    }, [session.allTags]);
 
     return (
         <>
-            <div className="announcement-card card left-align" style={{ borderColor: tag ? tag.color : "#ffffff" }}>
+            <div className="announcement-card card left-align" style={{ borderColor: announcement.tags.length > 0 ? announcement.tags[0].color : "#ffffff" }}>
                 <h5 className="title truncate">{announcement.title}</h5>
                 <div className="authors">
                     <div className="authors-image">
