@@ -16,6 +16,7 @@ import { Timetable } from "../../util/core/interfaces/timetable";
 import { Course } from "../../util/core/interfaces/timetable";
 import { ScheduleSlot } from "../../util/core/interfaces/schedule";
 import { Schedule } from "./schedule";
+import { markdownToPlainText } from "../markdown";
 
 export const Home = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
@@ -66,7 +67,7 @@ const FeaturedBlogPost = (props: { post: BlogPost }): JSX.Element => {
                     <h4 className="title">{post.title}</h4>
                     <hr />
                     <div className="blog-body markdown-container">
-                        <p>{post.body}</p>
+                        <p>{markdownToPlainText(post.body)}</p>
                         <Link className="full-content-page link" to={`/blog/${post.slug}`}>Read full blog
                             post <i className="zmdi zmdi-chevron-right"></i></Link>
                     </div>
@@ -82,8 +83,7 @@ const EventsFeed = (): JSX.Element => {
 
     const [events, setEvents] = React.useState<Event[]>([]);
     React.useEffect(() => {
-        const currentDate = new Date();
-        const fetchURL = `${Routes.OBJECT}/event?limit=3&start=${currentDate.getFullYear()}-${currentDate.getMonth()}-${currentDate.getDay()}`;
+        const fetchURL = `${Routes.OBJECT}/event?limit=3&start=${new Date().toISOString().substring(0, 10)}`;
         session.request('get', fetchURL).then((res: { data: { results: Array<Event> } }) => {
             setEvents(res.data.results);
         });
@@ -184,7 +184,7 @@ const HomeAnnouncement = (props: { announcement: Announcement }): JSX.Element =>
                 </div>
                 <hr />
                 <div className="announcement-description markdown-container">
-                    <p>{announcement.body}</p>
+                    <p>{markdownToPlainText(announcement.body)}</p>
                     <Link className="link" to={`/announcement/${announcement.id}`}>See announcement <i className="zmdi zmdi-chevron-right"></i></Link>
                 </div>
             </div>
