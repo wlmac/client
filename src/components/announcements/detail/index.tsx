@@ -37,20 +37,6 @@ export const AnnouncementDetail = (): JSX.Element => {
         });
     }, []);
 
-    React.useEffect(() => {
-        console.log("ORGANIZATIONS UPDATED:", session.allOrgs);
-
-        setOrganization(session.allOrgs.find((organization: Organization) => organization.id === announcement.organization)!);
-    }, [session.allOrgs, announcement]);
-
-    React.useEffect(() => {
-        console.log("USERS UPDATED:", session.allUsers);
-        let found_author = session.allUsers.find((user: User) => user.id === announcement.author)!;
-        console.log("Looking for:", announcement);
-        console.log("Author found:", found_author);
-        setAuthor(found_author);
-    }, [session.allUsers, announcement]);
-
     const header = (currentFeed: string | null): Array<JSX.Element> => {
         return AnnouncementFeeds.map((feed: AnnouncementFeed): JSX.Element => {
             const headerClass: string = feed.id === currentFeed ? "header header-active" : "header";

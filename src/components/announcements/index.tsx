@@ -314,15 +314,7 @@ const AnnouncementElement = (props: {
     const data: Announcement = props.announcement;
     const session: Session = React.useContext(SessionContext);
 
-    const [author, setAuthor] = React.useState<User>({} as User);
-    const [organization, setOrganization] = React.useState<Organization>({} as Organization);
-
-    React.useEffect(() => {
-        setAuthor(session.allUsers.find((user: User) => user.id === data.author)!);
-        setOrganization(session.allOrgs.find((organization: Organization) => organization.id === data.organization)!);
-    }, [session.allUsers, session.allOrgs]);
-
-    return organization && author ? (
+    return data.author ? (
         <div className="card">
             <div className="card-headers">
                 <div className="tag-section">
@@ -338,11 +330,11 @@ const AnnouncementElement = (props: {
                 <h1 className="title">{data.title}</h1>
                 <div className="card-authors">
                     <div className="card-authors-image">
-                        <Link to={`/club/${organization.slug}`}><img className="circle" src={organization.icon} /></Link>
+                        <Link to={`/club/${data.organization.slug}`}><img className="circle" src={data.organization.icon} /></Link>
                     </div>
                     <div className="card-authors-text">
-                        <Link to={`/club/${organization.slug}`} className="link">{organization.name}</Link>,
-                        <Link to={`/user/${author.username}`} className="link">{`${author.first_name} ${author.last_name}`}</Link>
+                        <Link to={`/club/${data.organization.slug}`} className="link">{data.organization.name}</Link>,
+                        <Link to={`/user/${data.author.username}`} className="link">{`${data.author.first_name} ${data.author.last_name}`}</Link>
                         <br />
                         • {new Date(data.created_date).toLocaleTimeString(undefined, dateFormat)}
                     </div>
@@ -355,7 +347,7 @@ const AnnouncementElement = (props: {
                 See announcement <i className="zmdi zmdi-chevron-right"></i>
             </Link>
         </div>
-    ) : <div className="card">Loading...</div>;
+    ) : <>Loading...</>;
 };
 
 // const AnnouncementCreator = (props: {
