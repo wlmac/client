@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Session, SessionContext, User } from "../../../../util/core/session";
-import { Link, NavigateFunction, useNavigate, useParams } from "react-router-dom";
+import { Link, NavigateFunction, useLocation, useNavigate, useParams } from "react-router-dom";
 import Organization from "../../../../util/core/interfaces/organization";
 import Routes from "../../../../util/core/misc/routes";
 import { loggedIn } from "../../../../util/core/AuthService";
@@ -15,7 +15,7 @@ export const ProfileView = (): JSX.Element => {
     const current_user: User = session.user;
     const [user, setUser] = React.useState({} as User);
     const [organizations, setOrganizations] = React.useState([] as Array<Organization>);
-
+    const location = useLocation();
 
     React.useEffect((): void => {
         document.title = `User ${user.username} | Metropolis`;
@@ -46,7 +46,7 @@ export const ProfileView = (): JSX.Element => {
 
     React.useEffect(() => {
         fetchUser();
-    }, []);
+    }, [location]);
 
     React.useEffect(() => {
         if (!("username" in user)) return;
