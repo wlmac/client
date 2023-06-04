@@ -8,6 +8,8 @@ import Organization from './interfaces/organization';
 import Tag from './interfaces/tag';
 import { AlertColor } from '@mui/material';
 import { Notif } from './interfaces/notification';
+import { RequestMethod } from './managers/session';
+import { HttpException } from '../models';
 
 const BATCH_CACHELIMIT = 100; // how many entities should be requested each iteration in a fetchAll operation
 
@@ -19,6 +21,7 @@ export interface User {
     graduating_year: number,
     id: number,
     organizations: Array<number>,
+    organizations_leading: Array<number>,
     tags_following: Array<number>,
     timezone: string,
     username: string,
@@ -42,7 +45,7 @@ export interface Session {
     setUser: (user: User) => void,
     refreshUser: () => void,
     updateToken: (token: string) => void,
-    request: (method: string, url: string, data?: any) => Promise<any>,
+    request: (method: RequestMethod, url: string, data?: any) => Promise<any>,
     refreshAuth: (callback?: () => void) => Promise<void>,
     logout: () => void,
     notify: (message: string, type: AlertColor) => void,
@@ -82,7 +85,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     // Snackbar Notification
     const [notification, setNotification] = React.useState<Notif>({
         open: false,
-        type: "" as AlertColor,
+        type: "info",
         message: ""
     });
 
@@ -189,7 +192,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
                 if (res.data.next) {
                     await new Promise(r => setTimeout(r, i_count * i_count * 100)); // timeout
                     // spent like a solid 5 minutes wondering about this function
-                    res = await request('get', `${Routes.OBJECT}/${objtype}?limit=${BATCH_CACHELIMIT}&offset=${(i_count-1)*BATCH_CACHELIMIT}`);
+                    res = await request('get', `${Routes.OBJECT}/${objtype}?limit=${BATCH_CACHELIMIT}&offset=${(i_count - 1) * BATCH_CACHELIMIT}`);
                     arr = [...arr, ...res.data.results];
                     i_count++;
                 }
@@ -202,7 +205,6 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
             return arr;
         }
         catch {
-            console.log("Exception");
             return [];
         }
     }
@@ -226,7 +228,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         }
     }
 
-    const request = async (method: string, url: string, data?: any): Promise<any> => {
+    const request = async (method: RequestMethod, url: string, data?: any): Promise<any> => {
         if (loggedIn()) {
             axios.defaults.headers.common['Authorization'] = `Bearer ${getToken()}`;
         }
@@ -250,6 +252,9 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
                     logout();
                 }
             }
+            // else if (err.response.status === 404) {
+            //     throw new HttpException("NotFoundException", "404 Not Found", 404);
+            // }
         }
     }
 
@@ -282,4 +287,3 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         </SessionContext.Provider>
     )
 }
-

@@ -20,6 +20,7 @@ import { useRef } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 
 import './index.scss';
+import { markdownToPlainText } from "../markdown";
 
 const ANN_FETCHLIMIT = 10; // how many anns to fetch each api request
 
@@ -281,19 +282,11 @@ const AnnouncementList = (props: any): JSX.Element => {
         {
             announcements.length == 0 ? <></> :
                 announcements.map((announcement: Announcement): JSX.Element => {
-                    let current_tags: Tag[] = [];
-                    for (let i = 0; i < announcement.tags.length; i++) {
-                        for (let j = 0; j < session.allTags.length; j++) {
-                            if (announcement.tags[i] == (session.allTags[j] as Tag).id) {
-                                current_tags.push(session.allTags[j]);
-                            }
-                        }
-                    }
                     return (
                         <AnnouncementElement
                             key={announcement.id}
                             announcement={announcement}
-                            tags={current_tags}
+                            tags={announcement.tags}
                         />
                     );
                 })
@@ -313,15 +306,7 @@ const AnnouncementElement = (props: {
     const data: Announcement = props.announcement;
     const session: Session = React.useContext(SessionContext);
 
-    const [author, setAuthor] = React.useState<User>({} as User);
-    const [organization, setOrganization] = React.useState<Organization>({} as Organization);
-
-    React.useEffect(() => {
-        setAuthor(session.allUsers.find((user: User) => user.id === data.author)!);
-        setOrganization(session.allOrgs.find((organization: Organization) => organization.id === data.organization)!);
-    }, [session.allUsers, session.allOrgs]);
-
-    return organization && author ? (
+    return data.author ? (
         <div className="card">
             <div className="card-headers">
                 <div className="tag-section">
@@ -337,24 +322,24 @@ const AnnouncementElement = (props: {
                 <h1 className="title">{data.title}</h1>
                 <div className="card-authors">
                     <div className="card-authors-image">
-                        <Link to={`/club/${organization.slug}`}><img className="circle" src={organization.icon} /></Link>
+                        <Link to={`/club/${data.organization.slug}`}><img className="circle" src={data.organization.icon} /></Link>
                     </div>
                     <div className="card-authors-text">
-                        <Link to={`/club/${organization.slug}`} className="link">{organization.name}</Link>,
-                        <Link to={`/user/${author.username}`} className="link">{`${author.first_name} ${author.last_name}`}</Link>
+                        <Link to={`/club/${data.organization.slug}`} className="link">{data.organization.name}</Link>,
+                        <Link to={`/user/${data.author.username}`} className="link">{`${data.author.first_name} ${data.author.last_name}`}</Link>
                         <br />
                         • {new Date(data.created_date).toLocaleTimeString(undefined, dateFormat)}
                     </div>
                 </div>
             </div>
             <hr />
-            <div className="card-body">{data.body}</div>
+            <div className="card-body">{markdownToPlainText(data.body)}</div>
             <br />
             <Link className="link" to={`/announcement/${data.id}`}>
                 See announcement <i className="zmdi zmdi-chevron-right"></i>
             </Link>
         </div>
-    ) : <div className="card">Loading...</div>;
+    ) : <>Loading...</>;
 };
 
 // const AnnouncementCreator = (props: {

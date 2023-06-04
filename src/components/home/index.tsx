@@ -16,6 +16,7 @@ import { Timetable } from "../../util/core/interfaces/timetable";
 import { Course } from "../../util/core/interfaces/timetable";
 import { ScheduleSlot } from "../../util/core/interfaces/schedule";
 import { Schedule } from "./schedule";
+import { markdownToPlainText } from "../markdown";
 
 export const Home = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
@@ -66,7 +67,7 @@ const FeaturedBlogPost = (props: { post: BlogPost }): JSX.Element => {
                     <h4 className="title">{post.title}</h4>
                     <hr />
                     <div className="blog-body markdown-container">
-                        <p>{post.body}</p>
+                        <p>{markdownToPlainText(post.body)}</p>
                         <Link className="full-content-page link" to={`/blog/${post.slug}`}>Read full blog
                             post <i className="zmdi zmdi-chevron-right"></i></Link>
                     </div>
@@ -82,7 +83,7 @@ const EventsFeed = (): JSX.Element => {
 
     const [events, setEvents] = React.useState<Event[]>([]);
     React.useEffect(() => {
-        const fetchURL = `${Routes.OBJECT}/event?limit=3`;
+        const fetchURL = `${Routes.OBJECT}/event?limit=3&start=${new Date().toISOString().substring(0, 10)}`;
         session.request('get', fetchURL).then((res: { data: { results: Array<Event> } }) => {
             setEvents(res.data.results);
         });
@@ -91,7 +92,6 @@ const EventsFeed = (): JSX.Element => {
     const Event = (props: { data: Event }): JSX.Element => {
         const data = props.data;
         let organization: Organization = session.allOrgs.find((organization: Organization) => organization.id === data.organization)!;
-        let tag: Tag = session.allTags.find((tag: Tag) => tag.id === data.tags[0])!;
 
         const toTimeOnly = (dateTime: string): string => {
             const commaIdx = dateTime.indexOf(",");
@@ -100,7 +100,7 @@ const EventsFeed = (): JSX.Element => {
 
         return (
             <div className="event-card card ">
-                <div className="event-time right-align valign-wrapper" style={{ backgroundColor: tag ? tag.color : "#ffffff" }}>
+                <div className="event-time right-align valign-wrapper" style={{ backgroundColor: data.tags.length > 0 ? data.tags[0].color : "#ffffff" }}>
                     <div className="time-container">
                         <span className="date">{new Date(data.start_date).toLocaleDateString(undefined, {
                             year: "numeric", month: "long", day: "numeric"
@@ -163,27 +163,22 @@ const HomeAnnouncements = (): JSX.Element[] => {
 const HomeAnnouncement = (props: { announcement: Announcement }): JSX.Element => {
     const session: Session = React.useContext(SessionContext);
     const announcement = props.announcement;
-    let organization: Organization = session.allOrgs.find((organization: Organization) => organization.id === announcement.organization)!;
-    let [tag, setTag] = React.useState({} as Tag);
-    React.useEffect(() => {
-        setTag(session.allTags.filter((tag: Tag) => tag.id == announcement.tags[0])[0]);
-    }, [session.allTags]);
 
     return (
         <>
-            <div className="announcement-card card left-align" style={{ borderColor: tag ? tag.color : "#ffffff" }}>
+            <div className="announcement-card card left-align" style={{ borderColor: announcement.tags.length > 0 ? announcement.tags[0].color : "#ffffff" }}>
                 <h5 className="title truncate">{announcement.title}</h5>
                 <div className="authors">
                     <div className="authors-image">
-                        <Link to={`/club/${organization ? organization.slug : ''}`}><img className="circle" src={organization ? organization.icon : "/"} /></Link>
+                        <Link to={`/club/${announcement.organization.slug}`}><img className="circle" src={announcement.organization.icon} /></Link>
                     </div>
                     <div className="authors-text">
-                        <Link to={`/club/${organization ? organization.slug : ''}`}>{organization ? organization.name : ""}</Link>
+                        <Link to={`/club/${announcement.organization.slug}`}>{announcement.organization.name}</Link>
                     </div>
                 </div>
                 <hr />
                 <div className="announcement-description markdown-container">
-                    <p>{announcement.body}</p>
+                    <p>{markdownToPlainText(announcement.body)}</p>
                     <Link className="link" to={`/announcement/${announcement.id}`}>See announcement <i className="zmdi zmdi-chevron-right"></i></Link>
                 </div>
             </div>

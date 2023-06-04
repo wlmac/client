@@ -10,6 +10,7 @@ import { Session, SessionContext, User } from "../../../util/core/session";
 import Markdown from "../../markdown";
 import { dateFormat } from "../../../util/core/misc/date";
 import { TagElement } from "../../../util/core/tags";
+import { loggedIn } from "../../../util/core/AuthService";
 
 export const BlogDetails = (): JSX.Element => {
     const { slug } = useParams();
@@ -17,45 +18,17 @@ export const BlogDetails = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
     const session: Session = React.useContext(SessionContext);
     const [post, setPost] = React.useState({} as BlogPost);
-    const [author, setAuthor] = React.useState({} as User);
     const [tags, setTags] = React.useState([] as Array<Tag>);
-    const [execs, setExecs] = React.useState([] as Array<User>);
-    const [members, setMembers] = React.useState([] as Array<User>);
 
     React.useEffect(() => {
         const fetchURL = `${Routes.OBJECT}/blog-post/retrieve/${slug}?lookup=slug`;
         session.request('get', fetchURL).then((res) => {
             const current_post: BlogPost = res.data as BlogPost;
             setPost(current_post);
-
-            // Author
-            session.request('get', `${Routes.USER}/retrieve/${current_post.author}`).then((res) => {
-                setAuthor(res.data);
-            }).catch(() => {
-                session.refreshAuth();
-            });
-        }).catch((err) => {
-            session.refreshAuth();
         });
     }, []);
 
-    React.useEffect(() => {
-        if (post.id) { //if it exists
-            // Tags
-            const current_tags: Tag[] = [];
-            for (let i = 0; i < post.tags.length; i++) {
-                for (let j = 0; j < session.allTags.length; j++) {
-                    if (post.tags[i] === (session.allTags[j] as Tag).id) {
-                        current_tags.push(session.allTags[j]);
-                        break;
-                    }
-                }
-            }
-            setTags(current_tags);
-        }
-    }, [session.allTags, post]);
-
-    return author ? (
+    return "slug" in post ? (
         <>
             <link rel="stylesheet" href="/static/css/blog-detail.css" />
             <div className="container">
@@ -71,14 +44,17 @@ export const BlogDetails = (): JSX.Element => {
                     <h1 className="title">{post.title}</h1>
                     <div className="card-authors">
                         <div className="card-authors-image">
-                            <Link to={`/user/${author.username}`}><img className="circle" src={author.gravatar_url} /></Link>
+                            <Link to={`/user/${post.author.username}`}><img className="circle" src={post.author.gravatar_url} /></Link>
                         </div>
-                        <div className="card-authors-text">
-                            <Link to={`/user/${author.username}`} className="link">{`${author.first_name} ${author.last_name}`}</Link>
-                            <br />
-                            • {new Date(post.created_date).toLocaleTimeString(undefined, dateFormat)}
+                        <div className="card-authors-text" style={{ display: "flex", gap: "0.25em" }}>
+                            <Link to={`/user/${post.author.username}`} className="link">{`${post.author.first_name} ${post.author.last_name}`}</Link>
+                            <>•&nbsp;{new Date(post.created_date).toLocaleTimeString(undefined, dateFormat)}</>
                             {/* {post.created_date !== post.last_modified_date && " (Edited)"} */}
                         </div>
+                        {
+                            (loggedIn() && (session.user.is_staff || session.user.id == post.author.id)) &&
+                            <span className="view-counter"><strong>{post.views}</strong> views</span>
+                        }
                     </div>
                     <hr />
                     <div className="card-body">

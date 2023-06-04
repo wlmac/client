@@ -10,7 +10,7 @@ import MembershipStatus from "../../util/core/misc/membership";
 import Routes from "../../util/core/misc/routes";
 import { Session, SessionContext, User } from "../../util/core/session";
 import { getTags, TagElement } from "../../util/core/tags";
-import Markdown from "../markdown";
+import Markdown, { markdownToPlainText } from "../markdown";
 import { loggedIn } from "../../util/core/AuthService";
 import { dateFormat } from "../../util/core/misc/date";
 
@@ -82,7 +82,6 @@ const BlogPosts = () => {
         if (wrappedElement!.getBoundingClientRect().bottom <= window.innerHeight) {
             //reached bottom!
             setOffset((offset) => { // since it is the function it has access to current state despite being rendered from initial state
-                console.log(offset);
                 if (offset != -1 && initLoadRef.current) { // not -1 means there are more blogs to fetch
                     fetchBlog(offset);
                 }
@@ -97,15 +96,7 @@ const BlogPosts = () => {
             {
                 posts.length == 0 ? <></> :
                     posts.map((post: BlogPost) => {
-                        let current_tags: Tag[] = [];
-                        for (let i = 0; i < post.tags.length; i++) {
-                            for (let j = 0; j < session.allTags.length; j++) {
-                                if (post.tags[i] == (session.allTags[j] as Tag).id) {
-                                    current_tags.push(session.allTags[j]);
-                                }
-                            }
-                        }
-                        return <BlogPostElement post={post} tags={current_tags} key={post.id} />;
+                        return <BlogPostElement post={post} tags={post.tags} key={post.id} />;
                     })
             }
             <div>
@@ -120,55 +111,46 @@ const BlogPosts = () => {
 const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Element => {
     const post = props.post;
     const session: Session = React.useContext(SessionContext);
-    
-    const [author, setAuthor] = React.useState<User>({} as User);
 
-    React.useEffect(() => {
-        setAuthor(session.allUsers.find((user: User) => user.id === post.author) || {} as User);
-    }, [session.allUsers]);
+    console.log(post.author);
 
     return (
-        <div className="card">
-            <div className="card-headers">
-                <img className="card-image" src={post.featured_image} />
-                <div className="card-text">
-                    <div className="tag-section">
-                        {
-                            props.tags.map((tag: Tag) => {
-                                return <TagElement key={tag.id} tag={tag} />
-                            })
-                        }
-                    </div>
-                    <h1 className="title">{post.title}</h1>
-                    <div className="card-authors">
-                        {
-                            "username" in author ?
+        <>
+            <div className="card">
+                <div className="card-headers">
+                    <img className="card-image" src={post.featured_image} />
+                    <div className="card-text">
+                        <div className="tag-section">
+                            {
+                                props.tags.map((tag: Tag) => {
+                                    return <TagElement key={tag.id} tag={tag} />
+                                })
+                            }
+                        </div>
+                        <h1 className="title">{post.title}</h1>
+                        <div className="card-authors">
                             <>
                                 <div className="card-authors-image">
-                                    <Link to={`/user/${author ? author.username : ''}`}><img className="circle" src={author ? author.gravatar_url : ""} /></Link>
+                                    <Link to={`/user/${post.author.username}`}><img className="circle" src={post.author.gravatar_url} /></Link>
                                 </div>
                                 <div className="card-authors-text">
-                                    <Link to={`/user/${author ? author.username : ''}`} className="link">{author && `${author.first_name} ${author.last_name}`}</Link>
+                                    <Link to={`/user/${post.author.username}`} className="link">{`${post.author.first_name} ${post.author.last_name}`}</Link>
                                     <br />
                                     • posted {new Date(post.created_date).toLocaleTimeString(undefined, dateFormat)}
                                 </div>
                             </>
-                            :
-                            <div className="card-authors-text">
-                                Loading...
-                            </div>
-                        }
+                        </div>
                     </div>
                 </div>
+                <hr />
+                <div className="card-body">
+                    <p>
+                        {markdownToPlainText(post.body)}
+                    </p>
+                </div>
+                <br />
+                <Link className="link" to={`/blog/${post.slug}`}>Read full blog post <i className="zmdi zmdi-chevron-right"></i></Link>
             </div>
-            <hr />
-            <div className="card-body">
-                <p>
-                    {post.body}
-                </p>
-            </div>
-            <br />
-            <Link className="link" to={`/blog/${post.slug}`}>Read full blog post <i className="zmdi zmdi-chevron-right"></i></Link>
-        </div>
+        </>
     );
 }

@@ -11,6 +11,11 @@
     padding: 40px;
 }
 
+.card-authors-text {
+    display: flex;
+    gap: 0.25em;
+}
+
 /* .club-logo-out {
     max-width: 17rem;
 } */

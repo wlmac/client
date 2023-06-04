@@ -42,7 +42,7 @@ export const NotFound = (): JSX.Element => {
                 </div>
 
                 <p className="center-align">
-                    <Link to="https://maclyonsden.com/">Return Home</Link>
+                    <Link to="/">Return Home</Link>
                     {/* <!-- No one is out of Elastigirl's reach, but unfortunately, even this page is out of her reach too. (It doesn't exist!) :( --> */}
                 </p>
             </div>

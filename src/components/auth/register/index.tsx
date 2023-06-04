@@ -40,7 +40,6 @@ export const Register = (): JSX.Element => {
     }
 
     const onRegister = (data: RegisterInputs): void => {
-        console.log("Submitted data:", data);
         if (data.password !== data.confirm_password) {
             setError("Passwords do not match");
             return;
@@ -54,10 +53,8 @@ export const Register = (): JSX.Element => {
             password: data.password
         }
         axios.post(`${Routes.USER}/new`, new_user).then((res) => {
-            console.log("Successfully registered user");
             nav("/accounts/login");
         }).catch((err) => {
-            console.log("Failed to register user");
             setError("An internal error occurred. Please contact an admin to get it fixed.")
         });
     }

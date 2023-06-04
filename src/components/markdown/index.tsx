@@ -41,3 +41,21 @@ function safeEmbed(url: string) {
     }
     return false;
 }
+
+
+/**
+ * Parsing Markdown into Plaintext
+ * @param markdownString The original Markdown body string
+ * @returns Plaintext string version of input string without Markdown annotations
+ */
+
+import { marked } from "marked"
+
+export function markdownToPlainText(markdownString: string): string {
+    if (!markdownString) return "";
+    const html = marked(markdownString);
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    const plainText = doc.body.innerText.trim();
+    return plainText;
+}
