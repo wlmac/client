@@ -21,6 +21,7 @@ export interface User {
     graduating_year: number,
     id: number,
     organizations: Array<number>,
+    organizations_leading: Array<number>,
     tags_following: Array<number>,
     timezone: string,
     username: string,
