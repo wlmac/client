@@ -45,7 +45,7 @@ export const ProfileView = (): JSX.Element => {
         if (!("username" in user)) return;
         const organization_display_list: Array<String> = [];
         session.allOrgs.forEach((organization: Organization) => {
-            if (user.organizations.find((element) => element === organization.id)) {
+            if (user.organizations_leading.find((element) => element === organization.id)) {
                 organization_display_list.push(organization.name);
             }
         });
