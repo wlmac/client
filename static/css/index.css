@@ -203,6 +203,11 @@ hr {
     height: 500px;
 }
 
+.card-authors-text {
+    display: flex;
+    gap: 0.25em;
+}
+
 @media screen and (max-width: 992px) {
     .event-card {
         width: calc(50% - 20px);
