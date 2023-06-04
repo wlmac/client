@@ -21,7 +21,7 @@ export interface User {
     graduating_year: number,
     id: number,
     organizations: Array<number>,
-    organizations_leading: Array<number>,
+    organizations_leading: Array<Organization>,
     tags_following: Array<number>,
     timezone: string,
     username: string,
@@ -39,8 +39,8 @@ interface CacheStatus {
 export interface Session {
     user: User,
     cacheStatus: CacheStatus
-    allUsers: Array<User>,
-    allOrgs: Array<Organization>,
+    // allUsers: Array<User>,
+    // allOrgs: Array<Organization>,
     allTags: Array<Tag>,
     setUser: (user: User) => void,
     refreshUser: () => void,
@@ -56,8 +56,8 @@ export interface Session {
 export const SessionContext = React.createContext<Session>({
     user: {} as User,
     cacheStatus: {} as CacheStatus,
-    allUsers: [],
-    allOrgs: [],
+    // allUsers: [],
+    // allOrgs: [],
     allTags: [],
     setUser: (user: User) => { },
     refreshUser: () => { },
@@ -72,8 +72,8 @@ export const SessionContext = React.createContext<Session>({
 
 export const SessionProvider = (props: { children: React.ReactNode }) => {
     let [user, updateUser] = React.useState({} as User);
-    const [allUsers, setAllUsers] = React.useState([] as Array<User>);
-    const [allOrgs, setAllOrgs] = React.useState([] as Array<Organization>);
+    // const [allUsers, setAllUsers] = React.useState([] as Array<User>);
+    // const [allOrgs, setAllOrgs] = React.useState([] as Array<Organization>);
     const [allTags, setAllTags] = React.useState([] as Array<Tag>);
     const [cacheStatus, setCacheStatus] = React.useState({
         tags: false,
@@ -141,21 +141,21 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
             })
         }).catch((err) => { });
 
-        getAll(`organization`).then((data) => {
-            setAllOrgs(data);
-            setCacheStatus((prevStatus) => {
-                prevStatus.orgs = true;
-                return prevStatus;
-            })
-        }).catch((err) => { });
+        // getAll(`organization`).then((data) => {
+        //     setAllOrgs(data);
+        //     setCacheStatus((prevStatus) => {
+        //         prevStatus.orgs = true;
+        //         return prevStatus;
+        //     })
+        // }).catch((err) => { });
 
-        getAll(`user`).then((data) => {
-            setAllUsers(data);
-            setCacheStatus((prevStatus) => {
-                prevStatus.users = true;
-                return prevStatus;
-            })
-        }).catch((err) => { console.log(err); });
+        // getAll(`user`).then((data) => {
+        //     setAllUsers(data);
+        //     setCacheStatus((prevStatus) => {
+        //         prevStatus.users = true;
+        //         return prevStatus;
+        //     })
+        // }).catch((err) => { console.log(err); });
     }
 
     // this function fetches every single entry of given path and caches it locally
@@ -282,7 +282,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     }
 
     return (
-        <SessionContext.Provider value={{ user: user, cacheStatus: cacheStatus, allUsers: allUsers, allOrgs: allOrgs, allTags: allTags, setUser: setUser, refreshUser: refreshUser, updateToken: updateToken, request: request, refreshAuth: refreshAuth, logout: logout, notify: notify, notification: notification, closeNotif: closeNotif }}>
+        <SessionContext.Provider value={{ user: user, cacheStatus: cacheStatus, /*allUsers: allUsers, allOrgs: allOrgs,*/ allTags: allTags, setUser: setUser, refreshUser: refreshUser, updateToken: updateToken, request: request, refreshAuth: refreshAuth, logout: logout, notify: notify, notification: notification, closeNotif: closeNotif }}>
             {props.children}
         </SessionContext.Provider>
     )
