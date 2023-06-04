@@ -17,29 +17,17 @@ export const BlogDetails = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
     const session: Session = React.useContext(SessionContext);
     const [post, setPost] = React.useState({} as BlogPost);
-    const [author, setAuthor] = React.useState({} as User);
     const [tags, setTags] = React.useState([] as Array<Tag>);
-    const [execs, setExecs] = React.useState([] as Array<User>);
-    const [members, setMembers] = React.useState([] as Array<User>);
 
     React.useEffect(() => {
         const fetchURL = `${Routes.OBJECT}/blog-post/retrieve/${slug}?lookup=slug`;
         session.request('get', fetchURL).then((res) => {
             const current_post: BlogPost = res.data as BlogPost;
             setPost(current_post);
-
-            // Author
-            session.request('get', `${Routes.USER}/retrieve/${current_post.author}`).then((res) => {
-                setAuthor(res.data);
-            }).catch(() => {
-                session.refreshAuth();
-            });
-        }).catch((err) => {
-            session.refreshAuth();
         });
     }, []);
 
-    return author ? (
+    return "slug" in post ? (
         <>
             <link rel="stylesheet" href="/static/css/blog-detail.css" />
             <div className="container">
@@ -55,12 +43,12 @@ export const BlogDetails = (): JSX.Element => {
                     <h1 className="title">{post.title}</h1>
                     <div className="card-authors">
                         <div className="card-authors-image">
-                            <Link to={`/user/${author.username}`}><img className="circle" src={author.gravatar_url} /></Link>
+                            <Link to={`/user/${post.author.username}`}><img className="circle" src={post.author.gravatar_url} /></Link>
                         </div>
                         <div className="card-authors-text">
-                            <Link to={`/user/${author.username}`} className="link">{`${author.first_name} ${author.last_name}`}</Link>
+                            <Link to={`/user/${post.author.username}`} className="link">{`${post.author.first_name} ${post.author.last_name}`}</Link>
                             <br />
-                            • {new Date(post.created_date).toLocaleTimeString(undefined, dateFormat)}
+                            •&nbsp;{new Date(post.created_date).toLocaleTimeString(undefined, dateFormat)}
                             {/* {post.created_date !== post.last_modified_date && " (Edited)"} */}
                         </div>
                     </div>
