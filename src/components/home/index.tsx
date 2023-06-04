@@ -166,7 +166,7 @@ const HomeAnnouncement = (props: { announcement: Announcement }): JSX.Element =>
 
     return (
         <>
-            <div className="announcement-card card left-align" style={{ borderColor: announcement.tags.length > 0 ? announcement.tags[0].color : "#ffffff" }}>
+            <div className="announcement-card card left-align" style={{ borderColor: announcement.tags.length > 0 ? announcement.tags[0].color : "#212121" }}>
                 <h5 className="title truncate">{announcement.title}</h5>
                 <div className="authors">
                     <div className="authors-image">
