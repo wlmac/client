@@ -45,10 +45,9 @@ export const BlogDetails = (): JSX.Element => {
                         <div className="card-authors-image">
                             <Link to={`/user/${post.author.username}`}><img className="circle" src={post.author.gravatar_url} /></Link>
                         </div>
-                        <div className="card-authors-text">
+                        <div className="card-authors-text" style={{ display: "flex", gap: "0.25em" }}>
                             <Link to={`/user/${post.author.username}`} className="link">{`${post.author.first_name} ${post.author.last_name}`}</Link>
-                            <br />
-                            •&nbsp;{new Date(post.created_date).toLocaleTimeString(undefined, dateFormat)}
+                            <>•&nbsp;{new Date(post.created_date).toLocaleTimeString(undefined, dateFormat)}</>
                             {/* {post.created_date !== post.last_modified_date && " (Edited)"} */}
                         </div>
                         <span className="view-counter"><strong>{post.views}</strong> views</span>
