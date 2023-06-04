@@ -143,3 +143,10 @@ hr {
         width:  100%
     }
 }
+
+.view-counter {
+    margin-left: auto;
+    margin-right: 0;
+    color: var(--line-grey);
+    font-size: 1rem;
+}

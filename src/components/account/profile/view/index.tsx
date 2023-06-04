@@ -61,7 +61,7 @@ export const ProfileView = (): JSX.Element => {
             "username" in user ?
                 <>
                     <div className="header">
-                        <img className="circle responsive-img profile-picture" src={user.gravatar_url} alt={`${user.username}'s profile picture`} />
+                        <img style={{ width: "100px", height: "100px" }} className="circle responsive-img profile-picture" src={`${user.gravatar_url}&s=100`} alt={`${user.username}'s profile picture`} />
                         <div className="name-info">
                             <h5 className="full-name">{user.first_name} {user.last_name}</h5>
                             <h6 className="username">{user.username}</h6>

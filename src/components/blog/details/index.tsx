@@ -51,6 +51,7 @@ export const BlogDetails = (): JSX.Element => {
                             •&nbsp;{new Date(post.created_date).toLocaleTimeString(undefined, dateFormat)}
                             {/* {post.created_date !== post.last_modified_date && " (Edited)"} */}
                         </div>
+                        <span className="view-counter"><strong>{post.views}</strong> views</span>
                     </div>
                     <hr />
                     <div className="card-body">
