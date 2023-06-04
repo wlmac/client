@@ -4,6 +4,7 @@ import { Link, NavigateFunction, useLocation, useNavigate, useParams } from "rea
 import Organization from "../../../../util/core/interfaces/organization";
 import Routes from "../../../../util/core/misc/routes";
 import { loggedIn } from "../../../../util/core/AuthService";
+import Markdown from "../../../markdown";
 
 export const ProfileView = (): JSX.Element => {
     const [organizationDisplay, setOrganizationDisplay] = React.useState("");
@@ -89,7 +90,7 @@ export const ProfileView = (): JSX.Element => {
                     <br />
                     <div>
                         {user.bio ?
-                            <p>{user.bio}</p>
+                            <Markdown text={user.bio} />
                             :
                             <p>This user has not shared any information.</p>
                         }
