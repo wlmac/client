@@ -3,7 +3,7 @@ import { TeamMember } from "../member";
 import { User } from "../../../../util/core/session";
 import config from "../../../../../config";
 
-export const BranchList = (props: { name: string, allUsers: Array<User> }): JSX.Element => {
+export const BranchList = (props: { name: string }): JSX.Element => {
     // @ts-expect-error
     let branchStaffList: Array<number> = config.METROPOLIS_STAFFS[props.name];
 
@@ -13,7 +13,7 @@ export const BranchList = (props: { name: string, allUsers: Array<User> }): JSX.
 
             {
                 branchStaffList.map((memberID: number): JSX.Element => {
-                    return <TeamMember memberID={memberID} key={memberID} allUsers={props.allUsers} />
+                    return <TeamMember memberID={memberID} key={memberID} />
                 })
             }
         </div>

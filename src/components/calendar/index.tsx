@@ -23,7 +23,7 @@ interface EventData {
 
 interface EventJSON {
   name: string,
-  organization: number,
+  organization: Organization,
   description: string,
   id: number,
   tags: Tag[],
@@ -53,7 +53,7 @@ export const Calendar = (): JSX.Element => {
   React.useEffect(() => {
     function parseEventJSON(raw: EventJSON): EventData {
       return Object.assign(Object.assign({}, raw), {
-        organization: session.allOrgs.find(org => org.id === raw.organization)
+        organization: raw.organization
       })
     }
     setEvents(rawEvents.map(parseEventJSON));

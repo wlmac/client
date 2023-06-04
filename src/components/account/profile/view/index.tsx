@@ -7,7 +7,8 @@ import { loggedIn } from "../../../../util/core/AuthService";
 import Markdown from "../../../markdown";
 
 export const ProfileView = (): JSX.Element => {
-    const [organizationDisplay, setOrganizationDisplay] = React.useState("");
+    // const [organizationDisplay, setOrganizationDisplay] = React.useState("");
+    // const [organizations, setOrganizations] = React.useState([] as Array<Organization>);
 
     const { username } = useParams();
     const session: Session = React.useContext(SessionContext);
@@ -16,7 +17,7 @@ export const ProfileView = (): JSX.Element => {
     const current_user: User = session.user;
     const [user, setUser] = React.useState({} as User);
     const [notFound, setNotFound] = React.useState(false);
-    const [organizations, setOrganizations] = React.useState([] as Array<Organization>);
+
     const location = useLocation();
 
     React.useEffect((): void => {
@@ -41,19 +42,20 @@ export const ProfileView = (): JSX.Element => {
         fetchUser();
     }, [location]);
 
-    React.useEffect(() => {
-        if (!("username" in user)) return;
-        const organization_display_list: Array<String> = [];
-        session.allOrgs.forEach((organization: Organization) => {
-            if (user.organizations_leading.find((element) => element === organization.id)) {
-                organization_display_list.push(organization.name);
-            }
-        });
-        setOrganizationDisplay(organization_display_list.join(", "));
-    }, [session.allOrgs, user]);
+    // React.useEffect(() => {
+    //     if (!("username" in user)) return;
+    //     const organization_display_list: Array<String> = [];
+    //     session.allOrgs.forEach((organization: Organization) => {
+    //         if (user.organizations_leading.find((element) => element === organization.id)) {
+    //             organization_display_list.push(organization.name);
+    //         }
+    //     });
+
+    //     setOrganizationDisplay(organization_display_list.join(", "));
+    // }, [user]);
 
     return (
-        notFound ? 
+        notFound ?
             <div className="header">
                 <h6 className="username">Sorry, a user with this username was not found.</h6>
             </div>
@@ -82,7 +84,14 @@ export const ProfileView = (): JSX.Element => {
                         </div>
                         <div className="field">
                             <div className="label">Executive of</div>
-                            {organizationDisplay}
+                            {/* {user.organizations_leading.map((org: Organization, idx: number): JSX.Element => {
+                                return <></>;
+                            })} */}
+                            {
+                                user.organizations_leading.map((org: Organization) => {
+                                    return org.name;
+                                }).join(", ")
+                            }
                         </div>
                         <br />
                         <div>

@@ -91,7 +91,6 @@ const EventsFeed = (): JSX.Element => {
 
     const Event = (props: { data: Event }): JSX.Element => {
         const data = props.data;
-        let organization: Organization = session.allOrgs.find((organization: Organization) => organization.id === data.organization)!;
 
         const toTimeOnly = (dateTime: string): string => {
             const commaIdx = dateTime.indexOf(",");
@@ -122,12 +121,12 @@ const EventsFeed = (): JSX.Element => {
                     <hr />
                     <div className="authors">
                         <div className="authors-image">
-                            <Link to={`/club/${organization ? organization.slug : ''}`}>
-                                <img className="circle" src={organization ? organization.icon : ""} alt={`${organization ? organization.name : ""} logo`} />
+                            <Link to={`/club/${data.organization ? data.organization.slug : ''}`}>
+                                <img className="circle" src={data.organization.icon} alt={`${data.organization.name} logo`} />
                             </Link>
                         </div>
                         <div className="authors-text">
-                            <Link to={`/club/${organization ? organization.slug : ''}`}>{organization ? organization.name : ""}</Link>
+                            <Link to={`/club/${data.organization.slug}`}>{data.organization.name}</Link>
                         </div>
                     </div>
                 </div>
