@@ -10,6 +10,7 @@ import { Session, SessionContext, User } from "../../../util/core/session";
 import Markdown from "../../markdown";
 import { dateFormat } from "../../../util/core/misc/date";
 import { TagElement } from "../../../util/core/tags";
+import { loggedIn } from "../../../util/core/AuthService";
 
 export const BlogDetails = (): JSX.Element => {
     const { slug } = useParams();
@@ -50,7 +51,10 @@ export const BlogDetails = (): JSX.Element => {
                             <>•&nbsp;{new Date(post.created_date).toLocaleTimeString(undefined, dateFormat)}</>
                             {/* {post.created_date !== post.last_modified_date && " (Edited)"} */}
                         </div>
-                        <span className="view-counter"><strong>{post.views}</strong> views</span>
+                        {
+                            (loggedIn() && (session.user.is_staff || session.user.id == post.author.id)) &&
+                            <span className="view-counter"><strong>{post.views}</strong> views</span>
+                        }
                     </div>
                     <hr />
                     <div className="card-body">
