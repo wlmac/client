@@ -46,9 +46,9 @@ export const BlogDetails = (): JSX.Element => {
                         <div className="card-authors-image">
                             <Link to={`/user/${post.author.username}`}><img className="circle" src={post.author.gravatar_url} /></Link>
                         </div>
-                        <div className="card-authors-text" style={{ display: "flex", gap: "0.25em" }}>
+                        <div className="card-authors-text">
                             <Link to={`/user/${post.author.username}`} className="link">{`${post.author.first_name} ${post.author.last_name}`}</Link>
-                            <>•&nbsp;{new Date(post.created_date).toLocaleTimeString(undefined, dateFormat)}</>
+                            <>&bull; {new Date(post.created_date).toLocaleTimeString(undefined, dateFormat)}</>
                             {/* {post.created_date !== post.last_modified_date && " (Edited)"} */}
                         </div>
                         {
