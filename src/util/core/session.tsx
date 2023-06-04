@@ -9,6 +9,7 @@ import Tag from './interfaces/tag';
 import { AlertColor } from '@mui/material';
 import { Notif } from './interfaces/notification';
 import { RequestMethod } from './managers/session';
+import { HttpException } from '../models';
 
 const BATCH_CACHELIMIT = 100; // how many entities should be requested each iteration in a fetchAll operation
 
@@ -250,6 +251,9 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
                     logout();
                 }
             }
+            // else if (err.response.status === 404) {
+            //     throw new HttpException("NotFoundException", "404 Not Found", 404);
+            // }
         }
     }
 
