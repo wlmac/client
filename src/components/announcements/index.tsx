@@ -47,17 +47,6 @@ export const Announcements = (): JSX.Element => {
     };
 
     React.useEffect(() => {
-        if (searchParams.get("tag")) {
-            let filtered = session.allTags.filter(e => e.name === searchParams.get("tag"));
-            setCurContent({
-                isFeed: false,
-                feed: {} as AnnouncementFeed,
-                tag: filtered.length == 0 ? {} as Tag : filtered[0], // the tag object
-            });
-        }
-    }, [session.allTags]);
-
-    React.useEffect(() => {
         if (session.user.id) {
             setFeeds((curFeeds) => {
                 // delete existing "my" feed
@@ -82,11 +71,12 @@ export const Announcements = (): JSX.Element => {
             });
         }
         else if (searchParams.get("tag")) {
-            let filtered = session.allTags.filter(e => e.name === searchParams.get("tag"));
             setCurContent({
                 isFeed: false,
                 feed: {} as AnnouncementFeed,
-                tag: filtered.length == 0 ? {} as Tag : filtered[0], // the tag object
+                tag: {
+                    name: searchParams.get("tag")
+                } as Tag, // the tag object
             });
         }
     }
@@ -207,6 +197,7 @@ const AnnouncementList = (props: any): JSX.Element => {
     const initLoadRef = React.useRef(false);
 
     function fetchAnns(append: boolean, offsetOverride?: number) {
+        console.log(append + ' ' + offsetOverride);
         if (initLoadRef.current) {
             setLoadMsg("Loading more announcements...");
         }
@@ -256,7 +247,9 @@ const AnnouncementList = (props: any): JSX.Element => {
 
     React.useEffect(() => {
         initLoadRef.current = false;
-        fetchAnns(false);
+        setOffset(0);
+        fetchAnns(false, 0);
+        console.log('updating');
         document.removeEventListener('scroll', trackScrolling);
         document.addEventListener('scroll', trackScrolling);
         return () => {
