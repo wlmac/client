@@ -204,8 +204,8 @@ const AnnouncementList = (props: any): JSX.Element => {
             setLoadMsg("Loading more announcements...");
         }
         let param = '';
-        if (!props.curContent.isFeed && props.curContent.tag.id) {
-            param = `&tags=${props.curContent.tag.id}`;
+        if (!props.curContent.isFeed && props.curContent.tag.name) {
+            param = `&tags=${encodeURIComponent(props.curContent.tag.name)}`;
         }
         else if (props.curContent.isFeed) {
             if (props.curContent.feed.id === "my" && (!session.user.organizations || session.user.organizations.length == 0)) {
@@ -309,7 +309,7 @@ const AnnouncementElement = (props: {
                     {props.tags.map((tag: Tag): JSX.Element => {
                         return <a className="tag-link" key={tag.id} href={`/announcements?tag=${tag.name}`} onClick={(ev) => {
                             ev.preventDefault();
-                            nav(`/announcements?tag=${tag.name}`);
+                            nav(`/announcements?tag=${encodeURIComponent(tag.name)}`);
                         }}>
                             <TagElement tag={tag} />
                         </a>;
