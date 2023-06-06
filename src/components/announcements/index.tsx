@@ -329,7 +329,7 @@ const AnnouncementElement = (props: {
                 </div>
             </div>
             <hr />
-            <div className="card-body">{markdownToPlainText(data.body)}</div>
+            <div className="card-body"><p className="card-restricted-text">{markdownToPlainText(data.body)}</p></div>
             <br />
             <Link className="link" to={`/announcement/${data.id}`}>
                 See announcement <i className="zmdi zmdi-chevron-right"></i>
