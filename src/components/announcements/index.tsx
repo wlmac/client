@@ -33,6 +33,7 @@ export const Announcements = (): JSX.Element => {
 
     const [feeds, setFeeds] = React.useState(AnnouncementFeeds);
     const [curContent, setCurContent] = React.useState({
+        indeterminate: true, // if true, curContent cannot be relied on (this prevents simultaneous requests on page load)
         isFeed: true, // true = is a feed, false = is a tag
         feed: {} as AnnouncementFeed, // default is all
         tag: {} as Tag, // the tag object
@@ -65,6 +66,7 @@ export const Announcements = (): JSX.Element => {
         if (searchParams.get('feed')) {
             let feedlist = feeds.filter(e => e.id === searchParams.get("feed"));
             setCurContent({
+                indeterminate: false,
                 isFeed: true, // true = is a feed, false = is a tag
                 feed: feedlist.length == 0 ? feeds[0] : feedlist[0], // default is all (0 index)
                 tag: {} as Tag, // the tag object
@@ -72,6 +74,7 @@ export const Announcements = (): JSX.Element => {
         }
         else if (searchParams.get("tag")) {
             setCurContent({
+                indeterminate: false,
                 isFeed: false,
                 feed: {} as AnnouncementFeed,
                 tag: {
@@ -194,10 +197,9 @@ const AnnouncementList = (props: any): JSX.Element => {
     const [offset, setOffset] = React.useState(0);
     const [loadMsg, setLoadMsg] = React.useState("Loading...");
 
-    const initLoadRef = React.useRef(false);
+    const initLoadRef = React.useRef(false); // first load of specific ann list
 
     function fetchAnns(append: boolean, offsetOverride?: number) {
-        console.log(append + ' ' + offsetOverride);
         if (initLoadRef.current) {
             setLoadMsg("Loading more announcements...");
         }
@@ -246,14 +248,15 @@ const AnnouncementList = (props: any): JSX.Element => {
     }
 
     React.useEffect(() => {
-        initLoadRef.current = false;
-        setOffset(0);
-        fetchAnns(false, 0);
-        console.log('updating');
-        document.removeEventListener('scroll', trackScrolling);
-        document.addEventListener('scroll', trackScrolling);
-        return () => {
+        if (!props.curContent.indeterminate) { // only fetch when we are sure that curContent is stable and (hopefully) correct
+            initLoadRef.current = false;
+            setOffset(0);
+            fetchAnns(false, 0);
             document.removeEventListener('scroll', trackScrolling);
+            document.addEventListener('scroll', trackScrolling);
+            return () => {
+                document.removeEventListener('scroll', trackScrolling);
+            }
         }
     }, [props.curContent]);
 
