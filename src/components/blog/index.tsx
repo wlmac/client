@@ -112,8 +112,6 @@ const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Eleme
     const post = props.post;
     const session: Session = React.useContext(SessionContext);
 
-    console.log(post.author);
-
     return (
         <>
             <div className="card">

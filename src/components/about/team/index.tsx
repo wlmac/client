@@ -21,7 +21,7 @@ export const ContentTeam = (): JSX.Element => {
     const branches = (): Array<JSX.Element> => {
         let new_branches: Array<JSX.Element> = [];
         for (const branchName in config.METROPOLIS_STAFFS) {
-            new_branches.push(<BranchList name={branchName} allUsers={session.allUsers} key={branchName} />);
+            new_branches.push(<BranchList name={branchName} key={branchName} />);
         }
         return new_branches;
     }

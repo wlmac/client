@@ -1,3 +1,4 @@
+import Organization from "./organization";
 import Tag from "./tag";
 
 export default interface Event {
@@ -5,7 +6,7 @@ export default interface Event {
     name: string;
     start_date: string;
     end_date: string;
-    organization: number;
+    organization: Organization;
     should_announce: boolean;
     description: string;
     tags: Array<Tag>;
