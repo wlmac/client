@@ -232,6 +232,9 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         if (loggedIn()) {
             axios.defaults.headers.common['Authorization'] = `Bearer ${getToken()}`;
         }
+        else {
+            axios.defaults.headers.common['Authorization'] = null;
+        }
 
         try {
             const res = await axios({

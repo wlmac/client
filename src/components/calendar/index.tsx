@@ -39,7 +39,7 @@ export const Calendar = (): JSX.Element => {
   // the month currently displayed
   const [eventFetch, setEventFetch]: [string, (x: string) => void] = useState<string>("");
   // currently selected date
-  const [selectedDate, setSelectedDate]: [Date | undefined, (x: Date | undefined) => void] = useState<Date | undefined>(undefined);
+  const [selectedDate, setSelectedDate]: [Date | undefined, (x: Date | undefined) => void] = useState<Date | undefined>(new Date());
   // events on the currently selected date
   const [eventsOnDay, setEventsOnDay]: [EventData[], (x: EventData[]) => void] = useState<EventData[]>([]);
   // current session
@@ -81,6 +81,10 @@ export const Calendar = (): JSX.Element => {
       successCallback(events);
     }
   }
+
+  React.useEffect(() => {
+    console.log(rawEvents);
+  }, [rawEvents]);
 
   // called when a new date is selected
   const newDateSelected = (day: Date | undefined) => {
@@ -214,7 +218,7 @@ const CalendarBoard = (props: BoardProps): JSX.Element => {
 
     if (selectedDate !== undefined) {
       // get the selected element
-      let selectedEl = document.querySelector<HTMLElement>("[data-date='" + selectedDate.toISOString().split("T")[0] + "']")
+      let selectedEl = document.querySelector<HTMLElement>("[data-date='" + new Date(selectedDate.getTime() - (new Date()).getTimezoneOffset() * 60000).toISOString().split("T")[0] + "']")
       if (selectedEl != null) {
         let topEl = selectedEl.querySelector<HTMLElement>(".fc-daygrid-day-top")
         if (topEl == null) throw ("reformat error")
@@ -231,7 +235,9 @@ const CalendarBoard = (props: BoardProps): JSX.Element => {
     }
   }
 
-  highlightSelectedNumber();
+  React.useEffect(() => {
+    highlightSelectedNumber();
+  }, [selectedDate]);
 
   var calendar =
     <FullCalendar
