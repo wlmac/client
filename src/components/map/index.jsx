@@ -50,11 +50,11 @@ const Map = () => {
 
   return (
     <>
-        <link rel="stylesheet" href="/static/css/map.css" />
-        <link rel="stylesheet" href="/static/css/mapbox-gl-geocoder.css" />
-        <link rel="stylesheet" href="/static/css/mapbox-gl.css" />
-        <script src="/static/js/mapbox-gl-geocoder.min.js" />
-        <script src="/static/js/mapbox-gl.js" />
+        <link rel="stylesheet" href="/resources/static/css/map.css" />
+        <link rel="stylesheet" href="/resources/static/css/mapbox-gl-geocoder.css" />
+        <link rel="stylesheet" href="/resources/static/css/mapbox-gl.css" />
+        <script src="/resources/static/js/mapbox-gl-geocoder.min.js" />
+        <script src="/resources/static/js/mapbox-gl.js" />
 
         <div className="container">
         <div className='map-container'>

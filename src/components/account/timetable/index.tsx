@@ -89,11 +89,11 @@ export const TimetablePage = (): JSX.Element => {
 
     return (
         <>
-            <link rel="stylesheet" href="/static/css/timetable/list.css" />
-            <link rel="stylesheet" href="/static/css/timetable/main.css" />
-            <link rel="stylesheet" href="/static/css/base.css" />
+            <link rel="stylesheet" href="/resources/static/css/timetable/list.css" />
+            <link rel="stylesheet" href="/resources/static/css/timetable/main.css" />
+            <link rel="stylesheet" href="/resources/static/css/base.css" />
 
-            <link rel="stylesheet" href="/static/css/secondary.css" />
+            <link rel="stylesheet" href="/resources/static/css/secondary.css" />
 
             <div className="container">
                 <ProfileNav />

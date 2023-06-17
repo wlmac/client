@@ -120,8 +120,8 @@ export const Calendar = (): JSX.Element => {
 
   return (
     <>
-      <link rel="stylesheet" href="static/css/fullcalendar.min.css" type="text/css" />
-      <link rel="stylesheet" href="static/css/calendar/view.css" type="text/css" />
+      <link rel="stylesheet" href="/resources/static/css/fullcalendar.min.css" type="text/css" />
+      <link rel="stylesheet" href="/resources/static/css/calendar/view.css" type="text/css" />
 
       <div className="container">
         <CalendarBoard updateEvents={updateEvents} selectedDate={selectedDate}

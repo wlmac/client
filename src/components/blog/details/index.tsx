@@ -30,7 +30,7 @@ export const BlogDetails = (): JSX.Element => {
 
     return "slug" in post ? (
         <>
-            <link rel="stylesheet" href="/static/css/blog-detail.css" />
+            <link rel="stylesheet" href="/resources/static/css/blog-detail.css" />
             <div className="container">
                 <div className="card-container">
                     <img className="card-image" src={post.featured_image} />

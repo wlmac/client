@@ -11,7 +11,7 @@ export const Resources = (): JSX.Element => {
 
     return (
         <>
-            <link rel="stylesheet" href="/static/css/flatpage.css" />
+            <link rel="stylesheet" href="/resources/static/css/flatpage.css" />
             <div className="resources-page">
                 <a id="back" onClick={goBack}>
                     <i className="zmdi zmdi-arrow-left"></i>
