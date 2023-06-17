@@ -33,7 +33,7 @@ export const NavigationBar = (): JSX.Element => {
                     <NavLink href="/blog" className="sidenav-close">Blog</NavLink>
                 </li>
                 <li>
-                    <NavLink href="https://doodle.maclyonsden.com" className="sidenav-close">Doodle</NavLink>
+                    <a href="https://doodle.maclyonsden.com" className="sidenav-close">Doodle</a>
                 </li>
                 <li>
                     <NavLink href="/resources" className="sidenav-close">Resources</NavLink>
@@ -111,6 +111,9 @@ export const NavigationBar = (): JSX.Element => {
                         </li>
                         <li className="nav-item">
                             <NavLink href="/blog">Content</NavLink>
+                        </li>
+                        <li className="nav-item">
+                            <a href="https://doodle.maclyonsden.com" className="nav-link">Doodle</a>
                         </li>
                         <li className="nav-item">
                             <NavLink href="/resources">Resources</NavLink>
