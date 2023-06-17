@@ -103,7 +103,7 @@ export const Schedule = (): JSX.Element => {
 
     return (
         <div className="banner">
-            <div className="background"><img alt="" src="/static/img/themes/banners/spring.jpg" /></div>
+            <div className="background"><img alt="" src="/resources/static/img/themes/banners/spring.jpg" /></div>
             <div className="overlay-container valign-wrapper">
                 <div className="next-class center-align">
                     {

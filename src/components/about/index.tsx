@@ -22,7 +22,7 @@ export const About = (): JSX.Element => {
 
     return (
         <>
-            <link rel="stylesheet" href="static/css/about.css" />
+            <link rel="stylesheet" href="/resources/static/css/about.css" />
             <div className="container">
                 <div className="headers">
                     <ul>

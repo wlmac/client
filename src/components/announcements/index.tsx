@@ -126,7 +126,7 @@ export const Announcements = (): JSX.Element => {
 
     return (
         <>
-            <link rel="stylesheet" href="static/css/announcement-list.css" />
+            <link rel="stylesheet" href="/resources/static/css/announcement-list.css" />
             {/* <AnnouncementCreator
                 openCreator={openCreator}
                 setOpenCreator={setOpenCreator}

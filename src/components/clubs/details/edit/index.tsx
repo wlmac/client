@@ -66,7 +66,7 @@ export const EditClubDetails = (): JSX.Element => {
 
     return (
         <>
-            <link rel="stylesheet" href="/static/css/edit-club.css"></link>
+            <link rel="stylesheet" href="/resources/static/css/edit-club.css"></link>
             <div className="edit-club">
                 <div className="row">
                     <img className="club-banner responsive-img col s12" src={club.banner} alt="banner of organization" />

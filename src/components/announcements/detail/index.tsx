@@ -81,7 +81,7 @@ export const AnnouncementDetail = (): JSX.Element => {
 
     return announcement.author ? (
         <>
-            <link rel="stylesheet" href="/static/css/announcement-detail.css" />
+            <link rel="stylesheet" href="/resources/static/css/announcement-detail.css" />
             <div className="container">
                 {
                     session.user.is_staff && <AnnouncementPrompt /> // To be replaced with is_teacher once available in backend

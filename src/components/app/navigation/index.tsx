@@ -81,7 +81,7 @@ export const NavigationBar = (): JSX.Element => {
                 <div className="nav-wrapper">
                     <NavLink href="/">
                         <div className="brand-logo">
-                            <img className="img-logo" src="/static/img/themes/logos/dark-transparent.png" />
+                            <img className="img-logo" src="/resources/static/img/themes/logos/dark-transparent.png" />
                         </div>
                     </NavLink>
 

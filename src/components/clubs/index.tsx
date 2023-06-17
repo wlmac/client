@@ -24,7 +24,7 @@ export const Clubs = (): JSX.Element => {
 
     return (
         <>
-            <link rel="stylesheet" href="/static/css/club-list.css" />
+            <link rel="stylesheet" href="/resources/static/css/club-list.css" />
 
             <div className="container">
                 <div className="card-container">

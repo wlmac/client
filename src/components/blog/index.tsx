@@ -22,7 +22,7 @@ export const Blog = (): JSX.Element => {
 
     return (
         <>
-            <link rel="stylesheet" href="static/css/blog-list.css" />
+            <link rel="stylesheet" href="/resources/static/css/blog-list.css" />
             <div className="container">
                 <div className="card-container">
                     <BlogPosts />

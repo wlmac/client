@@ -25,9 +25,9 @@ export const NewCourse = (): JSX.Element => {
 
     return (
         <>
-            <link rel="stylesheet" href="/static/css/secondary.css" />
-            <link rel="stylesheet" href="/static/css/timetable/main.css" />
-            <link rel="stylesheet" href="/static/css/timetable/new_course.css" />
+            <link rel="stylesheet" href="/resources/static/css/secondary.css" />
+            <link rel="stylesheet" href="/resources/static/css/timetable/main.css" />
+            <link rel="stylesheet" href="/resources/static/css/timetable/new_course.css" />
             <form onSubmit={(ev) => {
                 ev.preventDefault();
                 submitNewCourse();
