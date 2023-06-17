@@ -139,7 +139,7 @@ export const ClubDetails = (): JSX.Element => {
                                     {club.bio}
                                     <br /><br />
                                     {
-                                        club.owner !== session.user.id ? <Link to={`/club/edit/${club.slug}`}>Edit club details</Link> : <></>
+                                        (loggedIn() && club.owner === session.user.id) ? <Link to={`/club/edit/${club.slug}`}>Edit club details</Link> : <></>
                                     }
                                 </div>
                             </div>
