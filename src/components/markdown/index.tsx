@@ -9,6 +9,7 @@ const Markdown = ({ text }: { text: string }): JSX.Element => { //takes markdown
             text ? text.replace(/\r\n/g, '  \n') : ''
         } remarkPlugins={[remarkGfm]} components={{
             img: el => {
+                console.log("Embed element:", el);
                 return safeEmbed(el.src!) ? (
                     <iframe className="markdown-embed" frameBorder={0} src={el.src} />
                 ) : (
@@ -28,6 +29,8 @@ Markdown images with valid "safe" embed URLs are placed into iframe
 export default Markdown
 
 function safeEmbed(url: string) {
+    console.log("URL:", url);
+
     let list = [
         "https://forms.gle",
         "https://docs.google.com",
