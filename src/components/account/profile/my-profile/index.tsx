@@ -8,10 +8,12 @@ export const MyProfile = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
 
     React.useEffect(() => {
+        console.log("Helloa");
+        console.log(session.user);
         if (session.user.username) {
             nav(`/user/${session.user.username}`);
         }
-    }, [session.user.id]);
+    }, [session.user]);
 
     return <></>;
 }

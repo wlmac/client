@@ -10,6 +10,7 @@ import { AlertColor } from '@mui/material';
 import { Notif } from './interfaces/notification';
 import { RequestMethod } from './managers/session';
 import { HttpException } from '../models';
+import getCSRFToken from './misc/csrf';
 
 const BATCH_CACHELIMIT = 100; // how many entities should be requested each iteration in a fetchAll operation
 
@@ -234,6 +235,13 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         }
         else {
             axios.defaults.headers.common['Authorization'] = null;
+        }
+
+        if (method === 'post' || method === 'patch' || method === 'put') {
+            axios.defaults.headers.common['X-CSRFToken'] = getCSRFToken();
+        }
+        else {
+            axios.defaults.headers.common['X-CSRFToken'] = null;
         }
 
         try {
