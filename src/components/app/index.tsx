@@ -45,6 +45,7 @@ export const _App = (): JSX.Element => {
 
     React.useEffect((): void => {
         window.scrollTo(0, 0);
+        session.closeNotif();
     }, [location]);
 
     return (
