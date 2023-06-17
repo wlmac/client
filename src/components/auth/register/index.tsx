@@ -1,6 +1,6 @@
 import * as React from "react";
 import { default as axios } from 'axios';
-import { Link, NavigateFunction, useNavigate } from "react-router-dom";
+import { Link, NavigateFunction, NavigateOptions, useNavigate } from "react-router-dom";
 import { Session, SessionContext } from "../../../util/core/session";
 import { RouterLink } from "../../app/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -42,7 +42,7 @@ export const Register = (): JSX.Element => {
 
     React.useEffect((): void => {
         if (loggedIn()) {
-            nav("/");
+            nav("/", { replace: true });
         }
     });
 
