@@ -77,10 +77,15 @@ export const Schedule = (): JSX.Element => {
             msec -= mm * 1000 * 60;
             var ss = Math.floor(msec / 1000);
             msec -= ss * 1000;
-            return (
+            return currentCourse.course ? (
                 <>
                     <h4 className="schedule-course">{currentCourse.course}</h4>
                     <span className="schedule-description">{`${currentCourse.description.course}: Ends in ${timeDigitDisplay(hh, "hour")}${timeDigitDisplay(mm, "minute")}${ss} ${ss === 1 ? 'second' : 'seconds'}`}</span>
+                </>
+            ) : (
+                <>
+                    <h4 className="schedule-course">{currentCourse.description.course}</h4>
+                    <span className="schedule-description">{`Ends in ${timeDigitDisplay(hh, "hour")}${timeDigitDisplay(mm, "minute")}${ss} ${ss === 1 ? 'second' : 'seconds'}`}</span>
                 </>
             );
         }
@@ -92,10 +97,15 @@ export const Schedule = (): JSX.Element => {
             msec -= mm * 1000 * 60;
             var ss = Math.floor(msec / 1000);
             msec -= ss * 1000;
-            return (
+            return currentCourse.course ? (
                 <>
                     <h4 className="schedule-course">{currentCourse.course}</h4>
                     <span className="schedule-description">{`${currentCourse.description.course}: Starts in ${timeDigitDisplay(hh, "hour")}${timeDigitDisplay(mm, "minute")}${ss} ${ss === 1 ? 'second' : 'seconds'}`}</span>
+                </>
+            ) : (
+                <>
+                    <h4 className="schedule-course">{currentCourse.description.course}</h4>
+                    <span className="schedule-description">{`Starts in ${timeDigitDisplay(hh, "hour")}${timeDigitDisplay(mm, "minute")}${ss} ${ss === 1 ? 'second' : 'seconds'}`}</span>
                 </>
             );
         }
