@@ -24,6 +24,7 @@ export type RegisterInputs = {
 
 export type AnnouncementInputs = {
     title: string,
+    tags: number[],  // tag ids
     body: string,
     organization: string,
     show_after: string,

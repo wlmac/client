@@ -8,6 +8,32 @@ import { get_gravatar_uri } from "../../../util/core/misc/gravatar";
 import Routes from "../../../util/core/misc/routes";
 import { Session, SessionContext, User } from "../../../util/core/session";
 import { TagElement } from "../../../util/core/tags";
+import { AnnouncementElement } from "../../announcements";
+import Announcement from "../../../util/core/interfaces/announcement";
+
+// A module for displaying club announcements
+const ClubAnnouncements = (props: {orgID: number}): JSX.Element => {
+    // club id
+    const id: number = props.orgID;
+    // list of posts
+    const [posts, setPosts] = React.useState<Announcement[] | null>(null);
+    const session: Session = React.useContext(SessionContext);
+    React.useEffect(() => {
+        // get a list of club announcements
+        session.request("get", `${Routes.OBJECT}/announcement?organization=${id}`).then((response) => {
+            console.log(response);
+            if(response){
+                setPosts(response.data.results);
+            }
+        }).catch(console.error)
+    }, [id]);
+
+    // return posts mapped to components
+    const postEls = posts?.map(post => <AnnouncementElement announcement={post} tags={post.tags} key={post.id}></AnnouncementElement>);
+    return <>
+        {postEls}
+    </>
+}
 
 export const ClubDetails = (): JSX.Element => {
     const { slug } = useParams();
@@ -79,33 +105,17 @@ export const ClubDetails = (): JSX.Element => {
         )
     }
 
-    // const UserElement = (props: { userID: number }): JSX.Element => {
-    //     const [user, setUser] = React.useState({} as User);
-    //     React.useEffect(() => {
-    //         session.request('get', `${Routes.OBJECT}/user/retrieve/${props.userID}`, false).then((res: { data: any }) => {
-    //             setUser(res.data as User);
-    //             console.log("Fetched");
-    //         }).catch(() => {
-    //             session.refreshAuth();
-    //         });
-    //     }, []);
-    //     return (
-    //         <Link to={`/user/${user.id}`} key={user.id}>
-    //             <div className="member">
-    //                 <div className="member-image">
-    //                     <img className="circle" src="/img/profile_picture" alt={`${user.username}'s profile picture`} />
-    //                 </div>
-    //                 <div className="member-text">
-    //                     {`${user.first_name} ${user.last_name}`}
-    //                 </div>
-    //             </div>
-    //         </Link>
-    //     );
-    // }
+    const postStyle = {
+        height: "inherit",
+        overflow: "scroll",
+        maxHeight: "50em",
+        padding: "5px",
+    }
 
     return (
         <>
-            <link rel="stylesheet" href="/resources/static/css/detail.css" />
+            <link rel="stylesheet" href="/static/css/detail.css" />
+            <link rel="stylesheet" href="/static/css/announcement-list.css" />
 
             <div className="club">
                 <div className="row">
@@ -159,7 +169,7 @@ export const ClubDetails = (): JSX.Element => {
                         </div>
 
                         <div className="row">
-                            <div className="col s12">
+                            <div className="col m4 s12">
                                 <section id="executives">
                                     <h4>
                                         Executives
@@ -209,13 +219,18 @@ export const ClubDetails = (): JSX.Element => {
                                                 );
                                             })
                                         }
-                                        {/* {
-                                            ("members" in club) ?
-                                                club.members.map((memberID: number): React.ReactNode => {
-                                                    return <UserElement userID={memberID} />
-                                                }) : <></>
-                                        } */}
                                     </div>
+                                </section>
+                            </div>
+                            <div className="col m8 s12">
+                                <section id="AnnouncementHeading">
+                                    <h4>
+                                        Announcements
+                                    </h4>
+                                    <hr />
+                                </section>
+                                <section style={postStyle}>
+                                <ClubAnnouncements orgID={club.id}></ClubAnnouncements>
                                 </section>
                             </div>
                         </div>
