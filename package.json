@@ -6,7 +6,8 @@
     "build": "npx vite build",
     "start": "npx vite",
     "predeploy": "npm run build && echo client.maclyonsden.com > dist/CNAME",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "check-types": "tsc --noEmit"
   },
   "repository": {
     "type": "git",
