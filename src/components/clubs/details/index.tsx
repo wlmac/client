@@ -40,7 +40,7 @@ export const ClubDetails = (): JSX.Element => {
 
     const nav: NavigateFunction = useNavigate();
     const session: Session = React.useContext(SessionContext);
-    const [club, setClub] = React.useState({} as Organization);
+    const [club, setClub] = React.useState({ name: "Loading..." } as Organization);
     const [tags, setTags] = React.useState([] as Array<Tag>);
     const [execs, setExecs] = React.useState([] as Array<User>);
     const [members, setMembers] = React.useState([] as Array<User>);
@@ -58,12 +58,10 @@ export const ClubDetails = (): JSX.Element => {
         session.request('get', fetchURL).then((res) => {
             const current_club: Organization = res.data as Organization;
             setClub(current_club);
-            console.log(fetchURL);
 
             // Tags
             session.request('get', `${Routes.OBJECT}/tag`).then((res) => {
                 const tags_data: Tag[] = res.data.results;
-                console.log(current_club.tags);
                 const current_tags: Tag[] = [];
                 for (let i = 0; i < current_club.tags.length; i++) {
                     for (let j = 0; j < tags_data.length; j++) {
@@ -151,7 +149,7 @@ export const ClubDetails = (): JSX.Element => {
                                     {club.bio}
                                     <br /><br />
                                     {
-                                        club.owner !== session.user.id ? <Link to={`/club/edit/${club.slug}`}>Edit club details</Link> : <></>
+                                        (loggedIn() && club.owner === session.user.id) ? <Link to={`/club/edit/${club.slug}`}>Edit club details</Link> : <></>
                                     }
                                 </div>
                             </div>

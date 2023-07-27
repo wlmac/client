@@ -24,7 +24,7 @@ export const Clubs = (): JSX.Element => {
 
     return (
         <>
-            <link rel="stylesheet" href="/static/css/club-list.css" />
+            <link rel="stylesheet" href="/resources/static/css/club-list.css" />
 
             <div className="container">
                 <div className="card-container">
@@ -51,7 +51,7 @@ export const Clubs = (): JSX.Element => {
     );
 }
 
-const ClubList = (): JSX.Element[] => {
+const ClubList = (): JSX.Element | JSX.Element[] => {
     const session: Session = React.useContext(SessionContext);
     const [clubs, setClubs] = React.useState([]);
     const [tags, setTags] = React.useState([]);
@@ -73,7 +73,7 @@ const ClubList = (): JSX.Element[] => {
         });
     }, []);
 
-    return clubs.map((club: Organization): JSX.Element => {
+    return clubs.length > 0 ? clubs.map((club: Organization): JSX.Element => {
         let current_tags: Tag[] = [];
         for (let i = 0; i < club.tags.length; i++) {
             for (let j = 0; j < tags.length; j++) {
@@ -83,7 +83,7 @@ const ClubList = (): JSX.Element[] => {
             }
         }
         return <Club club={club} tags={current_tags} key={club.id} />;
-    });
+    }) : <>Loading...</>;
 }
 
 const Club = (props: { club: Organization, tags: Tag[] }): JSX.Element => {

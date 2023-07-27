@@ -11,13 +11,13 @@ export const NotFound = (): JSX.Element => {
 
     return (
         <>
-            <link rel="stylesheet" href="/static/css/404.css" />
+            <link rel="stylesheet" href="/resources/static/css/404.css" />
             <div className="main-container card">
                 <h2 className="center-align message">404: Page Not Found</h2>
-                <img className="comic-img" style={{ maxWidth: "100%" }} src={`/static/img/404-comics/404-${comic}.png`} />
+                <img className="comic-img" style={{ maxWidth: "100%" }} src={`/resources/static/img/404-comics/404-${comic}.png`} />
 
                 <div className="display-metropolis valign-wrapper">
-                    <img className="inline-logo" src="/static/img/themes/logos/dark-transparent.png" />
+                    <img className="inline-logo" src="/resources/static/img/themes/logos/dark-transparent.png" />
                 </div>
 
                 <div className="game-container" hidden={true}>
@@ -42,7 +42,7 @@ export const NotFound = (): JSX.Element => {
                 </div>
 
                 <p className="center-align">
-                    <Link to="https://maclyonsden.com/">Return Home</Link>
+                    <Link to="/">Return Home</Link>
                     {/* <!-- No one is out of Elastigirl's reach, but unfortunately, even this page is out of her reach too. (It doesn't exist!) :( --> */}
                 </p>
             </div>

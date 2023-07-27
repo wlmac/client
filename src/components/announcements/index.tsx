@@ -29,6 +29,7 @@ import { useRef } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 
 import './index.scss';
+import { markdownToPlainText } from "../markdown";
 
 const ANN_FETCHLIMIT = 10; // how many anns to fetch each api request
 
@@ -41,6 +42,7 @@ export const Announcements = (): JSX.Element => {
 
     const [feeds, setFeeds] = React.useState(AnnouncementFeeds);
     const [curContent, setCurContent] = React.useState({
+        indeterminate: true, // if true, curContent cannot be relied on (this prevents simultaneous requests on page load)
         isFeed: true, // true = is a feed, false = is a tag
         feed: {} as AnnouncementFeed, // default is all
         tag: {} as Tag, // the tag object
@@ -54,17 +56,6 @@ export const Announcements = (): JSX.Element => {
             //console.log(editorRef.current.getContent());
         }
     };
-
-    React.useEffect(() => {
-        if (searchParams.get("tag")) {
-            let filtered = session.allTags.filter(e => e.name === searchParams.get("tag"));
-            setCurContent({
-                isFeed: false,
-                feed: {} as AnnouncementFeed,
-                tag: filtered.length == 0 ? {} as Tag : filtered[0], // the tag object
-            });
-        }
-    }, [session.allTags]);
 
     React.useEffect(() => {
         if (session.user.id) {
@@ -85,17 +76,20 @@ export const Announcements = (): JSX.Element => {
         if (searchParams.get('feed')) {
             let feedlist = feeds.filter(e => e.id === searchParams.get("feed"));
             setCurContent({
+                indeterminate: false,
                 isFeed: true, // true = is a feed, false = is a tag
                 feed: feedlist.length == 0 ? feeds[0] : feedlist[0], // default is all (0 index)
                 tag: {} as Tag, // the tag object
             });
         }
         else if (searchParams.get("tag")) {
-            let filtered = session.allTags.filter(e => e.name === searchParams.get("tag"));
             setCurContent({
+                indeterminate: false,
                 isFeed: false,
                 feed: {} as AnnouncementFeed,
-                tag: filtered.length == 0 ? {} as Tag : filtered[0], // the tag object
+                tag: {
+                    name: searchParams.get("tag")
+                } as Tag, // the tag object
             });
         }
     }
@@ -142,7 +136,7 @@ export const Announcements = (): JSX.Element => {
 
     return (
         <>
-            <link rel="stylesheet" href="static/css/announcement-list.css" />
+            <link rel="stylesheet" href="/resources/static/css/announcement-list.css" />
             {/* <AnnouncementCreator
                 openCreator={openCreator}
                 setOpenCreator={setOpenCreator}
@@ -213,15 +207,15 @@ const AnnouncementList = (props: any): JSX.Element => {
     const [offset, setOffset] = React.useState(0);
     const [loadMsg, setLoadMsg] = React.useState("Loading...");
 
-    const initLoadRef = React.useRef(false);
+    const initLoadRef = React.useRef(false); // first load of specific ann list
 
-    function fetchAnns(append: boolean) {
+    function fetchAnns(append: boolean, offsetOverride?: number) {
         if (initLoadRef.current) {
             setLoadMsg("Loading more announcements...");
         }
         let param = '';
-        if (!props.curContent.isFeed && props.curContent.tag.id) {
-            param = `&tags=${props.curContent.tag.id}`;
+        if (!props.curContent.isFeed && props.curContent.tag.name) {
+            param = `&tags=${encodeURIComponent(props.curContent.tag.name)}`;
         }
         else if (props.curContent.isFeed) {
             if (props.curContent.feed.id === "my" && (!session.user.organizations || session.user.organizations.length == 0)) {
@@ -234,7 +228,7 @@ const AnnouncementList = (props: any): JSX.Element => {
                 param = props.curContent.feed.filters ?? '';
             }
         }
-        const fetchURL = `${Routes.OBJECT}/announcement?limit=${ANN_FETCHLIMIT}&offset=${Math.max(offset, 0)}${param}`;
+        const fetchURL = `${Routes.OBJECT}/announcement?limit=${ANN_FETCHLIMIT}&offset=${offsetOverride ?? Math.max(offset, 0)}${param}`;
         session
             .request('get', fetchURL)
             .then((res) => {
@@ -264,28 +258,31 @@ const AnnouncementList = (props: any): JSX.Element => {
     }
 
     React.useEffect(() => {
-        initLoadRef.current = false;
-        fetchAnns(false);
-        document.removeEventListener('scroll', trackScrolling);
-        document.addEventListener('scroll', trackScrolling);
-        return () => {
+        if (!props.curContent.indeterminate) { // only fetch when we are sure that curContent is stable and (hopefully) correct
+            initLoadRef.current = false;
+            setOffset(0);
+            fetchAnns(false, 0);
             document.removeEventListener('scroll', trackScrolling);
+            document.addEventListener('scroll', trackScrolling);
+            return () => {
+                document.removeEventListener('scroll', trackScrolling);
+            }
         }
     }, [props.curContent]);
 
-    function trackScrolling() {
+    const trackScrolling = React.useCallback(() => {
         const wrappedElement = document.getElementById('annlist');
         if (wrappedElement!.getBoundingClientRect().bottom <= window.innerHeight) {
             //reached bottom!
             setOffset((offset) => { // since it is the function it has access to current state despite being rendered from initial state
                 if (offset != -1 && initLoadRef.current) { // not -1 means there are more anns to fetch
-                    fetchAnns(true);
+                    fetchAnns(true, offset);
                 }
                 return offset;
             })
             document.removeEventListener('scroll', trackScrolling);
         }
-    }
+    }, []);
 
     return <div id="annlist">
         {
@@ -296,7 +293,7 @@ const AnnouncementList = (props: any): JSX.Element => {
                         <AnnouncementElement
                             key={announcement.id}
                             announcement={announcement}
-                            tags={current_tags}
+                            tags={announcement.tags}
                         />
                     );
                 })
@@ -331,7 +328,7 @@ export const AnnouncementElement = (props: {
                     {props.tags.map((tag: Tag): JSX.Element => {
                         return <a className="tag-link" key={tag.id} href={`/announcements?tag=${tag.name}`} onClick={(ev) => {
                             ev.preventDefault();
-                            nav(`/announcements?tag=${tag.name}`);
+                            nav(`/announcements?tag=${encodeURIComponent(tag.name)}`);
                         }}>
                             <TagElement tag={tag} />
                         </a>;
@@ -340,24 +337,24 @@ export const AnnouncementElement = (props: {
                 <h1 className="title">{data.title}</h1>
                 <div className="card-authors">
                     <div className="card-authors-image">
-                        <Link to={`/club/${organization.slug}`}><img className="circle" src={organization.icon} /></Link>
+                        <Link to={`/club/${data.organization.slug}`}><img className="circle" src={data.organization.icon} /></Link>
                     </div>
                     <div className="card-authors-text">
-                        <Link to={`/club/${organization.slug}`} className="link">{organization.name}</Link>,
-                        <Link to={`/user/${author.username}`} className="link">{`${author.first_name} ${author.last_name}`}</Link>
+                        <Link to={`/club/${data.organization.slug}`} className="link">{data.organization.name}</Link>,
+                        <Link to={`/user/${data.author.username}`} className="link">{`${data.author.first_name} ${data.author.last_name}`}</Link>
                         <br />
                         • {new Date(data.created_date).toLocaleTimeString(undefined, dateFormat)}
                     </div>
                 </div>
             </div>
             <hr />
-            <div className="card-body">{data.body}</div>
+            <div className="card-body"><p className="card-restricted-text">{markdownToPlainText(data.body)}</p></div>
             <br />
             <Link className="link" to={`/announcement/${data.id}`}>
                 See announcement <i className="zmdi zmdi-chevron-right"></i>
             </Link>
         </div>
-    ) : <div className="card">Loading...</div>;
+    ) : <>Loading...</>;
 };
 
 // const AnnouncementCreator = (props: {

@@ -1,4 +1,6 @@
 import ApprovalStatus from '../misc/approvalstatus';
+import { User } from '../session';
+import Organization from './organization';
 import Tag from './tag';
 
 interface UserField{

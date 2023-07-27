@@ -9,7 +9,7 @@ export const LoginRequired = (props: { children: JSX.Element }): JSX.Element => 
 
     if (!loggedIn()) {
         session.notify("Please login to access this page", "info");
-        nav(`/accounts/login?next=${encodeURIComponent(window.location.pathname)}`);
+        nav(`/accounts/login?next=${encodeURIComponent(window.location.pathname)}`, { replace: true });
     }
 
     return loggedIn() ? props.children : <></>;

@@ -6,3 +6,8 @@
     text-decoration: underline;
     text-decoration-color: var(--dark-grey);
 }
+
+.card-restricted-text {
+    white-space: pre-line;
+    line-clamp: 3;
+}

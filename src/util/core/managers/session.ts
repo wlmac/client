@@ -81,10 +81,10 @@ export default class SessionManager {
         payload,
         auth
           ? {
-              headers: {
-                Bearer: `Authorization ${this.accessToken}`,
-              },
-            }
+            headers: {
+              Bearer: `Authorization ${this.accessToken}`,
+            },
+          }
           : {},
       )
         .then((res) => {
@@ -122,7 +122,4 @@ export class APIResponse<T> {
   }
 }
 
-export enum RequestMethod {
-  GET = 'get',
-  POST = 'post',
-}
+export type RequestMethod = "get" | "post" | "put" | "patch" | "head" | "delete";

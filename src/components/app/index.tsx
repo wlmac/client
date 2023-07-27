@@ -1,5 +1,5 @@
 import * as React from "react";
-import { BrowserRouter, Routes, Route, useNavigate, NavigateFunction } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate, NavigateFunction, useLocation } from "react-router-dom";
 import { NavigationBar } from "./navigation";
 import { Footer } from "./footer";
 import { Home } from "../home";
@@ -37,11 +37,15 @@ import { MyProfile } from "../account/profile/my-profile";
 export const _App = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
     const session: Session = React.useContext(SessionContext);
+    const location = useLocation();
 
     React.useEffect((): void => {
         M.AutoInit();
-        window.scrollTo(0, 0);
     }, []);
+
+    React.useEffect((): void => {
+        window.scrollTo(0, 0);
+    }, [location]);
 
     return (
         <>

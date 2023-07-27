@@ -30,10 +30,16 @@ export const NavigationBar = (): JSX.Element => {
                     <NavLink href="/clubs" className="sidenav-close">Clubs</NavLink>
                 </li>
                 <li>
-                    <NavLink href="/blog" className="sidenav-close">Content</NavLink>
+                    <NavLink href="/blog" className="sidenav-close">Blog</NavLink>
+                </li>
+                <li>
+                    <a href="https://doodle.maclyonsden.com" className="sidenav-close">Doodle</a>
                 </li>
                 <li>
                     <NavLink href="/resources" className="sidenav-close">Resources</NavLink>
+                </li>
+                <li>
+                    <NavLink href="/map" className="sidenav-close">Map</NavLink>
                 </li>
                 <li className="divider"></li>
                 <li>
@@ -45,9 +51,6 @@ export const NavigationBar = (): JSX.Element => {
                 </li>
                 <li>
                     <NavLink href="/about?tab=team">Team</NavLink>
-                </li>
-                <li>
-                    <NavLink href="/map">Map</NavLink>
                 </li>
                 <li>
                     <NavLink href="/about?tab=school">Contact WLMCI</NavLink>
@@ -78,7 +81,7 @@ export const NavigationBar = (): JSX.Element => {
                 <div className="nav-wrapper">
                     <NavLink href="/">
                         <div className="brand-logo">
-                            <img className="img-logo" src="/static/img/themes/logos/dark-transparent.png" />
+                            <img className="img-logo" src="/resources/static/img/themes/logos/dark-transparent.png" />
                         </div>
                     </NavLink>
 
@@ -110,7 +113,13 @@ export const NavigationBar = (): JSX.Element => {
                             <NavLink href="/blog">Content</NavLink>
                         </li>
                         <li className="nav-item">
+                            <a href="https://doodle.maclyonsden.com" className="nav-link">Doodle</a>
+                        </li>
+                        <li className="nav-item">
                             <NavLink href="/resources">Resources</NavLink>
+                        </li>
+                        <li className="nav-item">
+                            <NavLink href="/map">Map</NavLink>
                         </li>
                         <li>
                             <a className="dropdown-trigger" href="/#!" data-target="dropdownAbout">About<i className="zmdi zmdi-caret-down"></i></a><ul id="dropdownAbout" className="dropdown-content">
@@ -122,9 +131,6 @@ export const NavigationBar = (): JSX.Element => {
                                 </li>
                                 <li>
                                     <NavLink href="/about?tab=team">Team</NavLink>
-                                </li>
-                                <li>
-                                    <NavLink href="/map">Map</NavLink>
                                 </li>
                                 <li>
                                     <NavLink href="/about?tab=school">Contact WLMCI</NavLink>

@@ -21,7 +21,7 @@ export const ContentTeam = (): JSX.Element => {
     const branches = (): Array<JSX.Element> => {
         let new_branches: Array<JSX.Element> = [];
         for (const branchName in config.METROPOLIS_STAFFS) {
-            new_branches.push(<BranchList name={branchName} allUsers={session.allUsers} key={branchName} />);
+            new_branches.push(<BranchList name={branchName} key={branchName} />);
         }
         return new_branches;
     }
@@ -32,7 +32,7 @@ export const ContentTeam = (): JSX.Element => {
             <h1 className="title">Our Team</h1>
             <hr />
             <p className="text">
-                A diverse group of {memberCount()} developers, artists, and creators worked in tandem to build this site.
+                A diverse group of {memberCount()} developers, artists, and creators worked in tandem to build this site. Our applications are open to all students, so if you're interested in joining our team, please apply <a href="https://forms.gle/MLrFckYTyYJ3R5KdA">here</a>.
             </p>
             <h1 className="title">Members</h1>
             <hr />

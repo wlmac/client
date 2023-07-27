@@ -5,6 +5,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 
 import { Session, SessionContext } from "../../util/core/session";
+import { getPaginatedAPI } from "../../util/query/apiQuerying";
 import Routes from "../../util/core/misc/routes";
 
 import Tag from "../../util/core/interfaces/tag";
@@ -22,10 +23,10 @@ interface EventData {
 
 interface EventJSON {
   name: string,
-  organization: number,
+  organization: Organization,
   description: string,
   id: number,
-  tags: number[],
+  tags: Tag[],
   start_date: string,
   end_date: string
 }
@@ -38,7 +39,7 @@ export const Calendar = (): JSX.Element => {
   // the month currently displayed
   const [eventFetch, setEventFetch]: [string, (x: string) => void] = useState<string>("");
   // currently selected date
-  const [selectedDate, setSelectedDate]: [Date | undefined, (x: Date | undefined) => void] = useState<Date | undefined>(undefined);
+  const [selectedDate, setSelectedDate]: [Date | undefined, (x: Date | undefined) => void] = useState<Date | undefined>(new Date());
   // events on the currently selected date
   const [eventsOnDay, setEventsOnDay]: [EventData[], (x: EventData[]) => void] = useState<EventData[]>([]);
   // current session
@@ -52,8 +53,7 @@ export const Calendar = (): JSX.Element => {
   React.useEffect(() => {
     function parseEventJSON(raw: EventJSON): EventData {
       return Object.assign(Object.assign({}, raw), {
-        organization: session.allOrgs.find(org => org.id === raw.organization),
-        tags: raw.tags.map(id => session.allTags.find(tag => tag.id === id)).filter((tag): tag is Tag => !!tag),
+        organization: raw.organization
       })
     }
     setEvents(rawEvents.map(parseEventJSON));
@@ -65,20 +65,26 @@ export const Calendar = (): JSX.Element => {
     if (eventFetch !== key) {
       // query events for this time period
       const url = `${Routes.BASEURL}/api/v3/obj/event?start=${getDate(fetchInfo.startStr)}&end=${getDate(fetchInfo.endStr)}`
-      console.log(url);
-      session.request('get', url).then((response) => {
-        if (response.status !== 200) {
-          failureCallback(new Error("Returned status " + response.status))
-        } else {
-          setEventFetch(key);
-          setRawEvents(response.data.results);
-          successCallback(events);
-        }
+
+      // gets all urls of a paginated url
+      getPaginatedAPI((url: string) => session.request("get", url), url).then((response) => {
+        // cache current event
+        setEventFetch(key);
+
+        // set the current raw events (organization needs to be queried later)
+        setRawEvents(response);
+        successCallback(events);
+      }, (rejection) => {
+        failureCallback(new Error(rejection))
       })
     } else {
       successCallback(events);
     }
   }
+
+  React.useEffect(() => {
+    console.log(rawEvents);
+  }, [rawEvents]);
 
   // called when a new date is selected
   const newDateSelected = (day: Date | undefined) => {
@@ -114,8 +120,8 @@ export const Calendar = (): JSX.Element => {
 
   return (
     <>
-      <link rel="stylesheet" href="static/css/fullcalendar.min.css" type="text/css" />
-      <link rel="stylesheet" href="static/css/calendar/view.css" type="text/css" />
+      <link rel="stylesheet" href="/resources/static/css/fullcalendar.min.css" type="text/css" />
+      <link rel="stylesheet" href="/resources/static/css/calendar/view.css" type="text/css" />
 
       <div className="container">
         <CalendarBoard updateEvents={updateEvents} selectedDate={selectedDate}
@@ -212,7 +218,7 @@ const CalendarBoard = (props: BoardProps): JSX.Element => {
 
     if (selectedDate !== undefined) {
       // get the selected element
-      let selectedEl = document.querySelector<HTMLElement>("[data-date='" + selectedDate.toISOString().split("T")[0] + "']")
+      let selectedEl = document.querySelector<HTMLElement>("[data-date='" + new Date(selectedDate.getTime() - (new Date()).getTimezoneOffset() * 60000).toISOString().split("T")[0] + "']")
       if (selectedEl != null) {
         let topEl = selectedEl.querySelector<HTMLElement>(".fc-daygrid-day-top")
         if (topEl == null) throw ("reformat error")
@@ -229,7 +235,9 @@ const CalendarBoard = (props: BoardProps): JSX.Element => {
     }
   }
 
-  highlightSelectedNumber();
+  React.useEffect(() => {
+    highlightSelectedNumber();
+  }, [selectedDate]);
 
   var calendar =
     <FullCalendar

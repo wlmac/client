@@ -1368,7 +1368,7 @@ export function Init(map) {
     map.on("load", () => {
         map.addSource("floorOne", {
             type: "image",
-            url: "../static/img/FloorOne.jpg",
+            url: "../resources/static/img/FloorOne.jpg",
             coordinates: [
                 [-79.46270547634776, 43.75413886166868], //TL
                 [-79.46072668772469, 43.75413886166868], //TR
@@ -1379,7 +1379,7 @@ export function Init(map) {
 
         map.addSource("floorTwo", {
             type: "image",
-            url: "../static/img/FloorTwo.jpg",
+            url: "../resources/static/img/FloorTwo.jpg",
             coordinates: [
                 [-79.46270547634776, 43.75413886166868], //TL
                 [-79.46072668772469, 43.75413886166868], //TR
@@ -1390,7 +1390,7 @@ export function Init(map) {
 
         map.addSource("outline", {
             type: "image",
-            url: "../static/img/booths/booths.jpg",
+            url: "../resources/static/img/booths/booths.jpg",
             coordinates: [
                 [-79.46155542041252, 43.7538999252219], //TL
                 [-79.46100243451043, 43.75394902268886], //TR

@@ -18,38 +18,13 @@ export const AnnouncementDetail = (): JSX.Element => {
 
     const [openCreator, setOpenCreator] = React.useState(true); // Modal
 
-    // Announcement properties
-    const [organization, setOrganization] = React.useState({} as Organization);
-    const [author, setAuthor] = React.useState({} as User);
-
-    // React.useEffect(() => {
-    //     if (!loggedIn()) {
-    //         nav(`/accounts/login`);
-    //     }
-    // });
-
     React.useEffect(() => {
         session.request('get', `${Routes.OBJECT}/announcement/retrieve/${id}`, false).then((res) => {
             setAnnouncement(res.data);
         }).catch((err) => {
-            console.log(err);
             session.refreshAuth();
         });
     }, []);
-
-    React.useEffect(() => {
-        console.log("ORGANIZATIONS UPDATED:", session.allOrgs);
-
-        setOrganization(session.allOrgs.find((organization: Organization) => organization.id === announcement.organization)!);
-    }, [session.allOrgs, announcement]);
-
-    React.useEffect(() => {
-        console.log("USERS UPDATED:", session.allUsers);
-        let found_author = session.allUsers.find((user: User) => user.id === announcement.author)!;
-        console.log("Looking for:", announcement);
-        console.log("Author found:", found_author);
-        setAuthor(found_author);
-    }, [session.allUsers, announcement]);
 
     const header = (currentFeed: string | null): Array<JSX.Element> => {
         return AnnouncementFeeds.map((feed: AnnouncementFeed): JSX.Element => {
@@ -73,7 +48,7 @@ export const AnnouncementDetail = (): JSX.Element => {
                             ...announcement,
                             status: "a" // approved
                         }).then((res) => {
-                            console.log("Success!");
+
                         }).catch((err) => {
 
                         });
@@ -100,19 +75,13 @@ export const AnnouncementDetail = (): JSX.Element => {
     const [rejectionReason, setRejectionReason] = React.useState("");
 
     const is_supervisor = (): boolean => {
-        let supervisor: number = organization.supervisors.find((supervisor_id: number) => supervisor_id === session.user.id)!;
+        let supervisor: number = announcement.organization.supervisors.find((supervisor_id: number) => supervisor_id === session.user.id)!;
         return !!supervisor; // See if supervisor exists
     }
 
-    console.log("Debug:", organization, author)
-
-    var readyToRender = (): boolean => {
-        return organization && author && "name" in organization && "name" in author;
-    }
-
-    return organization && author && "name" in organization && "username" in author ? (
+    return announcement.author ? (
         <>
-            <link rel="stylesheet" href="/static/css/announcement-detail.css" />
+            <link rel="stylesheet" href="/resources/static/css/announcement-detail.css" />
             <div className="container">
                 {
                     session.user.is_staff && <AnnouncementPrompt /> // To be replaced with is_teacher once available in backend
@@ -137,7 +106,6 @@ export const AnnouncementDetail = (): JSX.Element => {
                                 status: "r",
                                 rejection_reason: rejectionReason
                             }).then((res) => {
-                                console.log("Success!");
                                 M.Modal.getInstance(document.getElementById("reject-popup")!).close();
                             }).catch((err) => {
 
@@ -162,11 +130,11 @@ export const AnnouncementDetail = (): JSX.Element => {
                     <h1 className="title">{announcement.title}</h1>
                     <div className="card-authors">
                         <div className="card-authors-image">
-                            <Link to={`/club/${organization.slug}`}><img className="circle" src={organization && organization.banner} /></Link>
+                            <Link to={`/club/${announcement.organization.slug}`}><img className="circle" src={announcement.organization.icon} /></Link>
                         </div>
                         <div className="card-authors-text">
-                            <Link to={`/club/${organization.slug}`} className="link">{organization.name}</Link>,
-                            <Link to={`/user/${author.username}`} className="link">{`${author.first_name} ${author.last_name}`}</Link>
+                            <Link to={`/club/${announcement.organization.slug}`} className="link">{announcement.organization.name}</Link>,
+                            <Link to={`/user/${announcement.author.username}`} className="link">{`${announcement.author.first_name} ${announcement.author.last_name}`}</Link>
                             <br />
                             • {new Date(announcement.created_date).toLocaleTimeString(undefined, dateFormat)}
                         </div>
@@ -181,6 +149,6 @@ export const AnnouncementDetail = (): JSX.Element => {
                 </div>
             </div>
         </>
-    ) : <></>;
+    ) : <>Loading...</>;
 }
 

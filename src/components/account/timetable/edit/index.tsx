@@ -47,8 +47,8 @@ export const TimetableEdit = (): JSX.Element => {
 
     return (
         <>
-            <link rel="stylesheet" href="/static/css/timetable/edit.css" />
-            <link rel="stylesheet" href="/static/css/select2.min.css" />
+            <link rel="stylesheet" href="/resources/static/css/timetable/edit.css" />
+            <link rel="stylesheet" href="/resources/static/css/select2.min.css" />
             <div className="card-body" data-select2-id="select2-data-21-vyjo">
                 <form onSubmit={(ev) => {
                     ev.preventDefault();

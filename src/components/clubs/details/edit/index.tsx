@@ -44,14 +44,12 @@ export const EditClubDetails = (): JSX.Element => {
 
     const handleSubmit = (event?: any) => {
         if (event) event.preventDefault();
-        console.log("ogga");
         //come on... do smth
         const patchURL = `${Routes.OBJECT}/organization/single/${club.id}`;
         session.request('patch', patchURL, newClub).then((res) => {
             session.notify(`Successfully changed ${club.name}'s details`, "success");
             nav(`/club/${club.slug}`);
         }).catch((err) => {
-            console.log(err.response.status);
             if (err.response.status === 401) {
                 session.refreshAuth();
                 handleSubmit();
@@ -64,12 +62,11 @@ export const EditClubDetails = (): JSX.Element => {
 
     const handleBioChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
         setCurrentBio(event.target.value);
-        console.log(currentBio + " " + club.name);
     }
 
     return (
         <>
-            <link rel="stylesheet" href="/static/css/edit-club.css"></link>
+            <link rel="stylesheet" href="/resources/static/css/edit-club.css"></link>
             <div className="edit-club">
                 <div className="row">
                     <img className="club-banner responsive-img col s12" src={club.banner} alt="banner of organization" />

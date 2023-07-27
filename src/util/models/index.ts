@@ -30,3 +30,15 @@ export type AnnouncementInputs = {
     show_after: string,
     supervisor: string,
 }
+
+export class HttpException implements Error {
+    name: string;
+    message: string;
+    code: number;
+
+    constructor(_name: string, _message: string, _code: number) {
+        this.name = _name;
+        this.message = _message;
+        this.code = _code;
+    }
+}

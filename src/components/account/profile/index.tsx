@@ -12,8 +12,8 @@ export const Profile = (props: { children?: JSX.Element }): JSX.Element => {
     return (
         <LoginRequired>
             <>
-                <link rel="stylesheet" href="/static/css/profile/detail.css" />
-                <link rel="stylesheet" href="/static/css/secondary.css" />
+                <link rel="stylesheet" href="/resources/static/css/profile/detail.css" />
+                <link rel="stylesheet" href="/resources/static/css/secondary.css" />
                 <div className="container">
                     <ul className="sidenav secondnav" id="secondary-out">
                         <li>

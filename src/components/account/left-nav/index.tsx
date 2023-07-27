@@ -1,15 +1,18 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export const ProfileNav = (): JSX.Element => {
+    const location = useLocation();
+    console.log(location);
+
     return (
         <div className="secondary-nav-wrapper">
             <ul className="secondary-nav">
                 <li>
-                    <Link className="link current" to="/accounts/profile">Profile</Link>
+                    <Link className={`link${location.pathname.startsWith('/user/') ? ' current' : ''}`} to="/accounts/profile">Profile</Link>
                 </li>
                 <li>
-                    <Link className="link" to="/timetable">Timetable</Link>
+                    <Link className={`link${location.pathname.startsWith('/timetable') ? ' current' : ''}`} to="/timetable">Timetable</Link>
                 </li>
                 <hr />
                 <li>
