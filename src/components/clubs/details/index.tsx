@@ -114,8 +114,8 @@ export const ClubDetails = (): JSX.Element => {
 
     return (
         <>
-            <link rel="stylesheet" href="/static/css/detail.css" />
-            <link rel="stylesheet" href="/static/css/announcement-list.css" />
+            <link rel="stylesheet" href="/resources/static/css/detail.css" />
+            <link rel="stylesheet" href="/resources/static/css/announcement-list.css" />
 
             <div className="club">
                 <div className="row">
