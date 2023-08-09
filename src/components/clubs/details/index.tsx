@@ -149,7 +149,7 @@ export const ClubDetails = (): JSX.Element => {
                                     {
                                         ("links" in club) ?
                                             club.links.map((url: string) => {
-                                                return <ClubLink href={url} />
+                                                return <ClubLink href={url} key={url}/>
                                             })
                                             :
                                             <></>
