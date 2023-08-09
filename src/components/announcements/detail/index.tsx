@@ -74,11 +74,6 @@ export const AnnouncementDetail = (): JSX.Element => {
 
     const [rejectionReason, setRejectionReason] = React.useState("");
 
-    const is_supervisor = (): boolean => {
-        let supervisor: number = announcement.organization.supervisors.find((supervisor_id: number) => supervisor_id === session.user.id)!;
-        return !!supervisor; // See if supervisor exists
-    }
-
     return announcement.author ? (
         <>
             <link rel="stylesheet" href="/resources/static/css/announcement-detail.css" />
