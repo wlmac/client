@@ -354,7 +354,7 @@ export const AnnouncementElement = (props: {
                 See announcement <i className="zmdi zmdi-chevron-right"></i>
             </Link>
         </div>
-    ) : <>Loading...</>;
+    ) : <></>;
 };
 
 // const AnnouncementCreator = (props: {

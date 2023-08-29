@@ -19,13 +19,14 @@ const ClubAnnouncements = (props: {orgID: number}): JSX.Element => {
     const [posts, setPosts] = React.useState<Announcement[] | null>(null);
     const session: Session = React.useContext(SessionContext);
     React.useEffect(() => {
-        // get a list of club announcements
-        session.request("get", `${Routes.OBJECT}/announcement?organization=${id}`).then((response) => {
-            console.log(response);
-            if(response){
-                setPosts(response.data.results);
-            }
-        }).catch(console.error)
+        if(id){
+            // get a list of club announcements
+            session.request("get", `${Routes.OBJECT}/announcement?organization=${id}`).then((response) => {
+                if(response){
+                    setPosts(response.data.results);
+                }
+            }).catch(console.error)
+        }
     }, [id]);
 
     // return posts mapped to components
