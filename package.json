@@ -6,7 +6,8 @@
     "build": "npx vite build",
     "start": "npx vite",
     "predeploy": "npm run build && echo client.maclyonsden.com > dist/CNAME",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "check-types": "tsc --noEmit"
   },
   "repository": {
     "type": "git",
@@ -32,6 +33,8 @@
     "jwt-decode": "^3.1.2",
     "mapbox-gl": "^2.14.1",
     "marked": "^5.0.2",
+    "marked-gfm-heading-id": "^3.0.6",
+    "marked-mangle": "^1.1.2",
     "materialize-css": "^1.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -48,7 +51,7 @@
     "@types/materialize-css": "^1.0.11",
     "@types/node": "^18.15.13",
     "@types/react": "^17.0.48",
-    "@types/react-dom": "^17.0.19",
+    "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-react": "^1.2.0",
     "express": "^4.18.1",
     "sass": "^1.49.7",

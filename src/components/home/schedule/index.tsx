@@ -128,23 +128,11 @@ export const Schedule = (): JSX.Element => {
                 <div className="schedule-today-overlay-container">
                     {fetched && schedule.length > 0 && <h4 className="schedule-cycle">{schedule[0].cycle}</h4>}
                     <div className="schedule-today-courses">
-                        {/* <span className="schedule-today-course">Period 1 - HZT4U1.2</span><br />
-                            <span className="schedule-today-course">Period 2 - SCH4UP.3</span><br />
-                            <span className="schedule-today-course">Period 4 - MDM4UO.2</span><br /> */}
-                        {/*
-                                "courses" in timetable && timetable.courses.map((course: Course, idx: number): JSX.Element => {
-                                    return (
-                                        <>
-                                            <span className="schedule-today-course">{`Period ${course.position} - ${course.code}`}</span><br />
-                                        </>
-                                    );
-                                })
-                            */}
                         {schedule.map((slot: ScheduleSlot): JSX.Element => {
                             return (
-                                <>
+                                <span key={slot.description.course}>
                                     <span className="schedule-today-course">{slot.description.course} - {slot.course}</span><br />
-                                </>
+                                </span>
                             );
                         })}
                     </div>

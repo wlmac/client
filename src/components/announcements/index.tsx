@@ -8,10 +8,19 @@ import Organization from "../../util/core/interfaces/organization";
 import MembershipStatus from "../../util/core/misc/membership";
 import Media from "../../util/core/misc/media";
 import Tag from "../../util/core/interfaces/tag";
-import { getTags, TagElement } from "../../util/core/tags";
+import { getTags, TagElement, DeletableTagElement } from "../../util/core/tags";
 import { Session, SessionContext, User } from "../../util/core/session";
 import Routes from "../../util/core/misc/routes";
 import { loggedIn } from "../../util/core/AuthService";
+import {
+  ClickAwayListener,
+  CssBaseline,
+  Fade,
+  List,
+  ListItemButton,
+  Paper,
+  TextField,
+} from '@mui/material';
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { dateFormat } from "../../util/core/misc/date";
@@ -39,8 +48,9 @@ export const Announcements = (): JSX.Element => {
         tag: {} as Tag, // the tag object
     })
     const [openCreator, setOpenCreator] = React.useState(false);
-
     const editorRef = useRef(null);
+
+    
     const log = () => {
         if (editorRef.current) {
             //console.log(editorRef.current.getContent());
@@ -278,6 +288,7 @@ const AnnouncementList = (props: any): JSX.Element => {
         {
             announcements.length == 0 ? <></> :
                 announcements.map((announcement: Announcement): JSX.Element => {
+                    let current_tags: Tag[] = announcement.tags;
                     return (
                         <AnnouncementElement
                             key={announcement.id}
@@ -293,7 +304,7 @@ const AnnouncementList = (props: any): JSX.Element => {
     </div>
 };
 
-const AnnouncementElement = (props: {
+export const AnnouncementElement = (props: {
     announcement: Announcement;
     tags: Tag[];
 }): JSX.Element => {
@@ -302,7 +313,15 @@ const AnnouncementElement = (props: {
     const data: Announcement = props.announcement;
     const session: Session = React.useContext(SessionContext);
 
-    return data.author ? (
+    const [author, setAuthor] = React.useState<User>({} as User);
+    const [organization, setOrganization] = React.useState<Organization>({} as Organization);
+
+    React.useEffect(() => {
+        if(data.author) setAuthor(session.allUsers.find((user: User) => user.id === data.author.id)!);
+        setOrganization(session.allOrgs.find((organization: Organization) => organization.id === data.organization.id)!);
+    }, [session.allUsers, session.allOrgs]);
+
+    return organization && author ? (
         <div className="card">
             <div className="card-headers">
                 <div className="tag-section">
@@ -349,33 +368,37 @@ const AnnouncementElement = (props: {
 //     const [isPublic, setIsPublic] = React.useState(false);
 //     const session: Session = React.useContext(SessionContext);
 
-//     const {
-//         register,
-//         handleSubmit,
-//         watch,
-//         formState: { errors },
-//     } = useForm<AnnouncementInputs>();
-//     const [error, setError] = React.useState("");
+    // const [currentTags, setCurrentTags] = React.useState([]);
+    // const [showTags, setShowTags] = React.useState(false);
+    // const [selectedTags, setSelectedTags] = React.useState(new Set<Tag>([]));
+
+    // const {
+    //     register,
+    //     handleSubmit,
+    //     watch,
+    //     formState: { errors },
+    // } = useForm<AnnouncementInputs>();
+    // const [error, setError] = React.useState("");
 
 //     const [selected, setSelected] = React.useState<string[]>([]);
 //     const names = session.allOrgs.map((organization: Organization): string => {
 //         return organization.name;
 //     });
 
-//     const onCreate = (data: AnnouncementInputs): void => {
-//         // console.log("Submitted data:", data);
-//         session
-//             .postAPI(`${Routes.OBJECT}/announcement/new`, {
-//                 ...data,
-//             })
-//             .then(() => {
-//                 console.log("Announcement created successfully");
-//             })
-//             .catch((err) => {
-//                 console.log("Error:", err);
-//                 // session.refreshAuth();
-//             });
-//     };
+    // const onCreate = (data: AnnouncementInputs): void => {
+    //     console.log("Submitted data:", data);
+    //     session
+    //         .postAPI(`${Routes.OBJECT}/announcement/new`, {
+    //             ...data,
+    //         })
+    //         .then(() => {
+    //             console.log("Announcement created successfully");
+    //         })
+    //         .catch((err) => {
+    //             console.log("Error:", err);
+    //             // session.refreshAuth();
+    //         });
+    // };
 
 //     const ITEM_HEIGHT = 48;
 //     const ITEM_PADDING_TOP = 8;
@@ -398,162 +421,235 @@ const AnnouncementElement = (props: {
 //         );
 //     };
 
-//     return (
-//         <div id="announcement-creator" className="modal">
-//             <div className="modal-top modal-header">
-//                 <h5 className="header-announcement">Add Announcement</h5>
-//             </div>
-//             <form
-//                 className="signup"
-//                 onSubmit={handleSubmit(onCreate)}
-//                 style={{ paddingLeft: "1rem", paddingTop: "1rem" }}
-//             >
-//                 <div className="row">
-//                     <div className="input-field col s12">
-//                         <label htmlFor="id_title">Title:</label>
-//                         <input
-//                             {...register("title")}
-//                             type="text"
-//                             name="title"
-//                             required={true}
-//                             id="id_title"
-//                         />
-//                     </div>
-//                 </div>
-//                 <div className="row">
-//                     <>
-//                         <Editor
-//                             apiKey="your-api-key"
-//                             onInit={(evt, editor) => { }}
-//                             init={{
-//                                 height: 500,
-//                                 menubar: false,
-//                                 plugins: [
-//                                     "advlist",
-//                                     "autolink",
-//                                     "lists",
-//                                     "link",
-//                                     "image",
-//                                     "charmap",
-//                                     "preview",
-//                                     "anchor",
-//                                     "searchreplace",
-//                                     "visualblocks",
-//                                     "code",
-//                                     "fullscreen",
-//                                     "insertdatetime",
-//                                     "media",
-//                                     "table",
-//                                     "code",
-//                                     "help",
-//                                     "wordcount",
-//                                 ],
-//                                 toolbar:
-//                                     "undo redo | blocks | " +
-//                                     "bold italic forecolor | alignleft aligncenter " +
-//                                     "alignright alignjustify | bullist numlist outdent indent | " +
-//                                     "removeformat | help",
-//                                 content_style:
-//                                     "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-//                             }}
-//                         />
-//                     </>
-//                 </div>
-//                 <div className="row">
-//                     <div className="input-field col s12">
-//                         <label htmlFor="id_org">Organization:</label>
-//                         <br />
-//                         <select {...register("organization")} className="browser-default">
-//                             {
-//                                 session.allOrgs.map((org: Organization) => {
-//                                     return <option key={org.id} value={org.id}>{org.name}</option>
-//                                 })
-//                             }
-//                         </select>
-//                     </div>
-//                 </div>
-//                 <div className="row">
-//                     <div className="input-field col s12">
-//                         <label htmlFor="id_show_after">Show After:</label>
-//                         <input
-//                             {...register("show_after")}
-//                             type="text"
-//                             name="show_after"
-//                             minLength={1}
-//                             required={true}
-//                             id="id_show_after"
-//                         />
-//                     </div>
-//                 </div>
-//                 <div className="row">
-//                     <div className="input-field col s12">
-//                         <label htmlFor="id_supervisor">Supervisor:</label>
-//                         <input
-//                             {...register("supervisor")}
-//                             type="text"
-//                             name="supervisor"
-//                             minLength={1}
-//                             required={true}
-//                             id="id_supervisor"
-//                         />
-//                     </div>
-//                 </div>
-//                 {error && (
-//                     <span className="form-error">
-//                         <div className="form-errors">
-//                             <i className="material-icons">warning</i>
-//                             <>{error}</>
-//                         </div>
-//                     </span>
-//                 )}
-//                 <div className="modal-footer">
-//                     <a href="#!" className="modal-close waves-effect waves-red btn-flat">
-//                         Cancel
-//                     </a>
-//                     <button className="waves-effect waves-green btn" type="submit">
-//                         Create!
-//                     </button>
-//                 </div>
-//             </form>
-//         </div>
-//     );
+    // const handleTagInput = (event: any) => {  // event: any might be really bad type hinting
+    //   const text = event.target.value;
+    //   session
+    //     .getAPI(`${Routes.OBJECT}/tag`, false)
+    //     .then((res) => {
+    //       const tags = res.data.results;
 
-//     // return (
-//     //     <div className="popup">
-//     //         <div className="modal-a">
-//     //             <div className="modal-top modal-header">
-//     //                 <h5 className="header-announcement">Add Announcement</h5>
-//     //                 <a className="waves-effect waves-light btn" onClick={(ev: React.MouseEvent) => {
-//     //                     ev.preventDefault();
-//     //                     setOpenCreator(false);
-//     //                 }}>Cancel</a>
-//     //             </div>
-//     //             <div className="modal-content">
-//     //                 <div className="form input-row">
-//     //                     <h6 className="form-label">Organization:</h6>
-//     //                     <input type="text" className="textbox"></input>
-//     //                 </div>
-//     //                 <div className="form input-row">
-//     //                     <h6 className="form-label">Title:</h6>
-//     //                     <input type="text"></input>
-//     //                 </div>
-//     //                 <div className="form input-row">
-//     //                     <h6 className="form-label">Body:</h6>
-//     //                     <input type="text"></input>
-//     //                 </div>
-//     //                 <div className="form input-row">
-//     //                     <h6 className="form-label">Tags:</h6>
-//     //                     <input type="text"></input>
-//     //                 </div>
-//     //                 <div className="form input-row">
-//     //                     <h6 className="form-label">Public:</h6>
-//     //                     <label>
-//     //                         <input type="checkbox" className="filled-in" onChange={(ev) => setIsPublic(ev.target.checked)} />
-//     //                         <span>Filled in</span>
-//     //                     </label>
-//     //                 </div>
-//     //             </div>
-//     //         </div>
-//     //     </div>
-//     // );
+    //       const tempTags = tags.filter(
+    //         (element: Tag) => text.length !== 0 && element.name.toLowerCase().includes(text.toLowerCase())
+    //       );
+
+    //       setShowTags(tempTags.length !== 0);
+    //       setCurrentTags(tempTags);
+
+    //     })
+    //     .catch(() => {
+    //         session.refreshAuth();
+    //     });
+    // }
+
+    // const handleClick = (tag: Tag) => {
+    //   const unionSet = new Set<Tag>([]);
+    //   selectedTags.forEach((t: Tag) => unionSet.add(t));
+    //   const found = [...selectedTags].some(el => el.id === tag.id);
+    //   !found && unionSet.add(tag);
+
+    //   setSelectedTags(unionSet);
+    // }
+
+    // const deleteTag = (tag: Tag) => {
+    //   const unionSet = new Set<Tag>([]);
+    //   selectedTags.forEach((t: Tag) => unionSet.add(t));
+    //   const found = [...selectedTags].some(el => el.id === tag.id);
+    //   found && unionSet.delete(tag);
+
+    //   setSelectedTags(unionSet);
+    // }
+
+    // return (
+    //     <div id="announcement-creator" className="modal">
+    //         <div className="modal-top modal-header">
+    //             <h5 className="header-announcement">Add Announcement</h5>
+    //         </div>
+    //         <form
+    //             className="signup"
+    //             onSubmit={handleSubmit(onCreate)}
+    //             style={{ paddingLeft: "1rem", paddingTop: "1rem" }}
+    //         >
+    //             <div className="row">
+    //                 <div className="input-field col s12">
+    //                     <label htmlFor="id_title">Title:</label>
+    //                     <input
+    //                         {...register("title")}
+    //                         type="text"
+    //                         name="title"
+    //                         required={true}
+    //                         id="id_title"
+    //                         style={{
+    //                             backgroundImage:
+    //                                 "url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHklEQVQ4EaVTO26DQBD1ohQWaS2lg9JybZ+AK7hNwx2oIoVf4UPQ0Lj1FdKktevIpel8AKNUkDcWMxpgSaIEaTVv3sx7uztiTdu2s/98DywOw3Dued4Who/M2aIx5lZV1aEsy0+qiwHELyi+Ytl0PQ69SxAxkWIA4RMRTdNsKE59juMcuZd6xIAFeZ6fGCdJ8kY4y7KAuTRNGd7jyEBXsdOPE3a0QGPsniOnnYMO67LgSQN9T41F2QGrQRRFCwyzoIF2qyBuKKbcOgPXdVeY9rMWgNsjf9ccYesJhk3f5dYT1HX9gR0LLQR30TnjkUEcx2uIuS4RnI+aj6sJR0AM8AaumPaM/rRehyWhXqbFAA9kh3/8/NvHxAYGAsZ/il8IalkCLBfNVAAAAABJRU5ErkJggg==&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;",
+    //                         }}
+    //                     />
+    //                 </div>
+    //             </div>
+    //             <div className="row">
+    //                 <div className="input-field col s12">
+    //                     <label htmlFor="id_tags">Tags:</label>
+    //                     <input
+    //                         {...register("tags")}
+    //                         type="text"
+    //                         name="tags"
+    //                         required={true}
+    //                         id="id_tags"
+    //                         onChange={handleTagInput}
+    //                     />
+
+    //                     <div className="tag-section">
+    //                       {
+    //                         [...selectedTags].map((tag: Tag): JSX.Element => {
+    //                           return <DeletableTagElement key={tag.id} tag={tag} onClick={deleteTag} />;
+    //                         })
+    //                       }
+    //                     </div>
+                        
+    //                     <ClickAwayListener onClickAway={() => setShowTags(false)}>
+    //                       <Fade in={showTags}>
+    //                         <List component={Paper} sx={{ mt: 1 }}>
+    //                           {currentTags.slice(0, 5/* get first 5 elements */).map((tag: Tag): JSX.Element => {
+    //                               return <ListItemButton onClick={() => handleClick(tag)}>{tag.name}</ListItemButton>;
+    //                           })}
+    //                         </List>
+    //                       </Fade>
+    //                     </ClickAwayListener>
+    //                 </div>
+    //             </div>
+    //             <div className="row">
+    //                 <>
+    //                     <Editor
+    //                         apiKey="your-api-key"
+    //                         onInit={(evt, editor) => (editorRef.current = editor)}
+    //                         init={{
+    //                             height: 500,
+    //                             menubar: false,
+    //                             plugins: [
+    //                                 "advlist",
+    //                                 "autolink",
+    //                                 "lists",
+    //                                 "link",
+    //                                 "image",
+    //                                 "charmap",
+    //                                 "preview",
+    //                                 "anchor",
+    //                                 "searchreplace",
+    //                                 "visualblocks",
+    //                                 "code",
+    //                                 "fullscreen",
+    //                                 "insertdatetime",
+    //                                 "media",
+    //                                 "table",
+    //                                 "code",
+    //                                 "help",
+    //                                 "wordcount",
+    //                             ],
+    //                             toolbar:
+    //                                 "undo redo | blocks | " +
+    //                                 "bold italic forecolor | alignleft aligncenter " +
+    //                                 "alignright alignjustify | bullist numlist outdent indent | " +
+    //                                 "removeformat | help",
+    //                             content_style:
+    //                                 "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+    //                         }}
+    //                     />
+    //                 </>
+    //             </div>
+    //             <div className="row">
+    //                 <div className="input-field col s12">
+    //                     <label htmlFor="id_org">Organization:</label>
+    //                     <br />
+    //                     <select {...register("organization")}>
+    //                         {
+    //                             session.allOrgs.map((org: Organization) => {
+    //                                 return <option key={org.id} value={org.id}>{org.name}</option>
+    //                             })
+    //                         }
+    //                     </select>
+    //                 </div>
+    //             </div>
+    //             <div className="row">
+    //                 <div className="input-field col s12">
+    //                     <label htmlFor="id_show_after">Show After:</label>
+    //                     <input
+    //                         {...register("show_after")}
+    //                         type="text"
+    //                         name="show_after"
+    //                         minLength={1}
+    //                         required={true}
+    //                         id="id_show_after"
+    //                     />
+    //                 </div>
+    //             </div>
+    //             <div className="row">
+    //                 <div className="input-field col s12">
+    //                     <label htmlFor="id_supervisor">Supervisor:</label>
+    //                     <input
+    //                         {...register("supervisor")}
+    //                         type="text"
+    //                         name="supervisor"
+    //                         minLength={1}
+    //                         required={true}
+    //                         id="id_supervisor"
+    //                     />
+    //                 </div>
+    //             </div>
+    //             {error && (
+    //                 <span className="form-error">
+    //                     <div className="form-errors">
+    //                         <i className="material-icons">warning</i>
+    //                         <>{error}</>
+    //                     </div>
+    //                 </span>
+    //             )}
+    //             <div className="modal-footer">
+    //                 <a href="#!" className="modal-close waves-effect waves-red btn-flat">
+    //                     Cancel
+    //                 </a>
+    //                 <button className="waves-effect waves-green btn" type="submit">
+    //                     Create!
+    //                 </button>
+    //             </div>
+    //         </form>
+    //     </div>
+    // );
+
+    // return (
+    //     <div className="popup">
+    //         <div className="modal-a">
+    //             <div className="modal-top modal-header">
+    //                 <h5 className="header-announcement">Add Announcement</h5>
+    //                 <a className="waves-effect waves-light btn" onClick={(ev: React.MouseEvent) => {
+    //                     ev.preventDefault();
+    //                     setOpenCreator(false);
+    //                 }}>Cancel</a>
+    //             </div>
+    //             <div className="modal-content">
+    //                 <div className="form input-row">
+    //                     <h6 className="form-label">Organization:</h6>
+    //                     <input type="text" className="textbox"></input>
+    //                 </div>
+    //                 <div className="form input-row">
+    //                     <h6 className="form-label">Title:</h6>
+    //                     <input type="text"></input>
+    //                 </div>
+    //                 <div className="form input-row">
+    //                     <h6 className="form-label">Body:</h6>
+    //                     <input type="text"></input>
+    //                 </div>
+    //                 <div className="form input-row">
+    //                     <h6 className="form-label">Tags:</h6>
+    //                     <input type="text"></input>
+    //                 </div>
+    //                 <div className="form input-row">
+    //                     <h6 className="form-label">Public:</h6>
+    //                     <label>
+    //                         <input type="checkbox" className="filled-in" onChange={(ev) => setIsPublic(ev.target.checked)} />
+    //                         <span>Filled in</span>
+    //                     </label>
+    //                 </div>
+    //             </div>
+    //         </div>
+    //     </div>
+    // );
 // };
