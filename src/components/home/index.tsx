@@ -17,6 +17,7 @@ import { Course } from "../../util/core/interfaces/timetable";
 import { ScheduleSlot } from "../../util/core/interfaces/schedule";
 import { Schedule } from "./schedule";
 import { markdownToPlainText } from "../markdown";
+import MiniCalendar from "./calendar/mini-calendar";
 
 export const Home = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
@@ -45,6 +46,10 @@ export const Home = (): JSX.Element => {
                         <EventsFeed />
                     </div>
                     <Link className="full-content-page link" to="/calendar">View all events <i className="zmdi zmdi-chevron-right"></i></Link>
+                </div>
+                <hr style={{ margin: "10px calc(2% + 10px)", borderTopWidth: "2.5px", borderColor: "#d9d9d9" }} />
+                <div id="mini-calendar" style={{marginLeft: "2%", marginRight: "2%"}}>
+                    <MiniCalendar />
                 </div>
                 <hr style={{ margin: "10px calc(2% + 10px)", borderTopWidth: "2.5px", borderColor: "#d9d9d9" }} />
                 <div id="recent-announcements" className="center-align">

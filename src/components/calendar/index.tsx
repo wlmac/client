@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "@fullcalendar/react/dist/vdom";
-import FullCalendar from "@fullcalendar/react";
+import FullCalendar, { EventInput } from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 
@@ -10,57 +10,54 @@ import Routes from "../../util/core/misc/routes";
 
 import Tag from "../../util/core/interfaces/tag";
 import Organization from "../../util/core/interfaces/organization";
+import Event from "../../util/core/interfaces/event";
 
-interface EventData {
-  name: string,
-  organization: Organization | undefined,
-  description: string,
-  id: number,
-  tags: Tag[],
-  start_date: string,
-  end_date: string,
+// ------------------- UTIL -----------------------------
+export const getDate = (isoTime: string): string => {
+  return isoTime.split("T")[0];
 }
 
-interface EventJSON {
-  name: string,
-  organization: Organization,
-  description: string,
-  id: number,
-  tags: Tag[],
-  start_date: string,
-  end_date: string
+// convert the events into smth that fullCalendar uses
+export const parseEvents = (toParse: Event[]): EventInput[] => {
+  const parsed = [];
+  for (let curEvent of toParse) {
+  parsed.push({
+      title: curEvent.name,
+      start: curEvent.start_date, // get rid of the "time" element
+      end: curEvent.end_date,
+      color: (curEvent.tags[0] ?? { color: "lightblue" }).color,
+      textColor: "#434343",
+  })
+  }
+  return parsed;
 }
 
 export const Calendar = (): JSX.Element => {
   // raw events, used for caching id's before the session updates
-  const [rawEvents, setRawEvents]: [EventJSON[], (x: EventJSON[]) => void] = useState<EventJSON[]>([]);
+  const [rawEvents, setRawEvents]: [Event[], (x: Event[]) => void] = useState<Event[]>([]);
   // list of events for the current month
-  const [events, setEvents]: [EventData[], (x: EventData[]) => void] = useState<EventData[]>([]);
+  const [events, setEvents]: [Event[], (x: Event[]) => void] = useState<Event[]>([]);
   // the month currently displayed
   const [eventFetch, setEventFetch]: [string, (x: string) => void] = useState<string>("");
   // currently selected date
   const [selectedDate, setSelectedDate]: [Date | undefined, (x: Date | undefined) => void] = useState<Date | undefined>(new Date());
   // events on the currently selected date
-  const [eventsOnDay, setEventsOnDay]: [EventData[], (x: EventData[]) => void] = useState<EventData[]>([]);
+  const [eventsOnDay, setEventsOnDay]: [Event[], (x: Event[]) => void] = useState<Event[]>([]);
   // current session
   const session: Session = React.useContext(SessionContext);
 
-  const getDate = (isoTime: string): string => {
-    return isoTime.split("T")[0];
-  }
-
   // when the session or events update, try filling in the tags & org
   React.useEffect(() => {
-    function parseEventJSON(raw: EventJSON): EventData {
+    function parseEvent(raw: Event): Event {
       return Object.assign(Object.assign({}, raw), {
         organization: raw.organization
       })
     }
-    setEvents(rawEvents.map(parseEventJSON));
+    setEvents(rawEvents.map(parseEvent));
   }, [session, rawEvents])
 
   // update the events for the current month
-  const updateEvents = (fetchInfo: { startStr: string, endStr: string }, successCallback: (x: EventData[]) => void, failureCallback: (x: Error) => void) => {
+  const updateEvents = (fetchInfo: { startStr: string, endStr: string }, successCallback: (x: Event[]) => void, failureCallback: (x: Error) => void) => {
     let key: string = JSON.stringify(fetchInfo);
     if (eventFetch !== key) {
       // query events for this time period
@@ -94,7 +91,7 @@ export const Calendar = (): JSX.Element => {
     else {
       // update the list of events for this dae
       let today = day;
-      let eventsToday: EventData[] = []
+      let eventsToday: Event[] = []
       let tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000)
       for (let curEvent of events) {
         let eventStart = new Date(curEvent.start_date)
@@ -145,7 +142,7 @@ export const Calendar = (): JSX.Element => {
 }
 
 interface BoardProps {
-  updateEvents: (x: { startStr: string, endStr: string }, y: (x: EventData[]) => void, z: (x: Error) => void) => void,
+  updateEvents: (x: { startStr: string, endStr: string }, y: (x: Event[]) => void, z: (x: Error) => void) => void,
   selectedDate: Date | undefined,
   setSelectedDate: (x: Date | undefined) => void
 };
@@ -191,20 +188,6 @@ const CalendarBoard = (props: BoardProps): JSX.Element => {
   // event parsed for the fullcalendar api
   interface FullCalendarEvent {
     title: string, start: string, end: string, color: string, textColor: string
-  }
-  // convert the events into smth that fullCalendar uses
-  const parseEvents = (toParse: EventData[]): FullCalendarEvent[] => {
-    const parsed = [];
-    for (let curEvent of toParse) {
-      parsed.push({
-        title: curEvent.name,
-        start: curEvent.start_date, // get rid of the "time" element
-        end: curEvent.end_date,
-        color: (curEvent.tags[0] ?? { color: "lightblue" }).color,
-        textColor: "#434343",
-      })
-    }
-    return parsed;
   }
 
   // highlights the number for today
@@ -263,7 +246,7 @@ const CalendarBoard = (props: BoardProps): JSX.Element => {
         setSelectedDate(undefined)
       }}
       events={(fetchInfo, successCallback, failureCallback) => {
-        updateEvents(fetchInfo, (event_list: EventData[]) => { successCallback(parseEvents(event_list)) }, failureCallback);
+        updateEvents(fetchInfo, (event_list: Event[]) => { successCallback(parseEvents(event_list)) }, failureCallback);
       }}
       height={"auto"}
       selectLongPressDelay={0}
@@ -277,14 +260,14 @@ const CalendarBoard = (props: BoardProps): JSX.Element => {
 }
 
 // UI for the list of cards at the bottom
-const Cards = (props: { eventsToday: EventData[], date: Date | undefined }): JSX.Element => {
+const Cards = (props: { eventsToday: Event[], date: Date | undefined }): JSX.Element => {
   // list of events for today
   const eventsToday = props.eventsToday;
   // current date
   const date = props.date;
 
   // a list of cards
-  const cards = date == undefined ? [] : eventsToday.map((event: EventData) => <Card key={event.id} curEvent={event} date={date} />);
+  const cards = date == undefined ? [] : eventsToday.map((event: Event) => <Card key={event.id} curEvent={event} date={date} />);
   if (cards.length === 0) {
     return (<></>);
   } else {
@@ -293,7 +276,7 @@ const Cards = (props: { eventsToday: EventData[], date: Date | undefined }): JSX
 }
 
 // a singular card
-const Card = (props: { curEvent: EventData, date: Date }): JSX.Element => {
+const Card = (props: { curEvent: Event, date: Date }): JSX.Element => {
   const curEvent = props.curEvent;
   const date = props.date;
 
@@ -348,7 +331,7 @@ const Card = (props: { curEvent: EventData, date: Date }): JSX.Element => {
 }
 
 interface DetailPanelProps {
-  curEvent: EventData,
+  curEvent: Event,
   tagEls: JSX.Element[]
 };
 
