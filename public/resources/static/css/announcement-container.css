@@ -1,0 +1,87 @@
+:root {
+  --rounding: 10px;
+}
+
+#AnnouncementContainer {
+  width: 50%;
+  border-radius: var(--rounding);
+  box-shadow: 0px 5px 4px 1px rgba(0, 0, 0, 0.2);
+  background-color: white;
+  margin: 5%;
+}
+
+.heading {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background-color: #073763;  /* dark blue metropolis colour, should probably get this colour from a variable instead of hardcoding */
+  padding: 2.5%;
+  border-radius: var(--rounding) var(--rounding) 0 0;
+  font-size: 1.2rem;
+}
+
+.head {
+  color: white;
+  padding-left: 5%;
+  margin-top: 0;
+  font-weight: bold;
+}
+
+.date {
+  text-align: right;
+  padding-right: 5%;
+  color: #99acbc;
+  font-weight: lighter;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.left-side {
+  box-shadow: 3px 0px 4px 1px rgba(0, 0, 0, 0.2);
+  border-radius: var(--rounding);
+}
+
+.miniAnnouncement {
+  background-color: white;
+  padding: 3% 0% 4% 10%;
+  border-top: 1px solid #f5f5f5;
+  border-bottom-left-radius: var(--rounding);
+}
+
+.featuredAnnouncement {
+  padding: 3% 0% 4% 10%;
+  border-top: 1px solid #f5f5f5;
+  border-bottom-left-radius: var(--rounding);
+}
+
+.featured-title {
+  color: black;
+  font-size: 1.7rem;
+  font-weight: bold;
+}
+
+.featured-body-text {
+  padding-top: 3%;
+}
+
+.mini-title {
+  color: #5e8db9;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.club-info {
+  color: #4b749d;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.club-name {
+  padding-top: 3px;
+  padding-left: 2%;
+}
+
+
