@@ -304,6 +304,129 @@ const AnnouncementList = (props: any): JSX.Element => {
     </div>
 };
 
+export const AnnouncementContainer = (props: any): JSX.Element => {
+  const session: Session = React.useContext(SessionContext);
+
+  const [announcements, setAnnouncements] = React.useState([] as any[]);
+  // highlight DO I NEED AN initLoadRef
+
+  function fetchAnnouncements() {
+    // limit is 6: five announcements on left side, one big announcement on right side
+    const fetchURL = `${Routes.OBJECT}/announcement?limit=6`;
+    session
+      .request('get', fetchURL)
+      .then((res) => {
+          setAnnouncements(res.data.results);
+      }
+    );
+  }
+
+  function getDate() {
+    const date = new Date();
+    return new Date(date.toLocaleDateString()).toLocaleString('en-US', { month: 'long' }) + " " + date.getDate() + ", " + date.getFullYear();
+  }
+
+  React.useEffect(() => {
+    fetchAnnouncements();
+  }, []);
+
+  return <div id="AnnouncementContainer">
+    <link rel="stylesheet" href="/resources/static/css/announcement-container.css" />
+
+    <div className="heading">
+      <div className="head">
+        Morning Announcements
+      </div>
+      <div className="date">
+        {getDate()}
+      </div>
+    </div>
+    <div className="content">
+      <div className="left-side">
+        {
+          announcements.slice(1).map((announcement: Announcement): JSX.Element => {
+            return (
+              <MiniAnnouncement
+                key={announcement.id}
+                announcement={announcement}
+                tags={announcement.tags}
+              />
+            );
+        })
+        }
+      </div>
+      <div className="right-side">
+        {
+          announcements.length == 0 ? <></> : 
+            <FeaturedAnnouncement
+              key={announcements[0].id}
+              announcement={announcements[0]}
+              tags={announcements[0].tags}
+            />
+      }
+      </div>
+    </div>
+  </div>
+}
+
+export const MiniAnnouncement = (props: {
+  announcement: Announcement;
+  tags: Tag[];
+}): JSX.Element => {
+
+  const data: Announcement = props.announcement;
+  const session: Session = React.useContext(SessionContext);
+
+  const [author, setAuthor] = React.useState<User>({} as User);
+  const [organization, setOrganization] = React.useState<Organization>({} as Organization);
+
+  React.useEffect(() => {
+    if(data.author) setAuthor(session.allUsers.find((user: User) => user.id === data.author.id)!);
+    setOrganization(session.allOrgs.find((organization: Organization) => organization.id === data.organization.id)!);
+  }, [session.allUsers, session.allOrgs]);
+
+  return author ? (
+    <div className="miniAnnouncement">
+      <Link className="mini-title" to={`/announcement/${data.id}`}>
+        {data.title}
+      </Link>
+      <div className="club-info-container">
+        <Link className="club-info" to={`/club/${data.organization.slug}`}><img className="circle" src={data.organization.icon} /><div className="club-name">{data.organization.name}</div></Link>
+      </div>
+    </div>
+  ) : <>Loading...</>;
+}
+
+export const FeaturedAnnouncement = (props: {
+  announcement: Announcement;
+  tags: Tag[];
+}): JSX.Element => {
+  const data: Announcement = props.announcement;
+  const session: Session = React.useContext(SessionContext);
+
+  const [author, setAuthor] = React.useState<User>({} as User);
+  const [organization, setOrganization] = React.useState<Organization>({} as Organization);
+
+  React.useEffect(() => {
+    if(data.author) setAuthor(session.allUsers.find((user: User) => user.id === data.author.id)!);
+    setOrganization(session.allOrgs.find((organization: Organization) => organization.id === data.organization.id)!);
+  }, [session.allUsers, session.allOrgs]);
+
+  return organization && author ? (
+    <div className="featuredAnnouncement">
+      <Link className="featured-title" to={`/announcement/${data.id}`}>
+        {data.title}
+      </Link>
+      <div className="club-info-container">
+        <Link className="club-info" to={`/club/${data.organization.slug}`}><img className="circle" src={data.organization.icon} /><div className="club-name">{data.organization.name}</div></Link>
+      </div>
+      <div className="featured-body-text">
+        {markdownToPlainText(data.body)}
+      </div>
+    </div>
+  ) : <>Loading...</>;
+}
+
 export const AnnouncementElement = (props: {
     announcement: Announcement;
     tags: Tag[];

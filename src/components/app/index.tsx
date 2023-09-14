@@ -49,7 +49,7 @@ export const _App = (): JSX.Element => {
 
     return (
         <>
-            <div className="page">
+            <div className="page" style={{backgroundColor: "white"}}>
                 <NavigationBar />
 
                 <div className="router-outlet">

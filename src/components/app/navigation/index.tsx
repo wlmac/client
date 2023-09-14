@@ -112,31 +112,19 @@ export const NavigationBar = (): JSX.Element => {
                         <li className="nav-item">
                             <NavLink href="/blog">Content</NavLink>
                         </li>
-                        <li className="nav-item">
-                            <a href="https://doodle.maclyonsden.com" className="nav-link">Doodle</a>
-                        </li>
-                        <li className="nav-item">
-                            <NavLink href="/resources">Resources</NavLink>
-                        </li>
-                        <li className="nav-item">
-                            <NavLink href="/map">Map</NavLink>
-                        </li>
                         <li>
-                            <a className="dropdown-trigger" href="/#!" data-target="dropdownAbout">About<i className="zmdi zmdi-caret-down"></i></a><ul id="dropdownAbout" className="dropdown-content">
+                            <a className="dropdown-trigger" href="/#!" data-target="dropdownAbout">More<i className="zmdi zmdi-caret-down"></i></a><ul id="dropdownAbout" className="dropdown-content">
                                 <li>
-                                    <NavLink href="/about?tab=history">WLMCI</NavLink>
+                                    <NavLink href="/about?tab=history">About</NavLink>
                                 </li>
                                 <li>
-                                    <NavLink href="/about?tab=about">About</NavLink>
+                                    <NavLink href="/map">Map</NavLink>
                                 </li>
                                 <li>
-                                    <NavLink href="/about?tab=team">Team</NavLink>
+                                    <NavLink href="/resources">Resources</NavLink>
                                 </li>
                                 <li>
-                                    <NavLink href="/about?tab=school">Contact WLMCI</NavLink>
-                                </li>
-                                <li>
-                                    <NavLink href="/about?tab=contact">Contact Us</NavLink>
+                                    <a href="https://doodle.maclyonsden.com" className="nav-link">Doodle</a>
                                 </li>
                             </ul>
                         </li>

@@ -9,5 +9,7 @@ export default interface Event {
     organization: Organization;
     should_announce: boolean;
     description: string;
-    tags: Array<Tag>;
+    is_public: boolean;
+    term: number;
+    tags: Tag[];
 }

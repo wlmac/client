@@ -80,8 +80,8 @@ export const Schedule = (): JSX.Element => {
             return currentCourse.course ? (
                 <>
                     <h4 className="schedule-course">{currentCourse.course}</h4>
-                    <span className="schedule-description">{`${currentCourse.description.course}: Ends in ${timeDigitDisplay(hh, "hour")}${timeDigitDisplay(mm, "minute")}${ss} ${ss === 1 ? 'second' : 'seconds'}`}</span>
-                </>
+                    <span className="schedule-description">{`Ends in ${timeDigitDisplay(hh, "hour")}${timeDigitDisplay(mm, "minute")}${ss} ${ss === 1 ? 'second' : 'seconds'}`}</span>
+                </> /* ${currentCourse.description.course} */
             ) : (
                 <>
                     <h4 className="schedule-course">{currentCourse.description.course}</h4>
@@ -100,7 +100,7 @@ export const Schedule = (): JSX.Element => {
             return currentCourse.course ? (
                 <>
                     <h4 className="schedule-course">{currentCourse.course}</h4>
-                    <span className="schedule-description">{`${currentCourse.description.course}: Starts in ${timeDigitDisplay(hh, "hour")}${timeDigitDisplay(mm, "minute")}${ss} ${ss === 1 ? 'second' : 'seconds'}`}</span>
+                    <span className="schedule-description">{`Starts in ${timeDigitDisplay(hh, "hour")}${timeDigitDisplay(mm, "minute")}${ss} ${ss === 1 ? 'second' : 'seconds'}`}</span>
                 </>
             ) : (
                 <>
@@ -114,8 +114,8 @@ export const Schedule = (): JSX.Element => {
     return (
         <div className="banner">
             <div className="background"><img alt="" src="/resources/static/img/themes/banners/spring.jpg" /></div>
-            <div className="overlay-container valign-wrapper">
-                <div className="next-class center-align">
+            <div className="overlay-container valign-wrapper" >
+                <div className="next-class">
                     {
                         fetched ?
                             <CurrentCourse />
@@ -124,18 +124,25 @@ export const Schedule = (): JSX.Element => {
                     }
                 </div>
             </div>
-            <div className="schedule-today-overlay hide-on-small-and-down">
-                <div className="schedule-today-overlay-container">
+            <div className="overlay-container valign-wrapper">
+                <div className="schedule-today">
                     {fetched && schedule.length > 0 && <h4 className="schedule-cycle">{schedule[0].cycle}</h4>}
-                    <div className="schedule-today-courses">
-                        {schedule.map((slot: ScheduleSlot): JSX.Element => {
-                            return (
-                                <span key={slot.description.course}>
-                                    <span className="schedule-today-course">{slot.description.course} - {slot.course}</span><br />
-                                </span>
-                            );
-                        })}
-                    </div>
+                </div>
+                <div className="schedule-today-courses hide-on-small-and-down">
+                    {
+                    schedule.map((slot: ScheduleSlot): JSX.Element => {
+                        return (
+                            <span key={slot.description.course}>
+                                <span className="schedule-today-course">
+                                    {
+                                        new Date(slot.time.start).toLocaleString('en-US', {hour: '2-digit', minute: '2-digit'})
+                                    } - {
+                                        new Date(slot.time.end).toLocaleString('en-US', {hour: '2-digit', minute: '2-digit'})
+                                    } | {slot.course}
+                                </span><br />
+                            </span>
+                        );
+                    })}
                 </div>
             </div>
             {
@@ -151,3 +158,14 @@ export const Schedule = (): JSX.Element => {
         </div>
     );
 }
+
+function formatAMPM(date: Date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? 0 + minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
+  }

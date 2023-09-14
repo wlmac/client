@@ -1,0 +1,4 @@
+.inherit-cell *{
+    color: inherit;
+    font-weight: lighter;
+}
