@@ -385,7 +385,7 @@ export const MiniAnnouncement = (props: {
     setOrganization(session.allOrgs.find((organization: Organization) => organization.id === data.organization.id)!);
   }, [session.allUsers, session.allOrgs]);
 
-  return organization && author ? (
+  return author ? (
     <div className="miniAnnouncement">
       <Link className="mini-title" to={`/announcement/${data.id}`}>
         {data.title}
