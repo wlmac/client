@@ -16,7 +16,7 @@ const MiniCalendar = () => {
     const aspectRatio = 1.7
     // order border style
     const outerBorder = "solid 4px #DDDDDD"
-    const innerBorder = "solid 2px #999999"
+    const innerBorder = "solid 1px #999999"
     // current day
     const curDay = new Date().getDay()
 
@@ -85,7 +85,7 @@ const MiniCalendar = () => {
 
                     // current date
                     const dayNum = date.getDate()
-                    return <div style={{display: 'flex', justifyContent: 'space-between', padding: '2px 10px'}}>
+                    return <div style={{display: 'flex', justifyContent: 'space-between', padding: '2px 10px', fontSize: '1.2em'}}>
                         <div><span>{curDay}</span></div>
                         <div><span style={{marginRight: '0'}}>{dayNum}</span></div>
                     </div>
@@ -103,6 +103,7 @@ const MiniCalendar = () => {
                     // remove border
                     mountArg.el.style.border = 'none'
                     if(con){
+                        con.style.height = '3em'
                         // round borders
                         con.style.backgroundColor = "var(--dark-colour)"
                         if(mountArg.date.getDay() == curDay){
@@ -114,15 +115,21 @@ const MiniCalendar = () => {
                             con.style.borderRight = outerBorder
                         }
                         con.style.borderTop = outerBorder
+                        con.style.display = 'flex'
+                        con.style.alignItems = 'center'
                     }
                     // inner borders
                     if(mountArg.date.getDay() != (curDay+6) % 7) mountArg.el.style.borderRight = innerBorder;
                 },
                 viewDidMount: (mountArg) => {
                     mountArg.el.querySelectorAll<HTMLElement>('tr, table, [role=presentation]').forEach((el) => el.style.border = 'none')
+                },
+                eventDidMount: (mountArg) => {
+                    mountArg.el.style.boxShadow = "1px 3px 3px lightgray"
                 }
             }
         }}
+        eventDisplay = 'block'
         firstDay={curDay}
         selectable={false}
         events={(fetchInfo, successCallback, failureCallback) => {
