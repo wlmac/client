@@ -137,7 +137,6 @@ export const Announcements = (): JSX.Element => {
     return (
         <>
             <link rel="stylesheet" href="/resources/static/css/announcement-list.css" />
-            <AnnouncementContainer/>
             {/* <AnnouncementCreator
                 openCreator={openCreator}
                 setOpenCreator={setOpenCreator}
@@ -305,7 +304,7 @@ const AnnouncementList = (props: any): JSX.Element => {
     </div>
 };
 
-const AnnouncementContainer = (props: any): JSX.Element => {
+export const AnnouncementContainer = (props: any): JSX.Element => {
   const session: Session = React.useContext(SessionContext);
 
   const [announcements, setAnnouncements] = React.useState([] as any[]);

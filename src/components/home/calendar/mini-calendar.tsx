@@ -63,7 +63,7 @@ const MiniCalendar = () => {
             }
             innerEl.style.borderBottom = outerBorder
             innerEl.style.height = elHeight
-        }
+          }
     }
 
     // calendar
@@ -131,7 +131,7 @@ const MiniCalendar = () => {
         height={"auto"}
     />
 
-    return <div style={{padding: '10px', backgroundColor: 'white', borderRadius: '10px'}}>
+    return <div style={{padding: '10px', backgroundColor: 'white', borderRadius: '10px', boxShadow: '2px 4px 6px 2px rgba(0, 0, 0, 0.2)'}}>
         {calendar}
     </div>
 }

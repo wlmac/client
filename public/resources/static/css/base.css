@@ -14,7 +14,7 @@
     
     font-family: 'Roboto', sans-serif;
     letter-spacing: 0.15px;
-    background-color: var(--bg-grey);
+    background-color: white;
 }
 
 /*@media (prefers-color-scheme: dark) {
@@ -154,9 +154,8 @@ select{
 }
 
 .dropdown-content > li > a, .sidenav > li > a{
-    color: var(--mid-colour);
+    color: white;
     font-weight: 500;
-    /*width: 100%;*/
 }
 
 .dropdown-content> li > a:hover, .sidenav > li > a:hover{
@@ -327,8 +326,8 @@ label {
 }
 
 .markdown-embed {
-    width:40rem;
-    height:25rem;
+    width: 40rem;
+    height: 25rem;
 }
 
 blockquote {
@@ -336,62 +335,41 @@ blockquote {
 }
 
 .footer {
-    /*height: 230px;*/
     width: 100%;
     background-color: var(--dark-colour);
     display: -webkit-box;
     display: -ms-flexbox;
-    display: flex;
     margin: auto;
-    flex-direction: column;
-    -webkit-box-orient: vertical;
-    -ms-flex-direction: column;
-}
-
-.footer-title {
-    margin-top: 25px;
-    font-size: 16px;
-    color: var(--contrast-colour);
-    text-align: center;
-    padding: 0px 60px;
-}
-
-.footer-title a {
-    color: var(--link-colour);
-}
-
-.footer-title-par {
-    margin: 0px auto;
-    padding: 40px 0px 10px;
-}
-
-.footer-bar {
-    background-color: var(--mid-colour);
-    height: 0;
-    padding-top: .2vh;
-    width: 10vw;
-    margin: 15px auto 0px;
-    border-top-width: 0px !important;
-}
-
-.foooter-icon-par {
-    margin-top: 10px;
-    padding-bottom: 40px;
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
     flex-direction: row;
     -webkit-box-orient: horizontal;
     -ms-flex-direction: row;
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
+    justify-content: space-between;
+}
+
+.footer-title {
+    font-size: 13px;
+    line-height: 0.5rem;
+   
+    color: #99acbc;
+    font-weight: lighter;
+}
+
+.footer-title a {
+    color: #99acbc;
+}
+
+.footer-title-par {
+    margin: 15px 25px;
+    padding: 0px;
+}
+
+.foooter-icon-par {
+    margin: 25px;
+    right: auto;
 }
 
 .footer-icon {
-    height: 4vh;
-    width: 4vh;
-    margin: 2vh calc(0.25vh + 0.25vw);
     opacity: 0.68;
 }
 
@@ -405,14 +383,7 @@ blockquote {
     font-size: 15px;
     text-decoration: none;
     color: var(--contrast-colour);
-    margin: 0px 20px;
 }
-
-/* .footer-name:hover {
-    text-decoration: none;
-    color: var(--red0); */
-    /*opacity: 0.8;*/
-/* } */
 
 .footer-icon {
     width: 100% !important;
