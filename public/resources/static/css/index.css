@@ -245,28 +245,6 @@ hr {
     .title {
         font-size: 1.4rem;
     }
-    .blog-content {
-        padding: 20px !important;
-        width: 100% !important;
-    }
-    .blog {
-        -webkit-box-orient: vertical;
-        -webkit-box-direction: reverse;
-            -ms-flex-direction: column-reverse;
-                flex-direction: column-reverse;
-        max-height: -webkit-fit-content;
-        max-height: -moz-fit-content;
-        max-height: fit-content;
-    }
-    .blog-image {
-        display: block !important;
-        width: 100% !important;
-        padding: 0 !important;
-    }
-    .blog-body p {
-        font-size: 0.9rem;
-        line-height: 1.4rem;
-    }
     .event-card {
         width: calc(100% - 20px);
     }
