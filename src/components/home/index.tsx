@@ -44,6 +44,7 @@ export const Home = (): JSX.Element => {
             <Schedule />
             <div id="main-container">                
                 <div id="all-announcements">
+                    <link rel="stylesheet" href="/resources/static/css/home-page.css" /> 
                     <div className="morning-announcements">
                         <AnnouncementContainer/>
                     </div>
