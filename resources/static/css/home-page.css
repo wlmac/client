@@ -1,0 +1,40 @@
+#AnnouncementContainer {
+    
+    .content{
+        display: flex;
+    }
+
+    .content > * {
+        flex: 1 1 0px;
+    }
+
+    @media (max-width: 600px) {
+
+        .right-side {
+            display: none;
+        }
+    }
+}
+
+#all-announcements {
+    .blog p {
+        line-height: initial;
+    }
+
+    @media (max-width: 1000px) {
+        flex-direction: column;
+
+        .morning-announcements {
+            margin-right: 4%;
+        }
+
+        .featured-blog-posts {
+            margin-left: 4%;
+            margin-top: 40px;
+
+            > * {
+                margin-bottom: 15px !important;
+            }
+        }
+    }
+}
