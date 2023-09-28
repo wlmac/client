@@ -63,6 +63,7 @@ const MiniCalendar = () => {
             }
             innerEl.style.borderBottom = outerBorder
             innerEl.style.height = elHeight
+            innerEl.style.padding = '3px'
           }
     }
 
@@ -126,6 +127,7 @@ const MiniCalendar = () => {
                 },
                 eventDidMount: (mountArg) => {
                     mountArg.el.style.boxShadow = "1px 3px 3px lightgray"
+                    mountArg.el.style.marginBottom = '3px'
                 }
             }
         }}
