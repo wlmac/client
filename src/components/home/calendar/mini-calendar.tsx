@@ -127,7 +127,7 @@ const MiniCalendar = () => {
                 },
                 eventDidMount: (mountArg) => {
                     mountArg.el.style.boxShadow = "1px 3px 3px lightgray"
-                    mountArg.el.style.marginBottom = '3px'
+                    mountArg.el.style.marginBottom = '5px'
                 }
             }
         }}
