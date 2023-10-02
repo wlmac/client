@@ -17,6 +17,7 @@ const MiniCalendar = () => {
     // order border style
     const outerBorder = "solid 4px #DDDDDD"
     const innerBorder = "solid 1px #999999"
+    const minCellHeight = 100
     // current day
     const curDay = new Date().getDay()
 
@@ -38,7 +39,7 @@ const MiniCalendar = () => {
     const reformatDay = (mountArg: DayCellMountArg) => {
         const dayEl = mountArg.el
         const innerEl = mountArg.el.querySelector<HTMLElement>('.fc-daygrid-day-frame')
-        const elHeight = dayEl.clientWidth / aspectRatio + "px";
+        const elHeight = Math.max(minCellHeight, dayEl.clientWidth / aspectRatio) + 'px';
         // resize the date cell
         if (dayEl.clientHeight < dayEl.clientWidth / aspectRatio) {
             dayEl.style.height = elHeight
@@ -83,12 +84,22 @@ const MiniCalendar = () => {
                     const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
                     const date = arg.date;
                     const curDay = days[date.getDay()]
+                    const largeHeader = window.innerWidth > 1000
 
                     // current date
                     const dayNum = date.getDate()
-                    return <div style={{display: 'flex', justifyContent: 'space-between', padding: '2px 10px', fontSize: '1.2em'}}>
+                    const largeStyling = {
+                        padding: '2px 10px',
+                        fontSize: '1.2em'
+                    }
+                    const smallStyling = {
+                        padding: '2px 0',
+                        fontSize: '1em'
+                    }
+                    
+                    return <div style={{display: 'flex', justifyContent: 'space-between', ...(largeHeader ? largeStyling : smallStyling)}}>
                         <div><span>{curDay}</span></div>
-                        <div><span style={{marginRight: '0'}}>{dayNum}</span></div>
+                        {(largeHeader && <div><span style={{marginRight: '0'}}>{dayNum}</span></div>)}
                     </div>
                 },
                 dayHeaderDidMount: (mountArg) => {
