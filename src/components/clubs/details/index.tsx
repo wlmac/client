@@ -102,7 +102,7 @@ export const ClubDetails = (): JSX.Element => {
 
     const ClubLink = (props: { href: string }): JSX.Element => {
         return (
-            <li><i className="zmdi zmdi-link zmdi-hc-lg" aria-hidden="true"></i><a href={props.href} target="_blank" style={{ wordBreak: "break-word" }}>{props.href}</a></li>
+            <li style={{marginBottom: '0.7em'}}><i className="zmdi zmdi-link zmdi-hc-lg" aria-hidden="true" style={{marginRight: '3px'}}></i><a href={props.href} target="_blank" style={{ wordBreak: "break-word" , color: 'var(--link-colour)', lineHeight: '1rem'}}>{props.href}</a></li>
         )
     }
 

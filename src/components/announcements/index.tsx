@@ -377,13 +377,7 @@ export const MiniAnnouncement = (props: {
   const data: Announcement = props.announcement;
   const session: Session = React.useContext(SessionContext);
 
-  const [author, setAuthor] = React.useState<User>({} as User);
-  const [organization, setOrganization] = React.useState<Organization>({} as Organization);
-
-  React.useEffect(() => {
-    if(data.author) setAuthor(session.allUsers.find((user: User) => user.id === data.author.id)!);
-    setOrganization(session.allOrgs.find((organization: Organization) => organization.id === data.organization.id)!);
-  }, [session.allUsers, session.allOrgs]);
+  const author = data.author
 
   return author ? (
     <div className="miniAnnouncement">

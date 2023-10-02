@@ -347,8 +347,8 @@ const DetailPanel = (props: DetailPanelProps): JSX.Element => {
       <h4 className="event_title">{curEvent.name}</h4>
       <em><a className="eventHost event_host_name">{(curEvent.organization ?? { name: "" }).name}</a></em>
       <hr />
-      <p className={"event_description " + (toTruncate ? "truncate-100" : "")}
-        onClick={() => setToTruncate(!toTruncate)}>
+      <p className={"event_description"} style={{transitionDuration: "0.5s", maxHeight: toTruncate ? "100px" : "fit-content"}}
+        onMouseEnter={() => setToTruncate(false)} onMouseLeave={() => setToTruncate(true)}>
         {curEvent.description.replace(/(?:\r\n|\r|\n)/g, '<br>')}
       </p>
       <div className="tag-section">{tagEls}</div>
