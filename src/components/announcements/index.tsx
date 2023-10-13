@@ -10,6 +10,7 @@ import Media from "../../util/core/misc/media";
 import Tag from "../../util/core/interfaces/tag";
 import { getTags, TagElement, DeletableTagElement } from "../../util/core/tags";
 import { Session, SessionContext, User } from "../../util/core/session";
+import UserField from '../../util/core/interfaces/post';
 import Routes from "../../util/core/misc/routes";
 import { loggedIn } from "../../util/core/AuthService";
 import {
@@ -430,13 +431,8 @@ export const AnnouncementElement = (props: {
     const data: Announcement = props.announcement;
     const session: Session = React.useContext(SessionContext);
 
-    const [author, setAuthor] = React.useState<User>({} as User);
-    const [organization, setOrganization] = React.useState<Organization>({} as Organization);
-
-    React.useEffect(() => {
-        if(data.author) setAuthor(session.allUsers.find((user: User) => user.id === data.author.id)!);
-        setOrganization(session.allOrgs.find((organization: Organization) => organization.id === data.organization.id)!);
-    }, [session.allUsers, session.allOrgs]);
+    const author = data.author;
+    const organization = data.organization;
 
     return organization && author ? (
         <div className="card">
