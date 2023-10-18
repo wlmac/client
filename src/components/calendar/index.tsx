@@ -123,17 +123,16 @@ export const Calendar = (): JSX.Element => {
       <div className="container">
         <CalendarBoard updateEvents={updateEvents} selectedDate={selectedDate}
           setSelectedDate={newDateSelected} />
-
-        <div id="details">
-          <div className="container">
-            <a href="https://maclyonsden.com/calendar.ics">URL to iCalendar (use this to add to Google Calendar)</a>
-            <h3 id="detailsCurrentDay">{dateStr}</h3>
-            <p id="detailsCurrentWeek"></p>
-            <hr />
-            <p className="no-event-inform">No events on this day</p>
-            <div id="eventDetails">
-              <Cards eventsToday={eventsOnDay} date={selectedDate} />
-            </div>
+      </div>
+      <div id="details">
+        <div className="container">
+          <a href="https://maclyonsden.com/calendar.ics">URL to iCalendar (use this to add to Google Calendar)</a>
+          <h3 id="detailsCurrentDay">{dateStr}</h3>
+          <p id="detailsCurrentWeek"></p>
+          <hr />
+          <p className="no-event-inform">No events on this day</p>
+          <div id="eventDetails">
+            <Cards eventsToday={eventsOnDay} date={selectedDate} />
           </div>
         </div>
       </div>
@@ -250,6 +249,7 @@ const CalendarBoard = (props: BoardProps): JSX.Element => {
       }}
       height={"auto"}
       selectLongPressDelay={0}
+      stickyHeaderDates={false}
     />
 
   return (<>
