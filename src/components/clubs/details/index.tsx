@@ -139,7 +139,7 @@ export const ClubDetails = (): JSX.Element => {
                         </div>
                         <div className="row club-info">
                             <div className="col m8">
-                                <div className="description" style={{marginTop: '1em'}}>
+                                <div className="description" style={{marginTop: '2em'}}>
                                     {club.bio}
                                     <br /><br />
                                     {
