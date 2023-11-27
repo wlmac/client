@@ -48,7 +48,8 @@ export const BlogDetails = (): JSX.Element => {
                         </div>
                         <div className="card-authors-text">
                             <Link to={`/user/${post.author.username}`} className="link">{`${post.author.first_name} ${post.author.last_name}`}</Link>
-                            <>&bull; {new Date(post.created_date).toLocaleTimeString(undefined, dateFormat)}</>
+                            <>&bull; {new Date(post.created_date).toLocaleTimeString(undefined, dateFormat)}  </>
+                            <>&bull; estimated reading time: {Math.ceil(post.body.trim().split(/\s+/).length / 225)} min</>
                             {/* {post.created_date !== post.last_modified_date && " (Edited)"} */}
                         </div>
                         {

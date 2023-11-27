@@ -130,7 +130,6 @@ export const Calendar = (): JSX.Element => {
           <h3 id="detailsCurrentDay">{dateStr}</h3>
           <p id="detailsCurrentWeek"></p>
           <hr />
-          <p className="no-event-inform">No events on this day</p>
           <div id="eventDetails">
             <Cards eventsToday={eventsOnDay} date={selectedDate} />
           </div>
@@ -269,7 +268,7 @@ const Cards = (props: { eventsToday: Event[], date: Date | undefined }): JSX.Ele
   // a list of cards
   const cards = date == undefined ? [] : eventsToday.map((event: Event) => <Card key={event.id} curEvent={event} date={date} />);
   if (cards.length === 0) {
-    return (<></>);
+    return (<><p className="no-event-inform">No events on this day</p></>);
   } else {
     return <>{cards}</>;
   }

@@ -111,6 +111,7 @@ const BlogPosts = () => {
 const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Element => {
     const post = props.post;
     const session: Session = React.useContext(SessionContext);
+    const time = Math.ceil(post.body.trim().split(/\s+/).length / 225);
 
     return (
         <>
@@ -134,7 +135,7 @@ const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Eleme
                                 <div className="card-authors-text">
                                     <Link to={`/user/${post.author.username}`} className="link">{`${post.author.first_name} ${post.author.last_name}`}</Link>
                                     <br />
-                                    • posted {new Date(post.created_date).toLocaleTimeString(undefined, dateFormat)}
+                                    • {new Date(post.created_date).toLocaleTimeString(undefined, dateFormat)}  • estimated reading time: {time} min
                                 </div>
                             </>
                         </div>
