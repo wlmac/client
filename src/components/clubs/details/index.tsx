@@ -106,13 +106,6 @@ export const ClubDetails = (): JSX.Element => {
         )
     }
 
-    const postStyle = {
-        height: "inherit",
-        overflow: "scroll",
-        maxHeight: "50em",
-        padding: "5px",
-    }
-
     return (
         <>
             <link rel="stylesheet" href="/resources/static/css/detail.css" />
@@ -146,7 +139,7 @@ export const ClubDetails = (): JSX.Element => {
                         </div>
                         <div className="row club-info">
                             <div className="col m8">
-                                <div className="description">
+                                <div className="description" style={{marginTop: '1em'}}>
                                     {club.bio}
                                     <br /><br />
                                     {
@@ -169,7 +162,7 @@ export const ClubDetails = (): JSX.Element => {
                             </div>
                         </div>
 
-                        <div className="row">
+                        <div className="row" style={{display: 'flex', alignItems: 'stretch'}}>
                             <div className="col m4 s12">
                                 <section id="executives">
                                     <h4>
@@ -223,16 +216,23 @@ export const ClubDetails = (): JSX.Element => {
                                     </div>
                                 </section>
                             </div>
-                            <div className="col m8 s12">
+                            <div className="col m8 s12" style={{display: 'flex', flexDirection: 'column'}}>
                                 <section id="AnnouncementHeading">
                                     <h4>
                                         Announcements
                                     </h4>
                                     <hr />
                                 </section>
-                                <section style={postStyle}>
-                                <ClubAnnouncements orgID={club.id}></ClubAnnouncements>
-                                </section>
+                                <div style={{position: 'relative', flexGrow: '1'}}>
+                                    <section style={{
+                                            position: 'absolute',
+                                            inset: '0',
+                                            overflow: "scroll",
+                                            padding: "5px",
+                                        }}>
+                                    <ClubAnnouncements orgID={club.id}></ClubAnnouncements>
+                                    </section>
+                                </div>
                             </div>
                         </div>
                     </div>
