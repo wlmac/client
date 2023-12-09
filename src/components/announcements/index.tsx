@@ -374,7 +374,6 @@ export const MiniAnnouncement = (props: {
   announcement: Announcement;
   tags: Tag[];
 }): JSX.Element => {
-
   const data: Announcement = props.announcement;
   const session: Session = React.useContext(SessionContext);
 
@@ -386,7 +385,7 @@ export const MiniAnnouncement = (props: {
         {data.title}
       </Link>
       <div className="club-info-container">
-        <Link className="club-info" to={`/club/${data.organization.slug}`}><img className="circle" src={data.organization.icon} /><div className="club-name">{data.organization.name}</div></Link>
+        <Link className="club-info" to={`/club/${data.organization.slug}`}><img className="circle" src={`${Routes.BASEURL}${data.organization.icon}`} /><div className="club-name">{data.organization.name}</div></Link>
       </div>
     </div>
   ) : <>Loading...</>;
@@ -413,7 +412,7 @@ export const FeaturedAnnouncement = (props: {
         {data.title}
       </Link>
       <div className="club-info-container">
-        <Link className="club-info" to={`/club/${data.organization.slug}`}><img className="circle" src={data.organization.icon} /><div className="club-name">{data.organization.name}</div></Link>
+        <Link className="club-info" to={`/club/${data.organization.slug}`}><img className="circle" src={`${Routes.BASEURL}${data.organization.icon}`} /><div className="club-name">{data.organization.name}</div></Link>
       </div>
       <div className="featured-body-text">
         {markdownToPlainText(data.body)}
