@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Link, NavigateFunction, useNavigate, useParams } from "react-router-dom";
 import { loggedIn } from "../../../util/core/AuthService";
-import Organization from "../../../util/core/interfaces/organization";
+import Organization, {OrganizationUser} from "../../../util/core/interfaces/organization";
 import Tag from "../../../util/core/interfaces/tag";
 import { APIResponse } from "../../../util/core/managers/session";
 import { get_gravatar_uri } from "../../../util/core/misc/gravatar";
@@ -43,8 +43,8 @@ export const ClubDetails = (): JSX.Element => {
     const session: Session = React.useContext(SessionContext);
     const [club, setClub] = React.useState({ name: "Loading..." } as Organization);
     const [tags, setTags] = React.useState([] as Array<Tag>);
-    const [execs, setExecs] = React.useState([] as Array<User>);
-    const [members, setMembers] = React.useState([] as Array<User>);
+    const [execs, setExecs] = React.useState([] as Array<OrganizationUser>);
+    const [members, setMembers] = React.useState([] as Array<OrganizationUser>);
 
     React.useEffect((): void => {
         document.title = `${club.name} | Metropolis`;
@@ -78,23 +78,8 @@ export const ClubDetails = (): JSX.Element => {
             });
 
             // Execs and members
-            session.request('get', `${Routes.OBJECT}/user?limit=99999999`).then((res) => {
-                const users_data: User[] = res.data.results;
-                setExecs(current_club.execs.map((execId: number): User => {
-                    for (let i = 0; i < users_data.length; i++) {
-                        if (users_data[i].id === execId) return users_data[i];
-                    }
-                    return null!;
-                }));
-                setMembers(current_club.members.map((execId: number): User => {
-                    for (let i = 0; i < users_data.length; i++) {
-                        if (users_data[i].id === execId) return users_data[i];
-                    }
-                    return null!;
-                }));
-            }).catch(() => {
-                session.refreshAuth();
-            });
+            setExecs(current_club.execs);
+            setMembers(current_club.members);
         }).catch((err) => {
             session.refreshAuth();
         });
@@ -171,7 +156,7 @@ export const ClubDetails = (): JSX.Element => {
                                     <hr />
                                     <div className="members-list">
                                         {
-                                            execs.map((exec: User): JSX.Element => {
+                                            execs.map((exec: OrganizationUser): JSX.Element => {
                                                 if (exec === null) return <></>;
                                                 return (
                                                     <Link to={`/user/${exec.username}`} key={exec.id}>
@@ -197,7 +182,7 @@ export const ClubDetails = (): JSX.Element => {
 
                                     <div className="members-list">
                                         {
-                                            members.map((member: User): JSX.Element => {
+                                            members.map((member: OrganizationUser): JSX.Element => {
                                                 if (member === null) return <></>;
                                                 return (
                                                     <Link to={`/user/${member.username}`} key={member.id}>

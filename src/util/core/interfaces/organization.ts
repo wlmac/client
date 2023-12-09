@@ -1,6 +1,15 @@
+import { Url } from 'url';
 import Media from '../misc/media';
 import MembershipStatus from '../misc/membership';
 import Tag from './tag';
+
+export interface OrganizationUser {
+  id: number,
+  username: string,
+  first_name: string,
+  last_name: string,
+  gravatar_url: string
+}
 
 export default interface Organization {
   name: string;
@@ -13,8 +22,8 @@ export default interface Organization {
   applications_open: boolean; // Accepting Applications
   owner: number;
   supervisors: Array<number>;
-  members: Array<number>;
-  execs: Array<number>;
+  members: Array<OrganizationUser>;
+  execs: Array<OrganizationUser>;
   banner: string;
   icon: string;
   tags: Array<number>;
