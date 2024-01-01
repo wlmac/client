@@ -16,10 +16,10 @@ export const ProfileNav = (): JSX.Element => {
                 </li>
                 <hr />
                 <li>
-                    <a className="link" href="/admin/core/announcement/add/">Announcements</a>
+                    <Link className="link" to="/admin/core/announcement/add/">Announcements</Link>
                 </li>
                 <li>
-                    <a className="link" href="/admin/core/event/add/">Events</a>
+                    <Link className="link" to="/admin/core/event/add/">Events</Link>
                 </li>
                 <hr />
                 <li>

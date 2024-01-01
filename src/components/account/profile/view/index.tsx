@@ -79,24 +79,34 @@ export const ProfileView = (): JSX.Element => {
                     </div>
                     <hr />
                     <div className="body">
-                        <div className="field">
-                            <div className="label">Graduating</div><div>{user.graduating_year}</div>
-                        </div>
-                        <div className="field">
-                            <div className="label">Executive of</div>
-                            {/* {user.organizations_leading.map((org: Organization, idx: number): JSX.Element => {
-                                return <></>;
-                            })} */}
-                            {
-                                user.organizations_leading.map((org: Organization) => {
-                                    return org.name;
-                                }).join(", ")
-                            }
-                        </div>
-                        <br />
+                        {
+                            user.graduating_year == null ?
+                            ""
+                            :
+                            <div className="field">
+                                <div className="label">Graduating</div>
+                                <div>{user.graduating_year}</div>
+                            </div>
+                        }
+                        {
+                            user.organizations_leading.length == 0 ?
+                            ""
+                            :
+                            <div className="field">
+                                <div className="label">Executive of</div>
+                                {
+                                    user.organizations_leading.map((org: Organization) => {
+                                        return org.name;
+                                    }).join(", ")
+                                }
+                            </div>
+                        }
                         <div>
                             {user.bio ?
-                                <Markdown text={user.bio} />
+                                <div>
+                                    <br/>
+                                    <Markdown text={user.bio} />
+                                </div>
                                 :
                                 <p>This user has not shared any information.</p>
                             }

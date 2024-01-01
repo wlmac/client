@@ -59,7 +59,6 @@ hr {
 .field {
     display: -webkit-box;
     display: -ms-flexbox;
-    display: flex; 
     margin: 1rem 0;
 }
 
