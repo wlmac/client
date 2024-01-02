@@ -24,14 +24,15 @@ export const Profile = (props: { children?: JSX.Element }): JSX.Element => {
                         </li>
                         <li className="divider"></li>
                         <li>
-                            <Link className="link sidenav-close" to="/admin/core/announcement/add/">Add
-                                announcement</Link>
+                            <Link className="link sidenav-close" to="/admin/core/announcement/add/">Add announcement</Link>
                         </li>
                         <li>
                             <Link className="link sidenav-close" to="/admin/core/event/add/">Add event</Link>
                         </li>
                         <li className="divider"></li>
-                        <li><Link to="/accounts/logout/" className="sidenav-close">Logout</Link></li>
+                        <li>
+                            <Link to="/accounts/logout/" className="sidenav-close">Logout</Link>
+                        </li>
                     </ul>
 
                     <ProfileNav />

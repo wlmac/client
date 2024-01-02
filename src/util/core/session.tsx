@@ -21,7 +21,7 @@ export interface User {
     is_staff: boolean,
     graduating_year: number,
     id: number,
-    organizations: Array<number>,
+    organizations: Array<Organization>,
     organizations_leading: Array<Organization>,
     tags_following: Array<number>,
     timezone: string,

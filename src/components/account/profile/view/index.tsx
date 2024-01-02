@@ -101,6 +101,19 @@ export const ProfileView = (): JSX.Element => {
                                 }
                             </div>
                         }
+                        {
+                            user.organizations.length == 0 ?
+                            ""
+                            :
+                            <div className="field">
+                                <div className="label">Following</div>
+                                {
+                                    user.organizations.map((org: Organization) => {
+                                        return org.name;
+                                    }).join(", ")
+                                }
+                            </div>
+                        }
                         <div>
                             {user.bio ?
                                 <div>
