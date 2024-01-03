@@ -385,7 +385,12 @@ export const MiniAnnouncement = (props: {
         {data.title}
       </Link>
       <div className="club-info-container">
-        <Link className="club-info" to={`/club/${data.organization.slug}`}><img className="circle" src={`${Routes.BASEURL}${data.organization.icon}`} /><div className="club-name">{data.organization.name}</div></Link>
+        <Link className="club-info" to={`/club/${data.organization.slug}`}>
+            <img className="circle" src={`${Routes.BASEURL}${data.organization.icon}`} />
+            <div className="club-name">
+                {data.organization.name}
+            </div>
+        </Link>
       </div>
     </div>
   ) : <>Loading...</>;
@@ -449,7 +454,7 @@ export const AnnouncementElement = (props: {
                 <h1 className="title">{data.title}</h1>
                 <div className="card-authors">
                     <div className="card-authors-image">
-                        <Link to={`/club/${data.organization.slug}`}><img className="circle" src={data.organization.icon} /></Link>
+                        <Link to={`/club/${data.organization.slug}`}><img className="circle" src={Routes.BASEURL + data.organization.icon} /></Link>
                     </div>
                     <div className="card-authors-text">
                         <Link to={`/club/${data.organization.slug}`} className="link">{data.organization.name}</Link>,
