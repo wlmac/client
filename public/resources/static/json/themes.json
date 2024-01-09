@@ -46,7 +46,7 @@
     },
     {
       "name": "spring",
-      "startTime": "[year]-03-15T00:00:00.000",
+      "startTime": "[year]-03-09T00:00:00.000",
       "endTime": "[year]-06-15T23:59:59.999",
       "bannerPath": "/resources/static/css/themes/banners/spring-banner.css",
       "bannerImage": "/resources/static/img/themes/banners/spring.jpg",

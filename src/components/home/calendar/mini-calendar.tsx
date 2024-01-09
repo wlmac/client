@@ -109,7 +109,7 @@ const MiniCalendar = () => {
                     if(pad){
                         pad.style.width = '100%'
                         pad.classList.add('inherit-cell')
-                        pad.style.color = 'var(--contrast-colour)'
+                        pad.style.color = 'var(--highlight-colour)'
                     }
 
                     // remove border
