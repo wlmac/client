@@ -65,7 +65,6 @@ export const ThemeProvider = (props: { children: React.ReactNode }) => {
                     // startTime > endTime: cur after start or before end (wrapping around)
                     if(startTime <= endTime && (startTime <= curTime && curTime <= endTime) ||      
                         startTime > endTime && (startTime <= curTime || curTime <= endTime)) { 
-                            console.log(cur)
                             // fill in each property
                             if(!theme.name) theme.name = cur.name;
                             if(!theme.bannerPath) theme.bannerPath = cur.bannerPath;
