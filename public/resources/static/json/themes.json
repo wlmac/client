@@ -77,7 +77,7 @@
       "endTime": "[year]-03-14T23:59:59.999",
       "bannerPath": "/resources/static/css/themes/banners/winter-banner.css",
       "bannerImage": "/resources/static/img/themes/banners/winter.jpg",
-      "palettePath": "/resources/static/css/themes/palette/christmas-theme.css",
+      "palettePath": "/resources/static/css/themes/palette/base-theme.css",
       "logo": null
     }
   ]
