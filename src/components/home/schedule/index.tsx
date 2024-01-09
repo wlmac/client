@@ -4,11 +4,13 @@ import { Session, SessionContext } from "../../../util/core/session";
 import { ScheduleSlot } from "../../../util/core/interfaces/schedule";
 import Routes from "../../../util/core/misc/routes";
 import { Link } from "react-router-dom";
+import { Theme, ThemeContext } from "../../../util/core/client/theme/ThemeContext";
 
 export const Schedule = (): JSX.Element => {
     const [schedule, setSchedule] = React.useState<Array<ScheduleSlot>>([]);
     const [fetched, setFetched] = React.useState(false);
     const session: Session = React.useContext(SessionContext);
+    const theme: Theme = React.useContext(ThemeContext)
 
     const [currentTime, setCurrentTime] = React.useState(new Date());
 
@@ -113,7 +115,7 @@ export const Schedule = (): JSX.Element => {
 
     return (
         <div className="banner">
-            <div className="background"><img alt="" src="/resources/static/img/themes/banners/spring.jpg" /></div>
+            <div className="background"><img alt="" src={theme.bannerImage} /></div>
             <div className="overlay-container valign-wrapper" >
                 <div className="next-class">
                     {

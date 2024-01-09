@@ -1,8 +1,10 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
+import { Theme, ThemeContext } from "../../util/core/client/theme/ThemeContext";
 
 export const NotFound = (): JSX.Element => {
     const [comic, setComic] = React.useState(-1);
+    const theme: Theme = React.useContext(ThemeContext)
 
     React.useEffect((): void => {
         document.title = "404 Page Not Found | Metropolis";
@@ -17,7 +19,7 @@ export const NotFound = (): JSX.Element => {
                 <img className="comic-img" style={{ maxWidth: "100%" }} src={`/resources/static/img/404-comics/404-${comic}.png`} />
 
                 <div className="display-metropolis valign-wrapper">
-                    <img className="inline-logo" src="/resources/static/img/themes/logos/dark-transparent.png" />
+                    <img className="inline-logo" src={theme.logo} />
                 </div>
 
                 <div className="game-container" hidden={true}>

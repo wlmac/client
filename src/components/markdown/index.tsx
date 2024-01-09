@@ -64,7 +64,10 @@ import { marked } from "marked"
 
 export function markdownToPlainText(markdownString: string): string {
     if (!markdownString) return "";
-    const html = marked(markdownString);
+    const html = marked(markdownString, {
+        headerIds: false,
+        mangle: false
+    });
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
     const plainText = doc.body.innerText.trim();
