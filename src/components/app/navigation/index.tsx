@@ -3,10 +3,12 @@ import * as React from "react";
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import { getToken, loggedIn, logout } from "../../../util/core/AuthService";
 import { Session, SessionContext } from "../../../util/core/session";
+import { Theme, ThemeContext } from "../../../util/core/client/theme/ThemeContext";
 
 export const NavigationBar = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
     const session: Session = React.useContext(SessionContext);
+    const theme: Theme = React.useContext(ThemeContext)
 
     return (
         <>
@@ -81,7 +83,7 @@ export const NavigationBar = (): JSX.Element => {
                 <div className="nav-wrapper">
                     <NavLink href="/">
                         <div className="brand-logo">
-                            <img className="img-logo" src="/resources/static/img/themes/logos/dark-transparent.png" />
+                            <img className="img-logo" src={theme.logo} />
                         </div>
                     </NavLink>
 

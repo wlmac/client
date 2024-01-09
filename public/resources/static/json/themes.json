@@ -1,0 +1,83 @@
+[
+    {
+      "name": "39",
+      "startTime": "[year]-03-09T00:00:00.000",
+      "endTime": "[year]-03-09T23:59:59.999",
+      "bannerPath": null,
+      "bannerImage": null,
+      "palettePath": "/resources/static/css/themes/palette/39-theme.css",
+      "logo": null
+    },
+    {
+      "name": "christmas",
+      "startTime": "[year]-12-18T00:00:00.000",
+      "endTime": "[year]-12-30T23:59:59.999",
+      "bannerPath": "/resources/static/css/themes/banners/christmas-banner.css",
+      "bannerImage": "/resources/static/img/themes/banners/christmas.jpg",
+      "palettePath": "/resources/static/css/themes/palette/christmas-theme.css",
+      "logo": "/resources/static/img/themes/logos/christmas-transparent.png"
+    },
+    {
+      "name": "halloween",
+      "startTime": "[year]-10-27T00:00:00.000",
+      "endTime": "[year]-11-01T23:59:59.999",
+      "bannerPath": "/resources/static/css/themes/banners/halloween-banner.css",
+      "bannerImage": "/resources/static/img/themes/banners/halloween.jpg",
+      "palettePath": "/resources/static/css/themes/palette/halloween-theme.css",
+      "logo": "/resources/static/img/themes/logos/halloween-transparent.png"
+    },
+    {
+      "name": "remembrance",
+      "startTime": "[year]-11-09T00:00:00.000",
+      "endTime": "[year]-11-11T23:59:59.999",
+      "bannerPath": null,
+      "bannerImage": null,
+      "palettePath": null,
+      "logo": "/resources/static/img/themes/logos/remembrance-transparent.png"
+    },
+    {
+      "name": "valentines day",
+      "startTime": "[year]-02-10T00:00:00.000",
+      "endTime": "[year]-02-14T23:59:59.999",
+      "bannerPath": "/resources/static/css/themes/banners/valentines-banner.css",
+      "bannerImage": "/resources/static/img/themes/banners/valentines.jpg",
+      "palettePath": "/resources/static/css/themes/palette/valentines-theme.css",
+      "logo": "/resources/static/img/themes/logos/valentines-transparent.png"
+    },
+    {
+      "name": "spring",
+      "startTime": "[year]-03-15T00:00:00.000",
+      "endTime": "[year]-06-15T23:59:59.999",
+      "bannerPath": "/resources/static/css/themes/banners/spring-banner.css",
+      "bannerImage": "/resources/static/img/themes/banners/spring.jpg",
+      "palettePath": "/resources/static/css/themes/palette/base-theme.css",
+      "logo": null
+    },
+    {
+      "name": "summer",
+      "startTime": "[year]-06-16T00:00:00.000",
+      "endTime": "[year]-09-14T23:59:59.999",
+      "bannerPath": "/resources/static/css/themes/banners/summer-banner.css",
+      "bannerImage": "/resources/static/img/themes/banners/summer.jpg",
+      "palettePath": "/resources/static/css/themes/palette/base-theme.css",
+      "logo": null
+    },
+    {
+      "name": "autumn",
+      "startTime": "[year]-09-17T00:00:00.000",
+      "endTime": "[year]-12-15T23:59:59.999",
+      "bannerPath": "/resources/static/css/themes/banners/autumn-banner.css",
+      "bannerImage": "/resources/static/img/themes/banners/autumn.jpg",
+      "palettePath": "/resources/static/css/themes/palette/base-theme.css",
+      "logo": null
+    },
+    {
+      "name": "winter",
+      "startTime": "[year]-12-16T00:00:00.000",
+      "endTime": "[year]-03-14T23:59:59.999",
+      "bannerPath": "/resources/static/css/themes/banners/winter-banner.css",
+      "bannerImage": "/resources/static/img/themes/banners/winter.jpg",
+      "palettePath": "/resources/static/css/themes/palette/christmas-theme.css",
+      "logo": null
+    }
+  ]
