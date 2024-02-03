@@ -403,15 +403,7 @@ export const FeaturedAnnouncement = (props: {
   const data: Announcement = props.announcement;
   const session: Session = React.useContext(SessionContext);
 
-  const [author, setAuthor] = React.useState<User>({} as User);
-  const [organization, setOrganization] = React.useState<Organization>({} as Organization);
-
-  React.useEffect(() => {
-    if(data.author) setAuthor(session.allUsers.find((user: User) => user.id === data.author.id)!);
-    setOrganization(session.allOrgs.find((organization: Organization) => organization.id === data.organization.id)!);
-  }, [session.allUsers, session.allOrgs]);
-
-  return organization && author ? (
+  return (
     <div className="featuredAnnouncement">
       <Link className="featured-title" to={`/announcement/${data.id}`}>
         {data.title}
@@ -422,8 +414,7 @@ export const FeaturedAnnouncement = (props: {
       <div className="featured-body-text">
         {markdownToPlainText(data.body)}
       </div>
-    </div>
-  ) : <>Loading...</>;
+    </div>)
 }
 
 export const AnnouncementElement = (props: {
