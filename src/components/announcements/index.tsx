@@ -66,7 +66,7 @@ export const Announcements = (): JSX.Element => {
                 removeMy.push({
                     id: 'my',
                     text: "MY FEED",
-                    filters: (session.user.organizations) ? session.user.organizations.map(e => { return '&organization=' + e }).join('') : ''
+                    filters: (session.user.organizations) ? session.user.organizations.map(e => { return '&organization=' + e.id }).join('') : ''
                 });
                 return removeMy;
             })
