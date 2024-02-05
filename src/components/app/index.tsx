@@ -1,5 +1,5 @@
 import * as React from "react";
-import { BrowserRouter, Routes, Route, useNavigate, NavigateFunction, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate, NavigateFunction, useLocation, Link } from "react-router-dom";
 import { NavigationBar } from "./navigation";
 import { Footer } from "./footer";
 import { Home } from "../home";
@@ -30,6 +30,7 @@ import { ProfileView } from "../account/profile/view";
 import { ProfileEdit } from "../account/profile/edit";
 import { TimetableEdit } from "../account/timetable/edit";
 import { Alert, Snackbar } from "@mui/material";
+import { Theme, ThemeContext, ThemeProvider } from '../../util/core/client/theme/ThemeContext'
 import { NewCourse } from "../account/timetable/edit/new-course";
 import { LoginRequired } from "../../util/login-required";
 import { MyProfile } from "../account/profile/my-profile";
@@ -37,6 +38,7 @@ import { MyProfile } from "../account/profile/my-profile";
 export const _App = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
     const session: Session = React.useContext(SessionContext);
+    const theme: Theme = React.useContext(ThemeContext);
     const location = useLocation();
 
     React.useEffect((): void => {
@@ -49,6 +51,8 @@ export const _App = (): JSX.Element => {
 
     return (
         <>
+            <link rel="stylesheet" href={theme.bannerPath} />
+            <link rel="stylesheet" href={theme.palettePath} />
             <div className="page" style={{backgroundColor: "white"}}>
                 <NavigationBar />
 
@@ -128,7 +132,9 @@ export const App = (): JSX.Element => {
     return (
         <BrowserRouter>
             <SessionProvider>
-                <_App />
+                <ThemeProvider>
+                    <_App />
+                </ThemeProvider>
             </SessionProvider>
         </BrowserRouter>
     );

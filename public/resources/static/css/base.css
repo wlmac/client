@@ -351,12 +351,12 @@ blockquote {
     font-size: 13px;
     line-height: 0.5rem;
    
-    color: #99acbc;
+    color: var(--mid-colour);
     font-weight: lighter;
 }
 
 .footer-title a {
-    color: #99acbc;
+    color: var(--mid-colour);
 }
 
 .footer-title-par {

@@ -8,6 +8,7 @@ interface UserField{
   username: string;
   first_name: string;
   last_name: string;
+  gravatar_url: string;
 }
 
 interface OrganizationField{

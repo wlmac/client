@@ -34,7 +34,7 @@
     "mapbox-gl": "^2.14.1",
     "marked": "^5.0.2",
     "marked-gfm-heading-id": "^3.0.6",
-    "marked-mangle": "^1.1.2",
+    "marked-mangle": "^1.1.6",
     "materialize-css": "^1.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

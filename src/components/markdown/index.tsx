@@ -12,7 +12,7 @@ const Markdown = ({ text }: { text: string }): JSX.Element => { //takes markdown
             the above regex: 
             (?<!\\) negative lookbehind (asserts that there is no escape char \)
             { asserts existence of {
-            (.+?) capture grouop #1 which is the juicy meat we want (. matches any character, + is 1 or more occurences, and ? is lazy mode)
+            (.+?) capture group #1 which is the juicy meat we want (. matches any character, + is 1 or more occurences, and ? is lazy mode)
             (?<!\\)} negative lookbehind part 2 looking for unescaped closing }
 
             the $1 in the replacement string references capture group #1
@@ -64,7 +64,10 @@ import { marked } from "marked"
 
 export function markdownToPlainText(markdownString: string): string {
     if (!markdownString) return "";
-    const html = marked(markdownString);
+    const html = marked(markdownString, {
+        headerIds: false,
+        mangle: false
+    });
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
     const plainText = doc.body.innerText.trim();

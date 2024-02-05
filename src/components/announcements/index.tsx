@@ -66,7 +66,7 @@ export const Announcements = (): JSX.Element => {
                 removeMy.push({
                     id: 'my',
                     text: "MY FEED",
-                    filters: (session.user.organizations) ? session.user.organizations.map(e => { return '&organization=' + e }).join('') : ''
+                    filters: (session.user.organizations) ? session.user.organizations.map(e => { return '&organization=' + e.id }).join('') : ''
                 });
                 return removeMy;
             })
@@ -385,7 +385,12 @@ export const MiniAnnouncement = (props: {
         {data.title}
       </Link>
       <div className="club-info-container">
-        <Link className="club-info" to={`/club/${data.organization.slug}`}><img className="circle" src={`${Routes.BASEURL}${data.organization.icon}`} /><div className="club-name">{data.organization.name}</div></Link>
+        <Link className="club-info" to={`/club/${data.organization.slug}`}>
+            <img className="circle" src={`${Routes.BASEURL}${data.organization.icon}`} />
+            <div className="club-name">
+                {data.organization.name}
+            </div>
+        </Link>
       </div>
     </div>
   ) : <>Loading...</>;
@@ -398,15 +403,7 @@ export const FeaturedAnnouncement = (props: {
   const data: Announcement = props.announcement;
   const session: Session = React.useContext(SessionContext);
 
-  const [author, setAuthor] = React.useState<User>({} as User);
-  const [organization, setOrganization] = React.useState<Organization>({} as Organization);
-
-  React.useEffect(() => {
-    if(data.author) setAuthor(session.allUsers.find((user: User) => user.id === data.author.id)!);
-    setOrganization(session.allOrgs.find((organization: Organization) => organization.id === data.organization.id)!);
-  }, [session.allUsers, session.allOrgs]);
-
-  return organization && author ? (
+  return (
     <div className="featuredAnnouncement">
       <Link className="featured-title" to={`/announcement/${data.id}`}>
         {data.title}
@@ -417,8 +414,7 @@ export const FeaturedAnnouncement = (props: {
       <div className="featured-body-text">
         {markdownToPlainText(data.body)}
       </div>
-    </div>
-  ) : <>Loading...</>;
+    </div>)
 }
 
 export const AnnouncementElement = (props: {
@@ -449,7 +445,7 @@ export const AnnouncementElement = (props: {
                 <h1 className="title">{data.title}</h1>
                 <div className="card-authors">
                     <div className="card-authors-image">
-                        <Link to={`/club/${data.organization.slug}`}><img className="circle" src={data.organization.icon} /></Link>
+                        <Link to={`/club/${data.organization.slug}`}><img className="circle" src={Routes.BASEURL + data.organization.icon} /></Link>
                     </div>
                     <div className="card-authors-text">
                         <Link to={`/club/${data.organization.slug}`} className="link">{data.organization.name}</Link>,
