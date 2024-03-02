@@ -3,26 +3,29 @@
 // const BASEURL = "https://auth.jimmyliu.dev";
 const BASEURL = "https://maclyonsden.com";
 
+const APIURL = `${BASEURL}/api`
+const API3URL = `${APIURL}/v3`
 const Routes = {
   BASEURL: BASEURL,
+  OBJECT: `${BASEURL}/api/v3/obj`,
   AUTH: {
-    LOGIN: `${BASEURL}/api/auth/token`,
-    REFRESH: `${BASEURL}/api/auth/token/refresh`,
+    LOGIN: `${APIURL}/auth/token`,
+    REFRESH: `${APIURL}/auth/token/refresh`,
   },
   POST: {
-    USER: `${BASEURL}/api/v3/obj/user/retrieve`,
-    USER_UPDATE: `${BASEURL}/api/v3/obj/user/single`,
-    ANNOUNCEMENT: `${BASEURL}/api/v3/announcement`,
+    USER: `${API3URL}/obj/user/retrieve`,
+    USER_UPDATE: `${API3URL}/obj/user/single`,
+    ANNOUNCEMENT: `${API3URL}/announcement`,
   },
-  USER: `${BASEURL}/api/v3/obj/user`,
-  PERSONAL_TIMETABLE: `${BASEURL}/api/me/timetable`,
-  TIMETABLE: `${BASEURL}/api/v3/obj/timetable`,
+  USER: `${API3URL}/obj/user`,
+  PERSONAL_TIMETABLE: `${APIURL}/me/timetable`,
+  TIMETABLE: `${API3URL}/obj/timetable`,
   SCHEDULE: {
-    LOGGED_IN: `${BASEURL}/api/me/schedule`,
-    NOT_LOGGED_IN: `${BASEURL}/api/term/current/schedule`,
+    LOGGED_IN: `${APIURL}/me/schedule`,
+    NOT_LOGGED_IN: `${APIURL}/term/current/schedule`,
   },
-  COURSE: `${BASEURL}/api/v3/obj/course`,
-  OBJECT: `${BASEURL}/api/v3/obj`,
+  COURSE: `${API3URL}/obj/course`,
+  STAFF: `${API3URL}/staff`
 };
 
 export default Routes;
