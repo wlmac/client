@@ -1,10 +1,7 @@
 import * as React from "react";
-import { default as axios } from "axios";
 
 import { Session, SessionContext, User } from "../../../../util/core/session";
-import { Link, NavLink, NavigateFunction, useNavigate } from "react-router-dom";
-import Organization from "../../../../util/core/interfaces/organization";
-import { loggedIn } from "../../../../util/core/AuthService";
+import {  NavLink, NavigateFunction, useNavigate } from "react-router-dom";
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import Routes from "../../../../util/core/misc/routes";
@@ -44,6 +41,26 @@ export const ProfileEdit = (): JSX.Element => {
 
     // console.log(watch("graduating_year")) // watch input value by passing the name of it
     // console.log(user.timezone);
+    const currentMonth = new Date().getMonth() + 1; // Adding 1 to get 1-based month index
+    const currentYear = new Date().getFullYear();
+    let startYear = currentYear;
+    if (currentMonth >= 8) {
+      startYear = currentYear;
+    } else {
+      startYear = currentYear - 1;
+    }
+    const endYear = startYear + 3;
+    const generateSelectOptions = (startYear: number, endYear: number) => {
+        const options = [];
+        for (let year = startYear; year <= endYear; year++) {
+          options.push(
+            <option key={year} value={year}>
+              {year}
+            </option>
+          );
+        }
+        return options;
+      };
 
     return (
         <>
@@ -965,14 +982,12 @@ export const ProfileEdit = (): JSX.Element => {
                     </div>
 
 
+                    
                     <div className="field">
                         <div className="label"><label htmlFor="id_graduating_year">Graduating year:</label></div>
                         <span><select {...register("graduating_year")} className="browser-default" id="id_graduating_year">
                             <option value="">Does not apply</option>
-                            <option value="2023">2023</option>
-                            <option value="2024">2024</option>
-                            <option value="2025">2025</option>
-                            <option value="2026">2026</option>
+                            {generateSelectOptions(startYear, endYear)}
                         </select></span>
                     </div>
 

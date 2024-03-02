@@ -1,37 +1,25 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { Session, SessionContext, User } from "../../../../util/core/session";
-import config from "../../../../../config";
-import Routes from "../../../../util/core/misc/routes";
+import { UserField } from "../../../../util/core/interfaces/post";
 
-export const TeamMember = (props: { memberID: number }): JSX.Element => {
-    const session: Session = React.useContext(SessionContext);
-    const [user, setUser] = React.useState<User>({} as User);
+export const TeamMember = (props: { member: UserField, bio: string }): JSX.Element => {
 
-    React.useEffect(() => {
-        session.request('get', `${Routes.USER}/retrieve/${props.memberID}`).then((res) => {
-            setUser(res.data);
-        });
-    }, []);
-
-    return "username" in user ? (
+    return "username" in props.member ? (
         <div className="member">
-            <Link to={`/user/${user.username}`}>
+            <Link to={`/user/${props.member.username}`}>
                 <div className="member-name">
                     <div className="member-image">
-                        <img className="circle" src={user.gravatar_url} />
+                        <img className="circle" src={props.member.gravatar_url} />
                     </div>
                     <div className="member-text">
-                        {`${user.first_name} ${user.last_name}`}
+                        {`${props.member.first_name} ${props.member.last_name}`}
                     </div>
                 </div>
             </Link>
 
             <hr />
             <div className="member-bio">
-                {
-                    // @ts-expect-error
-                    config.METROPOLIS_STAFF_BIO[props.memberID]}
+                {props.bio}
             </div>
         </div>
     ) : <></>;

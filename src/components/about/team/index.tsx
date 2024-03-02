@@ -4,25 +4,22 @@ import { TeamMember } from "./member";
 import { Session, SessionContext, User } from "../../../util/core/session";
 import Routes from "../../../util/core/misc/routes";
 import { BranchList } from "./branch";
-import config from "../../../../config";
+
 
 export const ContentTeam = (): JSX.Element => {
     const session: Session = React.useContext(SessionContext);
 
     const memberCount = (): number => {
         let sum = 0;
-        for (const branchName in config.METROPOLIS_STAFFS) {
-            // @ts-expect-error
-            sum += config.METROPOLIS_STAFFS[branchName].length;
-        }
+       // just the length of the response array from Routes.Staff
         return sum;
     }
 
     const branches = (): Array<JSX.Element> => {
         let new_branches: Array<JSX.Element> = [];
-        for (const branchName in config.METROPOLIS_STAFFS) {
-            new_branches.push(<BranchList name={branchName} key={branchName} />);
-        }
+        // for (const branchName in config.METROPOLIS_STAFFS) {
+        //     new_branches.push(<BranchList name={branchName} key={branchName} />);
+        // }
         return new_branches;
     }
 
