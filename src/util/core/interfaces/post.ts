@@ -3,7 +3,7 @@ import { User } from '../session';
 import Organization from './organization';
 import Tag from './tag';
 
-export interface UserField{
+interface UserField{
   id: number;
   username: string;
   first_name: string;
@@ -11,7 +11,7 @@ export interface UserField{
   gravatar_url: string;
 }
 
-export interface OrganizationField{
+interface OrganizationField{
   id: number;
   name: string;
   slug: string;
