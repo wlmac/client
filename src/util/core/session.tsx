@@ -33,14 +33,12 @@ export interface User {
 
 interface CacheStatus {
     tags: boolean,
-    orgs: boolean,
-    users: boolean
+    orgs: boolean
 }
 
 export interface Session {
     user: User,
-    cacheStatus: CacheStatus
-    allUsers: Array<User>,
+    cacheStatus: CacheStatus,
     allOrgs: Array<Organization>,
     allTags: Array<Tag>,
     setUser: (user: User) => void,
@@ -57,7 +55,6 @@ export interface Session {
 export const SessionContext = React.createContext<Session>({
     user: {} as User,
     cacheStatus: {} as CacheStatus,
-    allUsers: [],
     allOrgs: [],
     allTags: [],
     setUser: (user: User) => { },
@@ -73,13 +70,11 @@ export const SessionContext = React.createContext<Session>({
 
 export const SessionProvider = (props: { children: React.ReactNode }) => {
     let [user, updateUser] = React.useState({} as User);
-    const [allUsers, setAllUsers] = React.useState([] as Array<User>);
     const [allOrgs, setAllOrgs] = React.useState([] as Array<Organization>);
     const [allTags, setAllTags] = React.useState([] as Array<Tag>);
     const [cacheStatus, setCacheStatus] = React.useState({
         tags: false,
-        orgs: false,
-        users: false
+        orgs: false
     });
     const nav: NavigateFunction = useNavigate();
 
@@ -149,14 +144,6 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
                 return prevStatus;
             })
         }).catch((err) => { });
-
-        getAll(`user`).then((data) => {
-            setAllUsers(data);
-            setCacheStatus((prevStatus) => {
-                prevStatus.users = true;
-                return prevStatus;
-            })
-        }).catch((err) => { console.log(err); });
     }
 
     // this function fetches every single entry of given path and caches it locally
@@ -293,7 +280,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     }
 
     return (
-        <SessionContext.Provider value={{ user: user, cacheStatus: cacheStatus, allUsers: allUsers, allOrgs: allOrgs, allTags: allTags, setUser: setUser, refreshUser: refreshUser, updateToken: updateToken, request: request, refreshAuth: refreshAuth, logout: logout, notify: notify, notification: notification, closeNotif: closeNotif }}>
+        <SessionContext.Provider value={{ user: user, cacheStatus: cacheStatus, allOrgs: allOrgs, allTags: allTags, setUser: setUser, refreshUser: refreshUser, updateToken: updateToken, request: request, refreshAuth: refreshAuth, logout: logout, notify: notify, notification: notification, closeNotif: closeNotif }}>
             {props.children}
         </SessionContext.Provider>
     )
