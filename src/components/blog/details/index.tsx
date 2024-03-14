@@ -11,6 +11,7 @@ import Markdown from "../../markdown";
 import { dateFormat } from "../../../util/core/misc/date";
 import { TagElement } from "../../../util/core/tags";
 import { loggedIn } from "../../../util/core/AuthService";
+import { NotFound } from "../../notfound";
 
 export const BlogDetails = (): JSX.Element => {
     const { slug } = useParams();
@@ -66,5 +67,10 @@ export const BlogDetails = (): JSX.Element => {
                 </div>
             </div>
         </>
-    ) : <></>;
+    )
+    :
+    <>
+        <NotFound/>
+    </>
+    ;
 }

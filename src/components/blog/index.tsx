@@ -94,7 +94,9 @@ const BlogPosts = () => {
     return (
         <div id="bloglist">
             {
-                posts.length == 0 ? <></> :
+                posts.length == 0 ? 
+                    <></>
+                :
                     posts.map((post: BlogPost) => {
                         return <BlogPostElement post={post} tags={post.tags} key={post.id} />;
                     })
