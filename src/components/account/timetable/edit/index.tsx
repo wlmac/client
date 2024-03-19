@@ -85,7 +85,7 @@ const TimetableEditor = (params: {
                     ev.preventDefault();
                     params.submitForm(selectedCourses);
                 }} data-select2-id="select2-data-20-cr8n">
-                    <h5 className="card-title"><strong>Edit timetable for Test term</strong></h5>
+                    <h5 className="card-title"><strong>Edit timetable for {term.name}</strong></h5>
                     <input type="hidden" name="csrfmiddlewaretoken" value="dUBPiwcYI3sSDgC52qu3o8cutarEiO1xML4iteigRLs9eEEA26us3LXlBdxidNAh" />
 
                     {/* <label htmlFor="id_courses">Courses:</label> */}

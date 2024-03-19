@@ -3,6 +3,7 @@ import * as React from "react";
 import { Link, NavigateFunction, useNavigate, useParams } from "react-router-dom";
 import { Session, SessionContext } from "../../../../../util/core/session";
 import Routes from "../../../../../util/core/misc/routes";
+import { Term } from "../../../../../util/core/interfaces/timetable";
 
 export const NewCourse = (): JSX.Element => {
     const session: Session = React.useContext(SessionContext);
@@ -10,7 +11,20 @@ export const NewCourse = (): JSX.Element => {
     const { ID } = useParams();
 
     const [code, setCode] = React.useState("");
+    const [term, setTerm] = React.useState<Term | undefined>(undefined);
     const [position, setPosition] = React.useState<number>(-1);
+
+    React.useEffect(() => {
+        session.request('get', `${Routes.OBJECT}/term?id=${ID}`).then((res) => {
+            if(res.status === 200){
+                if(res.data.count === 1){
+                    setTerm(res.data.results[0]);
+                } else {
+                    setTerm(undefined);
+                }
+            }
+        })
+    }, [])
 
     const submitNewCourse = (): void => {
         session.request('post', `${Routes.COURSE}/new`, {
@@ -23,7 +37,7 @@ export const NewCourse = (): JSX.Element => {
         });
     }
 
-    return (
+    return term ? (
         <>
             <link rel="stylesheet" href="/resources/static/css/secondary.css" />
             <link rel="stylesheet" href="/resources/static/css/timetable/main.css" />
@@ -32,7 +46,7 @@ export const NewCourse = (): JSX.Element => {
                 ev.preventDefault();
                 submitNewCourse();
             }}>
-                <h6 className="card-subtitle mb-2 text-muted card-top">Add a course for Test term</h6>
+                <h6 className="card-subtitle mb-2 text-muted card-top">Add a course for {term.name}</h6>
 
                 <label htmlFor="id_code" className="active">Code:</label>
 
@@ -103,5 +117,5 @@ export const NewCourse = (): JSX.Element => {
                 </div>
             </form>
         </>
-    );
+    ) : <></>;
 }
