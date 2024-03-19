@@ -28,7 +28,7 @@ import { TimetablePage } from "../account/timetable";
 import Map from "../map";
 import { ProfileView } from "../account/profile/view";
 import { ProfileEdit } from "../account/profile/edit";
-import { TimetableEdit } from "../account/timetable/edit";
+import { TimetableEdit, TimetableAdd } from "../account/timetable/edit";
 import { Alert, Snackbar } from "@mui/material";
 import { Theme, ThemeContext, ThemeProvider } from '../../util/core/client/theme/ThemeContext'
 import { NewCourse } from "../account/timetable/edit/new-course";
@@ -87,6 +87,11 @@ export const _App = (): JSX.Element => {
                         <Route path="/timetable/edit/:ID" element={
                             <Profile>
                                 <TimetableEdit />
+                            </Profile>
+                        } />
+                        <Route path="/timetable/add/:ID" element={
+                            <Profile>
+                                <TimetableAdd />
                             </Profile>
                         } />
                         <Route path="/course/add/term/:ID" element={
