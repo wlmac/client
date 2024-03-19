@@ -4,7 +4,15 @@ export interface Timetable {
         id: number;
         slug: string;
     }
-    term: Term
+    term: {
+        id: number;
+        name: string;
+        description: string;
+        timetable_format: string;
+        start_date: string;
+        end_date: string;
+        is_frozen: boolean;
+    }
     courses: Array<Course>
 }
 
