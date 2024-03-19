@@ -4,6 +4,7 @@ import { Session, SessionContext } from "../../../../util/core/session";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Course, Timetable, Term } from "../../../../util/core/interfaces/timetable";
 import Routes from "../../../../util/core/misc/routes";
+import "../../../../../public/resources/static/css/timetable/main.css";
 
 export const TimetableEdit = (): JSX.Element => {
     const session: Session = React.useContext(SessionContext);
@@ -74,7 +75,6 @@ const TimetableEditor = (params: {
     
     const allCourses = term.courses;
     const [selectedCourses, setSelectedCourses] = React.useState<Array<Course>>(params.defaultCourses);
-    console.log(selectedCourses)
 
     return (
         <>
