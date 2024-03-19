@@ -336,7 +336,7 @@ export const AnnouncementContainer = (props: any): JSX.Element => {
 
     <div className="heading">
       <div className="head">
-        Morning Announcements
+        Announcements
       </div>
       <div className="date">
         {getDate()}
