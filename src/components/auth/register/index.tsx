@@ -64,7 +64,7 @@ export const Register = (): JSX.Element => {
             password: data.password
         }
         axios.post(`${Routes.USER}/new`, new_user).then((res) => {
-            nav("/accounts/login");
+            nav("/account/login");
             session.notify("Successfully registered! Please log in to your new account.", "success");
         }).catch((err) => {
             if (err.response.status === 400) { // Bad request, fields need fixing
@@ -99,12 +99,12 @@ export const Register = (): JSX.Element => {
                         <div className="form-wrapper">
                             <div className="tab-wrapper row">
                                 <div className="col s6">
-                                    <RouterLink href="/accounts/login/">
+                                    <RouterLink href="/account/login/">
                                         <div className="tab">Log In</div>
                                     </RouterLink>
                                 </div>
                                 <div className="col s6">
-                                    <RouterLink href="/accounts/signup/">
+                                    <RouterLink href="/account/signup/">
                                         <div className="tab current">Sign Up</div>
                                     </RouterLink>
                                 </div>

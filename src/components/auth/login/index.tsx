@@ -83,12 +83,12 @@ export const Login = (): JSX.Element => {
                         <div className="form-wrapper">
                             <div className="tab-wrapper row">
                                 <div className="col s6">
-                                    <Link to="/accounts/login/">
+                                    <Link to="/account/login/">
                                         <div className="tab current">Log In</div>
                                     </Link>
                                 </div>
                                 <div className="col s6">
-                                    <Link to="/accounts/signup/">
+                                    <Link to="/account/signup/">
                                         <div className="tab">Sign Up</div>
                                     </Link>
                                 </div>

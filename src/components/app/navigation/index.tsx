@@ -69,13 +69,13 @@ export const NavigationBar = (): JSX.Element => {
                             <li><a className="nav-link" onClick={(ev: React.MouseEvent) => {
                                 ev.preventDefault();
                                 logout();
-                                nav("/accounts/login");
+                                nav("/account/login");
                             }}>Logout</a></li>
                         </>
                         :
                         <>
-                            <li><NavLink href="/accounts/login/?next=/" className="sidenav-close">Login</NavLink></li>
-                            <li><NavLink href="/accounts/signup/?next=/" className="sidenav-close">Sign Up</NavLink></li>
+                            <li><NavLink href="/account/login/?next=/" className="sidenav-close">Login</NavLink></li>
+                            <li><NavLink href="/account/signup/?next=/" className="sidenav-close">Sign Up</NavLink></li>
                         </>
                 }
             </ul>
@@ -144,7 +144,7 @@ export const NavigationBar = (): JSX.Element => {
                                         <li tabIndex={0}><Link to={`/user/${session.user.username}`}>Profile</Link></li>
                                         <li tabIndex={0}><Link to="/timetable">Timetable</Link></li>
                                         {session.user.is_staff && <li tabIndex={0}><a href="/admin/">Admin</a></li>}
-                                        <li tabIndex={0}><Link to="/accounts/logout">Logout</Link></li>
+                                        <li tabIndex={0}><Link to="/account/logout">Logout</Link></li>
                                     </ul>
                                 </>
                                 :
@@ -154,8 +154,8 @@ export const NavigationBar = (): JSX.Element => {
                                     </a>
 
                                     <ul id="dropdownAcc" className="dropdown-content" >
-                                        <li><RouterLink href="/accounts/login/?next=/">Login</RouterLink></li>
-                                        <li><RouterLink href="/accounts/signup/?next=/">Sign Up</RouterLink></li>
+                                        <li><RouterLink href="/account/login/?next=/">Login</RouterLink></li>
+                                        <li><RouterLink href="/account/signup/?next=/">Sign Up</RouterLink></li>
                                     </ul>
                                 </>
                             }

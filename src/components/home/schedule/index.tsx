@@ -152,7 +152,7 @@ export const Schedule = (): JSX.Element => {
                 <div className="overlay-container">
                     <div className="banner-message center-align">
                         <span>
-                            <Link to="/accounts/signup/">Sign up</Link> and add your timetable to see a personalized schedule here.
+                            <Link to="/account/signup/">Sign up</Link> and add your timetable to see a personalized schedule here.
                         </span>
                     </div>
                 </div>

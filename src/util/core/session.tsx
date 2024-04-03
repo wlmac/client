@@ -259,7 +259,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     const refreshAuth = async (callback?: () => void): Promise<void> => {
         if (!loggedIn()) {
             notify("Please log back into your account.", "info");
-            nav(`/accounts/login?next=${encodeURIComponent(window.location.pathname)}`);
+            nav(`/account/login?next=${encodeURIComponent(window.location.pathname)}`);
             return;
         }
 
@@ -276,7 +276,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
         setUser({} as User);
         localStorage.removeItem("token");
         localStorage.removeItem("refresh");
-        nav(`/accounts/login?next=${encodeURIComponent(window.location.pathname)}`);
+        nav(`/account/login?next=${encodeURIComponent(window.location.pathname)}`);
     }
 
     return (

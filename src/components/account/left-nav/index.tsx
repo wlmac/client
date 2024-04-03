@@ -36,7 +36,7 @@ export const ProfileNav = (): JSX.Element => {
         <div className="secondary-nav-wrapper">
             <ul className="secondary-nav">
                 <li>
-                    <Link className={`link${location.pathname.startsWith('/user/') ? ' current' : ''}`} to="/accounts/profile">Profile</Link>
+                    <Link className={`link${location.pathname.startsWith('/user/') ? ' current' : ''}`} to="/account/profile">Profile</Link>
                 </li>
                 <li>
                     <Link className={`link${location.pathname.startsWith('/timetable') ? ' current' : ''}`} to="/timetable">Timetable</Link>
@@ -66,7 +66,7 @@ export const ProfileNav = (): JSX.Element => {
                             </div>
                 }
                 <li>
-                    <Link className="link" to="/accounts/logout/">Logout</Link>
+                    <Link className="link" to="/account/logout/">Logout</Link>
                 </li>
             </ul>
         </div>

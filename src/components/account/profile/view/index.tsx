@@ -73,7 +73,7 @@ export const ProfileView = (): JSX.Element => {
                             session.user.id === user.id &&
                             <div className="edit-button">
                                 <i className="zmdi zmdi-fw-3x zmdi-edit"></i>
-                                <Link to="/accounts/profile/update">Edit</Link>
+                                <Link to="/account/profile/update">Edit</Link>
                             </div>
                         }
                     </div>

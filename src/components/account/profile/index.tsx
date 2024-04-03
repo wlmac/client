@@ -17,7 +17,7 @@ export const Profile = (props: { children?: JSX.Element }): JSX.Element => {
                 <div className="container">
                     <ul className="sidenav secondnav" id="secondary-out">
                         <li>
-                            <Link className="sidenav-close" to="/accounts/profile">Profile</Link>
+                            <Link className="sidenav-close" to="/account/profile">Profile</Link>
                         </li>
                         <li>
                             <Link className="sidenav-close" to="/timetable">Timetable</Link>
@@ -31,7 +31,7 @@ export const Profile = (props: { children?: JSX.Element }): JSX.Element => {
                         </li>
                         <li className="divider"></li>
                         <li>
-                            <Link to="/accounts/logout/" className="sidenav-close">Logout</Link>
+                            <Link to="/account/logout/" className="sidenav-close">Logout</Link>
                         </li>
                     </ul>
 

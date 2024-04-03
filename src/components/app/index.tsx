@@ -79,9 +79,9 @@ export const _App = (): JSX.Element => {
 
                         <Route path="/map" element={<Map />} />
 
-                        <Route path="/accounts/login" element={<Login />} />
-                        <Route path="/accounts/signup" element={<Register />} />
-                        <Route path="/accounts/logout" element={<Logout />} />
+                        <Route path="/account/login" element={<Login />} />
+                        <Route path="/account/signup" element={<Register />} />
+                        <Route path="/account/logout" element={<Logout />} />
 
                         <Route path="/timetable" element={<TimetablePage />} />
                         <Route path="/timetable/edit/:ID" element={
@@ -106,13 +106,13 @@ export const _App = (): JSX.Element => {
                             </Profile>
                         } />
 
-                        <Route path="/accounts/profile/update" element={
+                        <Route path="/account/profile/update" element={
                             <Profile>
                                 <ProfileEdit />
                             </Profile>
                         } />
 
-                        <Route path="/accounts/profile" element={
+                        <Route path="/account/profile" element={
                             <LoginRequired>
                                 <MyProfile />
                             </LoginRequired>
