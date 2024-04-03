@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import "@fullcalendar/react/dist/vdom";
 import FullCalendar, { EventInput } from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -45,6 +45,7 @@ export const Calendar = (): JSX.Element => {
   const [eventsOnDay, setEventsOnDay]: [Event[], (x: Event[]) => void] = useState<Event[]>([]);
   // current session
   const session: Session = React.useContext(SessionContext);
+  const cardContainerRef = useRef<HTMLDivElement>(null)
 
   // when the session or events update, try filling in the tags & org
   React.useEffect(() => {
@@ -96,6 +97,7 @@ export const Calendar = (): JSX.Element => {
           eventsToday.push(curEvent);
         }
       }
+      cardContainerRef.current?.scrollIntoView({behavior: 'smooth'});
       setEventsOnDay(eventsToday);
     }
   }
@@ -127,7 +129,7 @@ export const Calendar = (): JSX.Element => {
           <h3 id="detailsCurrentDay">{dateStr}</h3>
           <p id="detailsCurrentWeek"></p>
           <hr />
-          <div id="eventDetails">
+          <div ref={cardContainerRef} id="eventDetails">
             <Cards eventsToday={eventsOnDay} date={selectedDate} />
           </div>
         </div>
