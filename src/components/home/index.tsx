@@ -19,6 +19,7 @@ import { Schedule } from "./schedule";
 import { markdownToPlainText } from "../markdown";
 import MiniCalendar from "./calendar/mini-calendar";
 import { AnnouncementContainer } from "../announcements";
+import { cleanUrl } from "../../util/core/misc/tools";
 
 export const Home = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
@@ -70,7 +71,7 @@ const FeaturedBlogPost = (props: { post: BlogPost }): JSX.Element => {
     const post = props.post;
     return (
         <div className="blog">
-            <img className="blog-image" src={post.featured_image} />
+            <img className="blog-image" src={cleanUrl(post.featured_image)} />
             <div className="blog-content">
                 <p className="title">{post.title}</p>
                 <hr />

@@ -13,6 +13,7 @@ import { TagElement } from "../../util/core/tags";
 import Markdown, { markdownToPlainText } from "../markdown";
 import { loggedIn } from "../../util/core/AuthService";
 import { dateFormat } from "../../util/core/misc/date";
+import { cleanUrl } from "../../util/core/misc/tools";
 
 const BLOG_FETCHLIMIT = 10; // how many anns to fetch each api request
 
@@ -119,7 +120,7 @@ const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Eleme
         <>
             <div className="card">
                 <div className="card-headers">
-                    <img className="card-image" src={post.featured_image} />
+                    <img className="card-image" src={cleanUrl(post.featured_image)} />
                     <div className="card-text">
                         <div className="tag-section">
                             {
