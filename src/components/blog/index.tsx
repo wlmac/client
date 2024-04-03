@@ -9,7 +9,7 @@ import Media from "../../util/core/misc/media";
 import MembershipStatus from "../../util/core/misc/membership";
 import Routes from "../../util/core/misc/routes";
 import { Session, SessionContext, User } from "../../util/core/session";
-import { getTags, TagElement } from "../../util/core/tags";
+import { TagElement } from "../../util/core/tags";
 import Markdown, { markdownToPlainText } from "../markdown";
 import { loggedIn } from "../../util/core/AuthService";
 import { dateFormat } from "../../util/core/misc/date";

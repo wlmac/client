@@ -31,16 +31,8 @@ export interface User {
     registertime: number
 }
 
-interface CacheStatus {
-    tags: boolean,
-    orgs: boolean
-}
-
 export interface Session {
     user: User,
-    cacheStatus: CacheStatus,
-    allOrgs: Array<Organization>,
-    allTags: Array<Tag>,
     setUser: (user: User) => void,
     refreshUser: () => void,
     updateToken: (token: string) => void,
@@ -54,9 +46,6 @@ export interface Session {
 
 export const SessionContext = React.createContext<Session>({
     user: {} as User,
-    cacheStatus: {} as CacheStatus,
-    allOrgs: [],
-    allTags: [],
     setUser: (user: User) => { },
     refreshUser: () => { },
     updateToken: (token: string) => { },
@@ -70,12 +59,6 @@ export const SessionContext = React.createContext<Session>({
 
 export const SessionProvider = (props: { children: React.ReactNode }) => {
     let [user, updateUser] = React.useState({} as User);
-    const [allOrgs, setAllOrgs] = React.useState([] as Array<Organization>);
-    const [allTags, setAllTags] = React.useState([] as Array<Tag>);
-    const [cacheStatus, setCacheStatus] = React.useState({
-        tags: false,
-        orgs: false
-    });
     const nav: NavigateFunction = useNavigate();
 
     // Snackbar Notification
@@ -117,34 +100,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
             updateToken(getToken());
             refreshUser();
         }
-
-        cacheRoutine();
-
-        const interval = setInterval(() => {
-            cacheRoutine();
-        }, 5 * 60 * 1000);
-        return () => {
-            clearInterval(interval);
-        }
     }, []);
-
-    const cacheRoutine = async () => {
-        getAll(`tag`).then((data) => {
-            setAllTags(data);
-            setCacheStatus((prevStatus) => {
-                prevStatus.tags = true;
-                return prevStatus;
-            })
-        }).catch((err) => { });
-
-        getAll(`organization`).then((data) => {
-            setAllOrgs(data);
-            setCacheStatus((prevStatus) => {
-                prevStatus.orgs = true;
-                return prevStatus;
-            })
-        }).catch((err) => { });
-    }
 
     // this function fetches every single entry of given path and caches it locally
     // a routine is run to download new content if the data is modified
@@ -280,7 +236,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     }
 
     return (
-        <SessionContext.Provider value={{ user: user, cacheStatus: cacheStatus, allOrgs: allOrgs, allTags: allTags, setUser: setUser, refreshUser: refreshUser, updateToken: updateToken, request: request, refreshAuth: refreshAuth, logout: logout, notify: notify, notification: notification, closeNotif: closeNotif }}>
+        <SessionContext.Provider value={{ user: user, setUser: setUser, refreshUser: refreshUser, updateToken: updateToken, request: request, refreshAuth: refreshAuth, logout: logout, notify: notify, notification: notification, closeNotif: closeNotif }}>
             {props.children}
         </SessionContext.Provider>
     )
