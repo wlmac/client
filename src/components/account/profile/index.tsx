@@ -12,6 +12,7 @@ export const Profile = (props: { children?: JSX.Element }): JSX.Element => {
     return (
         <LoginRequired>
             <>
+                <meta name="robots" content="noindex"></meta>
                 <link rel="stylesheet" href="/resources/static/css/profile/detail.css" />
                 <link rel="stylesheet" href="/resources/static/css/secondary.css" />
                 <div className="container">
