@@ -27,9 +27,10 @@ export const ProfileEdit = (): JSX.Element => {
     const { register, handleSubmit, watch, reset, formState: { errors } } = useForm<Inputs>();
 
     React.useEffect(() => {
+        // console.log(user)
         if ("username" in user) {
-            console.log("User:", { ...session.user, graduating_year: session.user.graduating_year!.toString() });
-            reset({ ...session.user, graduating_year: session.user.graduating_year!.toString() });
+            // console.log("User:", { ...session.user, graduating_year: session.user.graduating_year?.toString() });
+            reset({ ...session.user, graduating_year: session.user.graduating_year?.toString() });
         }
     }, [session.user]);
 
