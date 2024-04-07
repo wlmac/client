@@ -19,7 +19,7 @@ export const NotFound = (): JSX.Element => {
                 <img className="comic-img" style={{ maxWidth: "100%" }} src={`/resources/static/img/404-comics/404-${comic}.png?w=2000&fmt=webp`} />
 
                 <div className="display-metropolis valign-wrapper">
-                    <img className="inline-logo" src={theme.logo+"?w=&fmt=webp"} />
+                    <img className="inline-logo" src={theme.logo+"?w=800&fmt=webp"} />
                 </div>
 
                 <div className="game-container" hidden={true}>
