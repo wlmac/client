@@ -27,7 +27,7 @@
     "@mui/material": "^5.11.12",
     "@tinymce/tinymce-react": "^4.3.0",
     "@types/marked": "^5.0.0",
-    "axios": "^1.2.0",
+    "axios": "^1.6.0",
     "gh-pages": "^5.0.0",
     "global": "^4.4.0",
     "jwt-decode": "^3.1.2",
