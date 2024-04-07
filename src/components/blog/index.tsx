@@ -119,7 +119,7 @@ const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Eleme
         <>
             <div className="card">
                 <div className="card-headers">
-                    <img className="card-image" src={post.featured_image+"?w=800&fmt=webp"} />
+                    <img className="card-image" src={post.featured_image+"?w=800&h=&fmt=webp"} />
                     <div className="card-text">
                         <div className="tag-section">
                             {

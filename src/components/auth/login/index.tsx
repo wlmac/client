@@ -77,7 +77,7 @@ export const Login = (): JSX.Element => {
             <div className="container">
                 <div className="row wrapper">
                     <div className="col m12 l6 hide-on-med-and-down">
-                        <img className="responsive-img account-art" src="/resources/static/img/log-in.png?w=800&fmt=webp" />
+                        <img className="responsive-img account-art" src="/resources/static/img/log-in.png?w=800&h=&fmt=webp" />
                     </div>
                     <div className="col m12 l6">
                         <div className="form-wrapper">
