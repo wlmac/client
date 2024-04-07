@@ -69,7 +69,7 @@ export const EditClubDetails = (): JSX.Element => {
             <link rel="stylesheet" href="/resources/static/css/edit-club.css"></link>
             <div className="edit-club">
                 <div className="row">
-                    <img className="club-banner responsive-img col s12" src={club.banner} alt="banner of organization" />
+                    <img className="club-banner responsive-img col s12" src={club.banner+"?w=2000&fmt=webp"} alt="banner of organization" />
                 </div>
                 <div className="container">
                     <div className="white-bg box-center">

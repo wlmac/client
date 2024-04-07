@@ -93,7 +93,7 @@ export const Register = (): JSX.Element => {
 
             <div className="container">
                 <div className="row wrapper">
-                    <div className="graphic col m12 l6 hide-on-med-and-down account-art" style={{ backgroundImage: "url('/resources/static/img/sign-up.png')" }}>
+                    <div className="graphic col m12 l6 hide-on-med-and-down account-art" style={{ backgroundImage: "url('/resources/static/img/sign-up.png?w=800&fmt=webp')" }}>
                     </div>
                     <div className="col m12 l6">
                         <div className="form-wrapper">
