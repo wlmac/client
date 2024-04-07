@@ -70,7 +70,7 @@ const FeaturedBlogPost = (props: { post: BlogPost }): JSX.Element => {
     const post = props.post;
     return (
         <div className="blog">
-            <img className="blog-image" src={post.featured_image+"?w=800&h=&fmt=webp"} />
+            <img className="blog-image" src={post.featured_image+"?w=800&fmt=webp"} />
             <div className="blog-content">
                 <p className="title">{post.title}</p>
                 <hr />

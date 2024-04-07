@@ -98,14 +98,14 @@ export const ClubDetails = (): JSX.Element => {
 
             <div className="club">
                 <div className="row">
-                    <img className="club-banner responsive-img col s12" src={club.banner+"?w=2000&h=&fmt=webp"} alt="banner of organization" />
+                    <img className="club-banner responsive-img col s12" src={club.banner+"?w=2000&fmt=webp"} alt="banner of organization" />
                 </div>
                 <div className="container">
                     <div className="club-detail">
                         <div className="row club-header">
                             <div className="col m3 s12">
                                 <div className="club-logo">
-                                    <img className="circle" src={club.icon+"?w=800&h=&fmt=webp"} alt="icon of organization" />
+                                    <img className="circle" src={club.icon+"?w=800&fmt=webp"} alt="icon of organization" />
                                 </div>
                             </div>
                             <div className="col m5 s12">

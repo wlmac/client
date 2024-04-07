@@ -23,7 +23,7 @@ const Markdown = ({ text }: { text: string }): JSX.Element => { //takes markdown
                 return safeEmbed(el.src!) ? (
                     <iframe className="markdown-embed" allowFullScreen frameBorder={0} src={el.src} />
                 ) : (
-                    <img src={el.src+"?w=800&h=&fmt=webp"} alt={el.alt} />
+                    <img src={el.src+"?w=800&fmt=webp"} alt={el.alt} />
                 )
             }
         }} />

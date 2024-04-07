@@ -34,7 +34,7 @@ export const BlogDetails = (): JSX.Element => {
             <link rel="stylesheet" href="/resources/static/css/blog-detail.css" />
             <div className="container">
                 <div className="card-container">
-                    <img className="card-image" src={post.featured_image+"?w=800&h=&fmt=webp"} />
+                    <img className="card-image" src={post.featured_image+"?w=800&fmt=webp"} />
                     <div className="tag-section">
                         {
                             tags.map((tag: Tag) => {
