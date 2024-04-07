@@ -21,6 +21,7 @@ export const ProfileEdit = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
 
     const session: Session = React.useContext(SessionContext);
+    const [showDelete, setShowDelete] = React.useState<boolean>(false);
     let user: User = session.user;
 
     // Form
@@ -41,6 +42,15 @@ export const ProfileEdit = (): JSX.Element => {
             session.refreshUser();
             nav(`/user/${user.username}`);
         });
+    }
+
+    const deleteUser = () => {
+        session.request('post', `${Routes.USER}/me/delete`).then((res) => {
+            if(res.status === 200){
+                session.refreshUser();
+                nav(`/user/${user.username}`)
+            }
+        })
     }
 
     // console.log(watch("graduating_year")) // watch input value by passing the name of it
@@ -984,10 +994,25 @@ export const ProfileEdit = (): JSX.Element => {
             <!--     </span> -->
             <!-- </div> --> */}
                     <div style={{ display: "flex", alignItems: "center", "gap": "3px" }}>
-                        <button type="submit" className="btn">Submit</button>
-                        <NavLink to={`/user/${user.username}`} className="btn" role="button" aria-pressed="true">Cancel</NavLink>
+                        <button type="submit" className="btn btn-primary">Submit</button>
+                        <NavLink to={`/user/${user.username}`} className="btn btn-primary" role="button" aria-pressed="true">Cancel</NavLink>
                     </div>
                 </form>
+                <br />
+                {!session.user.is_deleted && <div className="delete-container">
+                    <h2 className="delete-title">Danger Zone</h2>
+                    <button className="delete btn-small btn-primary" style={{width: "100%"}} onClick={() => setShowDelete(true)}>Delete User</button>
+                </div>}
+
+                {showDelete && <div className="delete-confirmation" style={{display: "flex", flexDirection: "column", justifyContent: "center"}} >
+                    <div className="delete-box" style={{display: "flex", flexDirection: "column"}}>
+                        <h3>Are you sure you want to delete this user?</h3>
+                        <span style={{display: "flex", flexDirection: "row", justifyContent: "right"}}>
+                            <button className="delete btn-small btn-primary" onClick={deleteUser}>YES</button>
+                            <button className="btn btn-small btn-primary" onClick={() => setShowDelete(false)}>No</button>
+                        </span>
+                    </div>
+                </div>}
             </div>
         </>
     );

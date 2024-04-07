@@ -28,7 +28,10 @@ export interface User {
     username: string,
     email_hash: string,
     gravatar_url: string,
-    registertime: number
+    registertime: number,
+    is_teacher: boolean,
+    is_superuser: boolean,
+    is_deleted: boolean
 }
 
 export interface Session {
@@ -87,6 +90,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     const refreshUser = (): void => {
         if (loggedIn()) {
             request('get', `${Routes.USER}/retrieve/${user.id}`).then((res) => {
+                console.log(res);
                 setUser({
                     ...user,
                     ...res.data
