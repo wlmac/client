@@ -1004,7 +1004,7 @@ export const ProfileEdit = (): JSX.Element => {
                     <button className="delete btn-small btn-primary" style={{width: "100%"}} onClick={() => setShowDelete(true)}>Delete User</button>
                 </div>}
 
-                {showDelete && <div className="delete-confirmation" style={{display: "flex", flexDirection: "column", justifyContent: "center"}} >
+                <div className="delete-confirmation" style={{display: "flex", flexDirection: "column", justifyContent: "center", visibility: showDelete ? "visible" : "hidden", opacity: showDelete ? "100%" : "0%"}} >
                     <div className="delete-box" style={{display: "flex", flexDirection: "column"}}>
                         <h3>Are you sure you want to delete this user?</h3>
                         <span style={{display: "flex", flexDirection: "row", justifyContent: "right"}}>
@@ -1012,7 +1012,7 @@ export const ProfileEdit = (): JSX.Element => {
                             <button className="btn btn-small btn-primary" onClick={() => setShowDelete(false)}>No</button>
                         </span>
                     </div>
-                </div>}
+                </div>
             </div>
         </>
     );
