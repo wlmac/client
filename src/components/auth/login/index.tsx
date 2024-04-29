@@ -77,18 +77,18 @@ export const Login = (): JSX.Element => {
             <div className="container">
                 <div className="row wrapper">
                     <div className="col m12 l6 hide-on-med-and-down">
-                        <img className="responsive-img account-art" src="/resources/static/img/log-in.png" />
+                        <img className="responsive-img account-art" src="/resources/static/img/log-in.png?w=800&fmt=webp" />
                     </div>
                     <div className="col m12 l6">
                         <div className="form-wrapper">
                             <div className="tab-wrapper row">
                                 <div className="col s6">
-                                    <Link to="/accounts/login/">
+                                    <Link to="/account/login/">
                                         <div className="tab current">Log In</div>
                                     </Link>
                                 </div>
                                 <div className="col s6">
-                                    <Link to="/accounts/signup/">
+                                    <Link to="/account/signup/">
                                         <div className="tab">Sign Up</div>
                                     </Link>
                                 </div>

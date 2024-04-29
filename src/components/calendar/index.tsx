@@ -79,10 +79,6 @@ export const Calendar = (): JSX.Element => {
     }
   }
 
-  React.useEffect(() => {
-    console.log(rawEvents);
-  }, [rawEvents]);
-
   // called when a new date is selected
   const newDateSelected = (day: Date | undefined) => {
     setSelectedDate(day);
@@ -126,6 +122,7 @@ export const Calendar = (): JSX.Element => {
       </div>
       <div id="details">
         <div className="container">
+          {/* here */}
           <a href="https://maclyonsden.com/calendar.ics">URL to iCalendar (use this to add to Google Calendar)</a>
           <h3 id="detailsCurrentDay">{dateStr}</h3>
           <p id="detailsCurrentWeek"></p>
@@ -199,7 +196,7 @@ const CalendarBoard = (props: BoardProps): JSX.Element => {
 
     if (selectedDate !== undefined) {
       // get the selected element
-      let selectedEl = document.querySelector<HTMLElement>("[data-date='" + new Date(selectedDate.getTime() - (new Date()).getTimezoneOffset() * 60000).toISOString().split("T")[0] + "']")
+      let selectedEl = document.querySelector<HTMLElement>("[data-date='" + selectedDate.toISOString().split("T")[0] + "']")
       if (selectedEl != null) {
         let topEl = selectedEl.querySelector<HTMLElement>(".fc-daygrid-day-top")
         if (topEl == null) throw ("reformat error")

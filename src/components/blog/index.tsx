@@ -94,7 +94,9 @@ const BlogPosts = () => {
     return (
         <div id="bloglist">
             {
-                posts.length == 0 ? <></> :
+                posts.length == 0 ? 
+                    <></>
+                :
                     posts.map((post: BlogPost) => {
                         return <BlogPostElement post={post} tags={post.tags} key={post.id} />;
                     })
@@ -117,7 +119,7 @@ const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Eleme
         <>
             <div className="card">
                 <div className="card-headers">
-                    <img className="card-image" src={post.featured_image} />
+                    <img className="card-image" src={post.featured_image+"?w=800&fmt=webp"} />
                     <div className="card-text">
                         <div className="tag-section">
                             {

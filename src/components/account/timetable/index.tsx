@@ -2,7 +2,7 @@ import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import * as React from "react";
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import { loggedIn } from "../../../util/core/AuthService";
-import { Course, Timetable } from "../../../util/core/interfaces/timetable";
+import { Course, Timetable, Term } from "../../../util/core/interfaces/timetable";
 import Routes from "../../../util/core/misc/routes";
 import { Session, SessionContext } from "../../../util/core/session";
 import { ProfileNav } from "../left-nav";
@@ -66,20 +66,43 @@ const TimetableElement = (props: { timetable: Timetable }): JSX.Element => {
 export const TimetablePage = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
     const [timetable, setTimetable] = React.useState({} as Timetable);
+    const [noTimetable, setNoTimetable] = React.useState(false);
+    const [term, setTerm] = React.useState({} as Term);
     const session: Session = React.useContext(SessionContext);
 
     const fetchTimetable = (): void => {
         if (loggedIn()) {
             session.request('get', Routes.PERSONAL_TIMETABLE).then((res) => {
                 setTimetable(res.data);
-                // console.log(res.data[1]);
+                setNoTimetable(false);
             }).catch((err) => {
-                if (err.response.status === 404) {
+                setNoTimetable(true);
+            });
+        }
+    }
+
+    const dateInBetween = (start: string, current: Date, end: string): boolean => {
+        return new Date(start) <= current && current <= new Date(end) ? true : false;
+    }
+
+    const fetchTerm = (): void => {
+        if(loggedIn()) {
+            session.request('get', `${Routes.OBJECT}/term`).then((res) => {
+                if(res.status === 200){
+                    if(res.data.results?.length > 0){
+                        const curTerm: Term = res.data.results[0];
+                        if(dateInBetween(curTerm.start_date, new Date(), curTerm.end_date)){
+                            setTerm(curTerm);
+                        }
+                    }
+                }
+            }).catch((err) => {
+                if(err.status === 404){
                     return;
                 }
                 session.refreshAuth();
                 fetchTimetable();
-            });
+            })
         }
     }
 
@@ -87,6 +110,16 @@ export const TimetablePage = (): JSX.Element => {
         fetchTimetable();
     }, []);
 
+    React.useEffect(() => {
+        fetchTerm();
+    }, [])
+
+    const createTimetable = (): void => {
+        nav(`/timetable/add/${term.id}`);
+    }
+
+    // console.log(term)
+    // console.log(noTimetable)
     return (
         <>
             <link rel="stylesheet" href="/resources/static/css/timetable/list.css" />
@@ -105,7 +138,7 @@ export const TimetablePage = (): JSX.Element => {
                             :
                             <div className="timetable-add-container">
                                 <div className="card-body">
-                                    <form onSubmit={(ev) => { ev.preventDefault(); console.log("Submitted"); }}>
+                                    <form onSubmit={(ev) => { ev.preventDefault(); createTimetable(); }}>
                                         <h5 className="card-title">Add timetable</h5>
                                         <hr />
                                         <input type="hidden" name="csrfmiddlewaretoken" value="M5IY2bEzx9c5zEI25e3yzsF7XGycqazLGhT6fs8hrUw5fUunY4kgQZETZDpblGVm" />
@@ -113,15 +146,22 @@ export const TimetablePage = (): JSX.Element => {
                                         <Box sx={{ minWidth: 120 }}>
                                             <FormControl fullWidth>
                                                 <InputLabel id="demo-simple-select-label">Term</InputLabel>
+                                                {term && noTimetable ? <Select
+                                                    labelId={term.name}
+                                                    id={"" + term.id}
+                                                    value={term.id}
+                                                    label="Term"
+                                                >
+                                                        <MenuItem value={term.id}>{term.name}</MenuItem>
+                                                    </Select> : 
                                                 <Select
                                                     labelId="demo-simple-select-label"
                                                     id="demo-simple-select"
                                                     value={0}
                                                     label="Term"
-                                                    onChange={() => { }}
                                                 >
                                                     <MenuItem value={0}>---------</MenuItem>
-                                                </Select>
+                                                </Select>}
                                             </FormControl>
                                         </Box>
 

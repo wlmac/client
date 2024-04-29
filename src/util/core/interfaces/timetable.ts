@@ -24,3 +24,14 @@ export interface Course {
     term: number;
     submitter: number;
 }
+
+export interface Term{
+    id: number;
+    courses: Array<Course>;
+    name: string;
+    description: string;
+    timetable_format: string;
+    start_date: string;
+    end_date: string;
+    is_frozen: boolean;
+}

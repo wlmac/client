@@ -38,10 +38,9 @@ const MiniCalendar = () => {
       // reformats a day cell
     const reformatDay = (mountArg: DayCellMountArg) => {
         const dayEl = mountArg.el
-        const innerEl = mountArg.el.querySelector<HTMLElement>('.fc-daygrid-day-frame')
         const elHeight = Math.max(minCellHeight, dayEl.clientWidth / aspectRatio) + 'px';
         // resize the date cell
-        if (dayEl.clientHeight < dayEl.clientWidth / aspectRatio) {
+        if (dayEl.clientHeight < Math.max(minCellHeight, dayEl.clientWidth / aspectRatio)) {
             dayEl.style.height = elHeight
         }
 
@@ -52,19 +51,19 @@ const MiniCalendar = () => {
         // inner borders
         if(mountArg.date.getDay() != (curDay+6)%7) dayEl.style.borderRight = innerBorder
 
-        if(innerEl){
+        if(dayEl){
             // round the borders and set inner element height
             if(mountArg.date.getDay() == curDay) {
-                innerEl.style.borderLeft = outerBorder
-                innerEl.style.borderBottomLeftRadius = '10px'
+                dayEl.style.borderLeft = outerBorder
+                dayEl.style.borderBottomLeftRadius = '10px'
             }
             if(mountArg.date.getDay() == (curDay+6)%7) {
-                innerEl.style.borderRight = outerBorder
-                innerEl.style.borderBottomRightRadius = '10px'
+                dayEl.style.borderRight = outerBorder
+                dayEl.style.borderBottomRightRadius = '10px'
             }
-            innerEl.style.borderBottom = outerBorder
-            innerEl.style.height = elHeight
-            innerEl.style.padding = '3px'
+            dayEl.style.borderBottom = outerBorder
+            // innerEl.style.height = elHeight
+            dayEl.style.padding = '3px'
           }
     }
 
@@ -143,6 +142,7 @@ const MiniCalendar = () => {
             }
         }}
         eventDisplay = 'block'
+        expandRows = {true}
         firstDay={curDay}
         selectable={false}
         events={(fetchInfo, successCallback, failureCallback) => {

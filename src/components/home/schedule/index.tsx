@@ -115,7 +115,7 @@ export const Schedule = (): JSX.Element => {
 
     return (
         <div className="banner">
-            <div className="background"><img alt="" src={theme.bannerImage} /></div>
+            <div className="background"><img alt="" src={theme.bannerImage+"?w=2000&fmt=webp"} /></div>
             <div className="overlay-container valign-wrapper" >
                 <div className="next-class">
                     {
@@ -152,7 +152,7 @@ export const Schedule = (): JSX.Element => {
                 <div className="overlay-container">
                     <div className="banner-message center-align">
                         <span>
-                            <Link to="/accounts/signup/">Sign up</Link> and add your timetable to see a personalized schedule here.
+                            <Link to="/account/signup/">Sign up</Link> and add your timetable to see a personalized schedule here.
                         </span>
                     </div>
                 </div>

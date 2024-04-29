@@ -36,7 +36,7 @@ export const ProfileNav = (): JSX.Element => {
         <div className="secondary-nav-wrapper">
             <ul className="secondary-nav">
                 <li>
-                    <Link className={`link${location.pathname.startsWith('/user/') ? ' current' : ''}`} to="/accounts/profile">Profile</Link>
+                    <Link className={`link${location.pathname.startsWith('/user/') ? ' current' : ''}`} to="/account/profile">Profile</Link>
                 </li>
                 <li>
                     <Link className={`link${location.pathname.startsWith('/timetable') ? ' current' : ''}`} to="/timetable">Timetable</Link>
@@ -46,14 +46,14 @@ export const ProfileNav = (): JSX.Element => {
                     notFound ?
                         console.log("Why you looing for ghosts huh?")
                     :
-                        "username" in user ?
-                            user.organizations_leading.length > 0 ?
+                        "username" in current_user ?
+                            current_user.organizations_leading.length > 0 ?
                                 <div>
                                     <li>
-                                        <Link className="link" to="/admin/core/announcement/add/">Announcements</Link>
+                                        <a className="link" href={`${Routes.BASEURL}/admin/core/announcement/add/`}>Announcements</a>
                                     </li>
                                     <li>
-                                        <Link className="link" to="/admin/core/event/add/">Events</Link>
+                                        <a className="link" href={`${Routes.BASEURL}/admin/core/event/add/`}>Events</a>
                                     </li>
                                     <hr />
                                 </div>
@@ -66,7 +66,7 @@ export const ProfileNav = (): JSX.Element => {
                             </div>
                 }
                 <li>
-                    <Link className="link" to="/accounts/logout/">Logout</Link>
+                    <Link className="link" to="/account/logout/">Logout</Link>
                 </li>
             </ul>
         </div>
