@@ -16,10 +16,10 @@ export const NotFound = (): JSX.Element => {
             <link rel="stylesheet" href="/resources/static/css/404.css" />
             <div className="main-container card">
                 <h2 className="center-align message">404: Page Not Found</h2>
-                <img className="comic-img" style={{ maxWidth: "100%" }} src={`/resources/static/img/404-comics/404-${comic}.png`} />
+                <img className="comic-img" style={{ maxWidth: "100%" }} src={`/resources/static/img/404-comics/404-${comic}.png?w=2000&fmt=webp`} />
 
                 <div className="display-metropolis valign-wrapper">
-                    <img className="inline-logo" src={theme.logo} />
+                    <img className="inline-logo" src={theme.logo+"?w=800&fmt=webp"} />
                 </div>
 
                 <div className="game-container" hidden={true}>
