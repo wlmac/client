@@ -23,6 +23,7 @@ export interface User {
     id: number,
     organizations: Array<Organization>,
     organizations_leading: Array<Organization>,
+    organizations_supervising: Array<Organization>,
     tags_following: Array<number>,
     timezone: string,
     username: string,
