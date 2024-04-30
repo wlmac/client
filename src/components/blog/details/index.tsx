@@ -12,6 +12,7 @@ import { dateFormat } from "../../../util/core/misc/date";
 import { TagElement } from "../../../util/core/tags";
 import { loggedIn } from "../../../util/core/AuthService";
 import { NotFound } from "../../notfound";
+import { cleanUrl } from "../../../util/core/misc/tools";
 
 export const BlogDetails = (): JSX.Element => {
     const { slug } = useParams();
@@ -34,7 +35,7 @@ export const BlogDetails = (): JSX.Element => {
             <link rel="stylesheet" href="/resources/static/css/blog-detail.css" />
             <div className="container">
                 <div className="card-container">
-                    <img className="card-image" src={post.featured_image+"?w=800&fmt=webp"} />
+                    <img className="card-image" src={cleanUrl(post.featured_image)} />
                     <div className="tag-section">
                         {
                             tags.map((tag: Tag) => {

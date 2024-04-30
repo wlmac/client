@@ -5,7 +5,7 @@ import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import Organization from "../../util/core/interfaces/organization";
 import Media from "../../util/core/misc/media";
 import MembershipStatus from "../../util/core/misc/membership";
-import { getTags, TagElement } from "../../util/core/tags";
+import { TagElement } from "../../util/core/tags";
 import { Session, SessionContext } from "../../util/core/session";
 import Routes from "../../util/core/misc/routes";
 import Tag from "../../util/core/interfaces/tag";

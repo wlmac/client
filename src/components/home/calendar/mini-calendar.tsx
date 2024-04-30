@@ -38,10 +38,10 @@ const MiniCalendar = () => {
       // reformats a day cell
     const reformatDay = (mountArg: DayCellMountArg) => {
         const dayEl = mountArg.el
-        const elHeight = Math.max(minCellHeight, dayEl.clientWidth / aspectRatio) + 'px';
+        const elHeight = Math.max(minCellHeight, dayEl.clientWidth / aspectRatio);
         // resize the date cell
-        if (dayEl.clientHeight < Math.max(minCellHeight, dayEl.clientWidth / aspectRatio)) {
-            dayEl.style.height = elHeight
+        if (dayEl.clientHeight < elHeight) {
+            dayEl.style.height = elHeight + 'px';
         }
 
         // get rid of table borders
@@ -71,7 +71,7 @@ const MiniCalendar = () => {
     let calendar = <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridWeek"
-        headerToolbar={{ right: "" }}
+        headerToolbar={false }
         views={{
             dayGridWeek: {
                 dayCellDidMount: (dayRenderInfo) => {

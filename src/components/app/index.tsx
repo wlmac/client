@@ -34,6 +34,9 @@ import { Theme, ThemeContext, ThemeProvider } from '../../util/core/client/theme
 import { NewCourse } from "../account/timetable/edit/new-course";
 import { LoginRequired } from "../../util/login-required";
 import { MyProfile } from "../account/profile/my-profile";
+import { DeletionNotification } from "./delete-component";
+
+import * as URLRoutes from "../../util/core/misc/routes";
 
 export const _App = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
@@ -49,11 +52,21 @@ export const _App = (): JSX.Element => {
         window.scrollTo(0, 0);
     }, [location]);
 
+    const onRestore = (): void => {
+        session.request('post', `${URLRoutes.default.USER}/me/restore`).then((res) => {
+            session.refreshUser();
+            window.location.reload();
+        }).catch((err) => {
+            alert("failed to restore account - please contact us!")
+        })
+    }
+
     return (
         <>
             <link rel="stylesheet" href={theme.bannerPath} />
             <link rel="stylesheet" href={theme.palettePath} />
             <div className="page" style={{backgroundColor: "white"}}>
+                {session.user?.is_deleted ? <DeletionNotification onRestore={onRestore} /> : <></>}
                 <NavigationBar />
 
                 <div className="router-outlet">

@@ -1,3 +1,8 @@
+:root{
+    --delete-light: #c22727;
+    --delete-dark: #960000;
+}
+
 label {
     font-size: 14px;
 }
@@ -27,4 +32,43 @@ label {
 
 button {
     margin: 1rem 0;
+}
+
+.delete {
+    background-color: var(--delete-light) !important;
+}
+
+.delete:hover{
+    background-color: var(--delete-dark) !important;
+}
+
+.delete-container{
+    border: solid var(--status-red) 2px;
+    padding: 2em;
+}
+
+.delete-title{
+    margin-top: 0;
+}
+
+.delete-confirmation{
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    transition: all .2s;
+}
+
+.delete-confirmation .delete-box{
+    padding: 1em;
+    margin: auto;
+    background-color: white;
+    border: solid var(--status-red) 2px;
+    border-radius: 10px;
+    box-shadow: 3px 3px 5px;
+}
+
+.delete-confirmation span{
+    height: fit-content;
 }

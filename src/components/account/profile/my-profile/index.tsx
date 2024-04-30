@@ -5,6 +5,7 @@ import { NavigateFunction, useNavigate } from "react-router-dom";
 // Login Required
 export const MyProfile = (): JSX.Element => {
     const session: Session = React.useContext(SessionContext);
+    console.log(session)
     const nav: NavigateFunction = useNavigate();
 
     React.useEffect(() => {

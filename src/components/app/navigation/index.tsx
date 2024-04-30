@@ -4,6 +4,7 @@ import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import { getToken, loggedIn, logout } from "../../../util/core/AuthService";
 import { Session, SessionContext } from "../../../util/core/session";
 import { Theme, ThemeContext } from "../../../util/core/client/theme/ThemeContext";
+import Routes from "../../../util/core/misc/routes";
 
 export const NavigationBar = (): JSX.Element => {
     const nav: NavigateFunction = useNavigate();
@@ -66,6 +67,7 @@ export const NavigationBar = (): JSX.Element => {
                         <>
                             <li><NavLink href={`/user/${session.user.username}`} className="sidenav-close">Profile</NavLink></li>
                             <li><NavLink href={`/timetable`} className="sidenav-close">Timetable</NavLink></li>
+                            {(session.user?.is_superuser || session.user?.organizations_leading && session.user?.organizations_leading?.length > 0 || session.user?.organizations_supervising && session.user?.organizations_supervising?.length > 0) && <li tabIndex={0}><a href={`${Routes.BASEURL}/admin/`}>Admin</a></li>}
                             <li><a className="nav-link" onClick={(ev: React.MouseEvent) => {
                                 ev.preventDefault();
                                 logout();
@@ -143,7 +145,7 @@ export const NavigationBar = (): JSX.Element => {
                                     <ul id="dropdownAcc" className="dropdown-content" tabIndex={0}>
                                         <li tabIndex={0}><Link to={`/user/${session.user.username}`}>Profile</Link></li>
                                         <li tabIndex={0}><Link to="/timetable">Timetable</Link></li>
-                                        {session.user.is_staff && <li tabIndex={0}><a href="/admin/">Admin</a></li>}
+                                        {(session.user?.is_superuser || session.user?.organizations_leading && session.user?.organizations_leading?.length > 0 || session.user?.organizations_supervising && session.user?.organizations_supervising?.length > 0) && <li tabIndex={0}><a href={`${Routes.BASEURL}/admin/`}>Admin</a></li>}
                                         <li tabIndex={0}><Link to="/account/logout">Logout</Link></li>
                                     </ul>
                                 </>

@@ -8,7 +8,7 @@ import Organization from "../../util/core/interfaces/organization";
 import MembershipStatus from "../../util/core/misc/membership";
 import Media from "../../util/core/misc/media";
 import Tag from "../../util/core/interfaces/tag";
-import { getTags, TagElement, DeletableTagElement } from "../../util/core/tags";
+import { TagElement, DeletableTagElement } from "../../util/core/tags";
 import { Session, SessionContext, User } from "../../util/core/session";
 import UserField from '../../util/core/interfaces/post';
 import Routes from "../../util/core/misc/routes";
