@@ -37,8 +37,13 @@ export const ProfileEdit = (): JSX.Element => {
 
     const onSubmit: SubmitHandler<Inputs> = data => {
         console.log(data);
-
-        session.request('put', `${Routes.POST.USER_UPDATE}/${user.id}`, data).then((res) => {
+        const dataToSubmit = {
+          bio: data.bio,
+          first_name: data.first_name,
+          last_name: data.last_name,
+          graduating_year: data.graduating_year,
+        };
+        session.request('put', `${Routes.POST.USER_UPDATE}/${user.id}`, dataToSubmit).then((res) => {
             session.refreshUser();
             nav(`/user/${user.username}`);
         });
