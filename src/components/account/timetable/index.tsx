@@ -167,7 +167,7 @@ export const TimetablePage = (): JSX.Element => {
 
                                         <div className="mt-3">
                                             <button type="submit" id="continue-button" className="btn btn-primary mr-2" style={{ letterSpacing: 0 }}>Continue</button>
-                                            <Link to="/user/1" className="btn btn-primary" role="button" aria-pressed="true">Cancel</Link>
+                                            <Link to={`/user/${session.user.username}`} className="btn btn-primary" role="button" aria-pressed="true">Cancel</Link>
                                         </div>
                                     </form>
                                 </div>
