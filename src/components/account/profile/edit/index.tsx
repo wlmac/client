@@ -43,7 +43,7 @@ export const ProfileEdit = (): JSX.Element => {
           last_name: data.last_name,
           graduating_year: data.graduating_year,
         };
-        session.request('put', `${Routes.POST.USER_UPDATE}/${user.id}`, dataToSubmit).then((res) => {
+        session.request('patch', `${Routes.POST.USER_UPDATE}/${user.id}`, dataToSubmit).then((res) => {
             session.refreshUser();
             nav(`/user/${user.username}`);
         });
