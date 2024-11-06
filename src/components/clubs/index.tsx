@@ -28,7 +28,7 @@ export const Clubs = (): JSX.Element => {
 
             <div className="container">
                 <div className="card-container">
-                    <div className="legend">
+                    {/* <div className="legend">
                         <div className="legend-items">
                             <div className="green-square"></div>
                             <span>Open Membership</span>
@@ -41,7 +41,7 @@ export const Clubs = (): JSX.Element => {
                             <div className="red-square"> </div>
                             <span>Closed Applications</span>
                         </div>
-                    </div>
+                    </div> */}
                     <div className="cards">
                         {ClubList()}
                     </div>
@@ -91,17 +91,17 @@ const Club = (props: { club: Organization, tags: Tag[] }): JSX.Element => {
     const [tags, setTags] = React.useState([]);
     const session = React.useContext(SessionContext);
 
-    const get_membership_status = (): string => {
-        if (club.is_open) {
-            return "green";
-        }
-        else if (club.applications_open) {
-            return "yellow";
-        }
-        else {
-            return "red";
-        }
-    }
+    // const get_membership_status = (): string => {
+    //     if (club.is_open) {
+    //         return "green";
+    //     }
+    //     else if (club.applications_open) {
+    //         return "yellow";
+    //     }
+    //     else {
+    //         return "red";
+    //     }
+    // }
 
     React.useEffect(() => {
         session.request('get', `${Routes.OBJECT}/tag`, false).then((res) => {
@@ -115,7 +115,7 @@ const Club = (props: { club: Organization, tags: Tag[] }): JSX.Element => {
     }, []);
 
     return (
-        <div className={`card ${get_membership_status()}-status`}>
+        <div className={`card`}>
             <div className="valign-wrapper">
                 <div className="club-logo">
                     <img className="circle" src={club.icon+"?w=800&fmt=webp"} />
