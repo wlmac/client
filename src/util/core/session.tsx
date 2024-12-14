@@ -46,6 +46,7 @@ export interface Session {
     notify: (message: string, type: AlertColor) => void,
     notification: Notif,
     closeNotif: () => void,
+    clearCache: () => void
 }
 
 export const SessionContext = React.createContext<Session>({
@@ -58,7 +59,8 @@ export const SessionContext = React.createContext<Session>({
     logout: () => { },
     notify: (message: string, type: AlertColor) => { },
     notification: {} as Notif,
-    closeNotif: () => { }
+    closeNotif: () => { },
+    clearCache: () => { }
 });
 
 export const SessionProvider = (props: { children: React.ReactNode }) => {
@@ -106,6 +108,17 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
             refreshUser();
         }
     }, []);
+
+    const clearCache = () => {
+        localStorage.removeItem('tag');
+        localStorage.removeItem('organization');
+        setAllTags([]);
+        setAllOrgs([]);
+        setCacheStatus({
+            tags: false,
+            orgs: false
+        });
+    }
 
     // this function fetches every single entry of given path and caches it locally
     // a routine is run to download new content if the data is modified
@@ -241,7 +254,7 @@ export const SessionProvider = (props: { children: React.ReactNode }) => {
     }
 
     return (
-        <SessionContext.Provider value={{ user: user, setUser: setUser, refreshUser: refreshUser, updateToken: updateToken, request: request, refreshAuth: refreshAuth, logout: logout, notify: notify, notification: notification, closeNotif: closeNotif }}>
+        <SessionContext.Provider value={{ user: user, cacheStatus: cacheStatus, allOrgs: allOrgs, allTags: allTags, setUser: setUser, refreshUser: refreshUser, updateToken: updateToken, request: request, refreshAuth: refreshAuth, logout: logout, notify: notify, notification: notification, closeNotif: closeNotif , clearCache: clearCache}}>
             {props.children}
         </SessionContext.Provider>
     )
