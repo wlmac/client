@@ -39,19 +39,19 @@ const TimetableElement = (props: { timetable: Timetable }): JSX.Element => {
                 <table className="table"><thead><tr><th scope="col">Period</th><th scope="col">Day 1</th><th scope="col">Day 2</th></tr></thead>
                     <tbody>
                         <tr>
-                            <th scope="row">09:00 am - 10:15 am</th>
+                            <th scope="row">Period 1</th>
                             <CourseElement course_1={courses[1]} course_2={courses[1]} />
                         </tr>
                         <tr>
-                            <th scope="row">10:20 am - 11:35 am</th>
+                            <th scope="row">Period 2</th>
                             <CourseElement course_1={courses[2]} course_2={courses[2]} />
                         </tr>
                         <tr>
-                            <th scope="row">12:20 pm - 01:35 pm</th>
+                            <th scope="row">Period 3</th>
                             <CourseElement course_1={courses[3]} course_2={courses[4]} />
                         </tr>
                         <tr>
-                            <th scope="row">01:40 pm - 02:55 pm</th>
+                            <th scope="row">Period 4</th>
                             <CourseElement course_1={courses[4]} course_2={courses[3]} />
                         </tr>
                     </tbody>
