@@ -14,7 +14,6 @@ export const Logout = (): JSX.Element => {
     React.useEffect((): void => {
         document.title = "Logout | Metropolis";
 
-        session.clearCache();
         session.logout();
 
         session.notify("Successfully logged out. See you later!", "success");
