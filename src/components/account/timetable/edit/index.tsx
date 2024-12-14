@@ -76,9 +76,6 @@ const TimetableEditor = (params: {
     const allCourses = term.courses;
     const [selectedCourses, setSelectedCourses] = React.useState<Array<Course>>(params.defaultCourses);
 
-    React.useEffect(() => {
-        console.log(selectedCourses);
-    }, [selectedCourses])
 
     return (
         <>
