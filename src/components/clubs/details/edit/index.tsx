@@ -84,16 +84,14 @@ export const EditClubDetails = (): JSX.Element => {
                                 </div>
                             </div>
 
-                            <div className="field">
+                            {/* <div className="field">
                                 <label htmlFor="edit-club-status-dropdown">Club Status:</label>
                                 <select id="edit-club-status-dropdown" className="browser-default">
                                     <option value="Open Membership">Open Membership</option>
                                     <option value="Accepting Applications">Accepting Applications</option>
                                     <option value="Closed Applications">Closed Applications</option>
                                 </select>
-
-
-                            </div>
+                            </div> */}
 
                             <div className="field">
                                 <label htmlFor="edit-club-bio-textarea">Bio:</label>
