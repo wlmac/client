@@ -67,7 +67,7 @@ export const ProfileEdit = (): JSX.Element => {
             <link rel="stylesheet" href="/resources/static/css/base.css" />
 
             <div className="header">
-                <img className="circle responsive-img profile-picture" src={user.gravatar_url} alt={`${user.username}'s profile picture`} />
+                <img className="circle responsive-img profile-picture" style={{ width: "100px", height: "100px" }} src={user.gravatar_url} alt={`${user.username}'s profile picture`} />
                 <div className="name-info">
                     <h5 className="full-name">{`${user.first_name} ${user.last_name}`}</h5>
                     <h6 className="username">{user.username}</h6>
