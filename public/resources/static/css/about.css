@@ -116,6 +116,15 @@
     color: var(--dark-grey);
     font-size: 1rem;
 }
+.alumni-tags {
+    font-size: 0.7rem;
+    margin-left: 0.9rem;
+    background-color: var(--link-colour);
+    color: white;
+    padding: 0.3rem;
+    border-radius: 0.3em;
+    vertical-align: middle;
+}
 .circle {
     height: 100%;
     width: 100%;

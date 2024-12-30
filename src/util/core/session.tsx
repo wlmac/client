@@ -35,6 +35,10 @@ export interface User {
     is_deleted: boolean
 }
 
+export interface Alumni extends User {
+  positions: string[];
+}
+
 export interface Session {
     user: User,
     setUser: (user: User) => void,

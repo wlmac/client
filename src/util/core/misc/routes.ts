@@ -13,6 +13,7 @@ const Routes = {
     ANNOUNCEMENT: `${BASEURL}/api/v3/announcement`,
   },
   USER: `${BASEURL}/api/v3/obj/user`,
+  ALUMNI: `${BASEURL}/api/v3/staff` ,
   PERSONAL_TIMETABLE: `${BASEURL}/api/me/timetable`,
   TIMETABLE: `${BASEURL}/api/v3/obj/timetable`,
   SCHEDULE: {
