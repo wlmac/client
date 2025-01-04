@@ -151,7 +151,7 @@ const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Eleme
                             <button className={`${activeBtn === true ? "like-active" : "like-button"}`}
                             onClick={handleLick}
                             >
-                            <span className="material-symbols-outlined">thumb_up</span>
+                                <span className="material-icons">thumb_up</span>
                             </button>
                         </div>
                     </div>
