@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { default as axios } from 'axios';
 
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
@@ -115,6 +115,11 @@ const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Eleme
     const post = props.post;
     const session: Session = React.useContext(SessionContext);
     const time = Math.ceil(post.body.trim().split(/\s+/).length / 225);
+    const[activeBtn, setActiveBtn] = useState(false);
+
+    const handleLick = () => {
+      setActiveBtn((prevActiveBtn) => !prevActiveBtn);
+    }
 
     return (
         <>
@@ -141,6 +146,13 @@ const BlogPostElement = (props: { post: BlogPost, tags: Array<Tag> }): JSX.Eleme
                                     • {new Date(post.created_date).toLocaleTimeString(undefined, dateFormat)}  • estimated reading time: {time} min
                                 </div>
                             </>
+                        </div>
+                        <div>
+                            <button className={`${activeBtn === true ? "like-active" : "like-button"}`}
+                            onClick={handleLick}
+                            >
+                            <span className="material-symbols-outlined">thumb_up</span>
+                            </button>
                         </div>
                     </div>
                 </div>

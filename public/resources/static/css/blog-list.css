@@ -136,3 +136,14 @@ hr {
         display: none;
     }
 }
+
+.like-button, .like-active {
+    border: transparent;
+    border-radius: 8px;
+    background-color: transparent;
+    color: black;
+    cursor: pointer;
+}
+.like-active{
+    color: #1dea65;
+}
